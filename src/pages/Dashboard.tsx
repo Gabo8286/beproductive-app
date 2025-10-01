@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow } from "lucide-react";
+import { DatabaseTest } from "@/components/DatabaseTest";
 
 const features = [
   { icon: Target, title: "Goals", description: "Set and track your objectives", color: "text-primary" },
@@ -42,6 +43,8 @@ export default function Dashboard() {
           </Card>
         ))}
       </div>
+
+      <DatabaseTest />
 
       <Card className="bg-gradient-primary text-primary-foreground">
         <CardHeader>

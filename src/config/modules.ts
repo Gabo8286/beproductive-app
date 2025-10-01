@@ -21,7 +21,7 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     id: "tasks",
     name: "Tasks",
     description: "Manage your daily tasks and to-dos",
-    enabled: false,
+    enabled: true,
     icon: "check-square",
     path: "/tasks",
   },

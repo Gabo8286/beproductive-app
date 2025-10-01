@@ -75,7 +75,9 @@ export type Database = {
           full_name: string | null
           id: string
           onboarding_completed: boolean | null
-          role: string | null
+          preferences: Json | null
+          role: Database["public"]["Enums"]["user_role"] | null
+          subscription_tier: string | null
           updated_at: string
         }
         Insert: {
@@ -85,7 +87,9 @@ export type Database = {
           full_name?: string | null
           id: string
           onboarding_completed?: boolean | null
-          role?: string | null
+          preferences?: Json | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          subscription_tier?: string | null
           updated_at?: string
         }
         Update: {
@@ -95,7 +99,9 @@ export type Database = {
           full_name?: string | null
           id?: string
           onboarding_completed?: boolean | null
-          role?: string | null
+          preferences?: Json | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          subscription_tier?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -136,25 +142,117 @@ export type Database = {
         }
         Relationships: []
       }
+      tasks: {
+        Row: {
+          actual_duration: number | null
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          due_date: string | null
+          estimated_duration: number | null
+          id: string
+          metadata: Json | null
+          parent_task_id: string | null
+          position: number | null
+          priority: Database["public"]["Enums"]["task_priority"] | null
+          status: Database["public"]["Enums"]["task_status"] | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          actual_duration?: number | null
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          due_date?: string | null
+          estimated_duration?: number | null
+          id?: string
+          metadata?: Json | null
+          parent_task_id?: string | null
+          position?: number | null
+          priority?: Database["public"]["Enums"]["task_priority"] | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          actual_duration?: number | null
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          due_date?: string | null
+          estimated_duration?: number | null
+          id?: string
+          metadata?: Json | null
+          parent_task_id?: string | null
+          position?: number | null
+          priority?: Database["public"]["Enums"]["task_priority"] | null
+          status?: Database["public"]["Enums"]["task_status"] | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_parent_task_id_fkey"
+            columns: ["parent_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_members: {
         Row: {
           id: string
           joined_at: string
-          role: string | null
+          role: Database["public"]["Enums"]["member_role"] | null
           user_id: string
           workspace_id: string
         }
         Insert: {
           id?: string
           joined_at?: string
-          role?: string | null
+          role?: Database["public"]["Enums"]["member_role"] | null
           user_id: string
           workspace_id: string
         }
         Update: {
           id?: string
           joined_at?: string
-          role?: string | null
+          role?: Database["public"]["Enums"]["member_role"] | null
           user_id?: string
           workspace_id?: string
         }
@@ -175,6 +273,8 @@ export type Database = {
           id: string
           name: string
           owner_id: string
+          settings: Json | null
+          type: Database["public"]["Enums"]["workspace_type"] | null
           updated_at: string
         }
         Insert: {
@@ -183,6 +283,8 @@ export type Database = {
           id?: string
           name: string
           owner_id: string
+          settings?: Json | null
+          type?: Database["public"]["Enums"]["workspace_type"] | null
           updated_at?: string
         }
         Update: {
@@ -191,6 +293,8 @@ export type Database = {
           id?: string
           name?: string
           owner_id?: string
+          settings?: Json | null
+          type?: Database["public"]["Enums"]["workspace_type"] | null
           updated_at?: string
         }
         Relationships: []
@@ -200,10 +304,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      complete_task: {
+        Args: { task_id: string }
+        Returns: undefined
+      }
+      update_task_position: {
+        Args: { new_position: number; task_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      member_role: "member" | "admin" | "owner"
+      task_priority: "low" | "medium" | "high" | "urgent"
+      task_status: "todo" | "in_progress" | "blocked" | "done"
+      user_role: "user" | "team_lead" | "admin" | "super_admin"
+      workspace_type: "personal" | "team" | "organization"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -330,6 +445,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      member_role: ["member", "admin", "owner"],
+      task_priority: ["low", "medium", "high", "urgent"],
+      task_status: ["todo", "in_progress", "blocked", "done"],
+      user_role: ["user", "team_lead", "admin", "super_admin"],
+      workspace_type: ["personal", "team", "organization"],
+    },
   },
 } as const
