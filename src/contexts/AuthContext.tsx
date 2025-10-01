@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("profiles")
         .select("*")
         .eq("id", userId)
@@ -156,7 +156,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (updates.avatar_url !== undefined) updateData.avatar_url = updates.avatar_url;
       if (updates.onboarding_completed !== undefined) updateData.onboarding_completed = updates.onboarding_completed;
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("profiles")
         .update(updateData)
         .eq("id", user.id);
