@@ -12,6 +12,9 @@ import Signup from "@/pages/Signup";
 import ForgotPassword from "@/pages/ForgotPassword";
 import Dashboard from "@/pages/Dashboard";
 import Profile from "@/pages/Profile";
+import Goals from "@/pages/Goals";
+import NewGoal from "@/pages/NewGoal";
+import GoalDetail from "@/pages/GoalDetail";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +43,9 @@ const App = () => (
               >
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="goals" element={<Goals />} />
+                <Route path="goals/new" element={<NewGoal />} />
+                <Route path="goals/:id" element={<GoalDetail />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

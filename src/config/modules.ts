@@ -13,7 +13,7 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     id: "goals",
     name: "Goals",
     description: "Set and track your personal and professional goals",
-    enabled: false,
+    enabled: true,
     icon: "target",
     path: "/goals",
   },
