@@ -17,6 +17,9 @@ import { DragAndDropProvider } from '@/components/dnd/DragAndDropProvider';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { DragEndEvent } from '@dnd-kit/core';
 import { useUpdateTaskPositions } from '@/hooks/useDragAndDrop';
+import { QuickTaskInput } from './QuickTaskInput';
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -180,6 +183,7 @@ function TaskListItem({ task }: { task: Task }) {
 
 export function TaskListView({ tasks }: TaskListViewProps) {
   const updatePositions = useUpdateTaskPositions();
+  const [showQuickCreate, setShowQuickCreate] = useState(false);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -216,17 +220,38 @@ export function TaskListView({ tasks }: TaskListViewProps) {
         </Card>
       }
     >
-      <Card>
-        <CardContent className="p-0">
-          <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
-            <div className="divide-y">
-              {tasks.map((task) => (
-                <TaskListItem key={task.id} task={task} />
-              ))}
-            </div>
-          </SortableContext>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        {/* Quick Create Input */}
+        {showQuickCreate ? (
+          <QuickTaskInput
+            onCancel={() => setShowQuickCreate(false)}
+            onSuccess={() => setShowQuickCreate(false)}
+            placeholder="Quick task title..."
+          />
+        ) : (
+          <Button
+            variant="outline"
+            className="w-full justify-start gap-2"
+            onClick={() => setShowQuickCreate(true)}
+          >
+            <Plus className="h-4 w-4" />
+            Add task
+          </Button>
+        )}
+
+        {/* Task List */}
+        <Card>
+          <CardContent className="p-0">
+            <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
+              <div className="divide-y">
+                {tasks.map((task) => (
+                  <TaskListItem key={task.id} task={task} />
+                ))}
+              </div>
+            </SortableContext>
+          </CardContent>
+        </Card>
+      </div>
     </DragAndDropProvider>
   );
 }

@@ -8,6 +8,9 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 import { useMoveTaskToStatus, useUpdateTaskPositions } from '@/hooks/useDragAndDrop';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import { QuickTaskInput } from './QuickTaskInput';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -25,10 +28,13 @@ const statusColumns = [
   { id: 'done', title: 'Done', icon: '✅' },
 ];
 
+type TaskStatus = Database['public']['Enums']['task_status'];
+
 export function TaskBoardView({ tasks }: TaskBoardViewProps) {
   const moveTaskToStatus = useMoveTaskToStatus();
   const updatePositions = useUpdateTaskPositions();
   const [localTasks, setLocalTasks] = useState(tasks);
+  const [showQuickCreate, setShowQuickCreate] = useState<string | null>(null);
 
   // Update local tasks when props change
   useState(() => {
@@ -128,18 +134,34 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
             className="h-full"
           >
             <Card className="h-fit min-h-[400px]">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-2">
-                    <span>{column.icon}</span>
-                    {column.title}
-                  </span>
+              <CardHeader className="pb-3 flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <span>{column.icon}</span>
+                  {column.title}
                   <Badge variant="secondary" className="ml-2">
                     {tasksByStatus[column.id]?.length || 0}
                   </Badge>
                 </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={() => setShowQuickCreate(showQuickCreate === column.id ? null : column.id)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
               </CardHeader>
               <CardContent className="space-y-3">
+                {/* Quick Create for this column */}
+                {showQuickCreate === column.id && (
+                  <QuickTaskInput
+                    defaults={{ status: column.id as TaskStatus }}
+                    onCancel={() => setShowQuickCreate(null)}
+                    onSuccess={() => setShowQuickCreate(null)}
+                    placeholder={`Quick task in ${column.title}...`}
+                  />
+                )}
+
                 <SortableContext 
                   items={tasksByStatus[column.id]?.map(t => t.id) || []} 
                   strategy={verticalListSortingStrategy}

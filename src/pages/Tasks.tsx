@@ -17,7 +17,10 @@ import { Database } from '@/integrations/supabase/types';
 import { CategoryFilter } from '@/components/tags/CategoryFilter';
 import { useTags } from '@/hooks/useTags';
 import { TagBadge } from '@/components/tags/TagBadge';
-import { X } from 'lucide-react';
+import { X, Zap } from 'lucide-react';
+import { FloatingTaskButton } from '@/components/tasks/FloatingTaskButton';
+import { QuickTaskModal } from '@/components/tasks/QuickTaskModal';
+import { useKeyboardShortcuts, getTaskCreationShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 type TaskStatus = Database['public']['Enums']['task_status'];
 type TaskPriority = Database['public']['Enums']['task_priority'];
@@ -32,8 +35,17 @@ function TasksContent() {
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority | 'all'>('all');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isQuickModalOpen, setIsQuickModalOpen] = useState(false);
   
   const { data: allTags = [] } = useTags();
+
+  // Keyboard shortcuts for quick task creation
+  useKeyboardShortcuts(
+    getTaskCreationShortcuts(
+      () => setIsQuickModalOpen(true),
+      () => setIsQuickModalOpen(true),
+    )
+  );
 
   // Filter tags by category
   const categoryFilteredTags = selectedCategory 
@@ -101,12 +113,25 @@ function TasksContent() {
             Manage your daily tasks and to-dos
           </p>
         </div>
-        <TaskForm trigger={
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New Task
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setIsQuickModalOpen(true)}
+            className="gap-2"
+          >
+            <Zap className="w-4 h-4" />
+            Quick Create
+            <kbd className="hidden md:inline-flex pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+              <span className="text-xs">⌘</span>N
+            </kbd>
           </Button>
-        } />
+          <TaskForm trigger={
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              New Task
+            </Button>
+          } />
+        </div>
       </div>
 
       {/* Stats */}
@@ -309,6 +334,20 @@ function TasksContent() {
           )}
         </>
       )}
+
+      {/* Quick Create Modal */}
+      <QuickTaskModal 
+        open={isQuickModalOpen}
+        onOpenChange={setIsQuickModalOpen}
+        defaults={{
+          status: statusFilter !== 'all' ? statusFilter : 'todo',
+          priority: priorityFilter !== 'all' ? priorityFilter : 'medium',
+          tags: selectedTags,
+        }}
+      />
+
+      {/* Floating Action Button (Mobile) */}
+      <FloatingTaskButton />
     </div>
   );
 }
