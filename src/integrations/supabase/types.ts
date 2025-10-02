@@ -346,6 +346,352 @@ export type Database = {
           },
         ]
       }
+      api_key_audit_log: {
+        Row: {
+          action: string
+          api_key_id: string | null
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          new_values: Json | null
+          old_values: Json | null
+          performed_by: string | null
+          reason: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          api_key_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          performed_by?: string | null
+          reason?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          api_key_id?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          new_values?: Json | null
+          old_values?: Json | null
+          performed_by?: string | null
+          reason?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_key_audit_log_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "api_key_audit_log_performed_by_fkey"
+            columns: ["performed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_keys: {
+        Row: {
+          additional_headers: Json | null
+          api_version: string | null
+          base_url: string | null
+          created_at: string
+          created_by: string | null
+          current_day_requests: number | null
+          current_month_cost: number | null
+          current_month_tokens: number | null
+          daily_request_limit: number | null
+          description: string | null
+          encrypted_key: string
+          expires_at: string | null
+          id: string
+          key_hash: string
+          key_name: string
+          last_rotated_at: string | null
+          last_used_at: string | null
+          metadata: Json | null
+          model_name: string | null
+          monthly_limit_usd: number | null
+          monthly_token_limit: number | null
+          provider: Database["public"]["Enums"]["api_provider_type"]
+          provider_config: Json | null
+          status: Database["public"]["Enums"]["api_key_status"]
+          tags: string[] | null
+          total_lifetime_cost: number | null
+          updated_at: string
+        }
+        Insert: {
+          additional_headers?: Json | null
+          api_version?: string | null
+          base_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_day_requests?: number | null
+          current_month_cost?: number | null
+          current_month_tokens?: number | null
+          daily_request_limit?: number | null
+          description?: string | null
+          encrypted_key: string
+          expires_at?: string | null
+          id?: string
+          key_hash: string
+          key_name: string
+          last_rotated_at?: string | null
+          last_used_at?: string | null
+          metadata?: Json | null
+          model_name?: string | null
+          monthly_limit_usd?: number | null
+          monthly_token_limit?: number | null
+          provider: Database["public"]["Enums"]["api_provider_type"]
+          provider_config?: Json | null
+          status?: Database["public"]["Enums"]["api_key_status"]
+          tags?: string[] | null
+          total_lifetime_cost?: number | null
+          updated_at?: string
+        }
+        Update: {
+          additional_headers?: Json | null
+          api_version?: string | null
+          base_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_day_requests?: number | null
+          current_month_cost?: number | null
+          current_month_tokens?: number | null
+          daily_request_limit?: number | null
+          description?: string | null
+          encrypted_key?: string
+          expires_at?: string | null
+          id?: string
+          key_hash?: string
+          key_name?: string
+          last_rotated_at?: string | null
+          last_used_at?: string | null
+          metadata?: Json | null
+          model_name?: string | null
+          monthly_limit_usd?: number | null
+          monthly_token_limit?: number | null
+          provider?: Database["public"]["Enums"]["api_provider_type"]
+          provider_config?: Json | null
+          status?: Database["public"]["Enums"]["api_key_status"]
+          tags?: string[] | null
+          total_lifetime_cost?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_system_config: {
+        Row: {
+          access_level: string | null
+          config_key: string
+          config_value: Json
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_encrypted: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          access_level?: string | null
+          config_key: string
+          config_value: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_encrypted?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          access_level?: string | null
+          config_key?: string
+          config_value?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_encrypted?: boolean | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_system_config_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_system_limits: {
+        Row: {
+          cost_multiplier: number | null
+          cost_per_1k_tokens: number | null
+          created_at: string
+          default_user_daily_request_limit: number | null
+          default_user_monthly_limit_usd: number | null
+          default_user_monthly_token_limit: number | null
+          global_daily_request_limit: number | null
+          global_monthly_limit_usd: number | null
+          global_monthly_token_limit: number | null
+          id: string
+          is_enabled: boolean | null
+          maintenance_message: string | null
+          maintenance_mode: boolean | null
+          metadata: Json | null
+          provider: Database["public"]["Enums"]["api_provider_type"]
+          requests_per_hour: number | null
+          requests_per_minute: number | null
+          updated_at: string
+        }
+        Insert: {
+          cost_multiplier?: number | null
+          cost_per_1k_tokens?: number | null
+          created_at?: string
+          default_user_daily_request_limit?: number | null
+          default_user_monthly_limit_usd?: number | null
+          default_user_monthly_token_limit?: number | null
+          global_daily_request_limit?: number | null
+          global_monthly_limit_usd?: number | null
+          global_monthly_token_limit?: number | null
+          id?: string
+          is_enabled?: boolean | null
+          maintenance_message?: string | null
+          maintenance_mode?: boolean | null
+          metadata?: Json | null
+          provider: Database["public"]["Enums"]["api_provider_type"]
+          requests_per_hour?: number | null
+          requests_per_minute?: number | null
+          updated_at?: string
+        }
+        Update: {
+          cost_multiplier?: number | null
+          cost_per_1k_tokens?: number | null
+          created_at?: string
+          default_user_daily_request_limit?: number | null
+          default_user_monthly_limit_usd?: number | null
+          default_user_monthly_token_limit?: number | null
+          global_daily_request_limit?: number | null
+          global_monthly_limit_usd?: number | null
+          global_monthly_token_limit?: number | null
+          id?: string
+          is_enabled?: boolean | null
+          maintenance_message?: string | null
+          maintenance_mode?: boolean | null
+          metadata?: Json | null
+          provider?: Database["public"]["Enums"]["api_provider_type"]
+          requests_per_hour?: number | null
+          requests_per_minute?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      api_usage_analytics: {
+        Row: {
+          api_key_id: string | null
+          endpoint: string | null
+          error_code: string | null
+          error_message: string | null
+          estimated_cost: number | null
+          id: string
+          ip_address: unknown | null
+          method: string | null
+          model_name: string | null
+          provider: Database["public"]["Enums"]["api_provider_type"]
+          request_metadata: Json | null
+          request_size_bytes: number | null
+          requested_at: string
+          response_size_bytes: number | null
+          response_time_ms: number | null
+          success: boolean | null
+          tokens_completion: number | null
+          tokens_prompt: number | null
+          tokens_total: number | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          endpoint?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          estimated_cost?: number | null
+          id?: string
+          ip_address?: unknown | null
+          method?: string | null
+          model_name?: string | null
+          provider: Database["public"]["Enums"]["api_provider_type"]
+          request_metadata?: Json | null
+          request_size_bytes?: number | null
+          requested_at?: string
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          success?: boolean | null
+          tokens_completion?: number | null
+          tokens_prompt?: number | null
+          tokens_total?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          endpoint?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          estimated_cost?: number | null
+          id?: string
+          ip_address?: unknown | null
+          method?: string | null
+          model_name?: string | null
+          provider?: Database["public"]["Enums"]["api_provider_type"]
+          request_metadata?: Json | null
+          request_size_bytes?: number | null
+          requested_at?: string
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          success?: boolean | null
+          tokens_completion?: number | null
+          tokens_prompt?: number | null
+          tokens_total?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_usage_analytics_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "api_usage_analytics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       automation_logs: {
         Row: {
           changes_made: Json | null
@@ -2890,6 +3236,10 @@ export type Database = {
           template_id: string
         }[]
       }
+      get_api_key_monthly_usage: {
+        Args: { key_id: string }
+        Returns: Json
+      }
       get_level_from_xp: {
         Args: { total_xp: number }
         Returns: number
@@ -2911,6 +3261,10 @@ export type Database = {
         Args: { goal_id: string }
         Returns: Json
       }
+      get_system_api_usage_stats: {
+        Args: { days_back?: number }
+        Returns: Json
+      }
       get_user_ai_usage_stats: {
         Args: { p_days?: number; p_user_id: string }
         Returns: Json
@@ -2918,6 +3272,10 @@ export type Database = {
       get_xp_required_for_level: {
         Args: { target_level: number }
         Returns: number
+      }
+      is_super_admin: {
+        Args: { user_id?: string }
+        Returns: boolean
       }
       is_workspace_member: {
         Args: { _user_id: string; _workspace_id: string }
@@ -3034,6 +3392,8 @@ export type Database = {
         | "completed"
         | "dismissed"
       analytics_period: "week" | "month" | "quarter" | "year"
+      api_key_status: "active" | "inactive" | "revoked" | "expired"
+      api_provider_type: "openai" | "claude" | "gemini" | "lovable" | "custom"
       entry_status: "completed" | "skipped" | "missed" | "partial"
       goal_category:
         | "personal"
@@ -3265,6 +3625,8 @@ export const Constants = {
         "dismissed",
       ],
       analytics_period: ["week", "month", "quarter", "year"],
+      api_key_status: ["active", "inactive", "revoked", "expired"],
+      api_provider_type: ["openai", "claude", "gemini", "lovable", "custom"],
       entry_status: ["completed", "skipped", "missed", "partial"],
       goal_category: [
         "personal",
