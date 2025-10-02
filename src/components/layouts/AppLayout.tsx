@@ -15,6 +15,7 @@ import {
 import { LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
+import { NotificationCenter } from "@/components/automation/NotificationCenter";
 
 export function AppLayout() {
   const { profile, signOut } = useAuth();
@@ -39,6 +40,7 @@ export function AppLayout() {
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
             <SidebarTrigger className="md:hidden" />
             <div className="flex-1" />
+            <NotificationCenter />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">

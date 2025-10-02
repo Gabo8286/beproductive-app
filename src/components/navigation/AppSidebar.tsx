@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar } from "lucide-react";
+import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap } from "lucide-react";
 import { useModules } from "@/contexts/ModulesContext";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +21,7 @@ const navigation = [
   { name: "Templates", href: "/templates", icon: FileText, moduleId: "tasks" as const },
   { name: "Recurring", href: "/recurring-tasks", icon: Calendar, moduleId: "tasks" as const },
   { name: "Tags", href: "/tags", icon: Tags, moduleId: "tasks" as const },
+  { name: "Automation", href: "/automation", icon: Zap, moduleId: "tasks" as const },
   { name: "Habits", href: "/habits", icon: Repeat, moduleId: "habits" as const },
   { name: "Projects", href: "/projects", icon: Folder, moduleId: "projects" as const },
   { name: "Reflections", href: "/reflections", icon: BookOpen, moduleId: "reflections" as const },

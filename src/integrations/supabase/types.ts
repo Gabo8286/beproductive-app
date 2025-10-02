@@ -69,6 +69,117 @@ export type Database = {
           },
         ]
       }
+      automation_logs: {
+        Row: {
+          changes_made: Json | null
+          error_message: string | null
+          executed_at: string | null
+          execution_time_ms: number | null
+          id: string
+          rule_id: string
+          success: boolean
+          task_id: string | null
+        }
+        Insert: {
+          changes_made?: Json | null
+          error_message?: string | null
+          executed_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          rule_id: string
+          success: boolean
+          task_id?: string | null
+        }
+        Update: {
+          changes_made?: Json | null
+          error_message?: string | null
+          executed_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          rule_id?: string
+          success?: boolean
+          task_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_logs_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "automation_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_logs_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_rules: {
+        Row: {
+          actions: Json
+          created_at: string | null
+          description: string | null
+          execution_count: number | null
+          id: string
+          is_enabled: boolean | null
+          last_executed_at: string | null
+          name: string
+          rule_type: string
+          trigger_conditions: Json
+          updated_at: string | null
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          actions?: Json
+          created_at?: string | null
+          description?: string | null
+          execution_count?: number | null
+          id?: string
+          is_enabled?: boolean | null
+          last_executed_at?: string | null
+          name: string
+          rule_type: string
+          trigger_conditions?: Json
+          updated_at?: string | null
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          actions?: Json
+          created_at?: string | null
+          description?: string | null
+          execution_count?: number | null
+          id?: string
+          is_enabled?: boolean | null
+          last_executed_at?: string | null
+          name?: string
+          rule_type?: string
+          trigger_conditions?: Json
+          updated_at?: string | null
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_rules_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goals: {
         Row: {
           created_at: string
@@ -118,6 +229,134 @@ export type Database = {
             columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_settings: {
+        Row: {
+          completion_celebrations: boolean | null
+          created_at: string | null
+          due_date_reminder_hours: number[] | null
+          due_date_reminders: boolean | null
+          email_notifications: boolean | null
+          id: string
+          in_app_notifications: boolean | null
+          overdue_alerts: boolean | null
+          overdue_escalation_hours: number[] | null
+          push_notifications: boolean | null
+          time_tracking_reminders: boolean | null
+          updated_at: string | null
+          user_id: string
+          webhook_url: string | null
+          weekly_summaries: boolean | null
+          weekly_summary_day: number | null
+          weekly_summary_time: string | null
+        }
+        Insert: {
+          completion_celebrations?: boolean | null
+          created_at?: string | null
+          due_date_reminder_hours?: number[] | null
+          due_date_reminders?: boolean | null
+          email_notifications?: boolean | null
+          id?: string
+          in_app_notifications?: boolean | null
+          overdue_alerts?: boolean | null
+          overdue_escalation_hours?: number[] | null
+          push_notifications?: boolean | null
+          time_tracking_reminders?: boolean | null
+          updated_at?: string | null
+          user_id: string
+          webhook_url?: string | null
+          weekly_summaries?: boolean | null
+          weekly_summary_day?: number | null
+          weekly_summary_time?: string | null
+        }
+        Update: {
+          completion_celebrations?: boolean | null
+          created_at?: string | null
+          due_date_reminder_hours?: number[] | null
+          due_date_reminders?: boolean | null
+          email_notifications?: boolean | null
+          id?: string
+          in_app_notifications?: boolean | null
+          overdue_alerts?: boolean | null
+          overdue_escalation_hours?: number[] | null
+          push_notifications?: boolean | null
+          time_tracking_reminders?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+          webhook_url?: string | null
+          weekly_summaries?: boolean | null
+          weekly_summary_day?: number | null
+          weekly_summary_time?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_settings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          channels: string[] | null
+          clicked_at: string | null
+          created_at: string | null
+          delivered_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          read_at: string | null
+          task_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          channels?: string[] | null
+          clicked_at?: string | null
+          created_at?: string | null
+          delivered_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          read_at?: string | null
+          task_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          channels?: string[] | null
+          clicked_at?: string | null
+          created_at?: string | null
+          delivered_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          read_at?: string | null
+          task_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -575,6 +814,10 @@ export type Database = {
         Args: { template_id: string; variable_values?: Json }
         Returns: string
       }
+      execute_automation_actions: {
+        Args: { p_actions: Json; p_rule_id: string; p_task_id: string }
+        Returns: undefined
+      }
       generate_recurring_instances: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -598,6 +841,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      process_automation_rules: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       reorder_tasks_in_status: {
         Args: {
           status_param: Database["public"]["Enums"]["task_status"]
@@ -609,6 +856,10 @@ export type Database = {
       replace_template_variables: {
         Args: { text_with_variables: string; variable_values: Json }
         Returns: string
+      }
+      send_due_date_notifications: {
+        Args: Record<PropertyKey, never>
+        Returns: number
       }
       start_timer: {
         Args: { p_task_id: string }

@@ -20,6 +20,7 @@ import TaskDetail from "@/pages/TaskDetail";
 import Templates from "@/pages/Templates";
 import RecurringTasks from "@/pages/RecurringTasks";
 import TagManagement from "@/pages/TagManagement";
+import Automation from "@/pages/Automation";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,7 @@ const App = () => (
                 <Route path="templates" element={<Templates />} />
                 <Route path="recurring-tasks" element={<RecurringTasks />} />
                 <Route path="tags" element={<TagManagement />} />
+                <Route path="automation" element={<Automation />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
