@@ -20,6 +20,8 @@ import { HabitPerformanceMetrics } from "@/components/habits/HabitPerformanceMet
 import { StreakChallenges } from "@/components/habits/StreakChallenges";
 import { ProgressExport } from "@/components/habits/ProgressExport";
 import { HabitEditForm } from "@/components/habits/HabitEditForm";
+import { ReminderManager } from "@/components/habits/ReminderManager";
+import { NotificationPermission } from "@/components/habits/NotificationPermission";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -187,6 +189,9 @@ export default function HabitDetail() {
       {/* Insights */}
       <HabitInsightsEngine habitId={id!} />
 
+      {/* Notification Permission */}
+      <NotificationPermission />
+
       {/* Tabs */}
       <Tabs defaultValue="overview">
         <TabsList>
@@ -195,6 +200,7 @@ export default function HabitDetail() {
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="calendar">Calendar</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
+          <TabsTrigger value="reminders">Reminders</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -229,6 +235,10 @@ export default function HabitDetail() {
         <TabsContent value="achievements" className="space-y-4">
           <StreakAchievements habit={habit} />
           <StreakChallenges habit={habit} />
+        </TabsContent>
+
+        <TabsContent value="reminders" className="space-y-4">
+          <ReminderManager habitId={id!} habitTitle={habit.title} />
         </TabsContent>
       </Tabs>
 
