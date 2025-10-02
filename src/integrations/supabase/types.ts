@@ -224,6 +224,47 @@ export type Database = {
           },
         ]
       }
+      goal_progress_entries: {
+        Row: {
+          change_type: string
+          created_at: string
+          created_by: string
+          goal_id: string
+          id: string
+          new_progress: number
+          notes: string | null
+          previous_progress: number
+        }
+        Insert: {
+          change_type: string
+          created_at?: string
+          created_by: string
+          goal_id: string
+          id?: string
+          new_progress: number
+          notes?: string | null
+          previous_progress?: number
+        }
+        Update: {
+          change_type?: string
+          created_at?: string
+          created_by?: string
+          goal_id?: string
+          id?: string
+          new_progress?: number
+          notes?: string | null
+          previous_progress?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_progress_entries_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goals: {
         Row: {
           assigned_to: string | null
@@ -889,6 +930,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bulk_update_goal_progress: {
+        Args: { progress_updates: Json }
+        Returns: undefined
+      }
+      calculate_automatic_progress: {
+        Args: { goal_id: string }
+        Returns: number
+      }
+      calculate_goal_analytics: {
+        Args: { goal_id: string }
+        Returns: Json
+      }
       calculate_goal_progress_from_milestones: {
         Args: { goal_id: string }
         Returns: number
@@ -927,6 +980,10 @@ export type Database = {
           instances_created: number
           template_id: string
         }[]
+      }
+      get_progress_suggestions: {
+        Args: { goal_id: string }
+        Returns: Json
       }
       is_workspace_member: {
         Args: { _user_id: string; _workspace_id: string }
@@ -978,6 +1035,15 @@ export type Database = {
       }
       update_goal_progress: {
         Args: { goal_id: string; new_progress: number }
+        Returns: undefined
+      }
+      update_goal_progress_with_history: {
+        Args: {
+          change_type?: string
+          goal_id: string
+          new_progress: number
+          notes?: string
+        }
         Returns: undefined
       }
       update_task_position: {
