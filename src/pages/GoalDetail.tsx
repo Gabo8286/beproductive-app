@@ -18,6 +18,7 @@ import { getStatusColor, getStatusLabel, getAvailableStatusTransitions } from "@
 import { MilestoneCard } from "@/components/goals/MilestoneCard";
 import { SubGoalsList } from "@/components/goals/SubGoalsList";
 import { GoalTimeline } from "@/components/goals/GoalTimeline";
+import { GoalHabitManager } from "@/components/goals/GoalHabitManager";
 import { format, differenceInDays } from "date-fns";
 import { toast } from "sonner";
 
@@ -447,9 +448,10 @@ export default function GoalDetail() {
 
           {/* Tabs for additional content */}
           <Tabs defaultValue="milestones" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="milestones">Milestones</TabsTrigger>
               <TabsTrigger value="subgoals">Sub-Goals</TabsTrigger>
+              <TabsTrigger value="habits">Habits</TabsTrigger>
               <TabsTrigger value="timeline">Timeline</TabsTrigger>
             </TabsList>
 
@@ -487,6 +489,10 @@ export default function GoalDetail() {
 
             <TabsContent value="subgoals">
               <SubGoalsList parentGoalId={goal.id} />
+            </TabsContent>
+
+            <TabsContent value="habits">
+              <GoalHabitManager goalId={goal.id} />
             </TabsContent>
 
             <TabsContent value="timeline">

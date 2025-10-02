@@ -22,6 +22,7 @@ import { ProgressExport } from "@/components/habits/ProgressExport";
 import { HabitEditForm } from "@/components/habits/HabitEditForm";
 import { ReminderManager } from "@/components/habits/ReminderManager";
 import { NotificationPermission } from "@/components/habits/NotificationPermission";
+import { HabitGoalLinker } from "@/components/habits/HabitGoalLinker";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
@@ -201,6 +202,7 @@ export default function HabitDetail() {
           <TabsTrigger value="calendar">Calendar</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
           <TabsTrigger value="reminders">Reminders</TabsTrigger>
+          <TabsTrigger value="goals">Goals</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -239,6 +241,10 @@ export default function HabitDetail() {
 
         <TabsContent value="reminders" className="space-y-4">
           <ReminderManager habitId={id!} habitTitle={habit.title} />
+        </TabsContent>
+
+        <TabsContent value="goals" className="space-y-4">
+          <HabitGoalLinker habitId={id!} />
         </TabsContent>
       </Tabs>
 
