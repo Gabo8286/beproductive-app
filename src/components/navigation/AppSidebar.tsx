@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap } from "lucide-react";
+import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap, StickyNote } from "lucide-react";
 import { useModules } from "@/contexts/ModulesContext";
 import { cn } from "@/lib/utils";
 import { brandConfig, getMotivationalMessage } from "@/lib/brand";
@@ -41,6 +41,15 @@ const navigation = [
     icon: CheckSquare, 
     moduleId: "tasks" as const,
     description: "What needs to be done",
+    color: "text-warning"
+  },
+  { 
+    name: "Travel Notes", 
+    displayName: "Quick To-Dos",
+    href: "/quick-todos", 
+    icon: StickyNote, 
+    moduleId: "tasks" as const,
+    description: "Quick capture",
     color: "text-warning"
   },
   { 

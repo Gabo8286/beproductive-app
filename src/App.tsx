@@ -22,6 +22,7 @@ import Templates from "@/pages/Templates";
 import RecurringTasks from "@/pages/RecurringTasks";
 import TagManagement from "@/pages/TagManagement";
 import Automation from "@/pages/Automation";
+import QuickTodos from "@/pages/QuickTodos";
 import Habits from "@/pages/Habits";
 import HabitDetail from "@/pages/HabitDetail";
 import Reflections from "@/pages/Reflections";
@@ -72,6 +73,7 @@ const App = () => {
                 <Route path="goals/:id" element={<GoalDetail />} />
                 <Route path="tasks" element={<Tasks />} />
                 <Route path="tasks/:id" element={<TaskDetail />} />
+                <Route path="quick-todos" element={<QuickTodos />} />
                 <Route path="templates" element={<Templates />} />
                 <Route path="recurring-tasks" element={<RecurringTasks />} />
                 <Route path="tags" element={<TagManagement />} />
