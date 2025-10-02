@@ -283,21 +283,17 @@ export class AIServiceManager {
 
   private async updateUsageCounters(apiKeyId: string, response: AIServiceResponse): Promise<void> {
     try {
-      // Update current usage counters directly via database update
-      const { error: updateError } = await supabase
-        .from('api_keys')
-        .update({
-          current_month_cost: response.cost,
-          current_month_tokens: response.tokensUsed.total,
-          current_day_requests: 1,
-          last_used_at: new Date().toISOString()
-        })
-        .eq('id', apiKeyId);
+      const { error } = await supabase.rpc('increment_api_key_usage', {
+        key_id: apiKeyId,
+        cost_amount: response.cost || 0,
+        token_amount: response.tokensUsed.total || 0,
+      });
 
-      if (updateError) throw updateError;
+      if (error) {
+        console.error('Error updating usage counters:', error);
+      }
     } catch (error) {
       console.error('Failed to update usage counters:', error);
-      // Don't throw - counter updates shouldn't break the main flow
     }
   }
 

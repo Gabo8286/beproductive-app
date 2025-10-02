@@ -3186,6 +3186,10 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: number
       }
+      check_api_key_limits: {
+        Args: { key_id: string }
+        Returns: Json
+      }
       check_habit_achievements: {
         Args: { current_streak: number; target_user_id: string }
         Returns: undefined
@@ -3240,6 +3244,10 @@ export type Database = {
         Args: { key_id: string }
         Returns: Json
       }
+      get_cost_projections: {
+        Args: { p_user_id: string }
+        Returns: Json
+      }
       get_level_from_xp: {
         Args: { total_xp: number }
         Returns: number
@@ -3272,6 +3280,10 @@ export type Database = {
       get_xp_required_for_level: {
         Args: { target_level: number }
         Returns: number
+      }
+      increment_api_key_usage: {
+        Args: { cost_amount: number; key_id: string; token_amount: number }
+        Returns: undefined
       }
       is_super_admin: {
         Args: { user_id?: string }
