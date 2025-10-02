@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 import { validateGoalInput, sanitizeGoalInput } from "@/utils/goalValidation";
 import { shouldAutoComplete, calculateProgressFromValue, calculateValueFromProgress } from "@/utils/goalStatus";
+import { useGamification } from "@/hooks/useGamification";
 
 export function useGoals() {
   const queryClient = useQueryClient();
@@ -167,6 +168,7 @@ export function useGoal(id: string) {
 
 export function useUpdateGoal(id: string) {
   const queryClient = useQueryClient();
+  const { awardPoints } = useGamification();
 
   return useMutation({
     mutationFn: async (input: UpdateGoalInput) => {
@@ -234,9 +236,19 @@ export function useUpdateGoal(id: string) {
       if (error) throw error;
       return data as Goal;
     },
-    onSuccess: (updatedGoal) => {
+    onSuccess: async (updatedGoal) => {
       queryClient.invalidateQueries({ queryKey: ['goals'] });
       queryClient.invalidateQueries({ queryKey: ['goals', id] });
+
+      // Award points for goal completion
+      if (updatedGoal.status === 'completed') {
+        try {
+          await awardPoints('GOAL_COMPLETED', updatedGoal.id);
+        } catch (error) {
+          console.error('Failed to award points for goal completion:', error);
+        }
+      }
+
       toast.success(`Goal "${updatedGoal.title}" updated successfully!`);
     },
     onError: (error: any) => {

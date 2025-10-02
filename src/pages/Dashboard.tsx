@@ -19,7 +19,9 @@ import {
   NewQuickTodosWidget,
   HabitsWidget,
   ReflectionsWidget,
-  NotesWidget
+  NotesWidget,
+  GamificationWidget,
+  ProductivityProfileWidget
 } from "@/components/widgets";
 
 const journeyFeatures = [
@@ -126,12 +128,12 @@ export default function Dashboard() {
         <SmartWidgetGrid enableDragDrop={userPreferences.enableDragDrop}>
           <GoalsWidget />
           <TasksWidget />
+          <GamificationWidget />
           <NewQuickTodosWidget />
+          <ProductivityProfileWidget />
           <NotesWidget />
           <HabitsWidget />
           <ReflectionsWidget />
-          <JourneyProgressWidget />
-          <QuickActionsWidget />
         </SmartWidgetGrid>
 
         <DatabaseTest />

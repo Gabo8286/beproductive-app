@@ -7,6 +7,8 @@ export type ModuleId =
   | "reflections"
   | "notes"
   | "quick-todos"
+  | "gamification"
+  | "productivity-profile"
   | "ai-insights"
   | "team-collaboration"
   | "process-inventory";

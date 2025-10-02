@@ -37,6 +37,8 @@ import HabitDetail from "@/pages/HabitDetail";
 import Reflections from "@/pages/Reflections";
 import ReflectionDetail from "@/pages/ReflectionDetail";
 import Notes from "@/pages/Notes";
+import Gamification from "@/pages/Gamification";
+import ProfileAssessment from "@/pages/ProfileAssessment";
 import AccessibilitySettingsPage from "@/pages/AccessibilitySettings";
 import AccessibilityStatement from "@/pages/AccessibilityStatement";
 import NotFound from "@/pages/NotFound";
@@ -105,6 +107,8 @@ const AppContent = () => {
         <Route path="reflections" element={<Reflections />} />
         <Route path="reflections/:id" element={<ReflectionDetail />} />
         <Route path="notes" element={<Notes />} />
+        <Route path="gamification" element={<Gamification />} />
+        <Route path="profile-assessment" element={<ProfileAssessment />} />
         <Route path="settings/accessibility" element={<AccessibilitySettingsPage />} />
       </Route>
 

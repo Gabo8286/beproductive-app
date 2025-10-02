@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { useGamification } from '@/hooks/useGamification';
 
 type Task = Database['public']['Tables']['tasks']['Row'];
 type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
@@ -174,6 +175,7 @@ export const useDeleteTask = () => {
 // Toggle task completion
 export const useToggleTaskCompletion = () => {
   const queryClient = useQueryClient();
+  const { awardPoints } = useGamification();
 
   return useMutation({
     mutationFn: async (task: Task) => {
@@ -191,6 +193,16 @@ export const useToggleTaskCompletion = () => {
         .single();
 
       if (error) throw error;
+
+      // Award points for task completion
+      if (newStatus === 'done') {
+        try {
+          await awardPoints('TASK_COMPLETED', task.id);
+        } catch (pointsError) {
+          console.error('Failed to award points for task completion:', pointsError);
+        }
+      }
+
       return data;
     },
     onSuccess: () => {

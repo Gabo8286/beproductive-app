@@ -65,6 +65,22 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     icon: "notebook",
     path: "/notes",
   },
+  gamification: {
+    id: "gamification",
+    name: "Journey Progress",
+    description: "Track your productivity level, achievements, and growth",
+    enabled: true,
+    icon: "trophy",
+    path: "/gamification",
+  },
+  "productivity-profile": {
+    id: "productivity-profile",
+    name: "Productivity Profile",
+    description: "Discover your productivity style and get personalized insights",
+    enabled: true,
+    icon: "user-circle",
+    path: "/profile-assessment",
+  },
   "ai-insights": {
     id: "ai-insights",
     name: "AI Insights",

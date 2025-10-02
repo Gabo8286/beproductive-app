@@ -16,3 +16,5 @@ export { NewQuickTodosWidget } from './NewQuickTodosWidget';
 export { HabitsWidget } from './HabitsWidget';
 export { ReflectionsWidget } from './ReflectionsWidget';
 export { NotesWidget } from './NotesWidget';
+export { GamificationWidget } from './GamificationWidget';
+export { ProductivityProfileWidget } from './ProductivityProfileWidget';

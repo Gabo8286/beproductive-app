@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Note, CreateNoteData, UpdateNoteData, NoteLink } from "@/types/notes";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { useGamification } from "@/hooks/useGamification";
 
 export const useNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -10,6 +11,7 @@ export const useNotes = () => {
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { awardPoints } = useGamification();
 
   // Fetch all notes for the current user
   const fetchNotes = async () => {
@@ -83,6 +85,13 @@ export const useNotes = () => {
 
       // Process any links in the content
       await processNoteLinks(newNote);
+
+      // Award points for note creation
+      try {
+        await awardPoints('NOTE_CREATED', newNote.id);
+      } catch (error) {
+        console.error('Failed to award points for note creation:', error);
+      }
 
       return newNote;
     } catch (err) {
@@ -195,6 +204,13 @@ export const useNotes = () => {
 
           if (linkError) {
             console.error('Error creating note links:', linkError);
+          } else {
+            // Award points for note linking
+            try {
+              await awardPoints('NOTE_LINKED', note.id);
+            } catch (error) {
+              console.error('Failed to award points for note linking:', error);
+            }
           }
         }
       }
