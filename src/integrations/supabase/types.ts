@@ -1030,6 +1030,54 @@ export type Database = {
         }
         Relationships: []
       }
+      quick_todos: {
+        Row: {
+          completed_at: string | null
+          content: string
+          created_at: string | null
+          created_by: string
+          id: string
+          position: number | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          content: string
+          created_at?: string | null
+          created_by: string
+          id?: string
+          position?: number | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          content?: string
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          position?: number | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quick_todos_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quick_todos_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reflection_analytics: {
         Row: {
           average_energy: number | null
@@ -1886,6 +1934,10 @@ export type Database = {
         Args: { p_date: string; p_habit_id: string }
         Returns: boolean
       }
+      clear_completed_quick_todos: {
+        Args: { workspace_uuid: string }
+        Returns: undefined
+      }
       complete_milestone: {
         Args: { milestone_id: string }
         Returns: undefined
@@ -1972,6 +2024,10 @@ export type Database = {
         Args: { p_user_id?: string }
         Returns: undefined
       }
+      toggle_quick_todo_completion: {
+        Args: { quick_todo_id: string }
+        Returns: undefined
+      }
       toggle_timer_pause: {
         Args: Record<PropertyKey, never>
         Returns: boolean
@@ -1995,6 +2051,10 @@ export type Database = {
           p_habit_id: string
           p_status: Database["public"]["Enums"]["entry_status"]
         }
+        Returns: undefined
+      }
+      update_quick_todo_position: {
+        Args: { new_position: number; quick_todo_id: string }
         Returns: undefined
       }
       update_reflection_analytics: {
