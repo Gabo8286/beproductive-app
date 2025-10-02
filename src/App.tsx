@@ -7,6 +7,9 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
+import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
+import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
+import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
@@ -30,6 +33,48 @@ import ReflectionDetail from "@/pages/ReflectionDetail";
 import NotFound from "@/pages/NotFound";
 import { useMemo } from "react";
 
+const AppContent = () => {
+  // Enable offline detection
+  useOfflineDetection();
+
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="goals" element={<Goals />} />
+        <Route path="goals/new" element={<NewGoal />} />
+        <Route path="goals/:id" element={<GoalDetail />} />
+        <Route path="tasks" element={<Tasks />} />
+        <Route path="tasks/:id" element={<TaskDetail />} />
+        <Route path="quick-todos" element={<QuickTodos />} />
+        <Route path="templates" element={<Templates />} />
+        <Route path="recurring-tasks" element={<RecurringTasks />} />
+        <Route path="tags" element={<TagManagement />} />
+        <Route path="automation" element={<Automation />} />
+        <Route path="habits" element={<Habits />} />
+        <Route path="habits/:id" element={<HabitDetail />} />
+        <Route path="reflections" element={<Reflections />} />
+        <Route path="reflections/:id" element={<ReflectionDetail />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
 const App = () => {
   const queryClient = useMemo(
     () =>
@@ -45,52 +90,21 @@ const App = () => {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <ModulesProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <AppLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="goals" element={<Goals />} />
-                <Route path="goals/new" element={<NewGoal />} />
-                <Route path="goals/:id" element={<GoalDetail />} />
-                <Route path="tasks" element={<Tasks />} />
-                <Route path="tasks/:id" element={<TaskDetail />} />
-                <Route path="quick-todos" element={<QuickTodos />} />
-                <Route path="templates" element={<Templates />} />
-                <Route path="recurring-tasks" element={<RecurringTasks />} />
-                <Route path="tags" element={<TagManagement />} />
-                <Route path="automation" element={<Automation />} />
-                <Route path="habits" element={<Habits />} />
-                <Route path="habits/:id" element={<HabitDetail />} />
-                <Route path="reflections" element={<Reflections />} />
-                <Route path="reflections/:id" element={<ReflectionDetail />} />
-              </Route>
-
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </ModulesProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+    <ErrorBoundary fallback={PageErrorFallback} level="page">
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <ModulesProvider>
+                <AppContent />
+              </ModulesProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
