@@ -423,6 +423,413 @@ export type Database = {
           },
         ]
       }
+      habit_analytics: {
+        Row: {
+          average_difficulty: number | null
+          average_energy: number | null
+          average_mood: number | null
+          calculated_at: string
+          completion_rate: number | null
+          habit_id: string
+          id: string
+          period_end: string
+          period_start: string
+          period_type: Database["public"]["Enums"]["period_enum"]
+          total_completions: number
+          total_misses: number
+          total_skips: number
+        }
+        Insert: {
+          average_difficulty?: number | null
+          average_energy?: number | null
+          average_mood?: number | null
+          calculated_at?: string
+          completion_rate?: number | null
+          habit_id: string
+          id?: string
+          period_end: string
+          period_start: string
+          period_type: Database["public"]["Enums"]["period_enum"]
+          total_completions?: number
+          total_misses?: number
+          total_skips?: number
+        }
+        Update: {
+          average_difficulty?: number | null
+          average_energy?: number | null
+          average_mood?: number | null
+          calculated_at?: string
+          completion_rate?: number | null
+          habit_id?: string
+          id?: string
+          period_end?: string
+          period_start?: string
+          period_type?: Database["public"]["Enums"]["period_enum"]
+          total_completions?: number
+          total_misses?: number
+          total_skips?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_analytics_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habit_entries: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          date: string
+          difficulty_felt: number | null
+          duration_minutes: number | null
+          energy_level: number | null
+          habit_id: string
+          id: string
+          mood: Database["public"]["Enums"]["mood_enum"] | null
+          notes: string | null
+          status: Database["public"]["Enums"]["entry_status"]
+          updated_at: string
+          value: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          date: string
+          difficulty_felt?: number | null
+          duration_minutes?: number | null
+          energy_level?: number | null
+          habit_id: string
+          id?: string
+          mood?: Database["public"]["Enums"]["mood_enum"] | null
+          notes?: string | null
+          status?: Database["public"]["Enums"]["entry_status"]
+          updated_at?: string
+          value?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          date?: string
+          difficulty_felt?: number | null
+          duration_minutes?: number | null
+          energy_level?: number | null
+          habit_id?: string
+          id?: string
+          mood?: Database["public"]["Enums"]["mood_enum"] | null
+          notes?: string | null
+          status?: Database["public"]["Enums"]["entry_status"]
+          updated_at?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_entries_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habit_goal_links: {
+        Row: {
+          contribution_weight: number
+          created_at: string
+          goal_id: string
+          habit_id: string
+          id: string
+        }
+        Insert: {
+          contribution_weight?: number
+          created_at?: string
+          goal_id: string
+          habit_id: string
+          id?: string
+        }
+        Update: {
+          contribution_weight?: number
+          created_at?: string
+          goal_id?: string
+          habit_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_goal_links_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "habit_goal_links_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habit_reminders: {
+        Row: {
+          created_at: string
+          days_of_week: number[] | null
+          habit_id: string
+          id: string
+          is_active: boolean
+          last_sent_at: string | null
+          location: Json | null
+          message: string | null
+          reminder_type: Database["public"]["Enums"]["reminder_type"]
+          time: string | null
+          trigger_habit_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          days_of_week?: number[] | null
+          habit_id: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          location?: Json | null
+          message?: string | null
+          reminder_type?: Database["public"]["Enums"]["reminder_type"]
+          time?: string | null
+          trigger_habit_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          days_of_week?: number[] | null
+          habit_id?: string
+          id?: string
+          is_active?: boolean
+          last_sent_at?: string | null
+          location?: Json | null
+          message?: string | null
+          reminder_type?: Database["public"]["Enums"]["reminder_type"]
+          time?: string | null
+          trigger_habit_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_reminders_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "habit_reminders_trigger_habit_id_fkey"
+            columns: ["trigger_habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habit_streaks: {
+        Row: {
+          broken_at: string | null
+          created_at: string
+          end_date: string | null
+          habit_id: string
+          id: string
+          length: number
+          reason: string | null
+          start_date: string
+        }
+        Insert: {
+          broken_at?: string | null
+          created_at?: string
+          end_date?: string | null
+          habit_id: string
+          id?: string
+          length: number
+          reason?: string | null
+          start_date: string
+        }
+        Update: {
+          broken_at?: string | null
+          created_at?: string
+          end_date?: string | null
+          habit_id?: string
+          id?: string
+          length?: number
+          reason?: string | null
+          start_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_streaks_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habit_templates: {
+        Row: {
+          category: Database["public"]["Enums"]["habit_category"]
+          color: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty: Database["public"]["Enums"]["habit_difficulty"] | null
+          duration_minutes: number | null
+          frequency: Database["public"]["Enums"]["habit_frequency"] | null
+          icon: string | null
+          id: string
+          is_system: boolean
+          metadata: Json
+          rating: number | null
+          time_of_day: Database["public"]["Enums"]["habit_time"] | null
+          title: string
+          usage_count: number
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["habit_category"]
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["habit_difficulty"] | null
+          duration_minutes?: number | null
+          frequency?: Database["public"]["Enums"]["habit_frequency"] | null
+          icon?: string | null
+          id?: string
+          is_system?: boolean
+          metadata?: Json
+          rating?: number | null
+          time_of_day?: Database["public"]["Enums"]["habit_time"] | null
+          title: string
+          usage_count?: number
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["habit_category"]
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["habit_difficulty"] | null
+          duration_minutes?: number | null
+          frequency?: Database["public"]["Enums"]["habit_frequency"] | null
+          icon?: string | null
+          id?: string
+          is_system?: boolean
+          metadata?: Json
+          rating?: number | null
+          time_of_day?: Database["public"]["Enums"]["habit_time"] | null
+          title?: string
+          usage_count?: number
+        }
+        Relationships: []
+      }
+      habits: {
+        Row: {
+          archived_at: string | null
+          category: Database["public"]["Enums"]["habit_category"]
+          color: string | null
+          created_at: string
+          created_by: string
+          current_streak: number
+          custom_frequency: Json | null
+          description: string | null
+          difficulty: Database["public"]["Enums"]["habit_difficulty"]
+          duration_minutes: number | null
+          end_date: string | null
+          frequency: Database["public"]["Enums"]["habit_frequency"]
+          icon: string | null
+          id: string
+          is_public: boolean
+          longest_streak: number
+          metadata: Json
+          position: number
+          reminder_enabled: boolean
+          reminder_time: string | null
+          start_date: string
+          tags: string[]
+          target_streak: number | null
+          time_of_day: Database["public"]["Enums"]["habit_time"] | null
+          title: string
+          type: Database["public"]["Enums"]["habit_type"]
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          archived_at?: string | null
+          category?: Database["public"]["Enums"]["habit_category"]
+          color?: string | null
+          created_at?: string
+          created_by: string
+          current_streak?: number
+          custom_frequency?: Json | null
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["habit_difficulty"]
+          duration_minutes?: number | null
+          end_date?: string | null
+          frequency?: Database["public"]["Enums"]["habit_frequency"]
+          icon?: string | null
+          id?: string
+          is_public?: boolean
+          longest_streak?: number
+          metadata?: Json
+          position?: number
+          reminder_enabled?: boolean
+          reminder_time?: string | null
+          start_date?: string
+          tags?: string[]
+          target_streak?: number | null
+          time_of_day?: Database["public"]["Enums"]["habit_time"] | null
+          title: string
+          type?: Database["public"]["Enums"]["habit_type"]
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          archived_at?: string | null
+          category?: Database["public"]["Enums"]["habit_category"]
+          color?: string | null
+          created_at?: string
+          created_by?: string
+          current_streak?: number
+          custom_frequency?: Json | null
+          description?: string | null
+          difficulty?: Database["public"]["Enums"]["habit_difficulty"]
+          duration_minutes?: number | null
+          end_date?: string | null
+          frequency?: Database["public"]["Enums"]["habit_frequency"]
+          icon?: string | null
+          id?: string
+          is_public?: boolean
+          longest_streak?: number
+          metadata?: Json
+          position?: number
+          reminder_enabled?: boolean
+          reminder_time?: string | null
+          start_date?: string
+          tags?: string[]
+          target_streak?: number | null
+          time_of_day?: Database["public"]["Enums"]["habit_time"] | null
+          title?: string
+          type?: Database["public"]["Enums"]["habit_type"]
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habits_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       milestone_templates: {
         Row: {
           category: string | null
@@ -1045,6 +1452,15 @@ export type Database = {
         Args: { goal_id: string }
         Returns: number
       }
+      calculate_habit_analytics: {
+        Args: {
+          p_end_date: string
+          p_habit_id: string
+          p_period_type: Database["public"]["Enums"]["period_enum"]
+          p_start_date: string
+        }
+        Returns: undefined
+      }
       calculate_hierarchy_level: {
         Args: { task_id: string }
         Returns: number
@@ -1060,6 +1476,10 @@ export type Database = {
       calculate_next_occurrence_from_date: {
         Args: { from_date: string; pattern: Json }
         Returns: string
+      }
+      check_habit_completion: {
+        Args: { p_date: string; p_habit_id: string }
+        Returns: boolean
       }
       complete_milestone: {
         Args: { milestone_id: string }
@@ -1157,6 +1577,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_habit_streak: {
+        Args: {
+          p_date: string
+          p_habit_id: string
+          p_status: Database["public"]["Enums"]["entry_status"]
+        }
+        Returns: undefined
+      }
       update_task_position: {
         Args: { new_position: number; task_id: string }
         Returns: undefined
@@ -1167,6 +1595,7 @@ export type Database = {
       }
     }
     Enums: {
+      entry_status: "completed" | "skipped" | "missed" | "partial"
       goal_category:
         | "personal"
         | "professional"
@@ -1176,7 +1605,23 @@ export type Database = {
         | "relationship"
         | "other"
       goal_status: "draft" | "active" | "paused" | "completed" | "archived"
+      habit_category:
+        | "health"
+        | "productivity"
+        | "learning"
+        | "mindfulness"
+        | "social"
+        | "financial"
+        | "creative"
+        | "other"
+      habit_difficulty: "easy" | "medium" | "hard" | "extreme"
+      habit_frequency: "daily" | "weekly" | "monthly" | "custom"
+      habit_time: "morning" | "afternoon" | "evening" | "anytime"
+      habit_type: "build" | "break" | "maintain"
       member_role: "member" | "admin" | "owner"
+      mood_enum: "amazing" | "good" | "neutral" | "bad" | "terrible"
+      period_enum: "day" | "week" | "month" | "year" | "all_time"
+      reminder_type: "time_based" | "location_based" | "trigger_based"
       task_priority: "low" | "medium" | "high" | "urgent"
       task_status: "todo" | "in_progress" | "blocked" | "done"
       user_role: "user" | "team_lead" | "admin" | "super_admin"
@@ -1308,6 +1753,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      entry_status: ["completed", "skipped", "missed", "partial"],
       goal_category: [
         "personal",
         "professional",
@@ -1318,7 +1764,24 @@ export const Constants = {
         "other",
       ],
       goal_status: ["draft", "active", "paused", "completed", "archived"],
+      habit_category: [
+        "health",
+        "productivity",
+        "learning",
+        "mindfulness",
+        "social",
+        "financial",
+        "creative",
+        "other",
+      ],
+      habit_difficulty: ["easy", "medium", "hard", "extreme"],
+      habit_frequency: ["daily", "weekly", "monthly", "custom"],
+      habit_time: ["morning", "afternoon", "evening", "anytime"],
+      habit_type: ["build", "break", "maintain"],
       member_role: ["member", "admin", "owner"],
+      mood_enum: ["amazing", "good", "neutral", "bad", "terrible"],
+      period_enum: ["day", "week", "month", "year", "all_time"],
+      reminder_type: ["time_based", "location_based", "trigger_based"],
       task_priority: ["low", "medium", "high", "urgent"],
       task_status: ["todo", "in_progress", "blocked", "done"],
       user_role: ["user", "team_lead", "admin", "super_admin"],
