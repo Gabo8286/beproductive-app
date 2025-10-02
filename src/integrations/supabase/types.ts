@@ -180,36 +180,90 @@ export type Database = {
           },
         ]
       }
+      goal_milestone_dependencies: {
+        Row: {
+          created_at: string | null
+          depends_on_id: string
+          id: string
+          milestone_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          depends_on_id: string
+          id?: string
+          milestone_id: string
+        }
+        Update: {
+          created_at?: string | null
+          depends_on_id?: string
+          id?: string
+          milestone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_milestone_dependencies_depends_on_id_fkey"
+            columns: ["depends_on_id"]
+            isOneToOne: false
+            referencedRelation: "goal_milestones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goal_milestone_dependencies_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "goal_milestones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goal_milestones: {
         Row: {
+          actual_hours: number | null
           completed_at: string | null
+          completion_notes: string | null
           created_at: string | null
           description: string | null
+          estimated_hours: number | null
           goal_id: string
           id: string
+          metadata: Json | null
+          priority: number | null
           progress_percentage: number | null
+          tags: string[] | null
           target_date: string | null
           title: string
           updated_at: string | null
         }
         Insert: {
+          actual_hours?: number | null
           completed_at?: string | null
+          completion_notes?: string | null
           created_at?: string | null
           description?: string | null
+          estimated_hours?: number | null
           goal_id: string
           id?: string
+          metadata?: Json | null
+          priority?: number | null
           progress_percentage?: number | null
+          tags?: string[] | null
           target_date?: string | null
           title: string
           updated_at?: string | null
         }
         Update: {
+          actual_hours?: number | null
           completed_at?: string | null
+          completion_notes?: string | null
           created_at?: string | null
           description?: string | null
+          estimated_hours?: number | null
           goal_id?: string
           id?: string
+          metadata?: Json | null
+          priority?: number | null
           progress_percentage?: number | null
+          tags?: string[] | null
           target_date?: string | null
           title?: string
           updated_at?: string | null
@@ -368,6 +422,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      milestone_templates: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          id: string
+          milestones: Json
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          id?: string
+          milestones?: Json
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          id?: string
+          milestones?: Json
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       notification_settings: {
         Row: {
@@ -930,6 +1017,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_milestone_template: {
+        Args: { goal_id: string; start_date?: string; template_id: string }
+        Returns: undefined
+      }
+      bulk_milestone_operations: {
+        Args: {
+          milestone_ids: string[]
+          operation_data?: Json
+          operation_type: string
+        }
+        Returns: undefined
+      }
       bulk_update_goal_progress: {
         Args: { progress_updates: Json }
         Returns: undefined
@@ -950,6 +1049,10 @@ export type Database = {
         Args: { task_id: string }
         Returns: number
       }
+      calculate_milestone_analytics: {
+        Args: { goal_id: string }
+        Returns: Json
+      }
       calculate_next_occurrence: {
         Args: { pattern: Json; template_id: string }
         Returns: string
@@ -960,6 +1063,14 @@ export type Database = {
       }
       complete_milestone: {
         Args: { milestone_id: string }
+        Returns: undefined
+      }
+      complete_milestone_enhanced: {
+        Args: {
+          actual_hours?: number
+          completion_notes?: string
+          milestone_id: string
+        }
         Returns: undefined
       }
       complete_task: {

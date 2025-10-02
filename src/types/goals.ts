@@ -34,6 +34,12 @@ export interface GoalMilestone {
   target_date?: string | null;
   completed_at?: string | null;
   progress_percentage: number;
+  priority?: number | null;
+  estimated_hours?: number | null;
+  actual_hours?: number | null;
+  tags?: string[] | null;
+  metadata?: Record<string, any> | null;
+  completion_notes?: string | null;
   created_at: string;
   updated_at: string;
 }
