@@ -11,8 +11,61 @@ import { CommunityStatsCounter } from "./CommunityStatsCounter";
 import { TrustBadges } from "./TrustBadges";
 import { SuccessStoriesGrid } from "./SuccessStoriesGrid";
 import { DemoContainer } from "./demo/DemoContainer";
+import { EmailCaptureModal } from "./conversion/EmailCaptureModal";
+import { FloatingCTA } from "./conversion/FloatingCTA";
+import { TrustSignals } from "./conversion/TrustSignals";
+import { SocialProofBanner } from "./conversion/SocialProofBanner";
+import { useConversionTracking } from "@/hooks/useConversionTracking";
+import { useExitIntent } from "@/hooks/useExitIntent";
+import { ConversionEventType } from "@/types/conversion";
+import { useState, useEffect } from "react";
 
 export const LandingPage = () => {
+  const {
+    personalizationData,
+    trackEvent,
+    trackBehavior,
+    getEngagementLevel,
+  } = useConversionTracking();
+
+  const { showExitIntent, resetExitIntent } = useExitIntent();
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailModalTrigger, setEmailModalTrigger] = useState<'exit' | 'scroll' | 'time' | 'engagement'>('exit');
+  const [hasShownTimeModal, setHasShownTimeModal] = useState(false);
+
+  // Exit intent trigger
+  useEffect(() => {
+    if (showExitIntent) {
+      setEmailModalTrigger('exit');
+      setShowEmailModal(true);
+      trackEvent(ConversionEventType.EXIT_INTENT);
+      resetExitIntent();
+    }
+  }, [showExitIntent, trackEvent, resetExitIntent]);
+
+  // Time-based trigger (after 60 seconds)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!hasShownTimeModal && personalizationData.scrollDepth > 30) {
+        setEmailModalTrigger('time');
+        setShowEmailModal(true);
+        setHasShownTimeModal(true);
+      }
+    }, 60000);
+
+    return () => clearTimeout(timer);
+  }, [hasShownTimeModal, personalizationData.scrollDepth]);
+
+  const handleEmailCapture = (email: string) => {
+    trackEvent(ConversionEventType.EMAIL_CAPTURE, { email, trigger: emailModalTrigger }, 10);
+    console.log('Email captured:', email);
+  };
+
+  const handleCTAClick = (location: string) => {
+    trackEvent(ConversionEventType.CTA_CLICK, { location }, 5);
+    trackBehavior('click', `cta-${location}`);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-hero">
       {/* Navigation - Glass Morphism */}
@@ -51,7 +104,12 @@ export const LandingPage = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button size="lg" className="apple-button shadow-lg hover:shadow-xl text-base h-12 px-8 font-medium" asChild>
+            <Button 
+                size="lg" 
+                className="apple-button shadow-lg hover:shadow-xl text-base h-12 px-8 font-medium" 
+                asChild
+                onClick={() => handleCTAClick('hero-primary')}
+              >
                 <Link to="/signup">
                   <Sparkles className="h-5 w-5 mr-2" />
                   Begin Your Journey Free
@@ -159,6 +217,11 @@ export const LandingPage = () => {
         <CommunityStatsCounter />
       </section>
 
+      {/* Social Proof Banner */}
+      <section className="container mx-auto px-4 py-12">
+        <SocialProofBanner />
+      </section>
+
       {/* Trust & Security Section */}
       <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <div className="max-w-6xl mx-auto">
@@ -191,7 +254,12 @@ export const LandingPage = () => {
             Whether you're leading teams, building businesses, or pursuing personal growth—BeProductive adapts to your unique path
           </p>
         </div>
-        <PersonaSelector />
+        <PersonaSelector 
+          onPersonaSelect={(personaId) => {
+            trackEvent(ConversionEventType.QUIZ_COMPLETE, { persona: personaId }, 5);
+            trackBehavior('click', `persona-${personaId}`);
+          }}
+        />
       </section>
 
       {/* Interactive Demo Experience Section */}
@@ -209,7 +277,12 @@ export const LandingPage = () => {
           </p>
         </div>
         <DemoContainer 
+          onDemoStart={() => {
+            trackEvent(ConversionEventType.DEMO_START, { source: 'landing-demo-section' }, 8);
+            trackBehavior('demo_start', 'interactive-demo');
+          }}
           onComplete={() => {
+            trackEvent(ConversionEventType.DEMO_COMPLETE, {}, 15);
             const signupLink = document.querySelector('a[href="/signup"]');
             signupLink?.scrollIntoView({ behavior: 'smooth' });
           }}
@@ -317,6 +390,9 @@ export const LandingPage = () => {
         </div>
       </section>
 
+      {/* Trust Signals Section */}
+      <TrustSignals />
+
       {/* Footer */}
       <footer className="container mx-auto px-4 py-12 text-center border-t border-border/50">
         <div className="flex items-center justify-center gap-2 mb-3">
@@ -327,6 +403,19 @@ export const LandingPage = () => {
           Commit to your journey, achieve your goals
         </p>
       </footer>
+
+      {/* Floating Conversion Elements */}
+      <FloatingCTA 
+        scrollThreshold={30}
+        engagementLevel={getEngagementLevel()}
+      />
+
+      <EmailCaptureModal
+        isOpen={showEmailModal}
+        onClose={() => setShowEmailModal(false)}
+        onSuccess={handleEmailCapture}
+        trigger={emailModalTrigger}
+      />
     </div>
   );
 };

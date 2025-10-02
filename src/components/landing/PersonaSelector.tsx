@@ -116,10 +116,19 @@ const personas: Persona[] = [
   },
 ];
 
-export function PersonaSelector() {
+interface PersonaSelectorProps {
+  onPersonaSelect?: (personaId: string) => void;
+}
+
+export function PersonaSelector({ onPersonaSelect }: PersonaSelectorProps = {}) {
   const [selectedPersona, setSelectedPersona] = useState<string>(personas[0].id);
 
   const selected = personas.find((p) => p.id === selectedPersona) || personas[0];
+
+  const handleSelect = (personaId: string) => {
+    setSelectedPersona(personaId);
+    onPersonaSelect?.(personaId);
+  };
 
   return (
     <div className="space-y-8">
@@ -133,7 +142,7 @@ export function PersonaSelector() {
             transition={{ delay: index * 0.1 }}
           >
             <Card
-              onClick={() => setSelectedPersona(persona.id)}
+              onClick={() => handleSelect(persona.id)}
               className={cn(
                 "cursor-pointer elevated-card group transition-all duration-300",
                 selectedPersona === persona.id

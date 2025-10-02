@@ -10,9 +10,10 @@ import { Sparkles, ArrowRight } from "lucide-react";
 
 interface DemoContainerProps {
   onComplete?: () => void;
+  onDemoStart?: () => void;
 }
 
-export function DemoContainer({ onComplete }: DemoContainerProps) {
+export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
   const {
     demoState,
     demoSteps,
@@ -66,7 +67,10 @@ export function DemoContainer({ onComplete }: DemoContainerProps) {
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <Button
-            onClick={() => startDemo('professional')}
+            onClick={() => {
+              startDemo('professional');
+              onDemoStart?.();
+            }}
             size="lg"
             className="apple-button"
           >
@@ -74,14 +78,20 @@ export function DemoContainer({ onComplete }: DemoContainerProps) {
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
           <Button
-            onClick={() => startDemo('student')}
+            onClick={() => {
+              startDemo('student');
+              onDemoStart?.();
+            }}
             size="lg"
             variant="outline"
           >
             Student Demo
           </Button>
           <Button
-            onClick={() => startDemo('entrepreneur')}
+            onClick={() => {
+              startDemo('entrepreneur');
+              onDemoStart?.();
+            }}
             size="lg"
             variant="outline"
           >
