@@ -31,7 +31,7 @@ export function AIInsightsDashboard() {
           <p className="text-muted-foreground">AI-powered productivity analysis and recommendations</p>
         </div>
         <Button
-          onClick={() => generateInsights()}
+          onClick={() => generateInsights(undefined)}
           disabled={isGenerating}
         >
           <RefreshCw className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />

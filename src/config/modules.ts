@@ -85,7 +85,7 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     id: "ai-insights",
     name: "AI Insights",
     description: "Get AI-powered productivity insights",
-    enabled: false,
+    enabled: true,
     icon: "sparkles",
     path: "/ai-insights",
   },

@@ -40,6 +40,7 @@ import Projects from "@/pages/Projects";
 import Notes from "@/pages/Notes";
 import Gamification from "@/pages/Gamification";
 import ProfileAssessment from "@/pages/ProfileAssessment";
+import AIInsights from "@/pages/AIInsights";
 import AccessibilitySettingsPage from "@/pages/AccessibilitySettings";
 import AccessibilityStatement from "@/pages/AccessibilityStatement";
 import NotFound from "@/pages/NotFound";
@@ -111,6 +112,7 @@ const AppContent = () => {
         <Route path="notes" element={<Notes />} />
         <Route path="gamification" element={<Gamification />} />
         <Route path="profile-assessment" element={<ProfileAssessment />} />
+        <Route path="ai-insights" element={<AIInsights />} />
         <Route path="settings/accessibility" element={<AccessibilitySettingsPage />} />
       </Route>
 

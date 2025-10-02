@@ -117,8 +117,8 @@ export function ProjectForm({
         target_date: project.target_date || '',
         estimated_hours: project.estimated_hours?.toString() || '',
         budget_amount: project.budget_amount?.toString() || '',
-        color: project.color,
-        icon: project.icon,
+        color: project.color || PROJECT_DEFAULTS.color,
+        icon: project.icon || PROJECT_DEFAULTS.icon,
         tags: project.tags || [],
       });
     } else {

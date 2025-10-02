@@ -134,7 +134,7 @@ export function GamificationWidget() {
             <div className="flex items-center justify-center space-x-1 text-purple-600 mb-1">
               <Repeat className="h-4 w-4" />
               <span className="text-lg font-semibold">
-                {profile.metadata?.total_habits_completed || 0}
+                {(profile.metadata as any)?.total_habits_completed || 0}
               </span>
             </div>
             <p className="text-xs text-purple-700">Habits Done</p>
