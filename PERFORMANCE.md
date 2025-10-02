@@ -9,11 +9,10 @@ This project includes comprehensive performance monitoring to track Core Web Vit
 We track all Core Web Vitals metrics:
 
 - **LCP (Largest Contentful Paint)**: < 2.5s
-- **FID (First Input Delay)**: < 100ms
+- **INP (Interaction to Next Paint)**: < 200ms (replaces FID)
 - **CLS (Cumulative Layout Shift)**: < 0.1
 - **FCP (First Contentful Paint)**: < 1.8s
 - **TTFB (Time to First Byte)**: < 600ms
-- **INP (Interaction to Next Paint)**: < 200ms
 
 ## Viewing Performance Metrics
 
