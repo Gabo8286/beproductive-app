@@ -8,6 +8,7 @@ import { PersonaSelector } from "./PersonaSelector";
 import { TestimonialCarousel } from "./TestimonialCarousel";
 import { LiveActivityFeed } from "./LiveActivityFeed";
 import { CommunityStatsCounter } from "./CommunityStatsCounter";
+import { BuildStory } from "./BuildStory";
 import { TrustBadges } from "./TrustBadges";
 import { SuccessStoriesGrid } from "./SuccessStoriesGrid";
 import { DemoContainer } from "./demo/DemoContainer";

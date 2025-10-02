@@ -31,14 +31,14 @@ export const useAIUsageStats = (days: number = 30) => {
     queryFn: async (): Promise<AIUsageStats> => {
       if (!user) throw new Error('User not authenticated');
 
-      const { data, error } = await supabase.rpc('get_user_ai_usage_summary', {
+      const { data, error } = await supabase.rpc('get_user_ai_usage_stats' as any, {
         p_user_id: user.id,
         p_days: days,
       });
 
       if (error) throw error;
 
-      return data || {
+      return (data as AIUsageStats) || {
         total_cost: 0,
         total_tokens: 0,
         total_requests: 0,
@@ -49,7 +49,7 @@ export const useAIUsageStats = (days: number = 30) => {
       };
     },
     enabled: !!user,
-    refetchInterval: 30000, // Refresh every 30 seconds for real-time data
+    refetchInterval: 30000,
   });
 };
 
@@ -59,15 +59,15 @@ export const useSystemAIUsageStats = (days: number = 30) => {
   return useQuery({
     queryKey: ['system-ai-usage-stats', days],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_system_api_usage_stats', {
+      const { data, error } = await supabase.rpc('get_system_api_usage_stats' as any, {
         days_back: days,
       });
 
       if (error) throw error;
-      return data;
+      return data as any;
     },
     enabled: profile?.role === 'super_admin',
-    refetchInterval: 60000, // Refresh every minute for admins
+    refetchInterval: 60000,
   });
 };
 
@@ -79,15 +79,15 @@ export const useCostProjections = () => {
     queryFn: async () => {
       if (!user) throw new Error('User not authenticated');
 
-      const { data, error } = await supabase.rpc('get_cost_projections', {
+      const { data, error } = await supabase.rpc('get_cost_projections' as any, {
         p_user_id: user.id,
       });
 
       if (error) throw error;
-      return data;
+      return data as any;
     },
     enabled: !!user,
-    refetchInterval: 5 * 60 * 1000, // Refresh every 5 minutes
+    refetchInterval: 5 * 60 * 1000,
   });
 };
 
@@ -111,7 +111,7 @@ export const useAIUsageLimits = () => {
 
       const limitChecks = await Promise.all(
         apiKeys.map(async (key) => {
-          const { data, error } = await supabase.rpc('check_api_key_limits', {
+          const { data, error } = await supabase.rpc('check_api_key_limits' as any, {
             key_id: key.id,
           });
 
@@ -121,7 +121,7 @@ export const useAIUsageLimits = () => {
           }
 
           return {
-            ...data,
+            ...(data as any),
             key_name: key.key_name,
             provider: key.provider,
           };
