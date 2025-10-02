@@ -106,4 +106,13 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     icon: "workflow",
     path: "/processes",
   },
+  "api-management": {
+    id: "api-management",
+    name: "API Management",
+    description: "Manage API connections, monitor usage, and control costs",
+    enabled: true,
+    icon: "key",
+    path: "/admin/api-management",
+    requiredRole: ["super_admin"],
+  },
 };

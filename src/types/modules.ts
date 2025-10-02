@@ -11,7 +11,8 @@ export type ModuleId =
   | "productivity-profile"
   | "ai-insights"
   | "team-collaboration"
-  | "process-inventory";
+  | "process-inventory"
+  | "api-management";
 
 export interface ModuleConfig {
   id: ModuleId;

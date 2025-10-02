@@ -44,6 +44,7 @@ import AIInsights from "@/pages/AIInsights";
 import AccessibilitySettingsPage from "@/pages/AccessibilitySettings";
 import AccessibilityStatement from "@/pages/AccessibilityStatement";
 import NotFound from "@/pages/NotFound";
+import APIManagementDashboard from "@/components/admin/APIManagement/APIManagementDashboard";
 import { useMemo } from "react";
 
 const AppContent = () => {
@@ -113,6 +114,7 @@ const AppContent = () => {
         <Route path="gamification" element={<Gamification />} />
         <Route path="profile-assessment" element={<ProfileAssessment />} />
         <Route path="ai-insights" element={<AIInsights />} />
+        <Route path="admin/api-management" element={<APIManagementDashboard />} />
         <Route path="settings/accessibility" element={<AccessibilitySettingsPage />} />
       </Route>
 
