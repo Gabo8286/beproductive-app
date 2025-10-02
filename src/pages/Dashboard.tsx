@@ -1,8 +1,9 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, CheckSquare, Repeat, BookOpen, Sparkles, Users } from "lucide-react";
+import { Target, CheckSquare, Repeat, BookOpen, Sparkles, Users, StickyNote } from "lucide-react";
 import { DatabaseTest } from "@/components/DatabaseTest";
 import { getWelcomeMessage, getMotivationalMessage } from "@/lib/brand";
+import { QuickTodosWidget } from "@/components/quickTodos/QuickTodosWidget";
 
 const journeyFeatures = [
   {
@@ -18,6 +19,14 @@ const journeyFeatures = [
     title: "Next Steps",
     subtitle: "Tasks",
     description: "Organize the steps needed to move forward",
+    color: "text-warning",
+    status: "active" as const,
+  },
+  {
+    icon: StickyNote,
+    title: "Travel Notes",
+    subtitle: "Quick To-Dos",
+    description: "Capture quick thoughts and reminders",
     color: "text-warning",
     status: "active" as const,
   },
@@ -99,6 +108,11 @@ export default function Dashboard() {
               </Card>
             ))}
         </div>
+      </div>
+
+      {/* Quick Access Widgets */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <QuickTodosWidget />
       </div>
 
       <DatabaseTest />

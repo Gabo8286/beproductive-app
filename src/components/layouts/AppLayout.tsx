@@ -16,10 +16,14 @@ import { LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 export function AppLayout() {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
+  
+  // Enable global keyboard shortcuts
+  useKeyboardShortcuts();
 
   const handleSignOut = async () => {
     await signOut();

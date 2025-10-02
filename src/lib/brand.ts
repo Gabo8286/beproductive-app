@@ -24,6 +24,11 @@ export const brandConfig = {
       description: "Learning from the path",
       icon: "BookOpen",
     },
+    quickTodos: {
+      metaphor: "Travel Notes",
+      description: "Quick thoughts and reminders",
+      icon: "StickyNote",
+    },
   },
 
   // Dashboard content and messaging
@@ -49,6 +54,7 @@ export const brandConfig = {
     goals: "Start your journey by setting your first destination",
     habits: "Build your daily routine to power your progress",
     reflections: "Reflect on your path to gain clarity",
+    quickTodos: "No travel notes yet. Jot down quick thoughts here.",
   },
 
   // Success messages using journey theme
@@ -56,6 +62,7 @@ export const brandConfig = {
     goalCompleted: "Destination reached! 🎯",
     habitStreak: "Your routine is powering your journey! 🔥",
     reflectionSaved: "Insight recorded on your path 📝",
+    quickTodoCreated: "Travel note captured! 📝",
   },
 } as const;
 

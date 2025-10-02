@@ -20,7 +20,6 @@ import { TagBadge } from '@/components/tags/TagBadge';
 import { X, Zap } from 'lucide-react';
 import { FloatingTaskButton } from '@/components/tasks/FloatingTaskButton';
 import { QuickTaskModal } from '@/components/tasks/QuickTaskModal';
-import { useKeyboardShortcuts, getTaskCreationShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 type TaskStatus = Database['public']['Enums']['task_status'];
 type TaskPriority = Database['public']['Enums']['task_priority'];
@@ -38,14 +37,6 @@ function TasksContent() {
   const [isQuickModalOpen, setIsQuickModalOpen] = useState(false);
   
   const { data: allTags = [] } = useTags();
-
-  // Keyboard shortcuts for quick task creation
-  useKeyboardShortcuts(
-    getTaskCreationShortcuts(
-      () => setIsQuickModalOpen(true),
-      () => setIsQuickModalOpen(true),
-    )
-  );
 
   // Filter tags by category
   const categoryFilteredTags = selectedCategory 

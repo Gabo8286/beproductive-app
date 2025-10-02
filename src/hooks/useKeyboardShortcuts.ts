@@ -1,68 +1,60 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export interface KeyboardShortcut {
-  key: string;
-  ctrl?: boolean;
-  shift?: boolean;
-  alt?: boolean;
-  meta?: boolean;
-  callback: () => void;
-  description: string;
-}
-
-export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
-      // Don't trigger shortcuts when typing in input fields
-      const target = event.target as HTMLElement;
-      const isInputField = 
-        target.tagName === 'INPUT' || 
-        target.tagName === 'TEXTAREA' || 
-        target.isContentEditable;
-
-      if (isInputField && !event.metaKey && !event.ctrlKey) {
-        return;
-      }
-
-      for (const shortcut of shortcuts) {
-        const ctrlKey = event.ctrlKey || event.metaKey; // Support both Ctrl and Cmd
-        const matchesKey = event.key.toLowerCase() === shortcut.key.toLowerCase();
-        const matchesCtrl = shortcut.ctrl ? ctrlKey : !ctrlKey;
-        const matchesShift = shortcut.shift ? event.shiftKey : !event.shiftKey;
-        const matchesAlt = shortcut.alt ? event.altKey : !event.altKey;
-
-        if (matchesKey && matchesCtrl && matchesShift && matchesAlt) {
-          event.preventDefault();
-          shortcut.callback();
-          break;
-        }
-      }
-    },
-    [shortcuts]
-  );
+/**
+ * Global keyboard shortcuts for quick navigation
+ * Follow macOS conventions (Cmd+Shift) and Windows conventions (Ctrl+Shift)
+ */
+export function useKeyboardShortcuts() {
+  const navigate = useNavigate();
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-};
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isMod = event.ctrlKey || event.metaKey; // Ctrl on Windows, Cmd on Mac
+      
+      // Only trigger if modifier + shift is pressed
+      if (!isMod || !event.shiftKey) return;
 
-// Global keyboard shortcuts for task creation
-export const getTaskCreationShortcuts = (
-  onQuickCreate: () => void,
-  onQuickCreateInStatus: () => void,
-) => [
-  {
-    key: 'n',
-    ctrl: true,
-    description: 'Create new task',
-    callback: onQuickCreate,
-  },
-  {
-    key: 'n',
-    ctrl: true,
-    shift: true,
-    description: 'Create task in current status',
-    callback: onQuickCreateInStatus,
-  },
-];
+      switch (event.key.toUpperCase()) {
+        case 'D':
+          // Cmd/Ctrl + Shift + D -> Dashboard
+          event.preventDefault();
+          navigate('/dashboard');
+          break;
+          
+        case 'G':
+          // Cmd/Ctrl + Shift + G -> Goals
+          event.preventDefault();
+          navigate('/goals');
+          break;
+          
+        case 'T':
+          // Cmd/Ctrl + Shift + T -> Quick To-Dos (Travel Notes)
+          event.preventDefault();
+          navigate('/quick-todos');
+          break;
+          
+        case 'K':
+          // Cmd/Ctrl + Shift + K -> Tasks
+          event.preventDefault();
+          navigate('/tasks');
+          break;
+          
+        case 'H':
+          // Cmd/Ctrl + Shift + H -> Habits
+          event.preventDefault();
+          navigate('/habits');
+          break;
+          
+        case 'R':
+          // Cmd/Ctrl + Shift + R -> Reflections
+          event.preventDefault();
+          navigate('/reflections');
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
+}

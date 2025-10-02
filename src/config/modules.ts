@@ -25,6 +25,14 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     icon: "check-square",
     path: "/tasks",
   },
+  "quick-todos": {
+    id: "quick-todos",
+    name: "Travel Notes",
+    description: "Quick thoughts and reminders for your journey",
+    enabled: true,
+    icon: "sticky-note",
+    path: "/quick-todos",
+  },
   habits: {
     id: "habits",
     name: "Habits",
