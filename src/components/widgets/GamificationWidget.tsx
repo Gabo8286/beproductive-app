@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Trophy, Star, TrendingUp, Zap, ArrowRight } from 'lucide-react';
+import { Trophy, Star, TrendingUp, Zap, ArrowRight, Repeat } from 'lucide-react';
 import { useGamification } from '@/hooks/useGamification';
 import { Link } from 'react-router-dom';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -111,12 +111,33 @@ export function GamificationWidget() {
             <p className="text-xs text-blue-700">This Week</p>
           </div>
 
+          <div className="text-center p-3 bg-green-50 rounded-lg">
+            <div className="flex items-center justify-center space-x-1 text-green-600 mb-1">
+              <Repeat className="h-4 w-4" />
+              <span className="text-lg font-semibold">{stats.longest_streak}</span>
+            </div>
+            <p className="text-xs text-green-700">Best Streak</p>
+          </div>
+        </div>
+
+        {/* Additional Stats Row */}
+        <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-yellow-50 rounded-lg">
             <div className="flex items-center justify-center space-x-1 text-yellow-600 mb-1">
               <Trophy className="h-4 w-4" />
               <span className="text-lg font-semibold">{stats.achievements_unlocked}</span>
             </div>
             <p className="text-xs text-yellow-700">Achievements</p>
+          </div>
+
+          <div className="text-center p-3 bg-purple-50 rounded-lg">
+            <div className="flex items-center justify-center space-x-1 text-purple-600 mb-1">
+              <Repeat className="h-4 w-4" />
+              <span className="text-lg font-semibold">
+                {profile.metadata?.total_habits_completed || 0}
+              </span>
+            </div>
+            <p className="text-xs text-purple-700">Habits Done</p>
           </div>
         </div>
 

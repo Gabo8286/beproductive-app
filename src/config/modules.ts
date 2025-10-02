@@ -37,7 +37,7 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     id: "habits",
     name: "Habits",
     description: "Build and track positive habits",
-    enabled: false,
+    enabled: true,
     icon: "repeat",
     path: "/habits",
   },

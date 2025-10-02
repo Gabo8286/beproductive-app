@@ -5,6 +5,7 @@ import { HabitEntry, CreateHabitEntryInput, UpdateHabitEntryInput } from "@/type
 import { validateEntryInput } from "@/utils/habits";
 import { format, startOfMonth, endOfMonth } from "date-fns";
 import { habitKeys } from "./useHabits";
+import { useGamification } from "./useGamification";
 
 // =====================================================
 // QUERY KEYS
@@ -100,6 +101,7 @@ export function useHabitCalendar(habitId: string, month: Date) {
  */
 export function useCreateEntry() {
   const queryClient = useQueryClient();
+  const { refresh: refreshGamification } = useGamification();
 
   return useMutation({
     mutationFn: async (input: CreateHabitEntryInput) => {
@@ -135,12 +137,21 @@ export function useCreateEntry() {
       if (error) throw error;
       return data as HabitEntry;
     },
-    onSuccess: (entry) => {
+    onSuccess: async (entry) => {
       queryClient.invalidateQueries({ queryKey: habitEntryKeys.lists() });
       queryClient.invalidateQueries({ queryKey: habitEntryKeys.today() });
       queryClient.invalidateQueries({ queryKey: habitKeys.lists() });
       queryClient.invalidateQueries({ queryKey: habitKeys.detail(entry.habit_id) });
-      
+
+      // Refresh gamification data for XP and achievement updates
+      if (entry.status === 'completed') {
+        try {
+          await refreshGamification();
+        } catch (error) {
+          console.error('Failed to refresh gamification data:', error);
+        }
+      }
+
       const message = entry.status === 'completed' ? "Habit completed! 🎉" :
                      entry.status === 'skipped' ? "Entry marked as skipped" :
                      "Entry recorded";
@@ -158,6 +169,7 @@ export function useCreateEntry() {
  */
 export function useUpdateEntry() {
   const queryClient = useQueryClient();
+  const { refresh: refreshGamification } = useGamification();
 
   return useMutation({
     mutationFn: async ({ id, ...input }: UpdateHabitEntryInput & { id: string }) => {
@@ -179,11 +191,21 @@ export function useUpdateEntry() {
       if (error) throw error;
       return data as HabitEntry;
     },
-    onSuccess: (entry) => {
+    onSuccess: async (entry) => {
       queryClient.invalidateQueries({ queryKey: habitEntryKeys.lists() });
       queryClient.invalidateQueries({ queryKey: habitEntryKeys.today() });
       queryClient.invalidateQueries({ queryKey: habitKeys.lists() });
       queryClient.invalidateQueries({ queryKey: habitKeys.detail(entry.habit_id) });
+
+      // Refresh gamification data if habit was completed
+      if (entry.status === 'completed') {
+        try {
+          await refreshGamification();
+        } catch (error) {
+          console.error('Failed to refresh gamification data:', error);
+        }
+      }
+
       toast.success("Entry updated successfully!");
     },
     onError: (error: any) => {
