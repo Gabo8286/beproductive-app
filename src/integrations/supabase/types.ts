@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          is_hidden: boolean | null
+          points_reward: number | null
+          rarity: string | null
+          requirement_target: string | null
+          requirement_type: string
+          requirement_value: number
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description: string
+          icon: string
+          id: string
+          is_hidden?: boolean | null
+          points_reward?: number | null
+          rarity?: string | null
+          requirement_target?: string | null
+          requirement_type: string
+          requirement_value: number
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          is_hidden?: boolean | null
+          points_reward?: number | null
+          rarity?: string | null
+          requirement_target?: string | null
+          requirement_type?: string
+          requirement_value?: number
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
       active_timers: {
         Row: {
           id: string
@@ -1092,6 +1140,45 @@ export type Database = {
           },
         ]
       }
+      productivity_assessments: {
+        Row: {
+          completed_at: string
+          dominant_profile: string
+          growth_areas: Json | null
+          id: string
+          profile_scores: Json
+          question_responses: Json
+          recommended_strategies: Json | null
+          secondary_profile: string | null
+          strengths: Json | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          dominant_profile: string
+          growth_areas?: Json | null
+          id?: string
+          profile_scores: Json
+          question_responses: Json
+          recommended_strategies?: Json | null
+          secondary_profile?: string | null
+          strengths?: Json | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          dominant_profile?: string
+          growth_areas?: Json | null
+          id?: string
+          profile_scores?: Json
+          question_responses?: Json
+          recommended_strategies?: Json | null
+          secondary_profile?: string | null
+          strengths?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1900,6 +1987,194 @@ export type Database = {
           },
         ]
       }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          created_at: string
+          current_progress: number | null
+          id: string
+          metadata: Json | null
+          unlocked_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          created_at?: string
+          current_progress?: number | null
+          id?: string
+          metadata?: Json | null
+          unlocked_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          created_at?: string
+          current_progress?: number | null
+          id?: string
+          metadata?: Json | null
+          unlocked_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_challenges: {
+        Row: {
+          challenge_type: string
+          completed_at: string | null
+          created_at: string
+          current_progress: number | null
+          description: string
+          expires_at: string | null
+          id: string
+          metadata: Json | null
+          points_reward: number | null
+          status: string | null
+          target_value: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          challenge_type: string
+          completed_at?: string | null
+          created_at?: string
+          current_progress?: number | null
+          description: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          points_reward?: number | null
+          status?: string | null
+          target_value: number
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          challenge_type?: string
+          completed_at?: string | null
+          created_at?: string
+          current_progress?: number | null
+          description?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          points_reward?: number | null
+          status?: string | null
+          target_value?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_gamification_profiles: {
+        Row: {
+          achievement_count: number | null
+          assessment_completed_at: string | null
+          created_at: string
+          id: string
+          last_level_up_at: string | null
+          level: number | null
+          longest_streak_any_habit: number | null
+          metadata: Json | null
+          monthly_reset_at: string | null
+          monthly_xp: number | null
+          productivity_profile_type: string | null
+          total_xp: number | null
+          updated_at: string
+          user_id: string
+          weekly_reset_at: string | null
+          weekly_xp: number | null
+        }
+        Insert: {
+          achievement_count?: number | null
+          assessment_completed_at?: string | null
+          created_at?: string
+          id?: string
+          last_level_up_at?: string | null
+          level?: number | null
+          longest_streak_any_habit?: number | null
+          metadata?: Json | null
+          monthly_reset_at?: string | null
+          monthly_xp?: number | null
+          productivity_profile_type?: string | null
+          total_xp?: number | null
+          updated_at?: string
+          user_id: string
+          weekly_reset_at?: string | null
+          weekly_xp?: number | null
+        }
+        Update: {
+          achievement_count?: number | null
+          assessment_completed_at?: string | null
+          created_at?: string
+          id?: string
+          last_level_up_at?: string | null
+          level?: number | null
+          longest_streak_any_habit?: number | null
+          metadata?: Json | null
+          monthly_reset_at?: string | null
+          monthly_xp?: number | null
+          productivity_profile_type?: string | null
+          total_xp?: number | null
+          updated_at?: string
+          user_id?: string
+          weekly_reset_at?: string | null
+          weekly_xp?: number | null
+        }
+        Relationships: []
+      }
+      user_points_log: {
+        Row: {
+          action_type: string
+          description: string | null
+          earned_at: string
+          id: string
+          metadata: Json | null
+          multiplier: number | null
+          points: number
+          source_id: string | null
+          source_module: string
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          metadata?: Json | null
+          multiplier?: number | null
+          points: number
+          source_id?: string | null
+          source_module: string
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          metadata?: Json | null
+          multiplier?: number | null
+          points?: number
+          source_id?: string | null
+          source_module?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       workspace_members: {
         Row: {
           id: string
@@ -1977,6 +2252,18 @@ export type Database = {
       apply_milestone_template: {
         Args: { goal_id: string; start_date?: string; template_id: string }
         Returns: undefined
+      }
+      award_points: {
+        Args: {
+          action_type_param: string
+          description_param?: string
+          multiplier_param?: number
+          point_amount: number
+          source_id_param?: string
+          source_module_param: string
+          target_user_id: string
+        }
+        Returns: boolean
       }
       bulk_milestone_operations: {
         Args: {
@@ -2077,6 +2364,10 @@ export type Database = {
           template_id: string
         }[]
       }
+      get_level_from_xp: {
+        Args: { total_xp: number }
+        Returns: number
+      }
       get_note_backlinks: {
         Args: { note_uuid: string }
         Returns: {
@@ -2093,6 +2384,10 @@ export type Database = {
       get_progress_suggestions: {
         Args: { goal_id: string }
         Returns: Json
+      }
+      get_xp_required_for_level: {
+        Args: { target_level: number }
+        Returns: number
       }
       is_workspace_member: {
         Args: { _user_id: string; _workspace_id: string }
@@ -2125,6 +2420,10 @@ export type Database = {
       replace_template_variables: {
         Args: { text_with_variables: string; variable_values: Json }
         Returns: string
+      }
+      reset_periodic_xp: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       send_due_date_notifications: {
         Args: Record<PropertyKey, never>
