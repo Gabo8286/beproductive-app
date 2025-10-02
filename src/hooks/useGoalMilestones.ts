@@ -25,23 +25,36 @@ export function useCreateMilestone() {
 
   return useMutation({
     mutationFn: async (input: Omit<GoalMilestone, 'id' | 'created_at' | 'updated_at' | 'progress_percentage' | 'completed_at'>) => {
+      // Validate input
+      if (!input.title?.trim()) {
+        throw new Error("Milestone title is required");
+      }
+      if (input.title.length > 200) {
+        throw new Error("Milestone title must be less than 200 characters");
+      }
+
       const { data, error } = await supabase
         .from('goal_milestones')
-        .insert(input)
+        .insert({
+          goal_id: input.goal_id,
+          title: input.title.trim(),
+          description: input.description?.trim() || null,
+          target_date: input.target_date || null,
+        })
         .select()
         .single();
 
       if (error) throw error;
       return data as GoalMilestone;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones', data.goal_id] });
-      queryClient.invalidateQueries({ queryKey: ['goals', data.goal_id] });
+    onSuccess: (milestone) => {
+      queryClient.invalidateQueries({ queryKey: ['goal-milestones', milestone.goal_id] });
+      queryClient.invalidateQueries({ queryKey: ['goals', milestone.goal_id] });
       toast.success("Milestone created successfully!");
     },
-    onError: (error) => {
-      toast.error("Failed to create milestone");
-      console.error(error);
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to create milestone");
+      console.error('Create milestone error:', error);
     },
   });
 }
@@ -62,9 +75,51 @@ export function useCompleteMilestone() {
       queryClient.invalidateQueries({ queryKey: ['goals'] });
       toast.success("Milestone completed!");
     },
-    onError: (error) => {
-      toast.error("Failed to complete milestone");
-      console.error(error);
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to complete milestone");
+      console.error('Complete milestone error:', error);
+    },
+  });
+}
+
+export function useUpdateMilestone() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...input }: Partial<GoalMilestone> & { id: string }) => {
+      const updateData: any = {};
+      
+      if (input.title !== undefined) {
+        if (!input.title.trim()) {
+          throw new Error("Milestone title is required");
+        }
+        updateData.title = input.title.trim();
+      }
+      if (input.description !== undefined) {
+        updateData.description = input.description?.trim() || null;
+      }
+      if (input.target_date !== undefined) {
+        updateData.target_date = input.target_date;
+      }
+
+      const { data, error } = await supabase
+        .from('goal_milestones')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as GoalMilestone;
+    },
+    onSuccess: (milestone) => {
+      queryClient.invalidateQueries({ queryKey: ['goal-milestones', milestone.goal_id] });
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      toast.success("Milestone updated!");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to update milestone");
+      console.error('Update milestone error:', error);
     },
   });
 }
@@ -86,9 +141,9 @@ export function useDeleteMilestone() {
       queryClient.invalidateQueries({ queryKey: ['goals'] });
       toast.success("Milestone deleted!");
     },
-    onError: (error) => {
-      toast.error("Failed to delete milestone");
-      console.error(error);
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to delete milestone");
+      console.error('Delete milestone error:', error);
     },
   });
 }

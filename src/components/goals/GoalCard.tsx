@@ -5,6 +5,7 @@ import { Goal } from "@/types/goals";
 import { format } from "date-fns";
 import { Calendar, Target } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getStatusColor } from "@/utils/goalStatus";
 
 interface GoalCardProps {
   goal: Goal;
@@ -12,21 +13,6 @@ interface GoalCardProps {
 
 export function GoalCard({ goal }: GoalCardProps) {
   const navigate = useNavigate();
-
-  const getStatusColor = (status: Goal['status']) => {
-    switch (status) {
-      case 'draft':
-        return 'bg-gray-500 text-white';
-      case 'active':
-        return 'bg-primary text-primary-foreground';
-      case 'paused':
-        return 'bg-yellow-500 text-white';
-      case 'completed':
-        return 'bg-green-500 text-white';
-      case 'archived':
-        return 'bg-muted text-muted-foreground';
-    }
-  };
 
   return (
     <Card 

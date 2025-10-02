@@ -12,6 +12,7 @@ import { ArrowLeft, Calendar, Edit, Trash2, Trophy } from "lucide-react";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { getStatusColor, getAvailableStatusTransitions } from "@/utils/goalStatus";
 
 export default function GoalDetail() {
   const { id } = useParams<{ id: string }>();
@@ -93,20 +94,7 @@ export default function GoalDetail() {
     );
   }
 
-  const getStatusColor = (status: typeof goal.status) => {
-    switch (status) {
-      case 'draft':
-        return 'bg-gray-500 text-white';
-      case 'active':
-        return 'bg-primary text-primary-foreground';
-      case 'paused':
-        return 'bg-yellow-500 text-white';
-      case 'completed':
-        return 'bg-green-500 text-white';
-      case 'archived':
-        return 'bg-muted text-muted-foreground';
-    }
-  };
+  const availableStatuses = getAvailableStatusTransitions(goal.status);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl space-y-6">
@@ -215,11 +203,11 @@ export default function GoalDetail() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="draft">Draft</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="paused">Paused</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="archived">Archived</SelectItem>
+                {availableStatuses.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </CardContent>
