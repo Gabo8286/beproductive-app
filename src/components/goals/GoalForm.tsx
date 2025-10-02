@@ -55,12 +55,13 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Destination Name</FormLabel>
               <FormControl>
                 <Input 
-                  placeholder="Enter goal title" 
+                  placeholder="What destination would you like to reach?" 
+                  className="focus-brand transition-all duration-200 hover:border-primary/50"
                   {...field}
-                  aria-label="Goal title"
+                  aria-label="Destination name"
                 />
               </FormControl>
               <FormMessage />
@@ -73,13 +74,13 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description (Optional)</FormLabel>
+              <FormLabel>Why This Destination Matters (Optional)</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Describe your goal..."
-                  className="min-h-[100px]"
+                  placeholder="Describe why this destination is important to your journey..."
+                  className="min-h-[100px] focus-brand scrollbar-brand resize-none"
                   {...field}
-                  aria-label="Goal description"
+                  aria-label="Destination description"
                 />
               </FormControl>
               <FormMessage />
@@ -93,14 +94,14 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
             name="start_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Start Date (Optional)</FormLabel>
+                <FormLabel>Journey Start (Optional)</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full pl-3 text-left font-normal",
+                          "w-full pl-3 text-left font-normal focus-brand transition-all duration-200 hover:border-primary/50",
                           !field.value && "text-muted-foreground"
                         )}
                         aria-label="Select start date"
@@ -108,7 +109,7 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
                         {field.value ? (
                           format(field.value, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>When will you begin?</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -134,22 +135,22 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
             name="target_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>End Date (Optional)</FormLabel>
+                <FormLabel>Target Arrival (Optional)</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full pl-3 text-left font-normal",
+                          "w-full pl-3 text-left font-normal focus-brand transition-all duration-200 hover:border-primary/50",
                           !field.value && "text-muted-foreground"
                         )}
-                        aria-label="Select end date"
+                        aria-label="Select target date"
                       >
                         {field.value ? (
                           format(field.value, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>When do you want to arrive?</span>
                         )}
                         <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
@@ -171,8 +172,8 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save Goal"}
+        <Button type="submit" className="w-full apple-button focus-brand" disabled={isSubmitting}>
+          {isSubmitting ? "Planning Route..." : "Set Destination"}
         </Button>
       </form>
     </Form>

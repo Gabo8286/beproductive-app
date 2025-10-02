@@ -229,24 +229,24 @@ export default function Goals() {
 
         <TabsContent value={viewMode} className="mt-6">
           {processedGoals.length === 0 ? (
-            <Card>
+            <Card className="journey-card">
               <CardContent className="flex flex-col items-center justify-center py-16">
-                <Target className="h-12 w-12 text-muted-foreground mb-4" />
+                <Target className="h-12 w-12 text-muted-foreground mb-4 journey-float" />
                 <h3 className="text-lg font-semibold mb-2">
-                  {searchQuery ? 'No goals found' : viewMode === 'all' ? 'No goals yet' : `No ${viewMode} goals`}
+                  {searchQuery ? 'No destinations found' : viewMode === 'all' ? 'No destinations set yet' : `No ${viewMode} destinations`}
                 </h3>
                 <p className="text-muted-foreground text-center mb-4">
                   {searchQuery
                     ? 'Try adjusting your search terms or filters'
                     : viewMode === 'all'
-                      ? 'Create your first goal to get started tracking your objectives'
-                      : `You don't have any ${viewMode} goals yet`
+                      ? 'Every journey needs a destination. Set your first goal to begin your path to success.'
+                      : `You don't have any ${viewMode} destinations yet`
                   }
                 </p>
                 {!searchQuery && (
-                  <Button onClick={() => navigate('/goals/new')}>
+                  <Button onClick={() => navigate('/goals/new')} className="apple-button">
                     <Plus className="h-4 w-4 mr-2" />
-                    Create Your First Goal
+                    Set Your First Destination
                   </Button>
                 )}
               </CardContent>

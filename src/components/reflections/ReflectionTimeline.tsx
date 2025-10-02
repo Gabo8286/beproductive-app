@@ -26,11 +26,11 @@ export default function ReflectionTimeline({
 
   if (reflections.length === 0) {
     return (
-      <div className="text-center py-16">
-        <BookOpen className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-xl font-semibold mb-2">No reflections yet</h3>
+      <div className="text-center py-16 journey-card">
+        <BookOpen className="h-16 w-16 mx-auto text-muted-foreground mb-4 journey-float" />
+        <h3 className="text-xl font-semibold mb-2">No route adjustments yet</h3>
         <p className="text-muted-foreground mb-6">
-          Start your reflection journey today!
+          Reflect on your journey to gain clarity and adjust your path forward.
         </p>
       </div>
     );

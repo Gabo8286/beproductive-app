@@ -92,10 +92,10 @@ export function GoalCard({ goal }: GoalCardProps) {
 
   return (
     <>
-      <Card className="transition-all hover:shadow-md group cursor-pointer" onClick={() => navigate(`/goals/${goal.id}`)}>
+      <Card className="journey-card apple-hover milestone-marker group cursor-pointer" onClick={() => navigate(`/goals/${goal.id}`)}>
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
           <div className="flex-1">
-            <CardTitle className="text-base font-semibold leading-none tracking-tight">
+            <CardTitle className="text-base font-semibold leading-none tracking-tight group-hover:text-gradient-brand transition-all">
               {goal.title}
             </CardTitle>
             {goal.description && (
@@ -152,7 +152,7 @@ export function GoalCard({ goal }: GoalCardProps) {
           <div className="flex items-center justify-between">
             <Badge className={getStatusColor(goal.status)}>
               {getStatusIcon(goal.status)}
-              <span className="ml-1">{getStatusLabel(goal.status)}</span>
+              <span className="ml-1">{goal.status === 'completed' ? 'Reached' : getStatusLabel(goal.status)}</span>
             </Badge>
             {goal.priority && (
               <Badge variant="outline" className={getPriorityColor(goal.priority)}>
@@ -161,10 +161,10 @@ export function GoalCard({ goal }: GoalCardProps) {
             )}
           </div>
 
-          {/* Progress */}
-          <div className="space-y-2">
+          {/* Journey Progress */}
+          <div className="space-y-2 journey-progress">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
+              <span className="text-muted-foreground">Journey Progress</span>
               <span className="font-medium">{Math.round(goal.progress || 0)}%</span>
             </div>
             <Progress 
@@ -234,17 +234,17 @@ export function GoalCard({ goal }: GoalCardProps) {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent onClick={(e) => e.stopPropagation()}>
           <DialogHeader>
-            <DialogTitle>Delete Goal</DialogTitle>
+            <DialogTitle>Remove Destination</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{goal.title}"? This action cannot be undone.
+              Are you sure you want to remove "{goal.title}" from your journey? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)} className="apple-button">
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
-              Delete
+            <Button variant="destructive" onClick={handleDelete} className="apple-button">
+              Remove
             </Button>
           </DialogFooter>
         </DialogContent>

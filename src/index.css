@@ -229,6 +229,11 @@
     @apply bg-primary rounded-full;
   }
 
+  /* Enhanced Focus States */
+  .focus-brand {
+    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors;
+  }
+
   /* Reduced Motion Support */
   @media (prefers-reduced-motion: reduce) {
     .journey-float,
