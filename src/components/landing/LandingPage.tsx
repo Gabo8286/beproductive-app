@@ -394,6 +394,9 @@ export const LandingPage = () => {
       {/* Trust Signals Section */}
       <TrustSignals />
 
+      {/* Build Story Section */}
+      <BuildStory />
+
       {/* Footer */}
       <footer className="container mx-auto px-4 py-12 text-center border-t border-border/50">
         <div className="flex items-center justify-center gap-2 mb-3">

@@ -44,7 +44,7 @@ export const useAIUsageStats = (days: number = 30) => {
         total_requests: 0,
         success_rate: 0,
         avg_response_time: 0,
-        by_provider: {},
+        by_provider: {} as any,
         daily_breakdown: [],
       };
     },

@@ -266,42 +266,45 @@ export const UsageAnalytics: React.FC = () => {
                 </Card>
               ))
             ) : (
-              Object.entries(systemStats?.by_provider || {}).map(([provider, stats]) => (
-                <Card key={provider}>
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">
-                        {PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS]}
-                      </CardTitle>
-                      <Badge className={getProviderBadgeColor(provider)}>
-                        {provider}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-2xl font-bold">{formatCurrency(stats.cost)}</p>
-                        <p className="text-sm text-gray-500">Total Cost</p>
+              Object.entries(systemStats?.by_provider || {}).map(([provider, providerStats]) => {
+                const stats = providerStats as any;
+                return (
+                  <Card key={provider}>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">
+                          {PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS]}
+                        </CardTitle>
+                        <Badge className={getProviderBadgeColor(provider)}>
+                          {provider}
+                        </Badge>
                       </div>
-                      <div>
-                        <p className="text-2xl font-bold">{formatNumber(stats.requests)}</p>
-                        <p className="text-sm text-gray-500">Requests</p>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-2xl font-bold">{formatCurrency(stats.cost)}</p>
+                          <p className="text-sm text-gray-500">Total Cost</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold">{formatNumber(stats.requests)}</p>
+                          <p className="text-sm text-gray-500">Requests</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Tokens:</span>
-                        <span>{formatNumber(stats.tokens)}</span>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>Tokens:</span>
+                          <span>{formatNumber(stats.tokens)}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>Users:</span>
+                          <span>{formatNumber(stats.users)}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Users:</span>
-                        <span>{formatNumber(stats.users)}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
+                    </CardContent>
+                  </Card>
+                );
+              })
             )}
           </div>
         </TabsContent>
@@ -338,7 +341,7 @@ export const UsageAnalytics: React.FC = () => {
                       </Badge>
                       <div className="flex-1">
                         <p className="text-sm font-medium">
-                          {activity.request_metadata?.request_type || 'AI Request'}
+                          {(activity.request_metadata as any)?.request_type || 'AI Request'}
                         </p>
                         <p className="text-xs text-gray-500">
                           {activity.profiles?.full_name || activity.profiles?.email || 'Unknown User'} •

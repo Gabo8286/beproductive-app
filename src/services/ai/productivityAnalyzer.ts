@@ -257,7 +257,7 @@ export class ProductivityAnalyzer {
       }, {} as Record<number, number>);
 
     const peakHour = Object.entries(tasksByHour)
-      .sort(([,a], [,b]) => b - a)[0]?.[0];
+      .sort(([,a], [,b]) => Number(b) - Number(a))[0]?.[0];
 
     const tasksByDay = data.tasks
       .filter(t => t.completed_at)
@@ -269,7 +269,7 @@ export class ProductivityAnalyzer {
 
     const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const peakDay = Object.entries(tasksByDay)
-      .sort(([,a], [,b]) => b - a)[0]?.[0];
+      .sort(([,a], [,b]) => Number(b) - Number(a))[0]?.[0];
 
     // Use AI to generate deeper insights
     const aiRequest: AIServiceRequest = {
