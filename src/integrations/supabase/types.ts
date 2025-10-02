@@ -382,6 +382,7 @@ export type Database = {
           position: number | null
           priority: number | null
           progress: number | null
+          project_id: string | null
           start_date: string | null
           status: Database["public"]["Enums"]["goal_status"] | null
           tags: string[] | null
@@ -406,6 +407,7 @@ export type Database = {
           position?: number | null
           priority?: number | null
           progress?: number | null
+          project_id?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["goal_status"] | null
           tags?: string[] | null
@@ -430,6 +432,7 @@ export type Database = {
           position?: number | null
           priority?: number | null
           progress?: number | null
+          project_id?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["goal_status"] | null
           tags?: string[] | null
@@ -460,6 +463,13 @@ export type Database = {
             columns: ["parent_goal_id"]
             isOneToOne: false
             referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goals_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
           {
@@ -1218,6 +1228,271 @@ export type Database = {
         }
         Relationships: []
       }
+      project_members: {
+        Row: {
+          id: string
+          invited_by: string | null
+          joined_at: string
+          permissions: Json | null
+          project_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          permissions?: Json | null
+          project_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          permissions?: Json | null
+          project_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_members_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_members_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_milestones: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          position: number | null
+          progress_percentage: number | null
+          project_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          position?: number | null
+          progress_percentage?: number | null
+          project_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          position?: number | null
+          progress_percentage?: number | null
+          project_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_milestones_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_templates: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by: string | null
+          default_milestones: Json | null
+          default_tasks: Json | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          template_data: Json
+          title: string
+          updated_at: string
+          usage_count: number | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          default_milestones?: Json | null
+          default_tasks?: Json | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          template_data?: Json
+          title: string
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          default_milestones?: Json | null
+          default_tasks?: Json | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          template_data?: Json
+          title?: string
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          actual_hours: number | null
+          budget_amount: number | null
+          color: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          estimated_hours: number | null
+          icon: string | null
+          id: string
+          is_template: boolean | null
+          metadata: Json | null
+          position: number | null
+          priority: Database["public"]["Enums"]["project_priority"]
+          progress_percentage: number | null
+          project_manager: string | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["project_status"]
+          tags: string[] | null
+          target_date: string | null
+          template_id: string | null
+          title: string
+          updated_at: string
+          visibility: Database["public"]["Enums"]["project_visibility"]
+          workspace_id: string
+        }
+        Insert: {
+          actual_hours?: number | null
+          budget_amount?: number | null
+          color?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          estimated_hours?: number | null
+          icon?: string | null
+          id?: string
+          is_template?: boolean | null
+          metadata?: Json | null
+          position?: number | null
+          priority?: Database["public"]["Enums"]["project_priority"]
+          progress_percentage?: number | null
+          project_manager?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          tags?: string[] | null
+          target_date?: string | null
+          template_id?: string | null
+          title: string
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["project_visibility"]
+          workspace_id: string
+        }
+        Update: {
+          actual_hours?: number | null
+          budget_amount?: number | null
+          color?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          estimated_hours?: number | null
+          icon?: string | null
+          id?: string
+          is_template?: boolean | null
+          metadata?: Json | null
+          position?: number | null
+          priority?: Database["public"]["Enums"]["project_priority"]
+          progress_percentage?: number | null
+          project_manager?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"]
+          tags?: string[] | null
+          target_date?: string | null
+          template_id?: string | null
+          title?: string
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["project_visibility"]
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_project_manager_fkey"
+            columns: ["project_manager"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quick_todos: {
         Row: {
           completed_at: string | null
@@ -1828,6 +2103,7 @@ export type Database = {
           parent_task_id: string | null
           position: number | null
           priority: Database["public"]["Enums"]["task_priority"] | null
+          project_id: string | null
           recurrence_pattern: Json | null
           recurring_template_id: string | null
           status: Database["public"]["Enums"]["task_status"] | null
@@ -1853,6 +2129,7 @@ export type Database = {
           parent_task_id?: string | null
           position?: number | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
+          project_id?: string | null
           recurrence_pattern?: Json | null
           recurring_template_id?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
@@ -1878,6 +2155,7 @@ export type Database = {
           parent_task_id?: string | null
           position?: number | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
+          project_id?: string | null
           recurrence_pattern?: Json | null
           recurring_template_id?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
@@ -1906,6 +2184,13 @@ export type Database = {
             columns: ["parent_task_id"]
             isOneToOne: false
             referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
           {
@@ -2318,6 +2603,10 @@ export type Database = {
         Args: { from_date: string; pattern: Json }
         Returns: string
       }
+      calculate_project_progress: {
+        Args: { project_id_param: string }
+        Returns: number
+      }
       calculate_reflection_streak: {
         Args: { p_user_id: string }
         Returns: number
@@ -2536,6 +2825,15 @@ export type Database = {
       mood_level: "amazing" | "great" | "good" | "neutral" | "bad" | "terrible"
       note_type: "fleeting" | "literature" | "permanent"
       period_enum: "day" | "week" | "month" | "year" | "all_time"
+      project_priority: "low" | "medium" | "high" | "urgent"
+      project_status:
+        | "planning"
+        | "active"
+        | "on_hold"
+        | "completed"
+        | "cancelled"
+        | "archived"
+      project_visibility: "private" | "workspace" | "public"
       prompt_category:
         | "gratitude"
         | "challenges"
@@ -2744,6 +3042,16 @@ export const Constants = {
       mood_level: ["amazing", "great", "good", "neutral", "bad", "terrible"],
       note_type: ["fleeting", "literature", "permanent"],
       period_enum: ["day", "week", "month", "year", "all_time"],
+      project_priority: ["low", "medium", "high", "urgent"],
+      project_status: [
+        "planning",
+        "active",
+        "on_hold",
+        "completed",
+        "cancelled",
+        "archived",
+      ],
+      project_visibility: ["private", "workspace", "public"],
       prompt_category: [
         "gratitude",
         "challenges",
