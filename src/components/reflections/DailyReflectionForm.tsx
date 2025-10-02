@@ -11,12 +11,16 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, X } from "lucide-react";
+import { CalendarIcon, X, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { useCreateReflection } from "@/hooks/useReflections";
 import MoodTracker from "./MoodTracker";
+import TemplateSelector from "./TemplateSelector";
+import GuidedReflectionFlow from "./GuidedReflectionFlow";
 import type { CreateReflectionInput, MoodLevel } from "@/types/reflections";
+import type { SystemTemplate } from "@/utils/systemTemplates";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
@@ -49,8 +53,12 @@ export default function DailyReflectionForm({
   const [tomorrowFocus, setTomorrowFocus] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [currentTag, setCurrentTag] = useState("");
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<SystemTemplate | null>(null);
+  const [useGuidedFlow, setUseGuidedFlow] = useState(false);
 
   const { mutate: createReflection, isPending } = useCreateReflection();
+  const { toast } = useToast();
 
   const {
     register,
@@ -90,6 +98,54 @@ export default function DailyReflectionForm({
     }
   };
 
+  const handleTemplateSelect = (template: SystemTemplate) => {
+    setSelectedTemplate(template);
+    setUseGuidedFlow(true);
+  };
+
+  const handleGuidedFlowComplete = async (responses: Record<string, string>) => {
+    if (!selectedTemplate) return;
+
+    const content = selectedTemplate.prompts
+      .map(prompt => {
+        const response = responses[prompt.id];
+        return response ? `**${prompt.text}**\n${response}` : '';
+      })
+      .filter(Boolean)
+      .join('\n\n');
+
+    const input: CreateReflectionInput = {
+      workspace_id: workspaceId,
+      title: selectedTemplate.name,
+      content,
+      reflection_type: selectedTemplate.structure.default_values.reflection_type as any || 'daily',
+      reflection_date: format(new Date(), 'yyyy-MM-dd'),
+      tags: selectedTemplate.tags,
+      is_private: selectedTemplate.structure.default_values.is_private as boolean ?? true,
+      metadata: {
+        template_id: selectedTemplate.name,
+        template_category: selectedTemplate.category,
+      }
+    };
+
+    createReflection(input, {
+      onSuccess: () => {
+        toast({
+          title: "Reflection saved",
+          description: "Your guided reflection has been recorded.",
+        });
+        onSuccess();
+      },
+      onError: () => {
+        toast({
+          title: "Error",
+          description: "Failed to save reflection. Please try again.",
+          variant: "destructive",
+        });
+      }
+    });
+  };
+
   const onSubmit = (data: FormData) => {
     const input: CreateReflectionInput = {
       workspace_id: workspaceId,
@@ -117,10 +173,37 @@ export default function DailyReflectionForm({
     });
   };
 
+  if (useGuidedFlow && selectedTemplate) {
+    return (
+      <GuidedReflectionFlow
+        template={selectedTemplate}
+        onComplete={handleGuidedFlowComplete}
+        onCancel={() => {
+          setUseGuidedFlow(false);
+          setSelectedTemplate(null);
+        }}
+      />
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Header Section */}
-      <div className="space-y-4">
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Template Selector Button */}
+        <div className="flex justify-center pb-4 border-b">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowTemplateSelector(true)}
+            className="gap-2"
+          >
+            <Sparkles className="h-4 w-4" />
+            Use a Template
+          </Button>
+        </div>
+
+        {/* Header Section */}
+        <div className="space-y-4">
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <Label htmlFor="title">Reflection Title</Label>
@@ -401,15 +484,22 @@ export default function DailyReflectionForm({
         )}
       </div>
 
-      {/* Actions */}
-      <div className="flex justify-end gap-2 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving..." : "Save Reflection"}
-        </Button>
-      </div>
-    </form>
+        {/* Actions */}
+        <div className="flex justify-end gap-2 pt-4">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Saving..." : "Save Reflection"}
+          </Button>
+        </div>
+      </form>
+
+      <TemplateSelector
+        open={showTemplateSelector}
+        onClose={() => setShowTemplateSelector(false)}
+        onSelectTemplate={handleTemplateSelect}
+      />
+    </>
   );
 }

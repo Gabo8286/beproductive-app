@@ -13,6 +13,7 @@ import ReflectionCalendar from "@/components/reflections/ReflectionCalendar";
 import ReflectionTimeline from "@/components/reflections/ReflectionTimeline";
 import DailyReflectionForm from "@/components/reflections/DailyReflectionForm";
 import ReflectionAnalyticsDashboard from "@/components/reflections/ReflectionAnalyticsDashboard";
+import MoodHeatmap from "@/components/reflections/MoodHeatmap";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { ReflectionFilters as Filters } from "@/types/reflections";
 
