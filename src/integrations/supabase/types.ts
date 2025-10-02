@@ -863,6 +863,107 @@ export type Database = {
         }
         Relationships: []
       }
+      note_links: {
+        Row: {
+          created_at: string
+          id: string
+          link_type: string
+          source_note_id: string
+          target_note_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link_type?: string
+          source_note_id: string
+          target_note_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link_type?: string
+          source_note_id?: string
+          target_note_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_links_source_note_id_fkey"
+            columns: ["source_note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "note_links_target_note_id_fkey"
+            columns: ["target_note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      note_tags: {
+        Row: {
+          created_at: string
+          id: string
+          note_id: string
+          tag: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note_id: string
+          tag: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_tags_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          note_type: Database["public"]["Enums"]["note_type"]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          note_type?: Database["public"]["Enums"]["note_type"]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          note_type?: Database["public"]["Enums"]["note_type"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notification_settings: {
         Row: {
           completion_celebrations: boolean | null
@@ -1976,6 +2077,19 @@ export type Database = {
           template_id: string
         }[]
       }
+      get_note_backlinks: {
+        Args: { note_uuid: string }
+        Returns: {
+          content: string
+          created_at: string
+          id: string
+          metadata: Json
+          note_type: Database["public"]["Enums"]["note_type"]
+          title: string
+          updated_at: string
+          user_id: string
+        }[]
+      }
       get_progress_suggestions: {
         Args: { goal_id: string }
         Returns: Json
@@ -2113,6 +2227,7 @@ export type Database = {
       member_role: "member" | "admin" | "owner"
       mood_enum: "amazing" | "good" | "neutral" | "bad" | "terrible"
       mood_level: "amazing" | "great" | "good" | "neutral" | "bad" | "terrible"
+      note_type: "fleeting" | "literature" | "permanent"
       period_enum: "day" | "week" | "month" | "year" | "all_time"
       prompt_category:
         | "gratitude"
@@ -2320,6 +2435,7 @@ export const Constants = {
       member_role: ["member", "admin", "owner"],
       mood_enum: ["amazing", "good", "neutral", "bad", "terrible"],
       mood_level: ["amazing", "great", "good", "neutral", "bad", "terrible"],
+      note_type: ["fleeting", "literature", "permanent"],
       period_enum: ["day", "week", "month", "year", "all_time"],
       prompt_category: [
         "gratitude",
