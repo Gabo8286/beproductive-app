@@ -15,6 +15,7 @@ import { useTags } from '@/hooks/useTags';
 import { SubtaskList } from '@/components/tasks/SubtaskList';
 import { HierarchyBreadcrumb } from '@/components/tasks/HierarchyBreadcrumb';
 import { useSubtaskProgress } from '@/hooks/useSubtasks';
+import { SaveAsTemplateDialog } from '@/components/templates/SaveAsTemplateDialog';
 
 const priorityConfig = {
   low: { color: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400', icon: '🟢' },
@@ -111,6 +112,7 @@ export default function TaskDetail() {
               </Button>
             }
           />
+          <SaveAsTemplateDialog taskId={task.id} />
           <Button 
             variant="outline" 
             size="sm" 

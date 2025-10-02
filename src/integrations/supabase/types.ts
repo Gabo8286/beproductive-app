@@ -193,6 +193,66 @@ export type Database = {
           },
         ]
       }
+      task_templates: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          id: string
+          is_public: boolean | null
+          name: string
+          template_config: Json
+          updated_at: string | null
+          usage_count: number | null
+          variables: Json | null
+          workspace_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          template_config?: Json
+          updated_at?: string | null
+          usage_count?: number | null
+          variables?: Json | null
+          workspace_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          template_config?: Json
+          updated_at?: string | null
+          usage_count?: number | null
+          variables?: Json | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_templates_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           actual_duration: number | null
@@ -393,6 +453,10 @@ export type Database = {
         Args: { task_id: string }
         Returns: undefined
       }
+      create_task_from_template: {
+        Args: { template_id: string; variable_values?: Json }
+        Returns: string
+      }
       generate_recurring_instances: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -423,6 +487,10 @@ export type Database = {
           workspace_id_param: string
         }
         Returns: undefined
+      }
+      replace_template_variables: {
+        Args: { text_with_variables: string; variable_values: Json }
+        Returns: string
       }
       update_task_position: {
         Args: { new_position: number; task_id: string }

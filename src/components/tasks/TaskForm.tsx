@@ -10,12 +10,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Plus } from 'lucide-react';
+import { CalendarIcon, Plus, FileText } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useCreateTask, useUpdateTask } from '@/hooks/useTasks';
 import { Database } from '@/integrations/supabase/types';
 import { TagSelector } from '@/components/tags/TagSelector';
+import { TemplateSelector } from '@/components/templates/TemplateSelector';
 
 type Task = Database['public']['Tables']['tasks']['Row'];
 type TaskStatus = Database['public']['Enums']['task_status'];
@@ -41,6 +42,7 @@ interface TaskFormProps {
 
 export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
   const [open, setOpen] = useState(false);
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
 
@@ -97,6 +99,23 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
         <DialogHeader>
           <DialogTitle>{task ? 'Edit Task' : 'Create New Task'}</DialogTitle>
         </DialogHeader>
+
+        {!task && (
+          <div className="pb-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setOpen(false);
+                setShowTemplateSelector(true);
+              }}
+              className="w-full"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Create from Template
+            </Button>
+          </div>
+        )}
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -281,6 +300,15 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
           </form>
         </Form>
       </DialogContent>
+
+      <TemplateSelector
+        open={showTemplateSelector}
+        onOpenChange={setShowTemplateSelector}
+        onSuccess={() => {
+          setShowTemplateSelector(false);
+          onSuccess?.();
+        }}
+      />
     </Dialog>
   );
 }

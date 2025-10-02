@@ -17,6 +17,8 @@ import NewGoal from "@/pages/NewGoal";
 import GoalDetail from "@/pages/GoalDetail";
 import Tasks from "@/pages/Tasks";
 import TaskDetail from "@/pages/TaskDetail";
+import Templates from "@/pages/Templates";
+import RecurringTasks from "@/pages/RecurringTasks";
 import TagManagement from "@/pages/TagManagement";
 import NotFound from "@/pages/NotFound";
 
@@ -50,8 +52,10 @@ const App = () => (
                 <Route path="goals/new" element={<NewGoal />} />
                 <Route path="goals/:id" element={<GoalDetail />} />
                 <Route path="tasks" element={<Tasks />} />
-          <Route path="tasks/:id" element={<TaskDetail />} />
-          <Route path="tags" element={<TagManagement />} />
+                <Route path="tasks/:id" element={<TaskDetail />} />
+                <Route path="templates" element={<Templates />} />
+                <Route path="recurring-tasks" element={<RecurringTasks />} />
+                <Route path="tags" element={<TagManagement />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
