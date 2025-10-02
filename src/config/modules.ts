@@ -53,7 +53,7 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     id: "reflections",
     name: "Reflections",
     description: "Daily reflections and journaling",
-    enabled: false,
+    enabled: true,
     icon: "book-open",
     path: "/reflections",
   },
