@@ -21,6 +21,8 @@ import Templates from "@/pages/Templates";
 import RecurringTasks from "@/pages/RecurringTasks";
 import TagManagement from "@/pages/TagManagement";
 import Automation from "@/pages/Automation";
+import Habits from "@/pages/Habits";
+import HabitDetail from "@/pages/HabitDetail";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +60,8 @@ const App = () => (
                 <Route path="recurring-tasks" element={<RecurringTasks />} />
                 <Route path="tags" element={<TagManagement />} />
                 <Route path="automation" element={<Automation />} />
+                <Route path="habits" element={<Habits />} />
+                <Route path="habits/:id" element={<HabitDetail />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
