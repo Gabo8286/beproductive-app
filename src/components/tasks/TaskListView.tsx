@@ -9,6 +9,8 @@ import { format } from 'date-fns';
 import { useDeleteTask, useToggleTaskCompletion } from '@/hooks/useTasks';
 import { TaskForm } from './TaskForm';
 import { Database } from '@/integrations/supabase/types';
+import { TagBadge } from '@/components/tags/TagBadge';
+import { useTags } from '@/hooks/useTags';
 import { Link } from 'react-router-dom';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
@@ -37,6 +39,7 @@ const statusConfig = {
 function TaskListItem({ task }: { task: Task }) {
   const deleteTask = useDeleteTask();
   const toggleCompletion = useToggleTaskCompletion();
+  const { data: tags = [] } = useTags();
 
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -120,11 +123,17 @@ function TaskListItem({ task }: { task: Task }) {
 
           {task.tags && task.tags.length > 0 && (
             <div className="flex gap-1">
-              {task.tags.slice(0, 2).map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs px-1 py-0">
-                  {tag}
-                </Badge>
-              ))}
+              {task.tags.slice(0, 2).map((tagName, index) => {
+                const tagData = tags.find(t => t.name === tagName);
+                return (
+                  <TagBadge 
+                    key={index} 
+                    name={tagName}
+                    color={tagData?.color || undefined}
+                    size="sm"
+                  />
+                );
+              })}
               {task.tags.length > 2 && (
                 <Badge variant="outline" className="text-xs px-1 py-0">
                   +{task.tags.length - 2}

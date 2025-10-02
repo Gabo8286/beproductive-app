@@ -10,6 +10,8 @@ import { format } from 'date-fns';
 import { useTask, useDeleteTask, useToggleTaskCompletion } from '@/hooks/useTasks';
 import { TaskForm } from '@/components/tasks/TaskForm';
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { TagBadge } from '@/components/tags/TagBadge';
+import { useTags } from '@/hooks/useTags';
 
 const priorityConfig = {
   low: { color: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400', icon: '🟢' },
@@ -33,6 +35,7 @@ export default function TaskDetail() {
   const { data: task, isLoading, error } = useTask(id);
   const deleteTask = useDeleteTask();
   const toggleCompletion = useToggleTaskCompletion();
+  const { data: tags = [] } = useTags();
 
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -227,21 +230,26 @@ export default function TaskDetail() {
                   </div>
                 )}
 
-                {task.tags && task.tags.length > 0 && (
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Tag className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">Tags:</span>
+                  {task.tags && task.tags.length > 0 && (
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Tag className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm font-medium">Tags:</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {task.tags.map((tagName, index) => {
+                          const tagData = tags.find(t => t.name === tagName);
+                          return (
+                            <TagBadge 
+                              key={index} 
+                              name={tagName}
+                              color={tagData?.color || undefined}
+                            />
+                          );
+                        })}
+                      </div>
                     </div>
-                    <div className="flex flex-wrap gap-1">
-                      {task.tags.map((tag, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                  )}
 
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">Position:</span>

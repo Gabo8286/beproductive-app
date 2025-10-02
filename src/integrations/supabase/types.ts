@@ -142,6 +142,57 @@ export type Database = {
         }
         Relationships: []
       }
+      tags: {
+        Row: {
+          category: string | null
+          color: string | null
+          created_at: string | null
+          created_by: string
+          id: string
+          name: string
+          updated_at: string | null
+          usage_count: number | null
+          workspace_id: string
+        }
+        Insert: {
+          category?: string | null
+          color?: string | null
+          created_at?: string | null
+          created_by: string
+          id?: string
+          name: string
+          updated_at?: string | null
+          usage_count?: number | null
+          workspace_id: string
+        }
+        Update: {
+          category?: string | null
+          color?: string | null
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          name?: string
+          updated_at?: string | null
+          usage_count?: number | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tags_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tags_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           actual_duration: number | null

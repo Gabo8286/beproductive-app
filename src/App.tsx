@@ -17,6 +17,7 @@ import NewGoal from "@/pages/NewGoal";
 import GoalDetail from "@/pages/GoalDetail";
 import Tasks from "@/pages/Tasks";
 import TaskDetail from "@/pages/TaskDetail";
+import TagManagement from "@/pages/TagManagement";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,7 +50,8 @@ const App = () => (
                 <Route path="goals/new" element={<NewGoal />} />
                 <Route path="goals/:id" element={<GoalDetail />} />
                 <Route path="tasks" element={<Tasks />} />
-                <Route path="tasks/:id" element={<TaskDetail />} />
+          <Route path="tasks/:id" element={<TaskDetail />} />
+          <Route path="tags" element={<TagManagement />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

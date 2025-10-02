@@ -15,6 +15,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useCreateTask, useUpdateTask } from '@/hooks/useTasks';
 import { Database } from '@/integrations/supabase/types';
+import { TagSelector } from '@/components/tags/TagSelector';
 
 type Task = Database['public']['Tables']['tasks']['Row'];
 type TaskStatus = Database['public']['Enums']['task_status'];
@@ -27,7 +28,7 @@ const taskSchema = z.object({
   status: z.enum(['todo', 'in_progress', 'blocked', 'done']).default('todo'),
   due_date: z.date().optional(),
   estimated_duration: z.number().min(1).optional(),
-  tags: z.string().optional(),
+  tags: z.array(z.string()).default([]),
 });
 
 type TaskFormData = z.infer<typeof taskSchema>;
@@ -52,7 +53,7 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
       status: (task?.status as TaskStatus) || 'todo',
       due_date: task?.due_date ? new Date(task.due_date) : undefined,
       estimated_duration: task?.estimated_duration || undefined,
-      tags: task?.tags?.join(', ') || '',
+      tags: task?.tags || [],
     },
   });
 
@@ -65,7 +66,7 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
         status: data.status,
         due_date: data.due_date?.toISOString() || null,
         estimated_duration: data.estimated_duration || null,
-        tags: data.tags ? data.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
+        tags: data.tags,
       };
 
       if (task) {
@@ -252,9 +253,9 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                 <FormItem>
                   <FormLabel>Tags</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Enter tags separated by commas..." 
-                      {...field} 
+                    <TagSelector 
+                      value={field.value}
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />

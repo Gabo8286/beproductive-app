@@ -10,6 +10,8 @@ import { useDeleteTask, useToggleTaskCompletion } from '@/hooks/useTasks';
 import { TaskForm } from './TaskForm';
 import { Database } from '@/integrations/supabase/types';
 import { Link } from 'react-router-dom';
+import { TagBadge } from '@/components/tags/TagBadge';
+import { useTags } from '@/hooks/useTags';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -37,6 +39,7 @@ const statusConfig = {
 export function TaskCard({ task }: TaskCardProps) {
   const deleteTask = useDeleteTask();
   const toggleCompletion = useToggleTaskCompletion();
+  const { data: tags = [] } = useTags();
 
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -143,11 +146,16 @@ export function TaskCard({ task }: TaskCardProps) {
 
         {task.tags && task.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-3">
-            {task.tags.map((tag, index) => (
-              <Badge key={index} variant="secondary" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
+            {task.tags.map((tagName, index) => {
+              const tagData = tags.find(t => t.name === tagName);
+              return (
+                <TagBadge 
+                  key={index} 
+                  name={tagName}
+                  color={tagData?.color || undefined}
+                />
+              );
+            })}
           </div>
         )}
       </CardContent>
