@@ -4,6 +4,16 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend
+} from 'recharts';
+import {
   getStoredMetrics,
   clearStoredMetrics,
   calculatePerformanceScore,
@@ -23,12 +33,33 @@ export function PerformanceDashboard() {
   });
 
   const [score, setScore] = useState(0);
+  const [historicalData, setHistoricalData] = useState<Array<{
+    timestamp: string;
+    LCP: number | null;
+    CLS: number | null;
+    FCP: number | null;
+    TTFB: number | null;
+    INP: number | null;
+    score: number;
+  }>>([]);
 
   useEffect(() => {
     const loadMetrics = () => {
       const stored = getStoredMetrics();
+      const newScore = calculatePerformanceScore(stored);
       setMetrics(stored);
-      setScore(calculatePerformanceScore(stored));
+      setScore(newScore);
+
+      // Add to historical data (keep last 20 measurements)
+      const timestamp = new Date().toISOString();
+      setHistoricalData(prev => [
+        ...prev.slice(-19),
+        {
+          timestamp,
+          ...stored,
+          score: newScore
+        }
+      ]);
     };
 
     loadMetrics();
@@ -80,6 +111,7 @@ export function PerformanceDashboard() {
       INP: null,
     });
     setScore(0);
+    setHistoricalData([]);
   };
 
   return (
@@ -278,6 +310,86 @@ export function PerformanceDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Performance Trends */}
+      {historicalData.length > 1 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Performance Trends
+            </CardTitle>
+            <CardDescription>
+              Real-time performance metrics over time
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={historicalData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="timestamp"
+                  tickFormatter={(timestamp) => new Date(timestamp).toLocaleTimeString()}
+                />
+                <YAxis />
+                <Tooltip
+                  labelFormatter={(timestamp) => new Date(timestamp).toLocaleString()}
+                  formatter={(value, name) => [
+                    name === 'score' ? value : `${Math.round(value)}ms`,
+                    name === 'LCP' ? 'Largest Contentful Paint' :
+                    name === 'FCP' ? 'First Contentful Paint' :
+                    name === 'TTFB' ? 'Time to First Byte' :
+                    name === 'INP' ? 'Interaction to Next Paint' :
+                    name === 'CLS' ? 'Cumulative Layout Shift' :
+                    name === 'score' ? 'Performance Score' : name
+                  ]}
+                />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                  name="Performance Score"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="LCP"
+                  stroke="#10b981"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="LCP (ms)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="FCP"
+                  stroke="#8b5cf6"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="FCP (ms)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="TTFB"
+                  stroke="#f59e0b"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="TTFB (ms)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="INP"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                  name="INP (ms)"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

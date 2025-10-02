@@ -4,6 +4,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
+import {
   BarChart3,
   TrendingUp,
   Activity,
@@ -65,9 +82,39 @@ export const UsageAnalytics: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              if (systemStats) {
+                const exportData = {
+                  export_date: new Date().toISOString(),
+                  time_range_days: timeRange,
+                  summary: {
+                    total_requests: systemStats.total_requests,
+                    total_cost: systemStats.total_cost,
+                    unique_users: systemStats.unique_users,
+                    success_rate: systemStats.success_rate,
+                    total_tokens: systemStats.total_tokens
+                  },
+                  by_provider: systemStats.by_provider,
+                  daily_breakdown: systemStats.daily_breakdown
+                };
+
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ai-usage-analytics-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }
+            }}
+          >
             <Download className="h-4 w-4 mr-2" />
-            Export
+            Export Data
           </Button>
         </div>
       </div>
@@ -207,13 +254,63 @@ export const UsageAnalytics: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-center h-64 text-gray-500">
-                  <div className="text-center">
-                    <BarChart3 className="h-12 w-12 mx-auto mb-4" />
-                    <p>Interactive charts coming soon</p>
-                    <p className="text-sm">Cost trends, request volume, and performance metrics</p>
+                {statsLoading ? (
+                  <div className="h-64 flex items-center justify-center">
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </div>
                   </div>
-                </div>
+                ) : systemStats?.daily_breakdown && systemStats.daily_breakdown.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={240}>
+                    <AreaChart data={systemStats.daily_breakdown}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        dataKey="date"
+                        tickFormatter={(date) => new Date(date).toLocaleDateString('en', { month: 'short', day: 'numeric' })}
+                      />
+                      <YAxis />
+                      <Tooltip
+                        labelFormatter={(date) => new Date(date).toLocaleDateString()}
+                        formatter={[
+                          (value, name) => [
+                            name === 'cost' ? formatCurrency(value) : formatNumber(value),
+                            name === 'cost' ? 'Cost' : name === 'requests' ? 'Requests' : 'Tokens'
+                          ]
+                        ]}
+                      />
+                      <Legend />
+                      <Area
+                        type="monotone"
+                        dataKey="cost"
+                        stackId="1"
+                        stroke="#3b82f6"
+                        fill="#3b82f6"
+                        fillOpacity={0.6}
+                        name="Cost"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="requests"
+                        stackId="2"
+                        stroke="#10b981"
+                        fill="#10b981"
+                        fillOpacity={0.6}
+                        name="Requests"
+                        yAxisId="right"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-64 text-gray-500">
+                    <div className="text-center">
+                      <BarChart3 className="h-12 w-12 mx-auto mb-4" />
+                      <p>No usage data available</p>
+                      <p className="text-sm">Data will appear when AI services are used</p>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -249,6 +346,56 @@ export const UsageAnalytics: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="providers" className="space-y-6">
+          {/* Provider Distribution Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Cost Distribution by Provider</CardTitle>
+              <CardDescription>
+                Percentage breakdown of total costs across AI providers
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {statsLoading ? (
+                <div className="h-64 flex items-center justify-center">
+                  <Skeleton className="h-32 w-32 rounded-full" />
+                </div>
+              ) : systemStats?.by_provider && Object.keys(systemStats.by_provider).length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={Object.entries(systemStats.by_provider).map(([provider, stats], index) => ({
+                        name: PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS] || provider,
+                        value: stats.cost,
+                        provider: provider,
+                        color: ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#6b7280'][index % 5]
+                      }))}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {Object.entries(systemStats.by_provider).map((_, index) => (
+                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#6b7280'][index % 5]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex items-center justify-center h-64 text-gray-500">
+                  <div className="text-center">
+                    <BarChart3 className="h-12 w-12 mx-auto mb-4" />
+                    <p>No provider usage data</p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {statsLoading ? (
               Array.from({ length: 4 }).map((_, i) => (

@@ -2,17 +2,27 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AIRecommendation, AIRecommendationStatus } from "@/types/ai-insights";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const useAIRecommendations = (status?: AIRecommendationStatus) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, loading: authLoading } = useAuth();
 
   const query = useQuery({
-    queryKey: ['ai-recommendations', status],
+    queryKey: ['ai-recommendations', user?.id, status],
     queryFn: async () => {
+      if (!user?.id) {
+        console.log('useAIRecommendations: No authenticated user found');
+        throw new Error('Authentication required');
+      }
+
+      console.log('useAIRecommendations: Fetching recommendations for user:', user.id);
+
       let query = supabase
         .from('ai_recommendations')
         .select('*')
+        .eq('user_id', user.id) // Critical: Filter by user_id for RLS policies
         .order('priority', { ascending: false })
         .order('created_at', { ascending: false });
 
@@ -21,9 +31,16 @@ export const useAIRecommendations = (status?: AIRecommendationStatus) => {
       }
 
       const { data, error } = await query;
-      if (error) throw error;
+
+      if (error) {
+        console.error('useAIRecommendations: Query error:', error);
+        throw error;
+      }
+
+      console.log('useAIRecommendations: Successfully fetched', data?.length || 0, 'recommendations');
       return data as AIRecommendation[];
     },
+    enabled: !!user?.id && !authLoading, // Only run query when user is authenticated
   });
 
   const updateStatus = useMutation({

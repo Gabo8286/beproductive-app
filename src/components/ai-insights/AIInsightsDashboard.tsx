@@ -2,24 +2,81 @@ import { useState } from "react";
 import { useAIInsights } from "@/hooks/useAIInsights";
 import { useAIRecommendations } from "@/hooks/useAIRecommendations";
 import { useGenerateAIInsights } from "@/hooks/useGenerateAIInsights";
+import { useAuth } from "@/contexts/AuthContext";
 import { AIInsightCard } from "./AIInsightCard";
 import { AIRecommendationCard } from "./AIRecommendationCard";
 import { AIUsageWidget } from "./AIUsageWidget";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, Lightbulb, RefreshCw, TrendingUp } from "lucide-react";
+import { Brain, Lightbulb, RefreshCw, TrendingUp, AlertTriangle, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export function AIInsightsDashboard() {
   const [activeTab, setActiveTab] = useState("insights");
-  
-  const { insights, isLoading: insightsLoading, markAsRead, archiveInsight, deleteInsight } = useAIInsights({
+  const { user, loading: authLoading } = useAuth();
+
+  const { insights, isLoading: insightsLoading, error: insightsError, markAsRead, archiveInsight, deleteInsight } = useAIInsights({
     isArchived: false,
   });
 
-  const { recommendations, isLoading: recsLoading, updateStatus } = useAIRecommendations();
+  const { recommendations, isLoading: recsLoading, error: recsError, updateStatus } = useAIRecommendations();
   const { generateInsights, isGenerating } = useGenerateAIInsights();
+
+  console.log('AIInsightsDashboard: Auth state:', {
+    user: user?.id,
+    authLoading,
+    insightsLoading,
+    insightsError: insightsError?.message,
+    recsError: recsError?.message,
+    insightsCount: insights?.length || 0,
+    recsCount: recommendations?.length || 0
+  });
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <span className="ml-2 text-gray-600">Loading your AI insights...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if user is not authenticated
+  if (!user) {
+    return (
+      <Alert className="max-w-2xl mx-auto">
+        <AlertTriangle className="h-4 w-4" />
+        <AlertTitle>Authentication Required</AlertTitle>
+        <AlertDescription>
+          Please sign in to view your AI insights and recommendations.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  // Show error if there are query errors
+  if (insightsError || recsError) {
+    return (
+      <Alert className="max-w-2xl mx-auto border-red-200">
+        <AlertTriangle className="h-4 w-4 text-red-500" />
+        <AlertTitle className="text-red-700">Error Loading AI Insights</AlertTitle>
+        <AlertDescription className="text-red-600">
+          {insightsError?.message || recsError?.message || 'Failed to load AI insights data. Please try refreshing the page.'}
+          <div className="mt-3">
+            <Button onClick={() => window.location.reload()} size="sm">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh Page
+            </Button>
+          </div>
+        </AlertDescription>
+      </Alert>
+    );
+  }
 
   const unreadInsights = insights.filter(i => !i.is_read).length;
   const pendingRecs = recommendations.filter(r => r.status === 'pending').length;
