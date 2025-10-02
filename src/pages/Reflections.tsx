@@ -12,13 +12,14 @@ import ReflectionFilters from "@/components/reflections/ReflectionFilters";
 import ReflectionCalendar from "@/components/reflections/ReflectionCalendar";
 import ReflectionTimeline from "@/components/reflections/ReflectionTimeline";
 import DailyReflectionForm from "@/components/reflections/DailyReflectionForm";
+import ReflectionAnalyticsDashboard from "@/components/reflections/ReflectionAnalyticsDashboard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { ReflectionFilters as Filters } from "@/types/reflections";
 
 export default function Reflections() {
   const [showNewReflection, setShowNewReflection] = useState(false);
   const [filters, setFilters] = useState<Filters>({});
-  const [viewMode, setViewMode] = useState<'timeline' | 'calendar'>('timeline');
+  const [viewMode, setViewMode] = useState<'timeline' | 'calendar' | 'analytics'>('timeline');
 
   // Get current workspace
   const { data: workspaceData } = useQuery({
@@ -150,6 +151,7 @@ export default function Reflections() {
         <TabsList>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
         <TabsContent value="timeline" className="mt-6">
@@ -165,6 +167,10 @@ export default function Reflections() {
             reflections={reflections || []}
             workspaceId={workspaceId}
           />
+        </TabsContent>
+
+        <TabsContent value="analytics" className="mt-6">
+          <ReflectionAnalyticsDashboard workspaceId={workspaceId} />
         </TabsContent>
       </Tabs>
 
