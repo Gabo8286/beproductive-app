@@ -1030,6 +1030,403 @@ export type Database = {
         }
         Relationships: []
       }
+      reflection_analytics: {
+        Row: {
+          average_energy: number | null
+          average_mood: number | null
+          average_satisfaction: number | null
+          average_stress: number | null
+          calculated_at: string | null
+          growth_indicators: Json | null
+          id: string
+          pattern_insights: Json | null
+          period_end: string
+          period_start: string
+          period_type: Database["public"]["Enums"]["analytics_period"]
+          top_themes: string[] | null
+          total_reflections: number | null
+          user_id: string
+        }
+        Insert: {
+          average_energy?: number | null
+          average_mood?: number | null
+          average_satisfaction?: number | null
+          average_stress?: number | null
+          calculated_at?: string | null
+          growth_indicators?: Json | null
+          id?: string
+          pattern_insights?: Json | null
+          period_end: string
+          period_start: string
+          period_type: Database["public"]["Enums"]["analytics_period"]
+          top_themes?: string[] | null
+          total_reflections?: number | null
+          user_id: string
+        }
+        Update: {
+          average_energy?: number | null
+          average_mood?: number | null
+          average_satisfaction?: number | null
+          average_stress?: number | null
+          calculated_at?: string | null
+          growth_indicators?: Json | null
+          id?: string
+          pattern_insights?: Json | null
+          period_end?: string
+          period_start?: string
+          period_type?: Database["public"]["Enums"]["analytics_period"]
+          top_themes?: string[] | null
+          total_reflections?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_analytics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reflection_goal_links: {
+        Row: {
+          action_items: string[] | null
+          created_at: string | null
+          goal_id: string
+          id: string
+          insights: string | null
+          reflection_id: string
+          reflection_type: Database["public"]["Enums"]["goal_reflection_type"]
+        }
+        Insert: {
+          action_items?: string[] | null
+          created_at?: string | null
+          goal_id: string
+          id?: string
+          insights?: string | null
+          reflection_id: string
+          reflection_type: Database["public"]["Enums"]["goal_reflection_type"]
+        }
+        Update: {
+          action_items?: string[] | null
+          created_at?: string | null
+          goal_id?: string
+          id?: string
+          insights?: string | null
+          reflection_id?: string
+          reflection_type?: Database["public"]["Enums"]["goal_reflection_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_goal_links_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reflection_goal_links_reflection_id_fkey"
+            columns: ["reflection_id"]
+            isOneToOne: false
+            referencedRelation: "reflections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reflection_habit_links: {
+        Row: {
+          adjustments: string[] | null
+          created_at: string | null
+          habit_id: string
+          id: string
+          observations: string | null
+          reflection_id: string
+          reflection_type: Database["public"]["Enums"]["habit_reflection_type"]
+        }
+        Insert: {
+          adjustments?: string[] | null
+          created_at?: string | null
+          habit_id: string
+          id?: string
+          observations?: string | null
+          reflection_id: string
+          reflection_type: Database["public"]["Enums"]["habit_reflection_type"]
+        }
+        Update: {
+          adjustments?: string[] | null
+          created_at?: string | null
+          habit_id?: string
+          id?: string
+          observations?: string | null
+          reflection_id?: string
+          reflection_type?: Database["public"]["Enums"]["habit_reflection_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_habit_links_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reflection_habit_links_reflection_id_fkey"
+            columns: ["reflection_id"]
+            isOneToOne: false
+            referencedRelation: "reflections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reflection_prompts: {
+        Row: {
+          category: Database["public"]["Enums"]["prompt_category"]
+          created_at: string | null
+          created_by: string | null
+          difficulty_level: number | null
+          effectiveness_score: number | null
+          frequency: Database["public"]["Enums"]["prompt_frequency"]
+          id: string
+          is_system: boolean | null
+          metadata: Json | null
+          prompt_text: string
+          usage_count: number | null
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["prompt_category"]
+          created_at?: string | null
+          created_by?: string | null
+          difficulty_level?: number | null
+          effectiveness_score?: number | null
+          frequency?: Database["public"]["Enums"]["prompt_frequency"]
+          id?: string
+          is_system?: boolean | null
+          metadata?: Json | null
+          prompt_text: string
+          usage_count?: number | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["prompt_category"]
+          created_at?: string | null
+          created_by?: string | null
+          difficulty_level?: number | null
+          effectiveness_score?: number | null
+          frequency?: Database["public"]["Enums"]["prompt_frequency"]
+          id?: string
+          is_system?: boolean | null
+          metadata?: Json | null
+          prompt_text?: string
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_prompts_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reflection_shares: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          reflection_id: string
+          share_type: Database["public"]["Enums"]["share_type"]
+          shared_by: string
+          shared_with_user_id: string | null
+          shared_with_workspace: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          reflection_id: string
+          share_type?: Database["public"]["Enums"]["share_type"]
+          shared_by: string
+          shared_with_user_id?: string | null
+          shared_with_workspace?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          reflection_id?: string
+          share_type?: Database["public"]["Enums"]["share_type"]
+          shared_by?: string
+          shared_with_user_id?: string | null
+          shared_with_workspace?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_shares_reflection_id_fkey"
+            columns: ["reflection_id"]
+            isOneToOne: false
+            referencedRelation: "reflections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reflection_shares_shared_by_fkey"
+            columns: ["shared_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reflection_shares_shared_with_user_id_fkey"
+            columns: ["shared_with_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reflection_templates: {
+        Row: {
+          category: Database["public"]["Enums"]["template_category"]
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          is_system: boolean | null
+          metadata: Json | null
+          name: string
+          prompts: Json
+          rating: number | null
+          structure: Json | null
+          usage_count: number | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["template_category"]
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          is_system?: boolean | null
+          metadata?: Json | null
+          name: string
+          prompts?: Json
+          rating?: number | null
+          structure?: Json | null
+          usage_count?: number | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["template_category"]
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          is_system?: boolean | null
+          metadata?: Json | null
+          name?: string
+          prompts?: Json
+          rating?: number | null
+          structure?: Json | null
+          usage_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflection_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reflections: {
+        Row: {
+          challenges: string[] | null
+          content: string
+          created_at: string | null
+          created_by: string
+          energy_level: number | null
+          gratitude_items: string[] | null
+          id: string
+          is_private: boolean | null
+          learnings: string[] | null
+          metadata: Json | null
+          mood: Database["public"]["Enums"]["mood_level"] | null
+          reflection_date: string
+          reflection_type: Database["public"]["Enums"]["reflection_type"]
+          satisfaction_level: number | null
+          stress_level: number | null
+          tags: string[] | null
+          title: string
+          tomorrow_focus: string[] | null
+          updated_at: string | null
+          wins: string[] | null
+          workspace_id: string
+        }
+        Insert: {
+          challenges?: string[] | null
+          content: string
+          created_at?: string | null
+          created_by: string
+          energy_level?: number | null
+          gratitude_items?: string[] | null
+          id?: string
+          is_private?: boolean | null
+          learnings?: string[] | null
+          metadata?: Json | null
+          mood?: Database["public"]["Enums"]["mood_level"] | null
+          reflection_date?: string
+          reflection_type?: Database["public"]["Enums"]["reflection_type"]
+          satisfaction_level?: number | null
+          stress_level?: number | null
+          tags?: string[] | null
+          title: string
+          tomorrow_focus?: string[] | null
+          updated_at?: string | null
+          wins?: string[] | null
+          workspace_id: string
+        }
+        Update: {
+          challenges?: string[] | null
+          content?: string
+          created_at?: string | null
+          created_by?: string
+          energy_level?: number | null
+          gratitude_items?: string[] | null
+          id?: string
+          is_private?: boolean | null
+          learnings?: string[] | null
+          metadata?: Json | null
+          mood?: Database["public"]["Enums"]["mood_level"] | null
+          reflection_date?: string
+          reflection_type?: Database["public"]["Enums"]["reflection_type"]
+          satisfaction_level?: number | null
+          stress_level?: number | null
+          tags?: string[] | null
+          title?: string
+          tomorrow_focus?: string[] | null
+          updated_at?: string | null
+          wins?: string[] | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflections_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reflections_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -1424,6 +1821,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_reflection_patterns: {
+        Args: { p_end_date: string; p_start_date: string; p_user_id: string }
+        Returns: Json
+      }
       apply_milestone_template: {
         Args: { goal_id: string; start_date?: string; template_id: string }
         Returns: undefined
@@ -1477,6 +1878,10 @@ export type Database = {
         Args: { from_date: string; pattern: Json }
         Returns: string
       }
+      calculate_reflection_streak: {
+        Args: { p_user_id: string }
+        Returns: number
+      }
       check_habit_completion: {
         Args: { p_date: string; p_habit_id: string }
         Returns: boolean
@@ -1504,6 +1909,13 @@ export type Database = {
       execute_automation_actions: {
         Args: { p_actions: Json; p_rule_id: string; p_task_id: string }
         Returns: undefined
+      }
+      generate_daily_prompts: {
+        Args: { p_reflection_date: string; p_user_id: string }
+        Returns: {
+          category: Database["public"]["Enums"]["prompt_category"]
+          prompt_text: string
+        }[]
       }
       generate_recurring_instances: {
         Args: Record<PropertyKey, never>
@@ -1585,6 +1997,13 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_reflection_analytics: {
+        Args: {
+          p_period_type: Database["public"]["Enums"]["analytics_period"]
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       update_task_position: {
         Args: { new_position: number; task_id: string }
         Returns: undefined
@@ -1595,6 +2014,7 @@ export type Database = {
       }
     }
     Enums: {
+      analytics_period: "week" | "month" | "quarter" | "year"
       entry_status: "completed" | "skipped" | "missed" | "partial"
       goal_category:
         | "personal"
@@ -1604,6 +2024,12 @@ export type Database = {
         | "learning"
         | "relationship"
         | "other"
+      goal_reflection_type:
+        | "progress_review"
+        | "milestone_achieved"
+        | "challenge_faced"
+        | "strategy_adjustment"
+        | "completion_celebration"
       goal_status: "draft" | "active" | "paused" | "completed" | "archived"
       habit_category:
         | "health"
@@ -1616,14 +2042,52 @@ export type Database = {
         | "other"
       habit_difficulty: "easy" | "medium" | "hard" | "extreme"
       habit_frequency: "daily" | "weekly" | "monthly" | "custom"
+      habit_reflection_type:
+        | "streak_milestone"
+        | "consistency_review"
+        | "difficulty_adjustment"
+        | "motivation_analysis"
+        | "pattern_recognition"
       habit_time: "morning" | "afternoon" | "evening" | "anytime"
       habit_type: "build" | "break" | "maintain"
       member_role: "member" | "admin" | "owner"
       mood_enum: "amazing" | "good" | "neutral" | "bad" | "terrible"
+      mood_level: "amazing" | "great" | "good" | "neutral" | "bad" | "terrible"
       period_enum: "day" | "week" | "month" | "year" | "all_time"
+      prompt_category:
+        | "gratitude"
+        | "challenges"
+        | "wins"
+        | "learning"
+        | "planning"
+        | "mood"
+        | "goals"
+        | "habits"
+        | "relationships"
+        | "growth"
+      prompt_frequency: "daily" | "weekly" | "monthly" | "occasional"
+      reflection_type:
+        | "daily"
+        | "weekly"
+        | "monthly"
+        | "project"
+        | "goal"
+        | "habit"
+        | "custom"
       reminder_type: "time_based" | "location_based" | "trigger_based"
+      share_type: "read_only" | "comment_enabled" | "collaborative"
       task_priority: "low" | "medium" | "high" | "urgent"
       task_status: "todo" | "in_progress" | "blocked" | "done"
+      template_category:
+        | "daily"
+        | "weekly"
+        | "monthly"
+        | "project"
+        | "goal_review"
+        | "habit_review"
+        | "personal"
+        | "professional"
+        | "custom"
       user_role: "user" | "team_lead" | "admin" | "super_admin"
       workspace_type: "personal" | "team" | "organization"
     }
@@ -1753,6 +2217,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      analytics_period: ["week", "month", "quarter", "year"],
       entry_status: ["completed", "skipped", "missed", "partial"],
       goal_category: [
         "personal",
@@ -1762,6 +2227,13 @@ export const Constants = {
         "learning",
         "relationship",
         "other",
+      ],
+      goal_reflection_type: [
+        "progress_review",
+        "milestone_achieved",
+        "challenge_faced",
+        "strategy_adjustment",
+        "completion_celebration",
       ],
       goal_status: ["draft", "active", "paused", "completed", "archived"],
       habit_category: [
@@ -1776,14 +2248,56 @@ export const Constants = {
       ],
       habit_difficulty: ["easy", "medium", "hard", "extreme"],
       habit_frequency: ["daily", "weekly", "monthly", "custom"],
+      habit_reflection_type: [
+        "streak_milestone",
+        "consistency_review",
+        "difficulty_adjustment",
+        "motivation_analysis",
+        "pattern_recognition",
+      ],
       habit_time: ["morning", "afternoon", "evening", "anytime"],
       habit_type: ["build", "break", "maintain"],
       member_role: ["member", "admin", "owner"],
       mood_enum: ["amazing", "good", "neutral", "bad", "terrible"],
+      mood_level: ["amazing", "great", "good", "neutral", "bad", "terrible"],
       period_enum: ["day", "week", "month", "year", "all_time"],
+      prompt_category: [
+        "gratitude",
+        "challenges",
+        "wins",
+        "learning",
+        "planning",
+        "mood",
+        "goals",
+        "habits",
+        "relationships",
+        "growth",
+      ],
+      prompt_frequency: ["daily", "weekly", "monthly", "occasional"],
+      reflection_type: [
+        "daily",
+        "weekly",
+        "monthly",
+        "project",
+        "goal",
+        "habit",
+        "custom",
+      ],
       reminder_type: ["time_based", "location_based", "trigger_based"],
+      share_type: ["read_only", "comment_enabled", "collaborative"],
       task_priority: ["low", "medium", "high", "urgent"],
       task_status: ["todo", "in_progress", "blocked", "done"],
+      template_category: [
+        "daily",
+        "weekly",
+        "monthly",
+        "project",
+        "goal_review",
+        "habit_review",
+        "personal",
+        "professional",
+        "custom",
+      ],
       user_role: ["user", "team_lead", "admin", "super_admin"],
       workspace_type: ["personal", "team", "organization"],
     },
