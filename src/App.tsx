@@ -36,6 +36,7 @@ import Habits from "@/pages/Habits";
 import HabitDetail from "@/pages/HabitDetail";
 import Reflections from "@/pages/Reflections";
 import ReflectionDetail from "@/pages/ReflectionDetail";
+import Projects from "@/pages/Projects";
 import Notes from "@/pages/Notes";
 import Gamification from "@/pages/Gamification";
 import ProfileAssessment from "@/pages/ProfileAssessment";
@@ -106,6 +107,7 @@ const AppContent = () => {
         <Route path="habits/:id" element={<HabitDetail />} />
         <Route path="reflections" element={<Reflections />} />
         <Route path="reflections/:id" element={<ReflectionDetail />} />
+        <Route path="projects" element={<Projects />} />
         <Route path="notes" element={<Notes />} />
         <Route path="gamification" element={<Gamification />} />
         <Route path="profile-assessment" element={<ProfileAssessment />} />

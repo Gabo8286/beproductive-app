@@ -45,7 +45,7 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     id: "projects",
     name: "Projects",
     description: "Organize and manage your projects",
-    enabled: false,
+    enabled: true,
     icon: "folder",
     path: "/projects",
   },
