@@ -34,6 +34,7 @@ import Habits from "@/pages/Habits";
 import HabitDetail from "@/pages/HabitDetail";
 import Reflections from "@/pages/Reflections";
 import ReflectionDetail from "@/pages/ReflectionDetail";
+import AccessibilitySettingsPage from "@/pages/AccessibilitySettings";
 import NotFound from "@/pages/NotFound";
 import { useMemo } from "react";
 
@@ -94,6 +95,7 @@ const AppContent = () => {
         <Route path="habits/:id" element={<HabitDetail />} />
         <Route path="reflections" element={<Reflections />} />
         <Route path="reflections/:id" element={<ReflectionDetail />} />
+        <Route path="settings/accessibility" element={<AccessibilitySettingsPage />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
