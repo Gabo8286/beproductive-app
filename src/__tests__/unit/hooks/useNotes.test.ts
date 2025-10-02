@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useNotes } from '@/hooks/useNotes';
-import { createWrapper } from '@/test/utils/test-utils';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -96,18 +95,14 @@ describe('useNotes', () => {
   });
 
   it('should initialize with empty notes array', async () => {
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     expect(result.current.notes).toEqual([]);
     expect(result.current.isLoading).toBe(true);
   });
 
   it('should create a new note', async () => {
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     const noteData = {
       title: 'Test Note',
@@ -122,9 +117,7 @@ describe('useNotes', () => {
   });
 
   it('should update an existing note', async () => {
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     const updates = {
       title: 'Updated Note',
@@ -138,9 +131,7 @@ describe('useNotes', () => {
   });
 
   it('should delete a note', async () => {
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     await waitFor(async () => {
       await expect(result.current.deleteNote('1')).resolves.not.toThrow();
@@ -153,9 +144,7 @@ describe('useNotes', () => {
       user: null
     });
 
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     await waitFor(async () => {
       await expect(result.current.createNote({
@@ -167,9 +156,7 @@ describe('useNotes', () => {
   });
 
   it('should search notes', async () => {
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     await waitFor(async () => {
       const searchResults = await result.current.searchNotes('test query');
@@ -178,9 +165,7 @@ describe('useNotes', () => {
   });
 
   it('should get note backlinks', async () => {
-    const { result } = renderHook(() => useNotes(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useNotes());
 
     await waitFor(async () => {
       const backlinks = await result.current.getNoteBacklinks('1');

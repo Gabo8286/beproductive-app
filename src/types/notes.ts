@@ -1,3 +1,5 @@
+import { Json } from "@/integrations/supabase/types";
+
 export type NoteType = "fleeting" | "literature" | "permanent";
 
 export interface Note {
@@ -6,7 +8,7 @@ export interface Note {
   title: string;
   content: string;
   note_type: NoteType;
-  metadata?: Record<string, any>;
+  metadata?: Json;
   created_at: string;
   updated_at: string;
 }
@@ -30,14 +32,14 @@ export interface CreateNoteData {
   title: string;
   content: string;
   note_type: NoteType;
-  metadata?: Record<string, any>;
+  metadata?: Json;
 }
 
 export interface UpdateNoteData {
   title?: string;
   content?: string;
   note_type?: NoteType;
-  metadata?: Record<string, any>;
+  metadata?: Json;
 }
 
 export interface NoteWithBacklinks extends Note {
