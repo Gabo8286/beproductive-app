@@ -1,6 +1,9 @@
 export { BaseWidget } from './BaseWidget';
 export { WidgetActions } from './WidgetActions';
 export { WidgetGrid } from './WidgetGrid';
+export { InteractiveWidget } from './InteractiveWidget';
+export { WidgetInteractionWrapper } from './WidgetInteractionWrapper';
+export { QuickActionButton } from './QuickActionButton';
 export { GoalsWidget } from './GoalsWidget';
 export { TasksWidget } from './TasksWidget';
 export { NewQuickTodosWidget } from './NewQuickTodosWidget';

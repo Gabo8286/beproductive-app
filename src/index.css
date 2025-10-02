@@ -325,4 +325,160 @@
   .hover-glow:hover::before {
     opacity: 1;
   }
+
+  /* Apple-Inspired Micro-Interactions */
+  /* Spring Scale Animation */
+  .spring-scale {
+    animation: springScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes springScale {
+    0% {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Bounce on Success */
+  .success-bounce {
+    animation: successBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  @keyframes successBounce {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(0.95); }
+    75% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  /* Shimmer Loading Effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -468px 0;
+    }
+    100% {
+      background-position: 468px 0;
+    }
+  }
+
+  /* Pulse on Update */
+  .update-pulse {
+    animation: updatePulse 1s ease-in-out;
+  }
+
+  @keyframes updatePulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 10px hsl(var(--primary) / 0);
+    }
+  }
+
+  /* Hover Elevation */
+  .hover-elevate {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .hover-elevate:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Button Press Animation */
+  .apple-press {
+    transition: all 0.1s ease-out;
+  }
+
+  .apple-press:active {
+    transform: scale(0.95);
+    transition: all 0.05s ease-out;
+  }
+
+  /* Contextual Menu Slide */
+  .context-slide-in {
+    animation: contextSlideIn 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  @keyframes contextSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Loading Skeleton with Apple-style shimmer */
+  .skeleton-apple {
+    background: linear-gradient(90deg,
+      hsl(var(--muted)) 25%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite;
+  }
+
+  @keyframes skeleton-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* GPU Acceleration */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Smooth Transitions */
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Reduce Motion for Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .spring-scale,
+    .success-bounce,
+    .shimmer,
+    .update-pulse,
+    .hover-elevate,
+    .context-slide-in,
+    .skeleton-apple {
+      animation: none;
+    }
+
+    .smooth-transition,
+    .apple-press,
+    .hover-elevate {
+      transition: none;
+    }
+  }
 }
