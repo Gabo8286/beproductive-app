@@ -17,7 +17,6 @@ import { DragAndDropProvider } from '@/components/dnd/DragAndDropProvider';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { DragEndEvent } from '@dnd-kit/core';
 import { useUpdateTaskPositions } from '@/hooks/useDragAndDrop';
-import { useDefaultWorkspace } from '@/hooks/useTasks';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -181,7 +180,6 @@ function TaskListItem({ task }: { task: Task }) {
 
 export function TaskListView({ tasks }: TaskListViewProps) {
   const updatePositions = useUpdateTaskPositions();
-  const { data: workspace } = useDefaultWorkspace();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
