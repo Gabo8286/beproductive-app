@@ -137,7 +137,7 @@ export function ProductivityProfileWidget() {
             Key Strategies
           </h4>
           <div className="space-y-1">
-            {currentAssessment.recommended_strategies.slice(0, 2).map((strategy, index) => (
+            {(currentAssessment.recommended_strategies as string[]).slice(0, 2).map((strategy, index) => (
               <div key={index} className="text-xs text-gray-600 pl-4 border-l-2 border-blue-200">
                 {strategy}
               </div>

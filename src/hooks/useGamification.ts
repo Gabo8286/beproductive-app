@@ -13,7 +13,10 @@ import {
   POINTS_ACTIONS,
   getLevelInfo,
   calculateLevelFromXp,
-  AchievementProgress
+  AchievementProgress,
+  AchievementCategory,
+  AchievementRarity,
+  RequirementType
 } from '@/types/gamification';
 
 export function useGamification() {
@@ -36,9 +39,9 @@ export function useGamification() {
         .from('user_gamification_profiles')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
-      if (fetchError && fetchError.code !== 'PGRST116') {
+      if (fetchError) {
         throw fetchError;
       }
 
@@ -158,7 +161,12 @@ export function useGamification() {
         );
 
         return {
-          achievement,
+          achievement: {
+            ...achievement,
+            category: achievement.category as AchievementCategory,
+            rarity: achievement.rarity as AchievementRarity,
+            requirement_type: achievement.requirement_type as RequirementType
+          },
           current_progress: userAchievement?.current_progress || 0,
           is_unlocked: !!userAchievement?.unlocked_at,
           unlocked_at: userAchievement?.unlocked_at,

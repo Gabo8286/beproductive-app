@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useGamification } from './useGamification';
+import { Json } from '@/integrations/supabase/types';
 
 export interface ProductivityQuestion {
   id: string;
@@ -30,13 +31,13 @@ export interface ProductivityProfile {
 export interface AssessmentResult {
   id: string;
   user_id: string;
-  question_responses: Record<string, string>;
-  profile_scores: Record<string, number>;
+  question_responses: Json;
+  profile_scores: Json;
   dominant_profile: string;
   secondary_profile?: string;
-  recommended_strategies: string[];
-  strengths: string[];
-  growth_areas: string[];
+  recommended_strategies: Json;
+  strengths: Json;
+  growth_areas: Json;
   completed_at: string;
 }
 

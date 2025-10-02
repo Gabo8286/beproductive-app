@@ -119,7 +119,7 @@ export default function ProfileAssessment() {
                   Your Strengths
                 </h3>
                 <ul className="space-y-2">
-                  {currentAssessment.strengths.map((strength, index) => (
+                  {(currentAssessment.strengths as string[]).map((strength, index) => (
                     <li key={index} className="flex items-start">
                       <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span className="text-gray-700">{strength}</span>
@@ -135,7 +135,7 @@ export default function ProfileAssessment() {
                   Growth Opportunities
                 </h3>
                 <ul className="space-y-2">
-                  {currentAssessment.growth_areas.map((area, index) => (
+                  {(currentAssessment.growth_areas as string[]).map((area, index) => (
                     <li key={index} className="flex items-start">
                       <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
                       <span className="text-gray-700">{area}</span>
@@ -175,7 +175,7 @@ export default function ProfileAssessment() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentAssessment.recommended_strategies.map((strategy, index) => (
+              {(currentAssessment.recommended_strategies as string[]).map((strategy, index) => (
                 <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <p className="text-gray-700">{strategy}</p>
                 </div>

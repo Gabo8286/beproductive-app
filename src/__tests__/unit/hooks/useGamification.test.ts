@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useGamification } from '@/hooks/useGamification';
-import { createWrapper } from '@/test/utils/test-utils';
 
 // Mock Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
@@ -86,18 +85,14 @@ describe('useGamification', () => {
   });
 
   it('should initialize with loading state', () => {
-    const { result } = renderHook(() => useGamification(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useGamification());
 
     expect(result.current.isLoading).toBe(true);
     expect(result.current.profile).toBeNull();
   });
 
   it('should calculate level info correctly', () => {
-    const { result } = renderHook(() => useGamification(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useGamification());
 
     const levelInfo = result.current.getLevelInfo(1500);
     expect(levelInfo.level).toBeGreaterThan(1);
@@ -107,9 +102,7 @@ describe('useGamification', () => {
   });
 
   it('should award points successfully', async () => {
-    const { result } = renderHook(() => useGamification(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useGamification());
 
     await waitFor(async () => {
       await expect(result.current.awardPoints('TASK_COMPLETED', 'task1')).resolves.not.toThrow();
@@ -133,9 +126,7 @@ describe('useGamification', () => {
       user: null
     });
 
-    const { result } = renderHook(() => useGamification(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useGamification());
 
     await waitFor(async () => {
       await expect(result.current.awardPoints('TASK_COMPLETED')).rejects.toThrow('User not authenticated');
@@ -143,9 +134,7 @@ describe('useGamification', () => {
   });
 
   it('should calculate level from XP correctly', () => {
-    const { result } = renderHook(() => useGamification(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useGamification());
 
     expect(result.current.calculateLevel(0)).toBe(1);
     expect(result.current.calculateLevel(1000)).toBeGreaterThan(1);

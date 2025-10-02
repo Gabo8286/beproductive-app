@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useProductivityProfile } from '@/hooks/useProductivityProfile';
-import { createWrapper } from '@/test/utils/test-utils';
 
 // Mock Supabase client
 const mockSupabase = {
@@ -86,17 +85,13 @@ describe('useProductivityProfile', () => {
   });
 
   it('should initialize with loading state', () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     expect(result.current.isLoading).toBe(true);
   });
 
   it('should provide assessment questions', () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     expect(result.current.questions).toBeDefined();
     expect(result.current.questions.length).toBeGreaterThan(0);
@@ -106,9 +101,7 @@ describe('useProductivityProfile', () => {
   });
 
   it('should provide productivity profiles', () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     expect(result.current.profiles).toBeDefined();
     expect(result.current.profiles.strategist).toBeDefined();
@@ -118,9 +111,7 @@ describe('useProductivityProfile', () => {
   });
 
   it('should calculate profile scores correctly', () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     const responses = {
       'planning_style': 'detailed_plan',
@@ -134,9 +125,7 @@ describe('useProductivityProfile', () => {
   });
 
   it('should determine dominant profiles correctly', () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     const scores = {
       strategist: 15,
@@ -151,9 +140,7 @@ describe('useProductivityProfile', () => {
   });
 
   it('should submit assessment successfully', async () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     const responses = {
       'planning_style': 'detailed_plan',
@@ -175,9 +162,7 @@ describe('useProductivityProfile', () => {
       user: null
     });
 
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     await waitFor(async () => {
       await expect(result.current.submitAssessment({})).rejects.toThrow('User not authenticated');
@@ -185,9 +170,7 @@ describe('useProductivityProfile', () => {
   });
 
   it('should get recommendations for a profile', () => {
-    const { result } = renderHook(() => useProductivityProfile(), {
-      wrapper: createWrapper()
-    });
+    const { result } = renderHook(() => useProductivityProfile());
 
     const recommendations = result.current.getRecommendationsForProfile('strategist');
     expect(recommendations.strategies).toBeDefined();

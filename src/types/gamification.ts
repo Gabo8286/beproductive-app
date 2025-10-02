@@ -1,3 +1,5 @@
+import { Json } from "@/integrations/supabase/types";
+
 export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
 export type AchievementCategory = 'tasks' | 'goals' | 'habits' | 'notes' | 'reflections' | 'levels' | 'streaks' | 'social';
 export type RequirementType = 'count' | 'streak' | 'total' | 'specific';
@@ -18,7 +20,7 @@ export interface UserGamificationProfile {
   last_level_up_at: string;
   weekly_reset_at: string;
   monthly_reset_at: string;
-  metadata: Record<string, any>;
+  metadata: Json;
   created_at: string;
   updated_at: string;
 }
@@ -32,7 +34,7 @@ export interface PointsLogEntry {
   source_id?: string;
   multiplier: number;
   description?: string;
-  metadata: Record<string, any>;
+  metadata: Json;
   earned_at: string;
 }
 
@@ -58,7 +60,7 @@ export interface UserAchievement {
   achievement_id: string;
   current_progress: number;
   unlocked_at?: string;
-  metadata: Record<string, any>;
+  metadata: Json;
   created_at: string;
   updated_at: string;
   achievement?: Achievement; // Populated via join
@@ -76,7 +78,7 @@ export interface UserChallenge {
   status: ChallengeStatus;
   expires_at?: string;
   completed_at?: string;
-  metadata: Record<string, any>;
+  metadata: Json;
   created_at: string;
   updated_at: string;
 }
