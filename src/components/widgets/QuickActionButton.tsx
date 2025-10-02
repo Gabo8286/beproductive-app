@@ -51,9 +51,10 @@ export function QuickActionButton({
         className
       )}
       size="icon"
+      aria-label={label}
       title={label}
     >
-      {icon}
+      <span aria-hidden="true">{icon}</span>
     </Button>
   );
 }

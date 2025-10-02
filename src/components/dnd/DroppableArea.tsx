@@ -17,6 +17,9 @@ export function DroppableArea({ id, children, className = '', data }: DroppableA
   return (
     <div
       ref={setNodeRef}
+      role="region"
+      aria-label={`Drop area for ${id}`}
+      aria-dropeffect={isOver ? 'move' : 'none'}
       className={`${className} ${
         isOver ? 'ring-2 ring-primary ring-offset-2 bg-accent/5' : ''
       } transition-all duration-200`}

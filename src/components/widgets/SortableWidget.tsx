@@ -1,8 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { GripVertical } from "lucide-react";
+import { useAriaAnnounce } from "@/hooks/useAriaAnnounce";
 
 interface SortableWidgetProps {
   id: string;
@@ -17,6 +18,9 @@ export function SortableWidget({
   widget,
   isActive 
 }: SortableWidgetProps) {
+  const [isDragActive, setIsDragActive] = useState(false);
+  const { announce } = useAriaAnnounce();
+  
   const {
     attributes,
     listeners,
@@ -29,6 +33,20 @@ export function SortableWidget({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+  };
+
+  // Keyboard activation handler
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      setIsDragActive(!isDragActive);
+      announce(
+        isDragActive 
+          ? `Widget ${widget.type} activated for reordering. Use arrow keys to move, Space to drop.`
+          : `Widget ${widget.type} dropped.`,
+        'assertive'
+      );
+    }
   };
 
   return (
@@ -45,19 +63,23 @@ export function SortableWidget({
       )}
     >
       {/* Drag Handle */}
-      <div
+      <button
         {...attributes}
         {...listeners}
+        onKeyDown={handleKeyDown}
         className={cn(
-          "absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100",
+          "absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 focus-visible:opacity-100",
           "w-6 h-6 bg-background/90 backdrop-blur-sm rounded cursor-grab",
           "flex items-center justify-center transition-all duration-200",
-          "hover:bg-primary hover:text-primary-foreground active:cursor-grabbing"
+          "hover:bg-primary hover:text-primary-foreground active:cursor-grabbing",
+          "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         )}
-        title="Drag to reorder"
+        aria-label={`Drag to reorder ${widget.type} widget. Press Space or Enter to activate.`}
+        aria-pressed={isDragActive}
+        tabIndex={0}
       >
         <GripVertical className="w-4 h-4" />
-      </div>
+      </button>
 
       {/* Widget Content */}
       <div className={cn(
