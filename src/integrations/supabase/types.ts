@@ -117,6 +117,235 @@ export type Database = {
           },
         ]
       }
+      ai_insights: {
+        Row: {
+          confidence_score: number | null
+          content: string
+          created_at: string | null
+          data_sources: Json | null
+          generated_at: string | null
+          id: string
+          is_archived: boolean | null
+          is_read: boolean | null
+          metadata: Json | null
+          provider: Database["public"]["Enums"]["ai_provider"]
+          summary: string | null
+          title: string
+          type: Database["public"]["Enums"]["ai_insight_type"]
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          content: string
+          created_at?: string | null
+          data_sources?: Json | null
+          generated_at?: string | null
+          id?: string
+          is_archived?: boolean | null
+          is_read?: boolean | null
+          metadata?: Json | null
+          provider?: Database["public"]["Enums"]["ai_provider"]
+          summary?: string | null
+          title: string
+          type: Database["public"]["Enums"]["ai_insight_type"]
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          content?: string
+          created_at?: string | null
+          data_sources?: Json | null
+          generated_at?: string | null
+          id?: string
+          is_archived?: boolean | null
+          is_read?: boolean | null
+          metadata?: Json | null
+          provider?: Database["public"]["Enums"]["ai_provider"]
+          summary?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["ai_insight_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_insights_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_recommendations: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          description: string
+          dismissed_at: string | null
+          effort_level: string | null
+          expected_impact: string | null
+          id: string
+          implementation_steps: Json | null
+          insight_id: string | null
+          metadata: Json | null
+          priority: number | null
+          status: Database["public"]["Enums"]["ai_recommendation_status"] | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          description: string
+          dismissed_at?: string | null
+          effort_level?: string | null
+          expected_impact?: string | null
+          id?: string
+          implementation_steps?: Json | null
+          insight_id?: string | null
+          metadata?: Json | null
+          priority?: number | null
+          status?:
+            | Database["public"]["Enums"]["ai_recommendation_status"]
+            | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string
+          dismissed_at?: string | null
+          effort_level?: string | null
+          expected_impact?: string | null
+          id?: string
+          implementation_steps?: Json | null
+          insight_id?: string | null
+          metadata?: Json | null
+          priority?: number | null
+          status?:
+            | Database["public"]["Enums"]["ai_recommendation_status"]
+            | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_recommendations_insight_id_fkey"
+            columns: ["insight_id"]
+            isOneToOne: false
+            referencedRelation: "ai_insights"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_recommendations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_service_usage: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          estimated_cost: number | null
+          id: string
+          metadata: Json | null
+          model_name: string | null
+          provider: Database["public"]["Enums"]["ai_provider"]
+          request_type: string | null
+          success: boolean | null
+          tokens_used: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          estimated_cost?: number | null
+          id?: string
+          metadata?: Json | null
+          model_name?: string | null
+          provider: Database["public"]["Enums"]["ai_provider"]
+          request_type?: string | null
+          success?: boolean | null
+          tokens_used?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          estimated_cost?: number | null
+          id?: string
+          metadata?: Json | null
+          model_name?: string | null
+          provider?: Database["public"]["Enums"]["ai_provider"]
+          request_type?: string | null
+          success?: boolean | null
+          tokens_used?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_service_usage_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_user_preferences: {
+        Row: {
+          auto_generate_insights: boolean | null
+          created_at: string | null
+          enabled_insight_types: Json | null
+          id: string
+          insight_frequency: string | null
+          notification_preferences: Json | null
+          preferred_provider: Database["public"]["Enums"]["ai_provider"] | null
+          privacy_settings: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          auto_generate_insights?: boolean | null
+          created_at?: string | null
+          enabled_insight_types?: Json | null
+          id?: string
+          insight_frequency?: string | null
+          notification_preferences?: Json | null
+          preferred_provider?: Database["public"]["Enums"]["ai_provider"] | null
+          privacy_settings?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          auto_generate_insights?: boolean | null
+          created_at?: string | null
+          enabled_insight_types?: Json | null
+          id?: string
+          insight_frequency?: string | null
+          notification_preferences?: Json | null
+          preferred_provider?: Database["public"]["Enums"]["ai_provider"] | null
+          privacy_settings?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_user_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       automation_logs: {
         Row: {
           changes_made: Json | null
@@ -2682,6 +2911,10 @@ export type Database = {
         Args: { goal_id: string }
         Returns: Json
       }
+      get_user_ai_usage_stats: {
+        Args: { p_days?: number; p_user_id: string }
+        Returns: Json
+      }
       get_xp_required_for_level: {
         Args: { target_level: number }
         Returns: number
@@ -2784,6 +3017,22 @@ export type Database = {
       }
     }
     Enums: {
+      ai_insight_type:
+        | "productivity_pattern"
+        | "goal_progress"
+        | "habit_analysis"
+        | "time_optimization"
+        | "task_prioritization"
+        | "reflection_sentiment"
+        | "project_health"
+        | "burnout_risk"
+        | "achievement_opportunity"
+      ai_provider: "openai" | "claude" | "gemini" | "lovable"
+      ai_recommendation_status:
+        | "pending"
+        | "in_progress"
+        | "completed"
+        | "dismissed"
       analytics_period: "week" | "month" | "quarter" | "year"
       entry_status: "completed" | "skipped" | "missed" | "partial"
       goal_category:
@@ -2997,6 +3246,24 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ai_insight_type: [
+        "productivity_pattern",
+        "goal_progress",
+        "habit_analysis",
+        "time_optimization",
+        "task_prioritization",
+        "reflection_sentiment",
+        "project_health",
+        "burnout_risk",
+        "achievement_opportunity",
+      ],
+      ai_provider: ["openai", "claude", "gemini", "lovable"],
+      ai_recommendation_status: [
+        "pending",
+        "in_progress",
+        "completed",
+        "dismissed",
+      ],
       analytics_period: ["week", "month", "quarter", "year"],
       entry_status: ["completed", "skipped", "missed", "partial"],
       goal_category: [
