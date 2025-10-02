@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Open Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        heading: ['Montserrat', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -81,12 +85,20 @@ export default {
         md: "var(--shadow-md)",
         lg: "var(--shadow-lg)",
         xl: "var(--shadow-xl)",
+        "2xl": "var(--shadow-2xl)",
         glow: "var(--shadow-glow)",
+        "glow-strong": "var(--shadow-glow-strong)",
       },
       transitionDuration: {
         fast: "var(--transition-fast)",
         base: "var(--transition-base)",
         slow: "var(--transition-slow)",
+        bounce: "var(--transition-bounce)",
+      },
+      transitionTimingFunction: {
+        "spring-bounce": "var(--spring-bounce)",
+        "spring-ease": "var(--spring-ease)",
+        "spring-out": "var(--spring-out)",
       },
       borderRadius: {
         lg: "var(--radius)",
