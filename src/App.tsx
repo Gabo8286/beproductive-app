@@ -5,11 +5,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
 import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { announceRouteChange } from "@/utils/accessibility/focusManagement";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
@@ -36,9 +40,31 @@ import { useMemo } from "react";
 const AppContent = () => {
   // Enable offline detection
   useOfflineDetection();
+  
+  const location = useLocation();
+
+  // Announce route changes to screen readers
+  useEffect(() => {
+    announceRouteChange(location.pathname);
+  }, [location.pathname]);
 
   return (
-    <Routes>
+    <>
+      {/* ARIA Live Regions for screen reader announcements */}
+      <div 
+        id="aria-live-polite" 
+        aria-live="polite" 
+        aria-atomic="true" 
+        className="sr-only" 
+      />
+      <div 
+        id="aria-live-assertive" 
+        aria-live="assertive" 
+        aria-atomic="true" 
+        className="sr-only" 
+      />
+      
+      <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
@@ -72,6 +98,7 @@ const AppContent = () => {
 
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </>
   );
 };
 
@@ -92,17 +119,19 @@ const App = () => {
   return (
     <ErrorBoundary fallback={PageErrorFallback} level="page">
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AuthProvider>
-              <ModulesProvider>
-                <AppContent />
-              </ModulesProvider>
-            </AuthProvider>
-          </BrowserRouter>
-        </TooltipProvider>
+        <AccessibilityProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AuthProvider>
+                <ModulesProvider>
+                  <AppContent />
+                </ModulesProvider>
+              </AuthProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AccessibilityProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );

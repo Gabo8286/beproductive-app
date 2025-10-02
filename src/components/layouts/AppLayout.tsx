@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
 
 export function AppLayout() {
   const { profile, signOut } = useAuth();
@@ -38,6 +39,7 @@ export function AppLayout() {
 
   return (
     <SidebarProvider>
+      <SkipNavigation />
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
@@ -57,7 +59,7 @@ export function AppLayout() {
 ...
             </DropdownMenu>
           </header>
-          <main className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand">
+          <main id="main-content" className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand">
             <Outlet />
           </main>
         </div>
