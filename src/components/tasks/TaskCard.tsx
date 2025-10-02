@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { useDeleteTask, useToggleTaskCompletion } from '@/hooks/useTasks';
 import { TaskForm } from './TaskForm';
 import { Database } from '@/integrations/supabase/types';
+import { Link } from 'react-router-dom';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -61,9 +62,11 @@ export function TaskCard({ task }: TaskCardProps) {
               className="mt-1"
             />
             <div className="flex-1 min-w-0">
-              <CardTitle className={`text-lg leading-6 ${task.status === 'done' ? 'line-through' : ''}`}>
-                {task.title}
-              </CardTitle>
+              <Link to={`/tasks/${task.id}`} className="hover:text-primary transition-colors">
+                <CardTitle className={`text-lg leading-6 ${task.status === 'done' ? 'line-through' : ''}`}>
+                  {task.title}
+                </CardTitle>
+              </Link>
               {task.description && (
                 <CardDescription className="mt-1">
                   {task.description}

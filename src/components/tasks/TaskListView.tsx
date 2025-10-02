@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { useDeleteTask, useToggleTaskCompletion } from '@/hooks/useTasks';
 import { TaskForm } from './TaskForm';
 import { Database } from '@/integrations/supabase/types';
+import { Link } from 'react-router-dom';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -61,12 +62,14 @@ function TaskListItem({ task }: { task: Task }) {
       />
 
       {/* Task Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between">
-          <div className="flex-1 min-w-0">
-            <h3 className={`font-medium truncate ${task.status === 'done' ? 'line-through' : ''}`}>
-              {task.title}
-            </h3>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between">
+            <div className="flex-1 min-w-0">
+              <Link to={`/tasks/${task.id}`} className="hover:text-primary transition-colors">
+                <h3 className={`font-medium truncate ${task.status === 'done' ? 'line-through' : ''}`}>
+                  {task.title}
+                </h3>
+              </Link>
             {task.description && (
               <p className="text-sm text-muted-foreground truncate mt-1">
                 {task.description}

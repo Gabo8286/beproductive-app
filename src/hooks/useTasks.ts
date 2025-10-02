@@ -31,6 +31,33 @@ const useDefaultWorkspace = () => {
   });
 };
 
+// Get single task by ID
+export const useTask = (taskId: string | undefined) => {
+  return useQuery({
+    queryKey: ['task', taskId],
+    queryFn: async () => {
+      if (!taskId) throw new Error('Task ID is required');
+
+      const { data, error } = await supabase
+        .from('tasks')
+        .select(`
+          *,
+          assigned_to_profile:profiles!tasks_assigned_to_fkey(full_name, avatar_url),
+          created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
+        `)
+        .eq('id', taskId)
+        .single();
+
+      if (error) throw error;
+      return data as (Task & {
+        assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
+        created_by_profile?: { full_name: string | null; avatar_url: string | null };
+      });
+    },
+    enabled: !!taskId,
+  });
+};
+
 // Get all tasks for user's workspace
 export const useTasks = () => {
   const { user } = useAuth();
