@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useReflection } from "@/hooks/useReflections";
 import { useDeleteReflection } from "@/hooks/useReflections";
+import { GoalReflectionLinker } from "@/components/reflections/GoalReflectionLinker";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -213,33 +214,12 @@ export default function ReflectionDetail() {
           </>
         )}
 
-        {/* Linked Items */}
-        {(reflection.goal_links?.length > 0 || reflection.habit_links?.length > 0) && (
-          <>
-            <Separator />
-            <div>
-              <h2 className="text-lg font-semibold mb-3">Linked Items</h2>
-              <div className="space-y-2">
-                {reflection.goal_links?.map((link) => (
-                  <div key={link.id} className="p-3 bg-secondary rounded-lg">
-                    <p className="font-medium">🎯 {link.goal?.title}</p>
-                    {link.insights && (
-                      <p className="text-sm text-muted-foreground mt-1">{link.insights}</p>
-                    )}
-                  </div>
-                ))}
-                {reflection.habit_links?.map((link) => (
-                  <div key={link.id} className="p-3 bg-secondary rounded-lg">
-                    <p className="font-medium">⚡ {link.habit?.title}</p>
-                    {link.observations && (
-                      <p className="text-sm text-muted-foreground mt-1">{link.observations}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
+        {/* Linked Goals */}
+        <Separator />
+        <div>
+          <h2 className="text-lg font-semibold mb-3">Linked Goals</h2>
+          <GoalReflectionLinker reflectionId={id!} reflectionContent={reflection.content} />
+        </div>
       </Card>
     </div>
   );
