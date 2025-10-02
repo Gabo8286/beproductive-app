@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import { TagBadge } from '@/components/tags/TagBadge';
 import { useTags } from '@/hooks/useTags';
 import { DraggableTask } from '@/components/dnd/DraggableTask';
+import { ProgressIndicator } from './ProgressIndicator';
+import { useSubtaskProgress } from '@/hooks/useSubtasks';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -41,6 +43,7 @@ export function TaskCard({ task }: TaskCardProps) {
   const deleteTask = useDeleteTask();
   const toggleCompletion = useToggleTaskCompletion();
   const { data: tags = [] } = useTags();
+  const { data: subtaskProgress } = useSubtaskProgress(task.id);
 
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -158,6 +161,17 @@ export function TaskCard({ task }: TaskCardProps) {
                 />
               );
             })}
+          </div>
+        )}
+
+        {subtaskProgress && subtaskProgress.total > 0 && (
+          <div className="mt-3">
+            <ProgressIndicator
+              total={subtaskProgress.total}
+              completed={subtaskProgress.completed}
+              percentage={subtaskProgress.percentage}
+              size="sm"
+            />
           </div>
         )}
       </CardContent>

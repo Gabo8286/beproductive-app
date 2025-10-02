@@ -19,7 +19,9 @@ import { DragEndEvent } from '@dnd-kit/core';
 import { useUpdateTaskPositions } from '@/hooks/useDragAndDrop';
 import { QuickTaskInput } from './QuickTaskInput';
 import { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, ChevronRight, ChevronDown } from 'lucide-react';
+import { SubtaskList } from './SubtaskList';
+import { useSubtasks } from '@/hooks/useSubtasks';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -48,6 +50,9 @@ function TaskListItem({ task }: { task: Task }) {
   const deleteTask = useDeleteTask();
   const toggleCompletion = useToggleTaskCompletion();
   const { data: tags = [] } = useTags();
+  const { data: subtasks } = useSubtasks(task.id);
+  const [showSubtasks, setShowSubtasks] = useState(false);
+  const hasSubtasks = subtasks && subtasks.length > 0;
 
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -63,15 +68,32 @@ function TaskListItem({ task }: { task: Task }) {
   const statusInfo = statusConfig[task.status as keyof typeof statusConfig];
 
   return (
-    <DraggableTask task={task}>
-      <div className={`flex items-center gap-4 p-4 pl-12 border rounded-lg hover:bg-accent/50 transition-colors ${
-        task.status === 'done' ? 'opacity-75' : ''
-      }`}>
-      {/* Checkbox */}
-      <Checkbox
-        checked={task.status === 'done'}
-        onCheckedChange={handleToggleCompletion}
-      />
+    <div>
+      <DraggableTask task={task}>
+        <div className={`flex items-center gap-4 p-4 pl-12 border rounded-lg hover:bg-accent/50 transition-colors ${
+          task.status === 'done' ? 'opacity-75' : ''
+        }`}>
+        {/* Expand/Collapse for subtasks */}
+        {hasSubtasks && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowSubtasks(!showSubtasks)}
+            className="h-6 w-6 p-0"
+          >
+            {showSubtasks ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+        )}
+        
+        {/* Checkbox */}
+        <Checkbox
+          checked={task.status === 'done'}
+          onCheckedChange={handleToggleCompletion}
+        />
 
       {/* Task Info */}
         <div className="flex-1 min-w-0">
@@ -176,8 +198,16 @@ function TaskListItem({ task }: { task: Task }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      </div>
-    </DraggableTask>
+        </div>
+      </DraggableTask>
+      
+      {/* Subtasks */}
+      {hasSubtasks && showSubtasks && (
+        <div className="ml-12 mt-2">
+          <SubtaskList parentId={task.id} defaultExpanded={true} />
+        </div>
+      )}
+    </div>
   );
 }
 

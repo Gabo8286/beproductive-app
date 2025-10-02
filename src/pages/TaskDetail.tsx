@@ -12,6 +12,9 @@ import { TaskForm } from '@/components/tasks/TaskForm';
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { TagBadge } from '@/components/tags/TagBadge';
 import { useTags } from '@/hooks/useTags';
+import { SubtaskList } from '@/components/tasks/SubtaskList';
+import { HierarchyBreadcrumb } from '@/components/tasks/HierarchyBreadcrumb';
+import { useSubtaskProgress } from '@/hooks/useSubtasks';
 
 const priorityConfig = {
   low: { color: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400', icon: '🟢' },
@@ -36,6 +39,7 @@ export default function TaskDetail() {
   const deleteTask = useDeleteTask();
   const toggleCompletion = useToggleTaskCompletion();
   const { data: tags = [] } = useTags();
+  const { data: subtaskProgress } = useSubtaskProgress(id);
 
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this task?')) {
@@ -77,18 +81,8 @@ export default function TaskDetail() {
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/tasks">Tasks</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{task.title}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      {/* Hierarchy Breadcrumb */}
+      {id && <HierarchyBreadcrumb taskId={id} />}
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -347,12 +341,12 @@ export default function TaskDetail() {
           <Card>
             <CardHeader>
               <CardTitle>Subtasks</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Break down this task into smaller, manageable pieces
+              </p>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <p className="text-sm">Subtask management coming soon...</p>
-                <p className="text-xs mt-2">Break down complex tasks into smaller, manageable pieces.</p>
-              </div>
+              {id && <SubtaskList parentId={id} />}
             </CardContent>
           </Card>
         </TabsContent>

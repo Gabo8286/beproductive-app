@@ -203,6 +203,7 @@ export type Database = {
           description: string | null
           due_date: string | null
           estimated_duration: number | null
+          hierarchy_level: number | null
           id: string
           metadata: Json | null
           parent_task_id: string | null
@@ -223,6 +224,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           estimated_duration?: number | null
+          hierarchy_level?: number | null
           id?: string
           metadata?: Json | null
           parent_task_id?: string | null
@@ -243,6 +245,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           estimated_duration?: number | null
+          hierarchy_level?: number | null
           id?: string
           metadata?: Json | null
           parent_task_id?: string | null
@@ -355,6 +358,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_hierarchy_level: {
+        Args: { task_id: string }
+        Returns: number
+      }
       complete_task: {
         Args: { task_id: string }
         Returns: undefined

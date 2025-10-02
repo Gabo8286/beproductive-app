@@ -11,6 +11,8 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { QuickTaskInput } from './QuickTaskInput';
+import { useSubtaskProgress } from '@/hooks/useSubtasks';
+import { ProgressIndicator } from './ProgressIndicator';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -29,6 +31,10 @@ const statusColumns = [
 ];
 
 type TaskStatus = Database['public']['Enums']['task_status'];
+
+function TaskCardWithProgress({ task }: { task: Task }) {
+  return <TaskCard task={task} />;
+}
 
 export function TaskBoardView({ tasks }: TaskBoardViewProps) {
   const moveTaskToStatus = useMoveTaskToStatus();
@@ -168,7 +174,7 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
                 >
                   {tasksByStatus[column.id]?.length > 0 ? (
                     tasksByStatus[column.id].map((task) => (
-                      <TaskCard key={task.id} task={task} />
+                      <TaskCardWithProgress key={task.id} task={task} />
                     ))
                   ) : (
                     <div className="text-center text-muted-foreground py-8">
