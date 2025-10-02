@@ -14,6 +14,61 @@ export type Database = {
   }
   public: {
     Tables: {
+      active_timers: {
+        Row: {
+          id: string
+          is_paused: boolean | null
+          paused_at: string | null
+          paused_duration: number | null
+          started_at: string
+          task_id: string
+          time_entry_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          is_paused?: boolean | null
+          paused_at?: string | null
+          paused_duration?: number | null
+          started_at?: string
+          task_id: string
+          time_entry_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          is_paused?: boolean | null
+          paused_at?: string | null
+          paused_duration?: number | null
+          started_at?: string
+          task_id?: string
+          time_entry_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "active_timers_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "active_timers_time_entry_id_fkey"
+            columns: ["time_entry_id"]
+            isOneToOne: false
+            referencedRelation: "time_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "active_timers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goals: {
         Row: {
           created_at: string
@@ -367,6 +422,69 @@ export type Database = {
           },
         ]
       }
+      time_entries: {
+        Row: {
+          billable: boolean | null
+          created_at: string | null
+          description: string | null
+          duration: number | null
+          end_time: string | null
+          hourly_rate: number | null
+          id: string
+          is_manual: boolean | null
+          start_time: string
+          tags: string[] | null
+          task_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          billable?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          end_time?: string | null
+          hourly_rate?: number | null
+          id?: string
+          is_manual?: boolean | null
+          start_time: string
+          tags?: string[] | null
+          task_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          billable?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          duration?: number | null
+          end_time?: string | null
+          hourly_rate?: number | null
+          id?: string
+          is_manual?: boolean | null
+          start_time?: string
+          tags?: string[] | null
+          task_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_entries_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_members: {
         Row: {
           id: string
@@ -491,6 +609,18 @@ export type Database = {
       replace_template_variables: {
         Args: { text_with_variables: string; variable_values: Json }
         Returns: string
+      }
+      start_timer: {
+        Args: { p_task_id: string }
+        Returns: string
+      }
+      stop_active_timer: {
+        Args: { p_user_id?: string }
+        Returns: undefined
+      }
+      toggle_timer_pause: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       update_task_position: {
         Args: { new_position: number; task_id: string }

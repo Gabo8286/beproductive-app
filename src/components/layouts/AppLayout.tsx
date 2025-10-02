@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Timer } from "@/components/time/Timer";
 
 export function AppLayout() {
   const { profile, signOut } = useAuth();
@@ -74,6 +75,7 @@ export function AppLayout() {
           </main>
         </div>
       </div>
+      <Timer />
     </SidebarProvider>
   );
 }

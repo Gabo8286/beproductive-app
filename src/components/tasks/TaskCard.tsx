@@ -15,6 +15,7 @@ import { useTags } from '@/hooks/useTags';
 import { DraggableTask } from '@/components/dnd/DraggableTask';
 import { ProgressIndicator } from './ProgressIndicator';
 import { useSubtaskProgress } from '@/hooks/useSubtasks';
+import { TimerButton } from '@/components/time/TimerButton';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -83,28 +84,31 @@ export function TaskCard({ task }: TaskCardProps) {
             </div>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <MoreHorizontal className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <TaskForm 
-                task={task} 
-                trigger={
-                  <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                    <Edit className="w-4 h-4 mr-2" />
-                    Edit
-                  </DropdownMenuItem>
-                }
-              />
-              <DropdownMenuItem onClick={handleDelete} className="text-destructive">
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            <TimerButton taskId={task.id} />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <MoreHorizontal className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <TaskForm 
+                  task={task} 
+                  trigger={
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit
+                    </DropdownMenuItem>
+                  }
+                />
+                <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </CardHeader>
 

@@ -16,6 +16,9 @@ import { SubtaskList } from '@/components/tasks/SubtaskList';
 import { HierarchyBreadcrumb } from '@/components/tasks/HierarchyBreadcrumb';
 import { useSubtaskProgress } from '@/hooks/useSubtasks';
 import { SaveAsTemplateDialog } from '@/components/templates/SaveAsTemplateDialog';
+import { TimerButton } from '@/components/time/TimerButton';
+import { TimeEntriesList } from '@/components/time/TimeEntriesList';
+import { TimeEntryForm } from '@/components/time/TimeEntryForm';
 
 const priorityConfig = {
   low: { color: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400', icon: '🟢' },
@@ -103,6 +106,7 @@ export default function TaskDetail() {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
+          <TimerButton taskId={task.id} variant="outline" size="sm" />
           <TaskForm 
             task={task} 
             trigger={
@@ -356,10 +360,16 @@ export default function TaskDetail() {
         <TabsContent value="time" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Time Tracking</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle>Time Tracking</CardTitle>
+                <div className="flex gap-2">
+                  <TimerButton taskId={task.id} variant="default" size="sm" />
+                  <TimeEntryForm taskId={task.id} />
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="p-4 border rounded-lg">
                     <p className="text-sm font-medium mb-1">Estimated Time</p>
@@ -388,9 +398,9 @@ export default function TaskDetail() {
                   </div>
                 )}
 
-                <div className="text-center py-4 text-muted-foreground">
-                  <p className="text-sm">Advanced time tracking features coming soon...</p>
-                </div>
+                <Separator />
+
+                <TimeEntriesList taskId={task.id} />
               </div>
             </CardContent>
           </Card>
