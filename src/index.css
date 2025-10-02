@@ -164,7 +164,7 @@
   .journey-progress::after {
     content: '';
     @apply absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-success/20;
-    transition: all var(--transition-base);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .journey-progress:hover::after {
@@ -193,7 +193,7 @@
   .milestone-marker::before {
     content: '';
     @apply absolute -top-2 -left-2 w-4 h-4 bg-gradient-primary rounded-full opacity-0;
-    transition: opacity var(--transition-base);
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .milestone-marker.completed::before {
@@ -212,9 +212,7 @@
 
   /* Enhanced Card Styles */
   .journey-card {
-    @apply bg-card/50 backdrop-blur-sm border border-border/50;
-    @apply hover:bg-card/80 hover:border-border/80;
-    @apply transition-all var(--transition-base);
+    @apply bg-card/50 backdrop-blur-sm border border-border/50 hover:bg-card/80 hover:border-border/80 transition-all duration-200;
   }
 
   /* Custom Scrollbar */
