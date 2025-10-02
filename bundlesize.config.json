@@ -1,0 +1,18 @@
+{
+  "files": [
+    {
+      "path": "dist/assets/*.js",
+      "maxSize": "200kb",
+      "compression": "brotli"
+    },
+    {
+      "path": "dist/assets/*.css",
+      "maxSize": "50kb",
+      "compression": "brotli"
+    },
+    {
+      "path": "dist/index.html",
+      "maxSize": "20kb"
+    }
+  ]
+}
