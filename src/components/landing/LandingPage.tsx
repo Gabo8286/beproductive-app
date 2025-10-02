@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle } from "lucide-react";
 import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
@@ -9,6 +10,7 @@ import { LiveActivityFeed } from "./LiveActivityFeed";
 import { CommunityStatsCounter } from "./CommunityStatsCounter";
 import { TrustBadges } from "./TrustBadges";
 import { SuccessStoriesGrid } from "./SuccessStoriesGrid";
+import { DemoContainer } from "./demo/DemoContainer";
 
 export const LandingPage = () => {
   return (
@@ -190,6 +192,28 @@ export const LandingPage = () => {
           </p>
         </div>
         <PersonaSelector />
+      </section>
+
+      {/* Interactive Demo Experience Section */}
+      <section id="demo" className="container mx-auto px-4 py-24">
+        <div className="text-center mb-12 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-4">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Try Before You Sign Up</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold">
+            Experience BeProductive Live
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+            Take an interactive tour through a realistic dashboard. See exactly how BeProductive transforms your daily workflow—no account required.
+          </p>
+        </div>
+        <DemoContainer 
+          onComplete={() => {
+            const signupLink = document.querySelector('a[href="/signup"]');
+            signupLink?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
       </section>
 
       {/* Benefits Section */}
