@@ -5,6 +5,10 @@ import { Sparkles, Target, Repeat, BookOpen, CheckCircle } from "lucide-react";
 import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
 import { PersonaSelector } from "./PersonaSelector";
 import { TestimonialCarousel } from "./TestimonialCarousel";
+import { LiveActivityFeed } from "./LiveActivityFeed";
+import { CommunityStatsCounter } from "./CommunityStatsCounter";
+import { TrustBadges } from "./TrustBadges";
+import { SuccessStoriesGrid } from "./SuccessStoriesGrid";
 
 export const LandingPage = () => {
   return (
@@ -148,6 +152,18 @@ export const LandingPage = () => {
         </div>
       </section>
 
+      {/* Community Stats Section */}
+      <section className="container mx-auto px-4 py-24">
+        <CommunityStatsCounter />
+      </section>
+
+      {/* Trust & Security Section */}
+      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <div className="max-w-6xl mx-auto">
+          <TrustBadges />
+        </div>
+      </section>
+
       {/* Interactive Journey Builder Section */}
       <section className="container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto">
@@ -214,8 +230,20 @@ export const LandingPage = () => {
         </div>
       </section>
 
+      {/* Success Stories Section */}
+      <section className="container mx-auto px-4 py-24">
+        <SuccessStoriesGrid />
+      </section>
+
+      {/* Live Activity Section */}
+      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-secondary/5 via-background to-primary/5">
+        <div className="max-w-4xl mx-auto">
+          <LiveActivityFeed />
+        </div>
+      </section>
+
       {/* Testimonials Section */}
-      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="container mx-auto px-4 py-24">
         <div className="text-center mb-12 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-4">
             <Sparkles className="h-4 w-4 text-primary" />
