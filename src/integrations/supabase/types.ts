@@ -2253,6 +2253,10 @@ export type Database = {
         Args: { goal_id: string; start_date?: string; template_id: string }
         Returns: undefined
       }
+      award_habit_points: {
+        Args: { entry_id_param: string; habit_id_param: string }
+        Returns: boolean
+      }
       award_points: {
         Args: {
           action_type_param: string
@@ -2317,6 +2321,10 @@ export type Database = {
       calculate_reflection_streak: {
         Args: { p_user_id: string }
         Returns: number
+      }
+      check_habit_achievements: {
+        Args: { current_streak: number; target_user_id: string }
+        Returns: undefined
       }
       check_habit_completion: {
         Args: { p_date: string; p_habit_id: string }
