@@ -63,7 +63,12 @@ export function useProjectTemplates(category?: string, includePublic: boolean = 
       const { data, error } = await query;
 
       if (error) throw error;
-      return (data || []) as ProjectTemplate[];
+      return (data || []).map(template => ({
+        ...template,
+        default_milestones: template.default_milestones as any,
+        default_tasks: template.default_tasks as any,
+        template_data: template.template_data as any
+      })) as ProjectTemplate[];
     },
     enabled: !!user || includePublic,
   });
@@ -86,7 +91,12 @@ export function useProjectTemplate(templateId: string) {
         .single();
 
       if (error) throw error;
-      return data as ProjectTemplate;
+      return {
+        ...data,
+        default_milestones: data.default_milestones as any,
+        default_tasks: data.default_tasks as any,
+        template_data: data.template_data as any
+      } as ProjectTemplate;
     },
     enabled: !!templateId,
   });
@@ -243,11 +253,12 @@ export function useCreateProjectFromTemplate() {
       if (templateError) throw templateError;
 
       // Create project with template data
+      const templateDataObj = typeof template.template_data === 'object' ? template.template_data : {};
       const projectInput: CreateProjectInput = {
         workspace_id: projectData.workspace_id!,
         title: projectData.title || template.title,
         description: projectData.description || template.description || '',
-        ...template.template_data,
+        ...(templateDataObj as any),
         ...projectData, // Override with provided data
         template_id: templateId,
       };
@@ -264,8 +275,9 @@ export function useCreateProjectFromTemplate() {
       if (projectError) throw projectError;
 
       // Create milestones from template
-      if (template.default_milestones && template.default_milestones.length > 0) {
-        const milestoneData = template.default_milestones.map((milestone, index) => ({
+      const milestones = Array.isArray(template.default_milestones) ? template.default_milestones : [];
+      if (milestones && milestones.length > 0) {
+        const milestoneData = milestones.map((milestone: any, index: number) => ({
           project_id: project.id,
           title: milestone.title,
           description: milestone.description,
@@ -290,15 +302,17 @@ export function useCreateProjectFromTemplate() {
       }
 
       // Create tasks from template
-      if (template.default_tasks && template.default_tasks.length > 0) {
-        const taskData = template.default_tasks.map((task, index) => ({
+      const tasks = Array.isArray(template.default_tasks) ? template.default_tasks : [];
+      if (tasks && tasks.length > 0) {
+        const taskData = tasks.map((task: any, index: number) => ({
           workspace_id: projectData.workspace_id!,
           project_id: project.id,
           title: task.title,
           description: task.description,
           priority: task.priority || 3,
-          estimated_hours: task.estimated_hours,
+          estimated_duration: task.estimated_hours,
           assigned_to: user?.id,
+          created_by: user?.id!,
           position: index,
         }));
 

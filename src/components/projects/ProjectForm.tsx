@@ -85,7 +85,20 @@ export function ProjectForm({
   const isEditing = !!project;
 
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    status: any;
+    priority: any;
+    visibility: any;
+    start_date: string;
+    target_date: string;
+    estimated_hours: string;
+    budget_amount: string;
+    color: string;
+    icon: string;
+    tags: string[];
+  }>({
     title: '',
     description: '',
     status: PROJECT_DEFAULTS.status,

@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   ProjectMember,
+  ProjectMemberPermissions,
   CreateProjectMemberInput,
   UpdateProjectMemberInput,
   PROJECT_MEMBER_DEFAULTS
@@ -39,14 +40,17 @@ export function useProjectMembers(projectId: string) {
         .from('project_members')
         .select(`
           *,
-          user_profile:profiles(id, full_name, avatar_url, email),
+          user_profile:profiles!project_members_user_id_fkey(id, full_name, avatar_url, email),
           invited_by_profile:profiles!project_members_invited_by_fkey(id, full_name, avatar_url)
         `)
         .eq('project_id', projectId)
         .order('joined_at', { ascending: true });
 
       if (error) throw error;
-      return (data || []) as ProjectMember[];
+      return (data || []).map(member => ({
+        ...member,
+        permissions: member.permissions as any as ProjectMemberPermissions
+      })) as ProjectMember[];
     },
     enabled: !!projectId,
   });
@@ -63,7 +67,7 @@ export function useProjectMember(memberId: string) {
         .from('project_members')
         .select(`
           *,
-          user_profile:profiles(id, full_name, avatar_url, email),
+          user_profile:profiles!project_members_user_id_fkey(id, full_name, avatar_url, email),
           invited_by_profile:profiles!project_members_invited_by_fkey(id, full_name, avatar_url),
           project:projects(id, title, workspace_id)
         `)
@@ -71,7 +75,10 @@ export function useProjectMember(memberId: string) {
         .single();
 
       if (error) throw error;
-      return data as ProjectMember;
+      return {
+        ...data,
+        permissions: data.permissions as any as ProjectMemberPermissions
+      } as ProjectMember;
     },
     enabled: !!memberId,
   });
@@ -96,7 +103,10 @@ export function useCurrentUserProjectMembership(projectId: string) {
         .maybeSingle();
 
       if (error) throw error;
-      return data as ProjectMember | null;
+      return data ? {
+        ...data,
+        permissions: data.permissions as any as ProjectMemberPermissions
+      } as ProjectMember : null;
     },
     enabled: !!projectId && !!user?.id,
   });
@@ -187,12 +197,15 @@ export function useAddProjectMember() {
         .insert(memberData)
         .select(`
           *,
-          user_profile:profiles(id, full_name, avatar_url, email)
+          user_profile:profiles!project_members_user_id_fkey(id, full_name, avatar_url, email)
         `)
         .single();
 
       if (error) throw error;
-      return data as ProjectMember;
+      return {
+        ...data,
+        permissions: data.permissions as any as ProjectMemberPermissions
+      } as ProjectMember;
     },
     onSuccess: (member) => {
       queryClient.invalidateQueries({ queryKey: projectMemberKeys.list(member.project_id) });
@@ -221,12 +234,15 @@ export function useUpdateProjectMember() {
         .eq('id', id)
         .select(`
           *,
-          user_profile:profiles(id, full_name, avatar_url, email)
+          user_profile:profiles!project_members_user_id_fkey(id, full_name, avatar_url, email)
         `)
         .single();
 
       if (error) throw error;
-      return data as ProjectMember;
+      return {
+        ...data,
+        permissions: data.permissions as any as ProjectMemberPermissions
+      } as ProjectMember;
     },
     onSuccess: (member) => {
       queryClient.invalidateQueries({ queryKey: projectMemberKeys.list(member.project_id) });
