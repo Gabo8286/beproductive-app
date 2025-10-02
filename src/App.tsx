@@ -24,17 +24,21 @@ import Automation from "@/pages/Automation";
 import Habits from "@/pages/Habits";
 import HabitDetail from "@/pages/HabitDetail";
 import NotFound from "@/pages/NotFound";
-import { useState } from "react";
+import { useMemo } from "react";
 
 const App = () => {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        refetchOnWindowFocus: false,
-      },
-    },
-  }));
+  const queryClient = useMemo(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 5 * 60 * 1000,
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+    []
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
