@@ -359,6 +359,14 @@ export type Database = {
         Args: { task_id: string }
         Returns: undefined
       }
+      is_workspace_member: {
+        Args: { _user_id: string; _workspace_id: string }
+        Returns: boolean
+      }
+      is_workspace_owner: {
+        Args: { _user_id: string; _workspace_id: string }
+        Returns: boolean
+      }
       move_task_to_status: {
         Args: {
           new_position: number
