@@ -9,7 +9,7 @@ type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
 type TaskUpdate = Database['public']['Tables']['tasks']['Update'];
 
 // Get user's default workspace
-const useDefaultWorkspace = () => {
+export const useDefaultWorkspace = () => {
   const { user } = useAuth();
 
   return useQuery({

@@ -359,8 +359,28 @@ export type Database = {
         Args: { task_id: string }
         Returns: undefined
       }
+      move_task_to_status: {
+        Args: {
+          new_position: number
+          new_status: Database["public"]["Enums"]["task_status"]
+          task_id_param: string
+        }
+        Returns: undefined
+      }
+      reorder_tasks_in_status: {
+        Args: {
+          status_param: Database["public"]["Enums"]["task_status"]
+          task_ids: string[]
+          workspace_id_param: string
+        }
+        Returns: undefined
+      }
       update_task_position: {
         Args: { new_position: number; task_id: string }
+        Returns: undefined
+      }
+      update_task_positions: {
+        Args: { task_updates: Json[] }
         Returns: undefined
       }
     }

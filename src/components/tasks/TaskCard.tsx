@@ -12,6 +12,7 @@ import { Database } from '@/integrations/supabase/types';
 import { Link } from 'react-router-dom';
 import { TagBadge } from '@/components/tags/TagBadge';
 import { useTags } from '@/hooks/useTags';
+import { DraggableTask } from '@/components/dnd/DraggableTask';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -55,7 +56,8 @@ export function TaskCard({ task }: TaskCardProps) {
   const statusInfo = statusConfig[task.status as keyof typeof statusConfig];
 
   return (
-    <Card className={`transition-all hover:shadow-md ${task.status === 'done' ? 'opacity-75' : ''}`}>
+    <DraggableTask task={task}>
+      <Card className={`transition-all hover:shadow-md ${task.status === 'done' ? 'opacity-75' : ''}`}>
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3 flex-1">
@@ -159,6 +161,7 @@ export function TaskCard({ task }: TaskCardProps) {
           </div>
         )}
       </CardContent>
-    </Card>
+      </Card>
+    </DraggableTask>
   );
 }

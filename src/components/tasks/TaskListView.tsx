@@ -12,6 +12,12 @@ import { Database } from '@/integrations/supabase/types';
 import { TagBadge } from '@/components/tags/TagBadge';
 import { useTags } from '@/hooks/useTags';
 import { Link } from 'react-router-dom';
+import { DraggableTask } from '@/components/dnd/DraggableTask';
+import { DragAndDropProvider } from '@/components/dnd/DragAndDropProvider';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DragEndEvent } from '@dnd-kit/core';
+import { useUpdateTaskPositions } from '@/hooks/useDragAndDrop';
+import { useDefaultWorkspace } from '@/hooks/useTasks';
 
 type Task = Database['public']['Tables']['tasks']['Row'] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
@@ -55,9 +61,10 @@ function TaskListItem({ task }: { task: Task }) {
   const statusInfo = statusConfig[task.status as keyof typeof statusConfig];
 
   return (
-    <div className={`flex items-center gap-4 p-4 border rounded-lg hover:bg-accent/50 transition-colors ${
-      task.status === 'done' ? 'opacity-75' : ''
-    }`}>
+    <DraggableTask task={task}>
+      <div className={`flex items-center gap-4 p-4 pl-12 border rounded-lg hover:bg-accent/50 transition-colors ${
+        task.status === 'done' ? 'opacity-75' : ''
+      }`}>
       {/* Checkbox */}
       <Checkbox
         checked={task.status === 'done'}
@@ -167,20 +174,61 @@ function TaskListItem({ task }: { task: Task }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+      </div>
+    </DraggableTask>
   );
 }
 
 export function TaskListView({ tasks }: TaskListViewProps) {
+  const updatePositions = useUpdateTaskPositions();
+  const { data: workspace } = useDefaultWorkspace();
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const activeIndex = tasks.findIndex((t) => t.id === active.id);
+    const overIndex = tasks.findIndex((t) => t.id === over.id);
+
+    if (activeIndex === -1 || overIndex === -1) return;
+
+    // Create reordered array
+    const reordered = [...tasks];
+    const [movedTask] = reordered.splice(activeIndex, 1);
+    reordered.splice(overIndex, 0, movedTask);
+
+    // Update positions
+    const updates = reordered.map((task, index) => ({
+      id: task.id,
+      position: index * 100,
+    }));
+
+    updatePositions.mutate(updates);
+  };
+
   return (
-    <Card>
-      <CardContent className="p-0">
-        <div className="divide-y">
-          {tasks.map((task) => (
-            <TaskListItem key={task.id} task={task} />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <DragAndDropProvider 
+      onDragEnd={handleDragEnd}
+      overlay={
+        <Card className="opacity-50 rotate-3">
+          <CardContent className="p-4">
+            Reordering...
+          </CardContent>
+        </Card>
+      }
+    >
+      <Card>
+        <CardContent className="p-0">
+          <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
+            <div className="divide-y">
+              {tasks.map((task) => (
+                <TaskListItem key={task.id} task={task} />
+              ))}
+            </div>
+          </SortableContext>
+        </CardContent>
+      </Card>
+    </DragAndDropProvider>
   );
 }
