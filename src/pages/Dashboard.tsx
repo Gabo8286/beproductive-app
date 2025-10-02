@@ -18,7 +18,8 @@ import {
   TasksWidget,
   NewQuickTodosWidget,
   HabitsWidget,
-  ReflectionsWidget
+  ReflectionsWidget,
+  NotesWidget
 } from "@/components/widgets";
 
 const journeyFeatures = [
@@ -126,6 +127,7 @@ export default function Dashboard() {
           <GoalsWidget />
           <TasksWidget />
           <NewQuickTodosWidget />
+          <NotesWidget />
           <HabitsWidget />
           <ReflectionsWidget />
           <JourneyProgressWidget />

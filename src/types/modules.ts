@@ -5,6 +5,7 @@ export type ModuleId =
   | "habits"
   | "projects"
   | "reflections"
+  | "notes"
   | "quick-todos"
   | "ai-insights"
   | "team-collaboration"

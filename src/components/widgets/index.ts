@@ -15,3 +15,4 @@ export { TasksWidget } from './TasksWidget';
 export { NewQuickTodosWidget } from './NewQuickTodosWidget';
 export { HabitsWidget } from './HabitsWidget';
 export { ReflectionsWidget } from './ReflectionsWidget';
+export { NotesWidget } from './NotesWidget';

@@ -57,6 +57,14 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
     icon: "book-open",
     path: "/reflections",
   },
+  notes: {
+    id: "notes",
+    name: "Knowledge Notes",
+    description: "Zettelkasten-style note-taking and knowledge management",
+    enabled: true,
+    icon: "notebook",
+    path: "/notes",
+  },
   "ai-insights": {
     id: "ai-insights",
     name: "AI Insights",

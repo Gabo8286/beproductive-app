@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap, StickyNote } from "lucide-react";
+import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap, StickyNote, Notebook } from "lucide-react";
 import { useModules } from "@/contexts/ModulesContext";
 import { cn } from "@/lib/utils";
 import { brandConfig, getMotivationalMessage } from "@/lib/brand";
@@ -116,15 +116,25 @@ const navigation = [
     color: "text-muted-foreground",
     voiceCommand: "projects"
   },
-  { 
-    name: "Route Adjustments", 
+  {
+    name: "Route Adjustments",
     displayName: "Reflections",
-    href: "/reflections", 
-    icon: BookOpen, 
+    href: "/reflections",
+    icon: BookOpen,
     moduleId: "reflections" as const,
     description: "Learning from the path",
     color: "text-success",
     voiceCommand: "reflections"
+  },
+  {
+    name: "Knowledge Base",
+    displayName: "Notes",
+    href: "/notes",
+    icon: Notebook,
+    moduleId: "notes" as const,
+    description: "Zettelkasten knowledge system",
+    color: "text-info",
+    voiceCommand: "notes"
   },
   { 
     name: "AI Insights", 

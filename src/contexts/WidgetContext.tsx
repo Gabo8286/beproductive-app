@@ -26,8 +26,9 @@ const defaultWidgets: WidgetConfig[] = [
   { id: "goals", type: "goals", size: "medium", position: 0, visible: true },
   { id: "tasks", type: "tasks", size: "medium", position: 1, visible: true },
   { id: "quick-todos", type: "quick-todos", size: "small", position: 2, visible: true },
-  { id: "habits", type: "habits", size: "medium", position: 3, visible: true },
-  { id: "reflections", type: "reflections", size: "small", position: 4, visible: true },
+  { id: "notes", type: "notes", size: "medium", position: 3, visible: true },
+  { id: "habits", type: "habits", size: "medium", position: 4, visible: true },
+  { id: "reflections", type: "reflections", size: "small", position: 5, visible: true },
 ];
 
 export function WidgetProvider({ children }: { children: ReactNode }) {
