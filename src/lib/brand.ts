@@ -26,15 +26,23 @@ export const brandConfig = {
     },
   },
 
-  // Motivational phrases for journey theme
-  motivationalPhrases: [
-    "Every step counts",
-    "Progress, not perfection",
-    "Your journey, your pace",
-    "Small steps, big impact",
-    "Consistency is key",
-    "Keep moving forward",
-  ],
+  // Dashboard content and messaging
+  content: {
+    welcomeMessages: [
+      "Welcome back to your journey",
+      "Ready to continue your path?",
+      "Let's make progress today",
+      "Your journey continues",
+    ],
+    motivationalPhrases: [
+      "Every step counts on your journey",
+      "Progress, not perfection",
+      "Small steps lead to big destinations",
+      "Your journey, your pace",
+      "Consistency is key to reaching your destinations",
+      "Keep moving forward, one step at a time",
+    ],
+  },
 
   // Empty state messages using journey theme
   emptyStates: {
@@ -55,10 +63,18 @@ export const brandConfig = {
 export type JourneyModule = keyof typeof brandConfig.journey;
 
 /**
+ * Get a random welcome message
+ */
+export const getWelcomeMessage = (): string => {
+  const messages = brandConfig.content.welcomeMessages;
+  return messages[Math.floor(Math.random() * messages.length)];
+};
+
+/**
  * Get a random motivational message
  */
 export const getMotivationalMessage = (): string => {
-  const messages = brandConfig.motivationalPhrases;
+  const messages = brandConfig.content.motivationalPhrases;
   return messages[Math.floor(Math.random() * messages.length)];
 };
 
