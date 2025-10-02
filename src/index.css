@@ -326,6 +326,60 @@
     opacity: 1;
   }
 
+  /* Smart Layout System Optimizations */
+  /* Grid Auto-Fit */
+  .widget-grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    grid-auto-rows: minmax(200px, auto);
+  }
+
+  /* Drag Preview */
+  .drag-preview {
+    opacity: 0.8;
+    transform: rotate(3deg) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+
+  /* Drop Zone */
+  .drop-zone {
+    border: 2px dashed hsl(var(--primary));
+    background: hsl(var(--primary) / 0.05);
+    border-radius: 12px;
+  }
+
+  /* Layout Transition */
+  .layout-transition {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Responsive Grid Classes */
+  .grid-responsive {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  @media (min-width: 640px) {
+    .grid-responsive {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-responsive {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .grid-responsive {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
   /* Apple-Inspired Micro-Interactions */
   /* Spring Scale Animation */
   .spring-scale {
