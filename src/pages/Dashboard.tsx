@@ -4,6 +4,22 @@ import { Target, CheckSquare, Repeat, BookOpen, Sparkles, Users, StickyNote } fr
 import { DatabaseTest } from "@/components/DatabaseTest";
 import { getWelcomeMessage, getMotivationalMessage } from "@/lib/brand";
 import { QuickTodosWidget } from "@/components/quickTodos/QuickTodosWidget";
+import { WidgetProvider } from "@/contexts/WidgetContext";
+import { SmartWidgetGrid } from "@/components/widgets/SmartWidgetGrid";
+import { LayoutConfigPanel } from "@/components/widgets/LayoutConfigPanel";
+import { PersonalizationPanel } from "@/components/widgets/PersonalizationPanel";
+import { JourneyProgressWidget } from "@/components/widgets/JourneyProgressWidget";
+import { QuickActionsWidget } from "@/components/widgets/QuickActionsWidget";
+import { GreetingHeader } from "@/components/dashboard/GreetingHeader";
+import { usePersonalization } from "@/hooks/usePersonalization";
+import { useTheme } from "@/hooks/useTheme";
+import {
+  GoalsWidget,
+  TasksWidget,
+  NewQuickTodosWidget,
+  HabitsWidget,
+  ReflectionsWidget
+} from "@/components/widgets";
 
 const journeyFeatures = [
   {
@@ -66,84 +82,58 @@ const journeyFeatures = [
 
 export default function Dashboard() {
   const { profile } = useAuth();
-  const welcomeMessage = getWelcomeMessage();
-  const motivationalMessage = getMotivationalMessage();
+  const {
+    personalizedContent,
+    userPreferences,
+    updatePreferences,
+    getTimeBasedGreeting,
+    getMotivationalInsight
+  } = usePersonalization();
+
+  // Apply theme preferences
+  useTheme();
+
+  // Get time-based content
+  const greeting = getTimeBasedGreeting();
+  const insight = getMotivationalInsight();
 
   return (
-    <div className="space-y-6">
-      {/* Journey Welcome Header */}
-      <div className="journey-card p-6 bg-gradient-subtle">
-        <h1 className="text-3xl font-bold tracking-tight text-gradient-brand">
-          {welcomeMessage}, {profile?.full_name || "Traveler"}!
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          {motivationalMessage}
-        </p>
-      </div>
+    <WidgetProvider>
+      <div className="space-y-6 pb-6">
+        {/* Personalized Header */}
+        <GreetingHeader
+          name={profile?.full_name}
+          greeting={greeting}
+          insight={insight}
+        />
 
-      {/* Active Journey Features */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Your Active Journey</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {journeyFeatures
-            .filter(feature => feature.status === "active")
-            .map((feature) => (
-              <Card key={feature.title} className="journey-progress apple-hover">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <div>
-                    <CardTitle className="text-sm font-medium">
-                      {feature.title}
-                    </CardTitle>
-                    <CardDescription className="text-xs text-muted-foreground">
-                      {feature.subtitle}
-                    </CardDescription>
-                  </div>
-                  <feature.icon className={`h-5 w-5 ${feature.color}`} />
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-        </div>
-      </div>
-
-      {/* Quick Access Widgets */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <QuickTodosWidget />
-      </div>
-
-      <DatabaseTest />
-
-      {/* Coming Soon Features */}
-      <Card className="bg-gradient-primary text-primary-foreground">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 journey-float" />
-            Expanding Your Journey
-          </CardTitle>
-          <CardDescription className="text-primary-foreground/80">
-            New pathways are being prepared for your productivity journey
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-3 md:grid-cols-2">
-            {journeyFeatures
-              .filter(feature => feature.status === "coming_soon")
-              .map((feature) => (
-                <div key={feature.title} className="flex items-center gap-3 p-3 bg-primary-foreground/10 rounded-lg">
-                  <feature.icon className="h-4 w-4 text-primary-foreground/80" />
-                  <div>
-                    <div className="font-medium text-sm">{feature.title}</div>
-                    <div className="text-xs text-primary-foreground/70">{feature.description}</div>
-                  </div>
-                </div>
-              ))}
+        {/* Dashboard Controls */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary journey-float" />
+            <span className="text-sm text-muted-foreground">
+              Your personalized productivity journey
+            </span>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          <div className="flex gap-2">
+            <PersonalizationPanel />
+            <LayoutConfigPanel />
+          </div>
+        </div>
+
+        {/* Smart Widget Grid */}
+        <SmartWidgetGrid enableDragDrop={userPreferences.enableDragDrop}>
+          <GoalsWidget />
+          <TasksWidget />
+          <NewQuickTodosWidget />
+          <HabitsWidget />
+          <ReflectionsWidget />
+          <JourneyProgressWidget />
+          <QuickActionsWidget />
+        </SmartWidgetGrid>
+
+        <DatabaseTest />
+      </div>
+    </WidgetProvider>
   );
 }
