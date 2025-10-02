@@ -49,8 +49,9 @@ const Notes = () => {
         });
       }
     } else {
+      // No noteId in params - creating a new note if edit=true
       setSelectedNote(null);
-      setIsEditing(false);
+      setIsEditing(edit);
     }
   }, [searchParams, notes, getNote, toast, setSearchParams]);
 
