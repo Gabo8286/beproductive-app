@@ -35,6 +35,7 @@ import HabitDetail from "@/pages/HabitDetail";
 import Reflections from "@/pages/Reflections";
 import ReflectionDetail from "@/pages/ReflectionDetail";
 import AccessibilitySettingsPage from "@/pages/AccessibilitySettings";
+import AccessibilityStatement from "@/pages/AccessibilityStatement";
 import NotFound from "@/pages/NotFound";
 import { useMemo } from "react";
 
@@ -67,6 +68,7 @@ const AppContent = () => {
       
       <Routes>
       <Route path="/" element={<Index />} />
+      <Route path="/accessibility" element={<AccessibilityStatement />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
