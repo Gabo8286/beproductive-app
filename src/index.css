@@ -150,5 +150,94 @@
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* BeProductive Journey-themed Brand Utilities */
+@layer utilities {
+  /* Journey Progress Indicators */
+  .journey-progress {
+    @apply relative overflow-hidden;
+  }
+
+  .journey-progress::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-success/20;
+    transition: all var(--transition-base);
+  }
+
+  .journey-progress:hover::after {
+    @apply from-primary via-secondary to-success;
+  }
+
+  /* Brand Gradients */
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-primary via-secondary to-success bg-clip-text text-transparent;
+  }
+
+  /* Apple-inspired Hover Effects */
+  .apple-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
+  }
+
+  .apple-button {
+    @apply transition-all duration-200 active:scale-95 hover:shadow-md;
+  }
+
+  /* Journey Milestone Markers */
+  .milestone-marker {
+    @apply relative;
+  }
+
+  .milestone-marker::before {
+    content: '';
+    @apply absolute -top-2 -left-2 w-4 h-4 bg-gradient-primary rounded-full opacity-0;
+    transition: opacity var(--transition-base);
+  }
+
+  .milestone-marker.completed::before {
+    @apply opacity-100;
+  }
+
+  /* Floating Animation for Journey Elements */
+  .journey-float {
+    animation: journeyFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes journeyFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Enhanced Card Styles */
+  .journey-card {
+    @apply bg-card/50 backdrop-blur-sm border border-border/50;
+    @apply hover:bg-card/80 hover:border-border/80;
+    @apply transition-all var(--transition-base);
+  }
+
+  /* Custom Scrollbar */
+  .scrollbar-brand {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary)) hsl(var(--muted));
+  }
+
+  .scrollbar-brand::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-brand::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-full;
+  }
+
+  /* Reduced Motion Support */
+  @media (prefers-reduced-motion: reduce) {
+    .journey-float,
+    .apple-hover,
+    .apple-button {
+      animation: none;
+      transition: none;
+    }
   }
 }

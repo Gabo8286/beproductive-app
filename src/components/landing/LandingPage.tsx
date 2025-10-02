@@ -8,15 +8,15 @@ export const LandingPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
       {/* Navigation */}
       <nav className="container mx-auto px-4 py-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Sparkles className="h-6 w-6 text-primary" />
+        <Link to="/" className="flex items-center gap-2 group">
+          <Sparkles className="h-6 w-6 text-primary journey-float" />
           <span className="text-xl font-bold">BeProductive</span>
         </Link>
         <div className="flex items-center gap-4">
           <Button variant="ghost" asChild>
             <Link to="/login">Sign In</Link>
           </Button>
-          <Button asChild>
+          <Button className="apple-button" asChild>
             <Link to="/signup">Get Started</Link>
           </Button>
         </div>
@@ -24,17 +24,17 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gradient-brand">
           Commit to Your Journey
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
           Transform your productivity with a system that grows with you. Set destinations, build routines, and reflect on your progress.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" asChild>
+          <Button size="lg" className="apple-button" asChild>
             <Link to="/signup">Start Your Journey</Link>
           </Button>
-          <Button size="lg" variant="outline" asChild>
+          <Button size="lg" variant="outline" className="apple-button" asChild>
             <Link to="#features">Learn More</Link>
           </Button>
         </div>
@@ -46,7 +46,7 @@ export const LandingPage = () => {
           Your Productivity Journey
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
-          <Card className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+          <Card className="journey-progress apple-hover">
             <CardContent className="pt-6">
               <div className="rounded-full bg-primary/10 w-12 h-12 flex items-center justify-center mb-4">
                 <Target className="h-6 w-6 text-primary" />
@@ -58,7 +58,7 @@ export const LandingPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+          <Card className="journey-progress apple-hover">
             <CardContent className="pt-6">
               <div className="rounded-full bg-secondary/10 w-12 h-12 flex items-center justify-center mb-4">
                 <Repeat className="h-6 w-6 text-secondary" />
@@ -70,7 +70,7 @@ export const LandingPage = () => {
             </CardContent>
           </Card>
 
-          <Card className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+          <Card className="journey-progress apple-hover">
             <CardContent className="pt-6">
               <div className="rounded-full bg-success/10 w-12 h-12 flex items-center justify-center mb-4">
                 <BookOpen className="h-6 w-6 text-success" />
@@ -115,7 +115,7 @@ export const LandingPage = () => {
 
       {/* Final CTA Section */}
       <section className="container mx-auto px-4 py-20">
-        <Card className="bg-gradient-primary text-white border-0">
+        <Card className="bg-gradient-primary text-white border-0 apple-hover">
           <CardContent className="py-12 text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Your Journey Starts Today
@@ -123,7 +123,7 @@ export const LandingPage = () => {
             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
               Join thousands of people who are already transforming their lives with BeProductive
             </p>
-            <Button size="lg" variant="secondary" asChild>
+            <Button size="lg" variant="secondary" className="apple-button" asChild>
               <Link to="/signup">Begin Your Journey</Link>
             </Button>
           </CardContent>
@@ -133,7 +133,7 @@ export const LandingPage = () => {
       {/* Footer */}
       <footer className="container mx-auto px-4 py-8 text-center border-t">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Sparkles className="h-5 w-5 text-primary journey-float" />
           <span className="font-semibold">BeProductive</span>
         </div>
         <p className="text-sm text-muted-foreground">
