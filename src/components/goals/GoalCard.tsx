@@ -15,14 +15,16 @@ export function GoalCard({ goal }: GoalCardProps) {
 
   const getStatusColor = (status: Goal['status']) => {
     switch (status) {
+      case 'draft':
+        return 'bg-gray-500 text-white';
       case 'active':
         return 'bg-primary text-primary-foreground';
+      case 'paused':
+        return 'bg-yellow-500 text-white';
       case 'completed':
         return 'bg-green-500 text-white';
       case 'archived':
         return 'bg-muted text-muted-foreground';
-      default:
-        return 'bg-secondary text-secondary-foreground';
     }
   };
 
@@ -56,13 +58,13 @@ export function GoalCard({ goal }: GoalCardProps) {
           <Progress value={goal.progress} />
         </div>
         
-        {(goal.timeline_start || goal.timeline_end) && (
+        {(goal.start_date || goal.target_date) && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>
-              {goal.timeline_start && format(new Date(goal.timeline_start), 'MMM d, yyyy')}
-              {goal.timeline_start && goal.timeline_end && ' - '}
-              {goal.timeline_end && format(new Date(goal.timeline_end), 'MMM d, yyyy')}
+              {goal.start_date && format(new Date(goal.start_date), 'MMM d, yyyy')}
+              {goal.start_date && goal.target_date && ' - '}
+              {goal.target_date && format(new Date(goal.target_date), 'MMM d, yyyy')}
             </span>
           </div>
         )}

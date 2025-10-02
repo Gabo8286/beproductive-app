@@ -15,18 +15,18 @@ import { CreateGoalInput } from "@/types/goals";
 const goalSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
   description: z.string().max(1000, "Description must be less than 1000 characters").optional(),
-  timeline_start: z.date().optional(),
-  timeline_end: z.date().optional(),
+  start_date: z.date().optional(),
+  target_date: z.date().optional(),
 }).refine(
   (data) => {
-    if (data.timeline_start && data.timeline_end) {
-      return data.timeline_end >= data.timeline_start;
+    if (data.start_date && data.target_date) {
+      return data.target_date >= data.start_date;
     }
     return true;
   },
   {
-    message: "End date must be after start date",
-    path: ["timeline_end"],
+    message: "Target date must be after start date",
+    path: ["target_date"],
   }
 );
 
@@ -42,8 +42,8 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
     defaultValues: {
       title: defaultValues?.title || "",
       description: defaultValues?.description || "",
-      timeline_start: defaultValues?.timeline_start,
-      timeline_end: defaultValues?.timeline_end,
+      start_date: defaultValues?.start_date,
+      target_date: defaultValues?.target_date,
     },
   });
 
@@ -90,7 +90,7 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="timeline_start"
+            name="start_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Start Date (Optional)</FormLabel>
@@ -131,7 +131,7 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
 
           <FormField
             control={form.control}
-            name="timeline_end"
+            name="target_date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>End Date (Optional)</FormLabel>

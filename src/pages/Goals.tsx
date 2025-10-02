@@ -17,7 +17,9 @@ export default function Goals() {
     return goals.filter(goal => goal.status === status);
   };
 
+  const draftGoals = filterGoalsByStatus('draft');
   const activeGoals = filterGoalsByStatus('active');
+  const pausedGoals = filterGoalsByStatus('paused');
   const completedGoals = filterGoalsByStatus('completed');
   const archivedGoals = filterGoalsByStatus('archived');
 
@@ -45,9 +47,15 @@ export default function Goals() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 max-w-md">
+        <TabsList className="grid w-full grid-cols-5 max-w-3xl">
+          <TabsTrigger value="draft">
+            Draft ({draftGoals.length})
+          </TabsTrigger>
           <TabsTrigger value="active">
             Active ({activeGoals.length})
+          </TabsTrigger>
+          <TabsTrigger value="paused">
+            Paused ({pausedGoals.length})
           </TabsTrigger>
           <TabsTrigger value="completed">
             Completed ({completedGoals.length})
@@ -56,6 +64,22 @@ export default function Goals() {
             Archived ({archivedGoals.length})
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="draft" className="space-y-4">
+          {draftGoals.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <CardDescription>No draft goals</CardDescription>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {draftGoals.map(goal => (
+                <GoalCard key={goal.id} goal={goal} />
+              ))}
+            </div>
+          )}
+        </TabsContent>
 
         <TabsContent value="active" className="space-y-4">
           {activeGoals.length === 0 ? (
@@ -74,6 +98,22 @@ export default function Goals() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {activeGoals.map(goal => (
+                <GoalCard key={goal.id} goal={goal} />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="paused" className="space-y-4">
+          {pausedGoals.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <CardDescription>No paused goals</CardDescription>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pausedGoals.map(goal => (
                 <GoalCard key={goal.id} goal={goal} />
               ))}
             </div>

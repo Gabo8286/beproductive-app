@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useGoal, useUpdateGoal, useDeleteGoal } from "@/hooks/useGoals";
+import { Goal } from "@/types/goals";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -53,7 +54,7 @@ export default function GoalDetail() {
     updateGoalMutation.mutate({ progress });
   };
 
-  const handleStatusUpdate = (status: 'active' | 'completed' | 'archived') => {
+  const handleStatusUpdate = (status: Goal['status']) => {
     const progressValue = status === 'completed' ? 100 : progress;
     updateGoalMutation.mutate({ status, progress: progressValue });
     if (status === 'completed') {
@@ -94,8 +95,12 @@ export default function GoalDetail() {
 
   const getStatusColor = (status: typeof goal.status) => {
     switch (status) {
+      case 'draft':
+        return 'bg-gray-500 text-white';
       case 'active':
         return 'bg-primary text-primary-foreground';
+      case 'paused':
+        return 'bg-yellow-500 text-white';
       case 'completed':
         return 'bg-green-500 text-white';
       case 'archived':
@@ -210,7 +215,9 @@ export default function GoalDetail() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="draft">Draft</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="paused">Paused</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="archived">Archived</SelectItem>
               </SelectContent>
@@ -218,7 +225,7 @@ export default function GoalDetail() {
           </CardContent>
         </Card>
 
-        {(goal.timeline_start || goal.timeline_end) && (
+        {(goal.start_date || goal.target_date) && (
           <Card>
             <CardHeader>
               <CardTitle>Timeline</CardTitle>
@@ -226,9 +233,9 @@ export default function GoalDetail() {
             <CardContent className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-muted-foreground" />
               <span>
-                {goal.timeline_start && format(new Date(goal.timeline_start), 'MMMM d, yyyy')}
-                {goal.timeline_start && goal.timeline_end && ' - '}
-                {goal.timeline_end && format(new Date(goal.timeline_end), 'MMMM d, yyyy')}
+                {goal.start_date && format(new Date(goal.start_date), 'MMMM d, yyyy')}
+                {goal.start_date && goal.target_date && ' - '}
+                {goal.target_date && format(new Date(goal.target_date), 'MMMM d, yyyy')}
               </span>
             </CardContent>
           </Card>

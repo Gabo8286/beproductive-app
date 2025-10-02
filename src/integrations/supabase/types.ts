@@ -180,50 +180,145 @@ export type Database = {
           },
         ]
       }
-      goals: {
+      goal_milestones: {
         Row: {
-          created_at: string
-          deleted_at: string | null
+          completed_at: string | null
+          created_at: string | null
           description: string | null
+          goal_id: string
           id: string
-          progress: number | null
-          status: string | null
-          timeline_end: string | null
-          timeline_start: string | null
+          progress_percentage: number | null
+          target_date: string | null
           title: string
-          updated_at: string
-          user_id: string
-          workspace_id: string | null
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
-          deleted_at?: string | null
+          completed_at?: string | null
+          created_at?: string | null
           description?: string | null
+          goal_id: string
           id?: string
-          progress?: number | null
-          status?: string | null
-          timeline_end?: string | null
-          timeline_start?: string | null
+          progress_percentage?: number | null
+          target_date?: string | null
           title: string
-          updated_at?: string
-          user_id: string
-          workspace_id?: string | null
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
-          deleted_at?: string | null
+          completed_at?: string | null
+          created_at?: string | null
           description?: string | null
+          goal_id?: string
           id?: string
-          progress?: number | null
-          status?: string | null
-          timeline_end?: string | null
-          timeline_start?: string | null
+          progress_percentage?: number | null
+          target_date?: string | null
           title?: string
-          updated_at?: string
-          user_id?: string
-          workspace_id?: string | null
+          updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "goal_milestones_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goals: {
+        Row: {
+          assigned_to: string | null
+          category: Database["public"]["Enums"]["goal_category"] | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string
+          current_value: number | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          parent_goal_id: string | null
+          position: number | null
+          priority: number | null
+          progress: number | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["goal_status"] | null
+          tags: string[] | null
+          target_date: string | null
+          target_value: number | null
+          title: string
+          unit: string | null
+          updated_at: string | null
+          workspace_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["goal_category"] | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by: string
+          current_value?: number | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          parent_goal_id?: string | null
+          position?: number | null
+          priority?: number | null
+          progress?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["goal_status"] | null
+          tags?: string[] | null
+          target_date?: string | null
+          target_value?: number | null
+          title: string
+          unit?: string | null
+          updated_at?: string | null
+          workspace_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["goal_category"] | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string
+          current_value?: number | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          parent_goal_id?: string | null
+          position?: number | null
+          priority?: number | null
+          progress?: number | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["goal_status"] | null
+          tags?: string[] | null
+          target_date?: string | null
+          target_value?: number | null
+          title?: string
+          unit?: string | null
+          updated_at?: string | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goals_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goals_parent_goal_id_fkey"
+            columns: ["parent_goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "goals_workspace_id_fkey"
             columns: ["workspace_id"]
@@ -794,6 +889,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_goal_progress_from_milestones: {
+        Args: { goal_id: string }
+        Returns: number
+      }
       calculate_hierarchy_level: {
         Args: { task_id: string }
         Returns: number
@@ -805,6 +904,10 @@ export type Database = {
       calculate_next_occurrence_from_date: {
         Args: { from_date: string; pattern: Json }
         Returns: string
+      }
+      complete_milestone: {
+        Args: { milestone_id: string }
+        Returns: undefined
       }
       complete_task: {
         Args: { task_id: string }
@@ -873,6 +976,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      update_goal_progress: {
+        Args: { goal_id: string; new_progress: number }
+        Returns: undefined
+      }
       update_task_position: {
         Args: { new_position: number; task_id: string }
         Returns: undefined
@@ -883,6 +990,15 @@ export type Database = {
       }
     }
     Enums: {
+      goal_category:
+        | "personal"
+        | "professional"
+        | "health"
+        | "financial"
+        | "learning"
+        | "relationship"
+        | "other"
+      goal_status: "draft" | "active" | "paused" | "completed" | "archived"
       member_role: "member" | "admin" | "owner"
       task_priority: "low" | "medium" | "high" | "urgent"
       task_status: "todo" | "in_progress" | "blocked" | "done"
@@ -1015,6 +1131,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      goal_category: [
+        "personal",
+        "professional",
+        "health",
+        "financial",
+        "learning",
+        "relationship",
+        "other",
+      ],
+      goal_status: ["draft", "active", "paused", "completed", "archived"],
       member_role: ["member", "admin", "owner"],
       task_priority: ["low", "medium", "high", "urgent"],
       task_status: ["todo", "in_progress", "blocked", "done"],

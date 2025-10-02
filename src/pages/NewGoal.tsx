@@ -5,13 +5,43 @@ import { useGoals } from "@/hooks/useGoals";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { CreateGoalInput } from "@/types/goals";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function NewGoal() {
   const navigate = useNavigate();
   const { createGoal, isCreating } = useGoals();
+  const [workspaceId, setWorkspaceId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: workspaces } = await supabase
+        .from('workspaces')
+        .select('id')
+        .eq('owner_id', user.id)
+        .eq('type', 'personal')
+        .limit(1)
+        .single();
+
+      if (workspaces) {
+        setWorkspaceId(workspaces.id);
+      }
+    };
+
+    fetchWorkspace();
+  }, []);
 
   const handleSubmit = (data: CreateGoalInput) => {
-    createGoal(data, {
+    if (!workspaceId) {
+      toast.error("No workspace found. Please create a workspace first.");
+      return;
+    }
+
+    createGoal({ ...data, workspace_id: workspaceId }, {
       onSuccess: () => {
         navigate('/goals');
       },
