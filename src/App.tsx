@@ -86,36 +86,35 @@ const AppContent = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       
       <Route
-        path="/"
         element={
           <ProtectedRoute>
             <AppLayout />
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="goals" element={<Goals />} />
-        <Route path="goals/new" element={<NewGoal />} />
-        <Route path="goals/:id" element={<GoalDetail />} />
-        <Route path="tasks" element={<Tasks />} />
-        <Route path="tasks/:id" element={<TaskDetail />} />
-        <Route path="quick-todos" element={<QuickTodos />} />
-        <Route path="templates" element={<Templates />} />
-        <Route path="recurring-tasks" element={<RecurringTasks />} />
-        <Route path="tags" element={<TagManagement />} />
-        <Route path="automation" element={<Automation />} />
-        <Route path="habits" element={<Habits />} />
-        <Route path="habits/:id" element={<HabitDetail />} />
-        <Route path="reflections" element={<Reflections />} />
-        <Route path="reflections/:id" element={<ReflectionDetail />} />
-        <Route path="projects" element={<Projects />} />
-        <Route path="notes" element={<Notes />} />
-        <Route path="gamification" element={<Gamification />} />
-        <Route path="profile-assessment" element={<ProfileAssessment />} />
-        <Route path="ai-insights" element={<AIInsights />} />
-        <Route path="admin/api-management" element={<APIManagementDashboard />} />
-        <Route path="settings/accessibility" element={<AccessibilitySettingsPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/goals" element={<Goals />} />
+        <Route path="/goals/new" element={<NewGoal />} />
+        <Route path="/goals/:id" element={<GoalDetail />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/tasks/:id" element={<TaskDetail />} />
+        <Route path="/quick-todos" element={<QuickTodos />} />
+        <Route path="/templates" element={<Templates />} />
+        <Route path="/recurring-tasks" element={<RecurringTasks />} />
+        <Route path="/tags" element={<TagManagement />} />
+        <Route path="/automation" element={<Automation />} />
+        <Route path="/habits" element={<Habits />} />
+        <Route path="/habits/:id" element={<HabitDetail />} />
+        <Route path="/reflections" element={<Reflections />} />
+        <Route path="/reflections/:id" element={<ReflectionDetail />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/gamification" element={<Gamification />} />
+        <Route path="/profile-assessment" element={<ProfileAssessment />} />
+        <Route path="/ai-insights" element={<AIInsights />} />
+        <Route path="/admin/api-management" element={<APIManagementDashboard />} />
+        <Route path="/settings/accessibility" element={<AccessibilitySettingsPage />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
