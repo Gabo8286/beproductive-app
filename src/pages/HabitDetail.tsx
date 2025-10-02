@@ -10,6 +10,15 @@ import { useHabitStreaks } from "@/hooks/useHabitStreaks";
 import { HabitCalendar } from "@/components/habits/HabitCalendar";
 import { HabitAnalytics } from "@/components/habits/HabitAnalytics";
 import { StreakDisplay } from "@/components/habits/StreakDisplay";
+import { StreakManager } from "@/components/habits/StreakManager";
+import { HabitHeatmap } from "@/components/habits/HabitHeatmap";
+import { HabitAnalyticsDashboard } from "@/components/habits/HabitAnalyticsDashboard";
+import { HabitInsightsEngine } from "@/components/habits/HabitInsightsEngine";
+import { StreakAchievements } from "@/components/habits/StreakAchievements";
+import { CompletionTrends } from "@/components/habits/CompletionTrends";
+import { HabitPerformanceMetrics } from "@/components/habits/HabitPerformanceMetrics";
+import { StreakChallenges } from "@/components/habits/StreakChallenges";
+import { ProgressExport } from "@/components/habits/ProgressExport";
 import { HabitEditForm } from "@/components/habits/HabitEditForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -175,16 +184,35 @@ export default function HabitDetail() {
         </CardContent>
       </Card>
 
-      {/* Streak Display */}
-      <StreakDisplay habit={habit} streaks={streaks || []} />
+      {/* Insights */}
+      <HabitInsightsEngine habitId={id!} />
 
       {/* Tabs */}
-      <Tabs defaultValue="calendar">
+      <Tabs defaultValue="overview">
         <TabsList>
-          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="streaks">Streaks</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="achievements">Achievements</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="overview" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <HabitHeatmap habitId={id!} habitTitle={habit.title} />
+            <CompletionTrends habitId={id!} />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="streaks" className="space-y-4">
+          <StreakManager habit={habit} streaks={streaks || []} />
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-4">
+          <HabitAnalyticsDashboard habitId={id!} />
+          <HabitPerformanceMetrics habitId={id!} />
+          <ProgressExport habitId={id!} habitTitle={habit.title} />
+        </TabsContent>
 
         <TabsContent value="calendar" className="space-y-4">
           <HabitCalendar 
@@ -198,22 +226,9 @@ export default function HabitDetail() {
           <HabitAnalytics habitId={id!} />
         </TabsContent>
 
-        <TabsContent value="history" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Entry History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {entries?.slice(0, 20).map(entry => (
-                  <div key={entry.id} className="flex items-center justify-between p-2 border rounded">
-                    <span>{format(new Date(entry.date), 'MMM dd, yyyy')}</span>
-                    <Badge>{entry.status}</Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="achievements" className="space-y-4">
+          <StreakAchievements habit={habit} />
+          <StreakChallenges habit={habit} />
         </TabsContent>
       </Tabs>
 

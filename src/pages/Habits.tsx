@@ -9,6 +9,7 @@ import { HabitCard } from "@/components/habits/HabitCard";
 import { HabitFilters } from "@/components/habits/HabitFilters";
 import { HabitEmpty } from "@/components/habits/HabitEmpty";
 import { TodayTracker } from "@/components/habits/TodayTracker";
+import { StreakLeaderboard } from "@/components/habits/StreakLeaderboard";
 import { HabitCreateForm } from "@/components/habits/HabitCreateForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { HabitCategory, HabitType, HabitFrequency, HabitDifficulty, HabitSortBy } from "@/types/habits";
@@ -85,6 +86,11 @@ export default function Habits() {
 
       {/* Today's Tracker */}
       <TodayTracker workspaceId={workspaceId} />
+
+      {/* Streak Leaderboard */}
+      {activeHabits.length > 0 && (
+        <StreakLeaderboard workspaceId={workspaceId} />
+      )}
 
       {/* Filters */}
       <HabitFilters

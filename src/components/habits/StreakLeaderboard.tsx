@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useStreakLeaderboard } from "@/hooks/useHabitStreaks";
+import { useHabits } from "@/hooks/useHabits";
 import { Trophy, Medal, Award } from "lucide-react";
 
 interface StreakLeaderboardProps {
@@ -8,7 +8,7 @@ interface StreakLeaderboardProps {
 }
 
 export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
-  const { data: leaderboard, isLoading } = useStreakLeaderboard(workspaceId);
+  const { data: habits } = useHabits(workspaceId, { archived: false });
 
   const getMedalIcon = (rank: number) => {
     switch (rank) {
@@ -23,11 +23,20 @@ export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading leaderboard...</div>;
-  }
+  const leaderboardEntries = habits
+    ?.filter(h => h.current_streak > 0 || h.longest_streak > 0)
+    .map((habit, index) => ({
+      habit,
+      current_streak: habit.current_streak,
+      longest_streak: habit.longest_streak,
+      completion_rate: habit.completion_rate || 0,
+      rank: index + 1,
+    }))
+    .sort((a, b) => b.current_streak - a.current_streak)
+    .map((entry, index) => ({ ...entry, rank: index + 1 }))
+    .slice(0, 10);
 
-  if (!leaderboard || leaderboard.length === 0) {
+  if (!leaderboardEntries || leaderboardEntries.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -50,7 +59,7 @@ export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {leaderboard.map((entry, index) => (
+          {leaderboardEntries.map((entry) => (
             <div
               key={entry.habit.id}
               className="flex items-center justify-between p-3 rounded-lg border"
