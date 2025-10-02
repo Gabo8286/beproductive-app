@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle } from "lucide-react";
+import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
+import { PersonaSelector } from "./PersonaSelector";
+import { TestimonialCarousel } from "./TestimonialCarousel";
 
 export const LandingPage = () => {
   return (
@@ -145,8 +148,36 @@ export const LandingPage = () => {
         </div>
       </section>
 
+      {/* Interactive Journey Builder Section */}
+      <section className="container mx-auto px-4 py-24">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-heading font-bold">
+              Experience It Yourself
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              Don't just read about it—try creating your first journey right now
+            </p>
+          </div>
+          <InteractiveJourneyBuilder />
+        </div>
+      </section>
+
+      {/* Persona Selector Section */}
+      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-secondary/5 via-background to-primary/5">
+        <div className="text-center mb-12 space-y-4">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold">
+            Built For Your Journey
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
+            Whether you're leading teams, building businesses, or pursuing personal growth—BeProductive adapts to your unique path
+          </p>
+        </div>
+        <PersonaSelector />
+      </section>
+
       {/* Benefits Section */}
-      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="container mx-auto px-4 py-24">
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
           <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl font-heading font-bold leading-tight">
@@ -180,6 +211,25 @@ export const LandingPage = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        <div className="text-center mb-12 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-4">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">Real Stories, Real Results</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-heading font-bold">
+            Join Thousands of Successful Journey Travelers
+          </h2>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Discover how professionals across industries use BeProductive to achieve their most ambitious goals
+          </p>
+        </div>
+        <div className="max-w-5xl mx-auto">
+          <TestimonialCarousel />
         </div>
       </section>
 
