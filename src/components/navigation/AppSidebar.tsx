@@ -23,7 +23,8 @@ const navigation = [
     icon: Home, 
     moduleId: null,
     description: "Your journey overview",
-    color: "text-foreground"
+    color: "text-foreground",
+    voiceCommand: "dashboard"
   },
   { 
     name: "Destinations", 
@@ -32,7 +33,8 @@ const navigation = [
     icon: Target, 
     moduleId: "goals" as const,
     description: "Where you want to go",
-    color: "text-primary"
+    color: "text-primary",
+    voiceCommand: "goals"
   },
   { 
     name: "Next Steps", 
@@ -41,7 +43,8 @@ const navigation = [
     icon: CheckSquare, 
     moduleId: "tasks" as const,
     description: "What needs to be done",
-    color: "text-warning"
+    color: "text-warning",
+    voiceCommand: "tasks"
   },
   { 
     name: "Travel Notes", 
@@ -50,7 +53,8 @@ const navigation = [
     icon: StickyNote, 
     moduleId: "tasks" as const,
     description: "Quick capture",
-    color: "text-warning"
+    color: "text-warning",
+    voiceCommand: "quick todos"
   },
   { 
     name: "Templates", 
@@ -59,7 +63,8 @@ const navigation = [
     icon: FileText, 
     moduleId: "tasks" as const,
     description: "Reusable patterns",
-    color: "text-muted-foreground"
+    color: "text-muted-foreground",
+    voiceCommand: "templates"
   },
   { 
     name: "Recurring", 
@@ -68,7 +73,8 @@ const navigation = [
     icon: Calendar, 
     moduleId: "tasks" as const,
     description: "Regular rhythms",
-    color: "text-muted-foreground"
+    color: "text-muted-foreground",
+    voiceCommand: "recurring"
   },
   { 
     name: "Tags", 
@@ -77,7 +83,8 @@ const navigation = [
     icon: Tags, 
     moduleId: "tasks" as const,
     description: "Organize your path",
-    color: "text-muted-foreground"
+    color: "text-muted-foreground",
+    voiceCommand: "tags"
   },
   { 
     name: "Automation", 
@@ -86,7 +93,8 @@ const navigation = [
     icon: Zap, 
     moduleId: "tasks" as const,
     description: "Smart workflows",
-    color: "text-warning"
+    color: "text-warning",
+    voiceCommand: "automation"
   },
   { 
     name: "Daily Routines", 
@@ -95,7 +103,8 @@ const navigation = [
     icon: Repeat, 
     moduleId: "habits" as const,
     description: "How you travel",
-    color: "text-secondary"
+    color: "text-secondary",
+    voiceCommand: "habits"
   },
   { 
     name: "Projects", 
@@ -104,7 +113,8 @@ const navigation = [
     icon: Folder, 
     moduleId: "projects" as const,
     description: "Major expeditions",
-    color: "text-muted-foreground"
+    color: "text-muted-foreground",
+    voiceCommand: "projects"
   },
   { 
     name: "Route Adjustments", 
@@ -113,7 +123,8 @@ const navigation = [
     icon: BookOpen, 
     moduleId: "reflections" as const,
     description: "Learning from the path",
-    color: "text-success"
+    color: "text-success",
+    voiceCommand: "reflections"
   },
   { 
     name: "AI Insights", 
@@ -122,7 +133,8 @@ const navigation = [
     icon: Sparkles, 
     moduleId: "ai-insights" as const,
     description: "Smart guidance",
-    color: "text-primary"
+    color: "text-primary",
+    voiceCommand: "ai insights"
   },
   { 
     name: "Team Journey", 
@@ -131,7 +143,8 @@ const navigation = [
     icon: Users, 
     moduleId: "team-collaboration" as const,
     description: "Traveling together",
-    color: "text-secondary"
+    color: "text-secondary",
+    voiceCommand: "team"
   },
   { 
     name: "Travel Guides", 
@@ -140,7 +153,8 @@ const navigation = [
     icon: Workflow, 
     moduleId: "process-inventory" as const,
     description: "Documented workflows",
-    color: "text-muted-foreground"
+    color: "text-muted-foreground",
+    voiceCommand: "processes"
   },
 ];
 
@@ -188,6 +202,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.href}
+                        data-voice-command={item.voiceCommand}
                         title={isCollapsed ? `${item.displayName} - ${item.description}` : undefined}
                         className={cn(
                           "flex items-center gap-3 rounded-lg px-3 transition-all duration-200",

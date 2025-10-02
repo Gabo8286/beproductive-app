@@ -5,6 +5,8 @@ interface AccessibilityPreferences {
   highContrast: boolean;
   fontSize: number;
   screenReaderMode: boolean;
+  focusMode: boolean; // Distraction-free interface
+  simplifiedLanguage: boolean; // Simplified language mode
 }
 
 interface AccessibilityContextType {
@@ -17,6 +19,8 @@ const defaultPreferences: AccessibilityPreferences = {
   highContrast: false,
   fontSize: 16,
   screenReaderMode: false,
+  focusMode: false,
+  simplifiedLanguage: false,
 };
 
 const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
@@ -63,6 +67,24 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
       root.classList.add('screen-reader-mode');
     } else {
       root.classList.remove('screen-reader-mode');
+    }
+
+    // Focus mode (distraction-free)
+    if (preferences.focusMode) {
+      root.classList.add('focus-mode');
+      root.setAttribute('data-focus-mode', 'true');
+    } else {
+      root.classList.remove('focus-mode');
+      root.removeAttribute('data-focus-mode');
+    }
+
+    // Simplified language mode
+    if (preferences.simplifiedLanguage) {
+      root.classList.add('simplified-language');
+      root.setAttribute('data-simplified-language', 'true');
+    } else {
+      root.classList.remove('simplified-language');
+      root.removeAttribute('data-simplified-language');
     }
   }, [preferences]);
 

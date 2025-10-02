@@ -43,13 +43,22 @@ export function AppLayout() {
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
-            <SidebarTrigger className="md:hidden" />
+          <header 
+            className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4"
+            role="banner"
+            aria-label="Main header"
+          >
+            <SidebarTrigger className="md:hidden" aria-label="Toggle sidebar navigation" />
             <div className="flex-1" />
             <NotificationCenter />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full apple-button">
+                <Button 
+                  variant="ghost" 
+                  className="relative h-10 w-10 rounded-full apple-button"
+                  aria-label="User menu"
+                  data-voice-command="profile menu"
+                >
                   <Avatar className="h-10 w-10">
                     <AvatarImage src={profile?.avatar_url || ""} alt={profile?.full_name || ""} />
                     <AvatarFallback>{initials}</AvatarFallback>
@@ -59,7 +68,12 @@ export function AppLayout() {
 ...
             </DropdownMenu>
           </header>
-          <main id="main-content" className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand">
+          <main 
+            id="main-content" 
+            className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand"
+            role="main"
+            aria-label="Main content"
+          >
             <Outlet />
           </main>
         </div>

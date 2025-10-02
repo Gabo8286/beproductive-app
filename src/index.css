@@ -422,6 +422,31 @@
     }
   }
 
+  /* Focus Mode (Distraction-Free) */
+  .focus-mode {
+    --sidebar-background: transparent;
+  }
+
+  .focus-mode .glass-nav,
+  .focus-mode .glass-card {
+    background: var(--background);
+    backdrop-filter: none;
+  }
+
+  .focus-mode [role="complementary"],
+  .focus-mode .secondary-content {
+    display: none;
+  }
+
+  /* Simplified Language Mode Indicators */
+  .simplified-language [data-complex] {
+    display: none;
+  }
+
+  .simplified-language [data-simple] {
+    display: block;
+  }
+
   /* Non-Color Visual Indicators for States */
   .error-state {
     border: 2px solid hsl(var(--destructive));

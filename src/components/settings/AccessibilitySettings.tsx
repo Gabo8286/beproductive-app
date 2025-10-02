@@ -109,27 +109,44 @@ export function AccessibilitySettings() {
         </CardContent>
       </Card>
 
-      {/* Screen Reader Settings */}
+      {/* Cognitive Accessibility */}
       <Card>
         <CardHeader>
-          <CardTitle>Screen Reader</CardTitle>
+          <CardTitle>Cognitive Accessibility</CardTitle>
           <CardDescription>
-            Optimize the interface for screen reader users
+            Features to reduce cognitive load and improve focus
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-1 flex-1">
-              <Label htmlFor="screen-reader-mode">Screen Reader Mode</Label>
+              <Label htmlFor="focus-mode">Focus Mode</Label>
               <p className="text-sm text-muted-foreground">
-                Enhanced announcements and optimized navigation for screen readers
+                Distraction-free interface with minimal UI elements
               </p>
             </div>
             <Switch
-              id="screen-reader-mode"
-              checked={preferences.screenReaderMode}
-              onCheckedChange={(checked) => updatePreferences({ screenReaderMode: checked })}
-              aria-label="Enable screen reader optimization"
+              id="focus-mode"
+              checked={preferences.focusMode}
+              onCheckedChange={(checked) => updatePreferences({ focusMode: checked })}
+              aria-label="Enable focus mode for distraction-free interface"
+            />
+          </div>
+
+          <Separator />
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1 flex-1">
+              <Label htmlFor="simplified-language">Simplified Language</Label>
+              <p className="text-sm text-muted-foreground">
+                Use simpler, clearer language throughout the app
+              </p>
+            </div>
+            <Switch
+              id="simplified-language"
+              checked={preferences.simplifiedLanguage}
+              onCheckedChange={(checked) => updatePreferences({ simplifiedLanguage: checked })}
+              aria-label="Enable simplified language mode"
             />
           </div>
         </CardContent>

@@ -10,6 +10,8 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
 import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
+import { KeyboardShortcutsDialog } from "@/components/dialogs/KeyboardShortcutsDialog";
+import { useKeyboardShortcutsDialog } from "@/hooks/useKeyboardShortcutsDialog";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -44,6 +46,7 @@ const AppContent = () => {
   useOfflineDetection();
   
   const location = useLocation();
+  const { isOpen, close } = useKeyboardShortcutsDialog();
 
   // Announce route changes to screen readers
   useEffect(() => {
@@ -65,6 +68,9 @@ const AppContent = () => {
         aria-atomic="true" 
         className="sr-only" 
       />
+
+      {/* Keyboard Shortcuts Dialog */}
+      <KeyboardShortcutsDialog open={isOpen} onOpenChange={close} />
       
       <Routes>
       <Route path="/" element={<Index />} />
