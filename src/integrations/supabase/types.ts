@@ -205,10 +205,14 @@ export type Database = {
           estimated_duration: number | null
           hierarchy_level: number | null
           id: string
+          instance_date: string | null
+          is_recurring: boolean | null
           metadata: Json | null
           parent_task_id: string | null
           position: number | null
           priority: Database["public"]["Enums"]["task_priority"] | null
+          recurrence_pattern: Json | null
+          recurring_template_id: string | null
           status: Database["public"]["Enums"]["task_status"] | null
           tags: string[] | null
           title: string
@@ -226,10 +230,14 @@ export type Database = {
           estimated_duration?: number | null
           hierarchy_level?: number | null
           id?: string
+          instance_date?: string | null
+          is_recurring?: boolean | null
           metadata?: Json | null
           parent_task_id?: string | null
           position?: number | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
+          recurrence_pattern?: Json | null
+          recurring_template_id?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           tags?: string[] | null
           title: string
@@ -247,10 +255,14 @@ export type Database = {
           estimated_duration?: number | null
           hierarchy_level?: number | null
           id?: string
+          instance_date?: string | null
+          is_recurring?: boolean | null
           metadata?: Json | null
           parent_task_id?: string | null
           position?: number | null
           priority?: Database["public"]["Enums"]["task_priority"] | null
+          recurrence_pattern?: Json | null
+          recurring_template_id?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           tags?: string[] | null
           title?: string
@@ -275,6 +287,13 @@ export type Database = {
           {
             foreignKeyName: "tasks_parent_task_id_fkey"
             columns: ["parent_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_recurring_template_id_fkey"
+            columns: ["recurring_template_id"]
             isOneToOne: false
             referencedRelation: "tasks"
             referencedColumns: ["id"]
@@ -362,9 +381,24 @@ export type Database = {
         Args: { task_id: string }
         Returns: number
       }
+      calculate_next_occurrence: {
+        Args: { pattern: Json; template_id: string }
+        Returns: string
+      }
+      calculate_next_occurrence_from_date: {
+        Args: { from_date: string; pattern: Json }
+        Returns: string
+      }
       complete_task: {
         Args: { task_id: string }
         Returns: undefined
+      }
+      generate_recurring_instances: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          instances_created: number
+          template_id: string
+        }[]
       }
       is_workspace_member: {
         Args: { _user_id: string; _workspace_id: string }
