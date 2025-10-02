@@ -4,6 +4,7 @@ import { useAIRecommendations } from "@/hooks/useAIRecommendations";
 import { useGenerateAIInsights } from "@/hooks/useGenerateAIInsights";
 import { AIInsightCard } from "./AIInsightCard";
 import { AIRecommendationCard } from "./AIRecommendationCard";
+import { AIUsageWidget } from "./AIUsageWidget";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -72,10 +73,69 @@ export function AIInsightsDashboard() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">--</div>
+            <div className="text-2xl font-bold">
+              {(() => {
+                // Calculate productivity score based on insights
+                if (insights.length === 0) return '--';
+
+                const scores = insights.map(insight => {
+                  const confidence = insight.confidence_score || 0.5;
+                  let baseScore = 50; // neutral score
+
+                  // Adjust score based on insight type and content
+                  if (insight.type === 'goal_progress' && insight.content.includes('excellent')) baseScore = 85;
+                  else if (insight.type === 'habit_analysis' && insight.content.includes('consistency')) baseScore = 80;
+                  else if (insight.type === 'burnout_risk' && insight.title.includes('HIGH')) baseScore = 30;
+                  else if (insight.type === 'achievement_opportunity') baseScore = 75;
+                  else if (insight.type === 'productivity_pattern') baseScore = 70;
+
+                  return baseScore * confidence;
+                });
+
+                const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+                return Math.round(avgScore);
+              })()}
+            </div>
             <p className="text-xs text-muted-foreground">
-              Coming soon
+              {insights.length > 0 ? `Based on ${insights.length} insights` : 'Generate insights to see score'}
             </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="lg:col-span-2">
+          <AIUsageWidget />
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              onClick={() => generateInsights(undefined)}
+              disabled={isGenerating}
+              className="w-full"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />
+              {isGenerating ? 'Generating...' : 'Generate All Insights'}
+            </Button>
+            <Button
+              onClick={() => generateInsights(['productivity_pattern', 'burnout_risk'])}
+              disabled={isGenerating}
+              variant="outline"
+              className="w-full"
+            >
+              Quick Health Check
+            </Button>
+            <Button
+              onClick={() => generateInsights(['achievement_opportunity', 'goal_progress'])}
+              disabled={isGenerating}
+              variant="outline"
+              className="w-full"
+            >
+              Find Opportunities
+            </Button>
           </CardContent>
         </Card>
       </div>
