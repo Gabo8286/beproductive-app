@@ -5,21 +5,29 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Search, Plus } from 'lucide-react';
-import { useTasks } from '@/hooks/useTasks';
+import { useTasks, useSortedTasks } from '@/hooks/useTasks';
 import { TaskCard } from '@/components/tasks/TaskCard';
+import { TaskListView } from '@/components/tasks/TaskListView';
+import { TaskBoardView } from '@/components/tasks/TaskBoardView';
+import { TaskCalendarView } from '@/components/tasks/TaskCalendarView';
 import { TaskForm } from '@/components/tasks/TaskForm';
+import { ViewModeSelector } from '@/components/tasks/ViewModeSelector';
+import { TaskViewProvider, useTaskView } from '@/contexts/TaskViewContext';
 import { Database } from '@/integrations/supabase/types';
 
 type TaskStatus = Database['public']['Enums']['task_status'];
 type TaskPriority = Database['public']['Enums']['task_priority'];
 
-export default function Tasks() {
+function TasksContent() {
   const { data: tasks, isLoading, error } = useTasks();
+  const { sortTasks, groupTasks } = useSortedTasks();
+  const { viewMode, sortBy, sortOrder, groupBy } = useTaskView();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority | 'all'>('all');
 
-  // Filter tasks based on search and filters
+  // Filter and sort tasks
   const filteredTasks = tasks?.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          task.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -29,13 +37,8 @@ export default function Tasks() {
     return matchesSearch && matchesStatus && matchesPriority;
   }) || [];
 
-  // Group tasks by status
-  const tasksByStatus = {
-    todo: filteredTasks.filter(task => task.status === 'todo'),
-    in_progress: filteredTasks.filter(task => task.status === 'in_progress'),
-    blocked: filteredTasks.filter(task => task.status === 'blocked'),
-    done: filteredTasks.filter(task => task.status === 'done'),
-  };
+  const sortedTasks = sortTasks(filteredTasks, sortBy, sortOrder);
+  const groupedTasks = groupTasks(sortedTasks, groupBy);
 
   const totalTasks = tasks?.length || 0;
   const completedTasks = tasks?.filter(task => task.status === 'done').length || 0;
@@ -100,10 +103,12 @@ export default function Tasks() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">In Progress</CardTitle>
-            <Badge variant="secondary">{tasksByStatus.in_progress.length}</Badge>
+            <Badge variant="secondary">{sortedTasks.filter(t => t.status === 'in_progress').length}</Badge>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{tasksByStatus.in_progress.length}</div>
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              {sortedTasks.filter(t => t.status === 'in_progress').length}
+            </div>
           </CardContent>
         </Card>
 
@@ -117,6 +122,9 @@ export default function Tasks() {
           </CardContent>
         </Card>
       </div>
+
+      {/* View Mode Selector */}
+      <ViewModeSelector />
 
       {/* Filters */}
       <Card>
@@ -166,8 +174,8 @@ export default function Tasks() {
         </CardContent>
       </Card>
 
-      {/* Tasks List */}
-      {filteredTasks.length === 0 ? (
+      {/* Tasks Display */}
+      {sortedTasks.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
             <div className="text-center">
@@ -190,12 +198,45 @@ export default function Tasks() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </div>
+        <>
+          {viewMode === 'list' && <TaskListView tasks={sortedTasks} />}
+          {viewMode === 'board' && <TaskBoardView tasks={sortedTasks} />}
+          {viewMode === 'calendar' && <TaskCalendarView tasks={sortedTasks} />}
+          {viewMode === 'grid' && (
+            groupBy === 'none' ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {sortedTasks.map((task) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {Object.entries(groupedTasks).map(([group, groupTasks]) => (
+                  <div key={group}>
+                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                      {group}
+                      <Badge variant="secondary">{groupTasks.length}</Badge>
+                    </h3>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      {groupTasks.map((task) => (
+                        <TaskCard key={task.id} task={task} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          )}
+        </>
       )}
     </div>
+  );
+}
+
+export default function Tasks() {
+  return (
+    <TaskViewProvider>
+      <TasksContent />
+    </TaskViewProvider>
   );
 }

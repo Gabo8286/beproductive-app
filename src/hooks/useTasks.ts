@@ -174,3 +174,93 @@ export const useToggleTaskCompletion = () => {
     },
   });
 };
+
+// Sorting and grouping functionality
+type SortBy = 'created_at' | 'due_date' | 'priority' | 'status' | 'title';
+type SortOrder = 'asc' | 'desc';
+type GroupBy = 'none' | 'status' | 'priority' | 'due_date';
+
+export const useSortedTasks = () => {
+  const sortTasks = (tasks: Task[], sortBy: SortBy, sortOrder: SortOrder) => {
+    return [...tasks].sort((a, b) => {
+      let aValue: any, bValue: any;
+
+      switch (sortBy) {
+        case 'created_at':
+          aValue = new Date(a.created_at);
+          bValue = new Date(b.created_at);
+          break;
+        case 'due_date':
+          aValue = a.due_date ? new Date(a.due_date) : new Date('9999-12-31');
+          bValue = b.due_date ? new Date(b.due_date) : new Date('9999-12-31');
+          break;
+        case 'priority':
+          const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 };
+          aValue = priorityOrder[a.priority as keyof typeof priorityOrder] || 0;
+          bValue = priorityOrder[b.priority as keyof typeof priorityOrder] || 0;
+          break;
+        case 'status':
+          const statusOrder = { todo: 1, in_progress: 2, blocked: 3, done: 4 };
+          aValue = statusOrder[a.status as keyof typeof statusOrder] || 0;
+          bValue = statusOrder[b.status as keyof typeof statusOrder] || 0;
+          break;
+        case 'title':
+          aValue = a.title.toLowerCase();
+          bValue = b.title.toLowerCase();
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
+  const groupTasks = (tasks: Task[], groupBy: GroupBy) => {
+    if (groupBy === 'none') return { 'All Tasks': tasks };
+
+    return tasks.reduce((groups: Record<string, Task[]>, task) => {
+      let groupKey: string;
+
+      switch (groupBy) {
+        case 'status':
+          groupKey = task.status === 'in_progress' ? 'In Progress' :
+                    task.status.charAt(0).toUpperCase() + task.status.slice(1);
+          break;
+        case 'priority':
+          groupKey = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+          break;
+        case 'due_date':
+          if (!task.due_date) {
+            groupKey = 'No Due Date';
+          } else {
+            const due = new Date(task.due_date);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            if (due.toDateString() === today.toDateString()) {
+              groupKey = 'Due Today';
+            } else if (due.toDateString() === tomorrow.toDateString()) {
+              groupKey = 'Due Tomorrow';
+            } else if (due < today) {
+              groupKey = 'Overdue';
+            } else {
+              groupKey = 'Future';
+            }
+          }
+          break;
+        default:
+          groupKey = 'All Tasks';
+      }
+
+      if (!groups[groupKey]) groups[groupKey] = [];
+      groups[groupKey].push(task);
+      return groups;
+    }, {});
+  };
+
+  return { sortTasks, groupTasks };
+};
