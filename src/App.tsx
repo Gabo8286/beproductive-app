@@ -23,6 +23,8 @@ import TagManagement from "@/pages/TagManagement";
 import Automation from "@/pages/Automation";
 import Habits from "@/pages/Habits";
 import HabitDetail from "@/pages/HabitDetail";
+import Reflections from "@/pages/Reflections";
+import ReflectionDetail from "@/pages/ReflectionDetail";
 import NotFound from "@/pages/NotFound";
 import { useMemo } from "react";
 
@@ -75,6 +77,8 @@ const App = () => {
                 <Route path="automation" element={<Automation />} />
                 <Route path="habits" element={<Habits />} />
                 <Route path="habits/:id" element={<HabitDetail />} />
+                <Route path="reflections" element={<Reflections />} />
+                <Route path="reflections/:id" element={<ReflectionDetail />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
