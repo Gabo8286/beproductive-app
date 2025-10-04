@@ -402,13 +402,13 @@ export function BehavioralInsightsWidget({
                   className="p-2 rounded bg-muted/30 text-xs"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium">{pattern.pattern_name}</span>
+                    <span className="font-medium">{(pattern as any).pattern_name || 'Pattern'}</span>
                     <Badge variant="outline" className="text-xs">
-                      {Math.round(pattern.confidence_score * 100)}%
+                      {Math.round(((pattern as any).confidence_score || 0) * 100)}%
                     </Badge>
                   </div>
                   <p className="text-muted-foreground mt-1">
-                    {pattern.description}
+                    {(pattern as any).description || pattern.description || ''}
                   </p>
                 </div>
               ))}

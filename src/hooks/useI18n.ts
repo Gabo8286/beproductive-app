@@ -7,7 +7,7 @@ import { isRTL } from "@/lib/i18n";
  */
 export const useI18n = (
   ns?: string | string[],
-  options?: UseTranslationOptions,
+  options?: UseTranslationOptions<any>,
 ) => {
   const translation = useTranslation(ns, options);
   const { i18n } = translation;
@@ -89,12 +89,13 @@ export const useLocalizedDate = () => {
         date: Date | string | number,
         style: "short" | "medium" | "long" | "full" = "medium",
       ) => {
-        const options: Intl.DateTimeFormatOptions = {
-          short: { dateStyle: "short" },
-          medium: { dateStyle: "medium" },
-          long: { dateStyle: "long" },
-          full: { dateStyle: "full" },
-        }[style];
+        const styleOptions: Record<string, Intl.DateTimeFormatOptions> = {
+          short: { dateStyle: "short" as const },
+          medium: { dateStyle: "medium" as const },
+          long: { dateStyle: "long" as const },
+          full: { dateStyle: "full" as const },
+        };
+        const options = styleOptions[style];
 
         return new Intl.DateTimeFormat(i18n.language, options).format(
           new Date(date),

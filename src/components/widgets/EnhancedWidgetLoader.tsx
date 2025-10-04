@@ -378,7 +378,6 @@ export function EnhancedWidgetLoader({
         widgetId={widgetId}
         widgetType={widgetType}
         widgetTitle={baseWidgetProps.title || widgetType}
-        criticalWidget={criticalWidget}
       >
         {loadingContent}
       </WidgetErrorBoundary>

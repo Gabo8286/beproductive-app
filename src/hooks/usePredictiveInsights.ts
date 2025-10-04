@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  predictiveInsights,
   PredictionType,
   PredictionResult,
   PredictionContext,
-  PredictionConfig
 } from "@/services/ai/predictiveInsights";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBehavioralAnalytics } from "@/hooks/useBehavioralAnalytics";
@@ -35,7 +33,7 @@ export function usePredictiveInsights(config: PredictiveInsightsConfig = {}) {
   const { trackEvent } = useBehavioralAnalytics();
 
   const defaultConfig: Required<PredictiveInsightsConfig> = {
-    enabledPredictions: ["productivity_forecast", "burnout_risk", "optimal_timing", "goal_achievement"],
+    enabledPredictions: ["productivity_forecasting", "burnout_detection", "optimal_timing", "goal_achievement_likelihood"],
     autoRefresh: true,
     refreshInterval: 30,
     cacheTime: 60,

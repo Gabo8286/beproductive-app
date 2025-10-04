@@ -89,8 +89,8 @@ export function CompactThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   const cycleTheme = () => {
-    const themes: Theme[] = ['light', 'dark', 'high-contrast'];
-    const currentIndex = themes.indexOf(theme as Theme);
+    const themes: ("light" | "dark" | "auto")[] = ['light', 'dark', 'auto'];
+    const currentIndex = themes.indexOf(theme as any);
     const nextIndex = (currentIndex + 1) % themes.length;
     setTheme(themes[nextIndex]);
   };
