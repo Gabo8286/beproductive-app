@@ -49,7 +49,6 @@ const AccessibilityStatement = lazy(() => import("@/pages/AccessibilityStatement
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const APIManagementDashboard = lazy(() => import("@/components/admin/APIManagement/APIManagementDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
-const SystemStatus = lazy(() => import("@/pages/SystemStatus"));
 
 // Lazy loaded AI components
 export const SmartRecommendationsWidget = lazy(() =>
@@ -118,14 +117,6 @@ function AppContent() {
             element={
               <Suspense fallback={<PageLoading />}>
                 <ForgotPassword />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/accept-invitation"
-            element={
-              <Suspense fallback={<PageLoading />}>
-                <AcceptInvitation />
               </Suspense>
             }
           />
@@ -302,22 +293,6 @@ function AppContent() {
               }
             />
             <Route
-              path="/team"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Team />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/processes"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Processes />
-                </Suspense>
-              }
-            />
-            <Route
               path="/settings/accessibility"
               element={
                 <Suspense fallback={<PageLoading />}>
@@ -330,14 +305,6 @@ function AppContent() {
               element={
                 <Suspense fallback={<PageLoading />}>
                   <APIManagementDashboard />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/system/status"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <SystemStatus />
                 </Suspense>
               }
             />

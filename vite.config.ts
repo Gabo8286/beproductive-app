@@ -181,8 +181,8 @@ export default defineConfig(({ mode }) => ({
         },
         entryFileNames: 'assets/js/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name.split('.');
-          let extType = info[info.length - 1];
+          const info = assetInfo.name?.split('.') || [];
+          let extType = info[info.length - 1] || 'misc';
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             extType = 'img';
           } else if (/woff2?|eot|ttf|otf/i.test(extType)) {
