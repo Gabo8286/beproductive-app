@@ -47,7 +47,7 @@ export const getPerformanceRating = (
 /**
  * Send performance metric to analytics
  */
-const sendToAnalytics = (metric: Metric) => {
+const sendToAnalytics = async (metric: Metric) => {
   const event: PerformanceEvent = {
     metric: metric.name,
     value: metric.value,
@@ -82,19 +82,21 @@ const sendToAnalytics = (metric: Metric) => {
     });
   }
 
-  // Store in localStorage for dashboard
+  // Store in safe storage for dashboard (prevents Safari/Brave blocking)
   const metricsKey = 'performance_metrics';
   try {
-    const stored = localStorage.getItem(metricsKey);
-    const metrics = stored ? JSON.parse(stored) : {};
+    const { safeStorage, safeJSON } = await import('@/utils/storage/safeStorage');
+    const stored = safeStorage.getItem(metricsKey);
+    const metrics = stored ? safeJSON.parse(stored, {}) : {};
     metrics[metric.name] = {
       value: metric.value,
       rating: metric.rating,
       timestamp: Date.now(),
     };
-    localStorage.setItem(metricsKey, JSON.stringify(metrics));
+    safeStorage.setItem(metricsKey, safeJSON.stringify(metrics), 24 * 60 * 60 * 1000); // 24h expiration
   } catch (error) {
-    console.error('Failed to store performance metrics:', error);
+    console.warn('[WebVitals] Failed to store performance metrics safely:', error);
+    // Continue without storing - don't block the app
   }
 
   // Send to backend analytics endpoint in production
@@ -136,11 +138,12 @@ export const initWebVitals = () => {
 };
 
 /**
- * Get stored performance metrics
+ * Get stored performance metrics safely
  */
-export const getStoredMetrics = (): PerformanceMetrics => {
+export const getStoredMetrics = async (): Promise<PerformanceMetrics> => {
   try {
-    const stored = localStorage.getItem('performance_metrics');
+    const { safeStorage, safeJSON } = await import('@/utils/storage/safeStorage');
+    const stored = safeStorage.getItem('performance_metrics');
     if (!stored) {
       return {
         LCP: null,
@@ -151,7 +154,7 @@ export const getStoredMetrics = (): PerformanceMetrics => {
       };
     }
 
-    const metrics = JSON.parse(stored);
+    const metrics = safeJSON.parse(stored, {});
     return {
       LCP: metrics.LCP?.value || null,
       CLS: metrics.CLS?.value || null,
@@ -160,7 +163,7 @@ export const getStoredMetrics = (): PerformanceMetrics => {
       INP: metrics.INP?.value || null,
     };
   } catch (error) {
-    console.error('Failed to retrieve stored metrics:', error);
+    console.warn('[WebVitals] Failed to retrieve stored metrics safely:', error);
     return {
       LCP: null,
       CLS: null,
@@ -172,13 +175,14 @@ export const getStoredMetrics = (): PerformanceMetrics => {
 };
 
 /**
- * Clear stored performance metrics
+ * Clear stored performance metrics safely
  */
-export const clearStoredMetrics = () => {
+export const clearStoredMetrics = async (): Promise<void> => {
   try {
-    localStorage.removeItem('performance_metrics');
+    const { safeStorage } = await import('@/utils/storage/safeStorage');
+    safeStorage.removeItem('performance_metrics');
   } catch (error) {
-    console.error('Failed to clear stored metrics:', error);
+    console.warn('[WebVitals] Failed to clear stored metrics safely:', error);
   }
 };
 

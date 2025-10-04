@@ -9,12 +9,14 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
+  authError: string | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>;
+  clearAuthError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,55 +28,181 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        // Fetch profile when user logs in
-        if (session?.user) {
-          setTimeout(() => {
-            fetchProfile(session.user.id);
-          }, 0);
-        } else {
-          setProfile(null);
-        }
-      }
-    );
+    console.log('[AuthContext] Initializing auth state...');
+    let isComponentMounted = true;
+    let authSubscription: any = null;
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
+    // Add timeout to prevent infinite loading (critical for Safari/Brave)
+    const loadingTimeout = setTimeout(() => {
+      if (isComponentMounted && loading) {
+        console.warn('[AuthContext] Auth initialization timed out after 10 seconds');
+        setAuthError('Authentication initialization timed out. Please refresh the page.');
         setLoading(false);
       }
-    });
+    }, 10000); // 10 seconds timeout
 
-    return () => subscription.unsubscribe();
+    // Add additional fallback timeout
+    const emergencyTimeout = setTimeout(() => {
+      if (isComponentMounted && loading) {
+        console.error('[AuthContext] Emergency timeout - forcing auth to complete');
+        setLoading(false);
+      }
+    }, 15000); // 15 seconds emergency timeout
+
+    const initializeAuth = async () => {
+      try {
+        console.log('[AuthContext] Setting up auth state listener...');
+
+        // Set up auth state listener with error handling
+        const { data, error: subscriptionError } = supabase.auth.onAuthStateChange(
+          (event, session) => {
+            if (!isComponentMounted) return;
+
+            console.log('[AuthContext] Auth state changed:', event, session ? 'has session' : 'no session');
+            setSession(session);
+            setUser(session?.user ?? null);
+
+            // Fetch profile when user logs in
+            if (session?.user) {
+              fetchProfile(session.user.id);
+            } else {
+              setProfile(null);
+              setLoading(false);
+            }
+          }
+        );
+
+        if (subscriptionError) {
+          console.error('[AuthContext] Failed to set up auth listener:', subscriptionError);
+          setAuthError(`Failed to initialize authentication: ${subscriptionError.message}`);
+          setLoading(false);
+          return;
+        }
+
+        authSubscription = data.subscription;
+
+        console.log('[AuthContext] Checking for existing session...');
+
+        // Check for existing session with timeout
+        const sessionPromise = supabase.auth.getSession();
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Session check timeout')), 8000);
+        });
+
+        try {
+          const { data: sessionData, error: sessionError } = await Promise.race([
+            sessionPromise,
+            timeoutPromise
+          ]) as any;
+
+          if (!isComponentMounted) return;
+
+          if (sessionError) {
+            console.error('[AuthContext] Session check error:', sessionError);
+            setAuthError(`Failed to check session: ${sessionError.message}`);
+            setLoading(false);
+            return;
+          }
+
+          const { session } = sessionData;
+          console.log('[AuthContext] Initial session check:', session ? 'found session' : 'no session');
+
+          setSession(session);
+          setUser(session?.user ?? null);
+
+          if (session?.user) {
+            await fetchProfile(session.user.id);
+          } else {
+            setLoading(false);
+          }
+
+        } catch (error) {
+          if (!isComponentMounted) return;
+
+          console.error('[AuthContext] Session check failed:', error);
+          setAuthError('Failed to check authentication status. Please refresh the page.');
+          setLoading(false);
+        }
+
+      } catch (error) {
+        if (!isComponentMounted) return;
+
+        console.error('[AuthContext] Auth initialization failed:', error);
+        setAuthError(`Authentication initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        setLoading(false);
+      }
+    };
+
+    // Start initialization
+    initializeAuth();
+
+    // Cleanup function
+    return () => {
+      console.log('[AuthContext] Cleaning up auth context...');
+      isComponentMounted = false;
+      clearTimeout(loadingTimeout);
+      clearTimeout(emergencyTimeout);
+
+      if (authSubscription) {
+        authSubscription.unsubscribe();
+      }
+    };
   }, []);
 
   const fetchProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      console.log('[AuthContext] Fetching profile for user:', userId);
+
+      // Add timeout for profile fetch
+      const profilePromise = supabase
         .from("profiles")
         .select("*")
         .eq("id", userId)
         .single();
 
-      if (error) throw error;
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000);
+      });
+
+      const { data, error } = await Promise.race([
+        profilePromise,
+        timeoutPromise
+      ]) as any;
+
+      if (error) {
+        console.error('[AuthContext] Profile fetch error:', error);
+        setAuthError(`Failed to load profile: ${error.message}`);
+        // Don't show toast for network errors during initialization
+        if (error.message && !error.message.includes('timeout')) {
+          toast.error("Failed to load profile");
+        }
+        setLoading(false);
+        return;
+      }
+
+      console.log('[AuthContext] Profile loaded successfully');
       setProfile(data as Profile);
+      setLoading(false);
+
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      toast.error("Failed to load profile");
-    } finally {
+      console.error("[AuthContext] Profile fetch failed:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setAuthError(`Failed to load profile: ${errorMessage}`);
+
+      // Only show toast for unexpected errors, not timeouts during init
+      if (!errorMessage.includes('timeout')) {
+        toast.error("Failed to load profile");
+      }
+
       setLoading(false);
     }
+  };
+
+  const clearAuthError = () => {
+    setAuthError(null);
   };
 
   const signIn = async (email: string, password: string) => {
@@ -180,12 +308,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         session,
         profile,
         loading,
+        authError,
         signIn,
         signUp,
         signOut,
         signInWithGoogle,
         resetPassword,
         updateProfile,
+        clearAuthError,
       }}
     >
       {children}
