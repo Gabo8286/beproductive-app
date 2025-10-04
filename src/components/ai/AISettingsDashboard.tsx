@@ -46,7 +46,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { useAISettings } from '@/hooks/useAISettings';
 import { useAIUsageStats } from '@/hooks/useAIUsageStats';
-import { INSIGHT_TYPE_LABELS, PROVIDER_LABELS } from '@/types/ai-insights';
+import { INSIGHT_TYPE_LABELS, PROVIDER_LABELS, AIInsightType } from '@/types/ai-insights';
 
 export function AISettingsDashboard() {
   const { user } = useAuth();
@@ -62,7 +62,6 @@ export function AISettingsDashboard() {
 
   const {
     data: usageStats,
-    data: monthlyUsage,
     isLoading: statsLoading
   } = useAIUsageStats();
 
@@ -236,11 +235,11 @@ export function AISettingsDashboard() {
                       <Label htmlFor={type} className="text-sm">{label}</Label>
                       <Switch
                         id={type}
-                        checked={localSettings?.enabled_insight_types?.includes(type)}
+                        checked={localSettings?.enabled_insight_types?.includes(type as AIInsightType)}
                         onCheckedChange={(checked) => {
                           const currentTypes = localSettings?.enabled_insight_types || [];
                           const newTypes = checked
-                            ? [...currentTypes, type]
+                            ? [...currentTypes, type as AIInsightType]
                             : currentTypes.filter(t => t !== type);
                           handleSettingChange('enabled_insight_types', newTypes);
                         }}
@@ -522,7 +521,7 @@ export function AISettingsDashboard() {
               <CardContent className="space-y-4">
                 <div className="text-center">
                   <div className="text-3xl font-bold">
-                    ${monthlyUsage?.totalCost?.toFixed(2) || '0.00'}
+                    ${usageStats?.total_cost?.toFixed(2) || '0.00'}
                   </div>
                   <p className="text-sm text-muted-foreground">Total Cost</p>
                 </div>
@@ -530,11 +529,11 @@ export function AISettingsDashboard() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Requests</span>
-                    <span>{monthlyUsage?.requestCount || 0}</span>
+                    <span>{usageStats?.total_requests || 0}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Tokens Used</span>
-                    <span>{monthlyUsage?.totalTokens?.toLocaleString() || 0}</span>
+                    <span>{usageStats?.total_tokens?.toLocaleString() || 0}</span>
                   </div>
                 </div>
               </CardContent>
@@ -547,14 +546,14 @@ export function AISettingsDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {usageStats?.byProvider && Object.entries(usageStats.byProvider).map(([provider, stats]) => (
+                  {usageStats?.by_provider && Object.entries(usageStats.by_provider).map(([provider, stats]) => (
                     <div key={provider} className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="capitalize">{provider}</span>
-                        <span>${stats.cost.toFixed(2)}</span>
+                        <span>${(stats as any).cost.toFixed(2)}</span>
                       </div>
                       <Progress
-                        value={(stats.cost / (usageStats.totalCost || 1)) * 100}
+                        value={((stats as any).cost / (usageStats.total_cost || 1)) * 100}
                         className="h-2"
                       />
                     </div>
