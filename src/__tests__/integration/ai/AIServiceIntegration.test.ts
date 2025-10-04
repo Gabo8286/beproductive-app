@@ -343,14 +343,19 @@ describe('AI Service Integration Tests', () => {
             tags: ['urgent', 'client'],
             status: 'in_progress',
             created_at: new Date().toISOString(),
-            dependencies: [],
-            completionRate: 0.3
+            dependencies: []
           }
         ],
         userContext: {
-          workingHours: { start: '09:00', end: '17:00' },
-          energyPatterns: { morning: 8, afternoon: 6, evening: 4 },
-          currentWorkload: 75
+          userId: 'test-user',
+          currentWorkload: 75,
+          availableTime: 8,
+          skillset: [],
+          preferences: {
+            workingHours: { start: '09:00', end: '17:00' },
+            preferredTaskTypes: [],
+            energyLevels: { morning: 8, afternoon: 6, evening: 4 }
+          }
         }
       });
 
@@ -367,9 +372,15 @@ describe('AI Service Integration Tests', () => {
         userId: 'test-user',
         tasks: [],
         userContext: {
-          workingHours: { start: '09:00', end: '17:00' },
-          energyPatterns: { morning: 8, afternoon: 6, evening: 4 },
-          currentWorkload: 0
+          userId: 'test-user',
+          currentWorkload: 0,
+          availableTime: 8,
+          skillset: [],
+          preferences: {
+            workingHours: { start: '09:00', end: '17:00' },
+            preferredTaskTypes: [],
+            energyLevels: { morning: 8, afternoon: 6, evening: 4 }
+          }
         }
       });
 
@@ -402,14 +413,19 @@ describe('AI Service Integration Tests', () => {
             tags: [],
             status: 'pending',
             created_at: new Date().toISOString(),
-            dependencies: [],
-            completionRate: 0.0
+            dependencies: []
           }
         ],
         userContext: {
-          workingHours: { start: '09:00', end: '17:00' },
-          energyPatterns: { morning: 8, afternoon: 6, evening: 4 },
-          currentWorkload: 50
+          userId: 'test-user',
+          currentWorkload: 50,
+          availableTime: 8,
+          skillset: [],
+          preferences: {
+            workingHours: { start: '09:00', end: '17:00' },
+            preferredTaskTypes: [],
+            energyLevels: { morning: 8, afternoon: 6, evening: 4 }
+          }
         }
       });
 
@@ -536,13 +552,18 @@ describe('AI Service Integration Tests', () => {
             tags: [],
             status: 'pending',
             created_at: new Date().toISOString(),
-            dependencies: [],
-            completionRate: 0.0
+            dependencies: []
           }],
           userContext: {
-            workingHours: { start: '09:00', end: '17:00' },
-            energyPatterns: { morning: 8, afternoon: 6, evening: 4 },
-            currentWorkload: 50
+            userId: 'test-user',
+            currentWorkload: 50,
+            availableTime: 8,
+            skillset: [],
+            preferences: {
+              workingHours: { start: '09:00', end: '17:00' },
+              preferredTaskTypes: [],
+              energyLevels: { morning: 8, afternoon: 6, evening: 4 }
+            }
           }
         })
       ];
@@ -688,8 +709,14 @@ describe('AI Service Integration Tests', () => {
       };
 
       // Make same request twice
-      await productivityInsightsGenerator.generateInsights(requestParams);
-      await productivityInsightsGenerator.generateInsights(requestParams);
+      await productivityInsightsGenerator.generateInsights({
+        ...requestParams,
+        insightTypes: ['productivity_pattern'] as Array<'productivity_pattern'>
+      });
+      await productivityInsightsGenerator.generateInsights({
+        ...requestParams,
+        insightTypes: ['productivity_pattern'] as Array<'productivity_pattern'>
+      });
 
       // Depending on implementation, second call might use cache
       // This test verifies that caching doesn't break functionality

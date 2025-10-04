@@ -273,11 +273,9 @@ export const UsageAnalytics: React.FC = () => {
                       <YAxis />
                       <Tooltip
                         labelFormatter={(date) => new Date(date).toLocaleDateString()}
-                        formatter={[
-                          (value, name) => [
-                            name === 'cost' ? formatCurrency(value) : formatNumber(value),
-                            name === 'cost' ? 'Cost' : name === 'requests' ? 'Requests' : 'Tokens'
-                          ]
+                        formatter={(value: number, name: string) => [
+                          name === 'cost' ? formatCurrency(value) : formatNumber(value),
+                          name === 'cost' ? 'Cost' : name === 'requests' ? 'Requests' : 'Tokens'
                         ]}
                       />
                       <Legend />
@@ -365,7 +363,7 @@ export const UsageAnalytics: React.FC = () => {
                     <Pie
                       data={Object.entries(systemStats.by_provider).map(([provider, stats], index) => ({
                         name: PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS] || provider,
-                        value: stats.cost,
+                        value: (stats as any).cost || 0,
                         provider: provider,
                         color: ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#6b7280'][index % 5]
                       }))}

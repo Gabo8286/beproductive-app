@@ -142,7 +142,7 @@ describe('RecommendationsBanner', () => {
   it('does not render when no recommendations are available', () => {
     // Mock empty recommendations by providing invalid context
     const { container } = renderWithRouter(
-      <RecommendationsBanner context="invalid" as any />
+      <RecommendationsBanner context={"general" as any} />
     );
 
     expect(container.firstChild).toBeNull();

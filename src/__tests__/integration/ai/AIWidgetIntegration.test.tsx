@@ -88,7 +88,7 @@ describe('AI Widget Integration Tests', () => {
       // Start interaction with timer
       const buttons = screen.getAllByRole('button');
       const timerButtons = buttons.filter(button =>
-        button.className.includes('h-9') && button.type === 'button' && !button.className.includes('w-full')
+        button.className.includes('h-9') && (button as HTMLButtonElement).type === 'button' && !button.className.includes('w-full')
       );
 
       if (timerButtons.length > 0) {

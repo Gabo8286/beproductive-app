@@ -99,11 +99,11 @@ function RouteAnnouncer() {
 }
 
 function AppContent() {
-  const { open, setOpen } = useKeyboardShortcutsDialog();
+  const { isOpen, close } = useKeyboardShortcutsDialog();
   useOfflineDetection();
 
   return (
-    <ErrorBoundary fallback={<PageErrorFallback />}>
+    <ErrorBoundary fallback={(error, resetError) => <PageErrorFallback error={error} resetError={resetError} />}>
       <TooltipProvider>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -364,7 +364,7 @@ function AppContent() {
           />
         </Routes>
 
-        <KeyboardShortcutsDialog open={open} onOpenChange={setOpen} />
+        <KeyboardShortcutsDialog open={isOpen} onOpenChange={(open) => open ? undefined : close()} />
         <Toaster />
         <Sonner />
       </TooltipProvider>
