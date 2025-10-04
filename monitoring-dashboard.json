@@ -1,0 +1,117 @@
+{
+  "grafana": {
+    "panels": [
+      {
+        "title": "Error Rate",
+        "type": "stat",
+        "targets": [
+          "error_rate_5m"
+        ],
+        "thresholds": [
+          {
+            "color": "green",
+            "value": 0
+          },
+          {
+            "color": "yellow",
+            "value": 1
+          },
+          {
+            "color": "red",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "title": "Response Time",
+        "type": "graph",
+        "targets": [
+          "response_time_p95",
+          "response_time_p99"
+        ],
+        "yAxis": {
+          "unit": "ms"
+        }
+      },
+      {
+        "title": "Web Vitals",
+        "type": "heatmap",
+        "targets": [
+          "web_vitals_lcp",
+          "web_vitals_fid",
+          "web_vitals_cls"
+        ]
+      },
+      {
+        "title": "User Activity",
+        "type": "graph",
+        "targets": [
+          "active_users",
+          "new_registrations",
+          "task_creations"
+        ]
+      },
+      {
+        "title": "System Health",
+        "type": "table",
+        "targets": [
+          "health_checks"
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "environment",
+        "type": "custom",
+        "options": [
+          "production",
+          "staging",
+          "development"
+        ]
+      },
+      {
+        "name": "timeRange",
+        "type": "interval",
+        "default": "1h"
+      }
+    ]
+  },
+  "datadog": {
+    "widgets": [
+      {
+        "definition": {
+          "type": "timeseries",
+          "title": "Application Performance",
+          "requests": [
+            {
+              "q": "avg:webapp.response_time{environment:$environment}"
+            },
+            {
+              "q": "avg:webapp.error_rate{environment:$environment}"
+            }
+          ]
+        }
+      },
+      {
+        "definition": {
+          "type": "query_value",
+          "title": "Uptime",
+          "requests": [
+            {
+              "q": "avg:webapp.uptime{environment:$environment}"
+            }
+          ],
+          "autoscale": true,
+          "precision": 2
+        }
+      }
+    ],
+    "template_variables": [
+      {
+        "name": "environment",
+        "default": "production",
+        "prefix": "environment"
+      }
+    ]
+  }
+}

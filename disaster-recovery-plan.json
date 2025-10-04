@@ -1,0 +1,143 @@
+{
+  "overview": {
+    "rto": "4 hours",
+    "rpo": "1 hour",
+    "priority": "P1",
+    "team": {
+      "lead": "DevOps Team Lead",
+      "contacts": [
+        "on-call-engineer@company.com",
+        "infrastructure-team@company.com"
+      ]
+    }
+  },
+  "scenarios": {
+    "database_failure": {
+      "severity": "critical",
+      "rto": "2 hours",
+      "rpo": "30 minutes",
+      "detection": [
+        "Application cannot connect to database",
+        "Database health checks failing",
+        "Supabase dashboard showing outages"
+      ],
+      "response_steps": [
+        "1. Verify Supabase service status",
+        "2. Check application logs for connection errors",
+        "3. Attempt database connection via Supabase CLI",
+        "4. If Supabase is down, implement emergency maintenance page",
+        "5. Monitor Supabase status for restoration",
+        "6. If extended outage, consider backup restoration"
+      ],
+      "recovery_procedure": "\n# Database Recovery Procedure\n1. Assess the scope of data loss\n2. Identify the most recent valid backup\n3. Create new Supabase project if primary is unrecoverable\n4. Restore from backup:\n   npx supabase db reset --db-url NEW_DB_URL\n   psql NEW_DB_URL < latest_backup.sql\n5. Update application environment variables\n6. Run data integrity checks\n7. Gradually restore traffic\n8. Monitor application performance"
+    },
+    "application_failure": {
+      "severity": "high",
+      "rto": "1 hour",
+      "rpo": "15 minutes",
+      "detection": [
+        "Application returning 5xx errors",
+        "Health check endpoints failing",
+        "User reports of inaccessibility"
+      ],
+      "response_steps": [
+        "1. Check CDN/hosting platform status",
+        "2. Verify deployment status",
+        "3. Check application logs and error tracking",
+        "4. Roll back to previous deployment if needed",
+        "5. Scale up resources if performance issue",
+        "6. Implement temporary maintenance page if critical"
+      ]
+    },
+    "data_corruption": {
+      "severity": "critical",
+      "rto": "4 hours",
+      "rpo": "1 hour",
+      "detection": [
+        "Data integrity violations reported",
+        "Users reporting incorrect data",
+        "Automated data validation alerts"
+      ],
+      "response_steps": [
+        "1. Stop all write operations immediately",
+        "2. Identify scope and timeline of corruption",
+        "3. Isolate affected data",
+        "4. Restore from point-in-time backup",
+        "5. Replay transactions from backup point",
+        "6. Verify data integrity before resuming operations"
+      ]
+    },
+    "security_breach": {
+      "severity": "critical",
+      "rto": "2 hours",
+      "rpo": "0 minutes",
+      "detection": [
+        "Unusual access patterns detected",
+        "Security monitoring alerts",
+        "User reports of unauthorized access"
+      ],
+      "response_steps": [
+        "1. Immediate containment - revoke all active sessions",
+        "2. Change all secrets and API keys",
+        "3. Assess scope of potential data access",
+        "4. Notify users if personal data potentially accessed",
+        "5. Implement additional security measures",
+        "6. Conduct security audit before restoration"
+      ]
+    }
+  },
+  "recovery_environments": {
+    "staging": {
+      "purpose": "Testing recovery procedures",
+      "configuration": "mirrors production with test data",
+      "restore_frequency": "weekly",
+      "automation": true
+    },
+    "disaster_recovery": {
+      "purpose": "Emergency production replacement",
+      "configuration": "production-equivalent infrastructure",
+      "restore_frequency": "daily",
+      "automation": true,
+      "failover_time": "30 minutes"
+    }
+  },
+  "communication_plan": {
+    "internal": {
+      "incident_channel": "#incident-response",
+      "stakeholders": [
+        "engineering-team@company.com",
+        "product-team@company.com",
+        "executives@company.com"
+      ],
+      "update_frequency": "every 30 minutes during incidents"
+    },
+    "external": {
+      "status_page": "https://status.company.com",
+      "customer_communication": [
+        "Email notifications",
+        "In-app banners",
+        "Social media updates"
+      ],
+      "sla_commitments": {
+        "notification_time": "15 minutes",
+        "resolution_updates": "1 hour",
+        "post_incident_report": "48 hours"
+      }
+    }
+  },
+  "testing": {
+    "frequency": "quarterly",
+    "scenarios": [
+      "database_restoration_test",
+      "application_rollback_test",
+      "failover_test",
+      "data_integrity_verification"
+    ],
+    "success_criteria": [
+      "RTO met for all scenarios",
+      "RPO met for all scenarios",
+      "All team members can execute procedures",
+      "Communication plan works effectively"
+    ]
+  }
+}

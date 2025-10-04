@@ -1,0 +1,951 @@
+openapi: 3.0.3
+info:
+  title: Spark Bloom Flow API
+  description: |
+    Enterprise-grade productivity and habit tracking API that enables seamless integration
+    with your existing tools and workflows.
+
+    ## Authentication
+
+    All API requests require authentication using an API key in the Authorization header:
+    ```
+    Authorization: Bearer your-api-key-here
+    ```
+
+    ## Rate Limiting
+
+    - Free Tier: 1,000 requests per hour
+    - Pro Tier: 10,000 requests per hour
+    - Enterprise: 100,000 requests per hour
+
+    ## Support
+
+    - Email: api-support@sparkbloomflow.com
+    - Documentation: https://developers.sparkbloomflow.com
+    - Status Page: https://status.sparkbloomflow.com
+  version: 1.2.0
+  contact:
+    name: API Support
+    email: api-support@sparkbloomflow.com
+    url: https://developers.sparkbloomflow.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://sparkbloomflow.com/terms
+
+servers:
+  - url: https://api.sparkbloomflow.com/v1
+    description: Production server
+  - url: https://staging-api.sparkbloomflow.com/v1
+    description: Staging server
+
+security:
+  - ApiKeyAuth: []
+  - OAuth2: []
+
+paths:
+  /tasks:
+    get:
+      tags:
+        - Tasks
+      summary: List tasks
+      description: Retrieve a paginated list of tasks with optional filtering
+      parameters:
+        - name: status
+          in: query
+          description: Filter by task status
+          schema:
+            type: string
+            enum: [pending, in_progress, completed, cancelled]
+        - name: priority
+          in: query
+          description: Filter by priority level
+          schema:
+            type: string
+            enum: [low, medium, high]
+        - name: assignee_id
+          in: query
+          description: Filter by assignee user ID
+          schema:
+            type: string
+            format: uuid
+        - name: project_id
+          in: query
+          description: Filter by project ID
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          description: Number of results to return (max 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: offset
+          in: query
+          description: Number of results to skip for pagination
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: sort
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [created_at, updated_at, due_date, priority, title]
+            default: created_at
+        - name: order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          tasks:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Task'
+                          pagination:
+                            $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+
+    post:
+      tags:
+        - Tasks
+      summary: Create task
+      description: Create a new task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /tasks/{task_id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get task
+      description: Retrieve a specific task by ID
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Task'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags:
+        - Tasks
+      summary: Update task
+      description: Update an existing task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Task'
+
+    delete:
+      tags:
+        - Tasks
+      summary: Delete task
+      description: Delete a task
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Task ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Task deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /habits:
+    get:
+      tags:
+        - Habits
+      summary: List habits
+      description: Retrieve a list of habits
+      parameters:
+        - name: category
+          in: query
+          description: Filter by habit category
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          description: Filter by active status
+          schema:
+            type: boolean
+        - name: frequency
+          in: query
+          description: Filter by frequency
+          schema:
+            type: string
+            enum: [daily, weekly, monthly, custom]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          habits:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Habit'
+
+    post:
+      tags:
+        - Habits
+      summary: Create habit
+      description: Create a new habit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHabitRequest'
+      responses:
+        '201':
+          description: Habit created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Habit'
+
+  /habits/{habit_id}/completions:
+    post:
+      tags:
+        - Habits
+      summary: Record habit completion
+      description: Record a completion for a habit
+      parameters:
+        - name: habit_id
+          in: path
+          required: true
+          description: Habit ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HabitCompletionRequest'
+      responses:
+        '201':
+          description: Completion recorded successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/HabitCompletion'
+
+  /analytics/users/{user_id}:
+    get:
+      tags:
+        - Analytics
+      summary: Get user analytics
+      description: Retrieve productivity analytics for a specific user
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: uuid
+        - name: period
+          in: query
+          description: Time period for analytics
+          schema:
+            type: string
+            enum: [day, week, month, quarter, year]
+            default: week
+        - name: start_date
+          in: query
+          description: Start date for custom period (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          description: End date for custom period (ISO 8601)
+          schema:
+            type: string
+            format: date-time
+        - name: metrics
+          in: query
+          description: Specific metrics to include
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [tasks, habits, productivity_score, completion_rate]
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserAnalytics'
+
+  /webhooks:
+    get:
+      tags:
+        - Webhooks
+      summary: List webhooks
+      description: Retrieve configured webhooks
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          webhooks:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Webhook'
+
+    post:
+      tags:
+        - Webhooks
+      summary: Create webhook
+      description: Create a new webhook subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+      responses:
+        '201':
+          description: Webhook created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Webhook'
+
+  /webhooks/{webhook_id}:
+    delete:
+      tags:
+        - Webhooks
+      summary: Delete webhook
+      description: Delete a webhook subscription
+      parameters:
+        - name: webhook_id
+          in: path
+          required: true
+          description: Webhook ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Webhook deleted successfully
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: API key authentication
+
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.sparkbloomflow.com/oauth/authorize
+          tokenUrl: https://auth.sparkbloomflow.com/oauth/token
+          scopes:
+            read:tasks: Read task data
+            write:tasks: Create and update tasks
+            read:habits: Read habit tracking data
+            write:habits: Create and update habits
+            read:analytics: Access productivity analytics
+            admin:org: Organization administration
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        meta:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+              description: Response timestamp
+            version:
+              type: string
+              description: API version
+            request_id:
+              type: string
+              description: Unique request identifier
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique task identifier
+        title:
+          type: string
+          description: Task title
+          maxLength: 255
+        description:
+          type: string
+          description: Task description
+          maxLength: 2000
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+          description: Current task status
+        priority:
+          type: string
+          enum: [low, medium, high]
+          description: Task priority level
+        due_date:
+          type: string
+          format: date-time
+          description: Task due date
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        completed_at:
+          type: string
+          format: date-time
+          description: Completion timestamp
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+          description: Task tags
+        assignee_id:
+          type: string
+          format: uuid
+          description: Assigned user ID
+          nullable: true
+        project_id:
+          type: string
+          format: uuid
+          description: Associated project ID
+          nullable: true
+        metadata:
+          type: object
+          description: Additional task metadata
+          additionalProperties: true
+
+    CreateTaskRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 2000
+        priority:
+          type: string
+          enum: [low, medium, high]
+          default: medium
+        due_date:
+          type: string
+          format: date-time
+        assignee_id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+          additionalProperties: true
+
+    UpdateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 2000
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+        priority:
+          type: string
+          enum: [low, medium, high]
+        due_date:
+          type: string
+          format: date-time
+        assignee_id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+          additionalProperties: true
+
+    Habit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 1000
+        frequency:
+          type: string
+          enum: [daily, weekly, monthly, custom]
+        target_value:
+          type: number
+          description: Target value for the habit
+        unit:
+          type: string
+          description: Unit of measurement
+        created_at:
+          type: string
+          format: date-time
+        streak:
+          type: object
+          properties:
+            current:
+              type: integer
+              minimum: 0
+            longest:
+              type: integer
+              minimum: 0
+            last_completed:
+              type: string
+              format: date-time
+        category:
+          type: string
+        is_active:
+          type: boolean
+
+    CreateHabitRequest:
+      type: object
+      required:
+        - name
+        - frequency
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 1000
+        frequency:
+          type: string
+          enum: [daily, weekly, monthly, custom]
+        target_value:
+          type: number
+        unit:
+          type: string
+        category:
+          type: string
+
+    HabitCompletionRequest:
+      type: object
+      properties:
+        completed_at:
+          type: string
+          format: date-time
+        value:
+          type: number
+          description: Actual value achieved
+        notes:
+          type: string
+          maxLength: 500
+
+    HabitCompletion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        habit_id:
+          type: string
+          format: uuid
+        completed_at:
+          type: string
+          format: date-time
+        value:
+          type: number
+        notes:
+          type: string
+
+    UserAnalytics:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        period:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        metrics:
+          type: object
+          properties:
+            tasks_completed:
+              type: integer
+            tasks_created:
+              type: integer
+            completion_rate:
+              type: number
+              format: float
+              minimum: 0
+              maximum: 1
+            average_completion_time:
+              type: string
+            productivity_score:
+              type: integer
+              minimum: 0
+              maximum: 100
+            habits_maintained:
+              type: integer
+            habit_streak_average:
+              type: number
+        trends:
+          type: object
+          properties:
+            productivity_change:
+              type: string
+            completion_rate_change:
+              type: string
+
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum:
+              - task.created
+              - task.updated
+              - task.completed
+              - task.deleted
+              - habit.created
+              - habit.completed
+              - habit.streak.broken
+              - user.productivity.milestone
+        secret:
+          type: string
+          description: Webhook secret for signature verification
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    CreateWebhookRequest:
+      type: object
+      required:
+        - url
+        - events
+      properties:
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+            enum:
+              - task.created
+              - task.updated
+              - task.completed
+              - task.deleted
+              - habit.created
+              - habit.completed
+              - habit.streak.broken
+              - user.productivity.milestone
+        secret:
+          type: string
+
+    Pagination:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+        limit:
+          type: integer
+          description: Number of items per page
+        offset:
+          type: integer
+          description: Number of items skipped
+        has_more:
+          type: boolean
+          description: Whether more items are available
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: AUTHENTICATION_ERROR
+                      message:
+                        type: string
+                        example: Invalid API key
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: NOT_FOUND
+                      message:
+                        type: string
+                        example: Resource not found
+
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          description: Rate limit per hour
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          description: Remaining requests
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          description: Reset time (Unix timestamp)
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: RATE_LIMIT_EXCEEDED
+                      message:
+                        type: string
+                        example: Rate limit exceeded

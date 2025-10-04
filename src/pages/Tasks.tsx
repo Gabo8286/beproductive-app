@@ -20,6 +20,7 @@ import { TagBadge } from '@/components/tags/TagBadge';
 import { X, Zap } from 'lucide-react';
 import { FloatingTaskButton } from '@/components/tasks/FloatingTaskButton';
 import { QuickTaskModal } from '@/components/tasks/QuickTaskModal';
+import { RecommendationsBanner } from '@/components/ai/RecommendationsBanner';
 
 type TaskStatus = Database['public']['Enums']['task_status'];
 type TaskPriority = Database['public']['Enums']['task_priority'];
@@ -124,6 +125,9 @@ function TasksContent() {
           } />
         </div>
       </div>
+
+      {/* AI Recommendations Banner */}
+      <RecommendationsBanner context="tasks" />
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">

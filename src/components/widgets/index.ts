@@ -18,3 +18,5 @@ export { ReflectionsWidget } from './ReflectionsWidget';
 export { NotesWidget } from './NotesWidget';
 export { GamificationWidget } from './GamificationWidget';
 export { ProductivityProfileWidget } from './ProductivityProfileWidget';
+export { TimeTrackingWidget } from './TimeTrackingWidget';
+export { SmartRecommendationsWidget } from './SmartRecommendationsWidget';

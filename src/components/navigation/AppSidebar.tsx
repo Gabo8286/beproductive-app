@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap, StickyNote, Notebook } from "lucide-react";
+import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap, StickyNote, Notebook, BarChart3, Globe, Building, Timer } from "lucide-react";
 import { useModules } from "@/contexts/ModulesContext";
 import { cn } from "@/lib/utils";
 import { brandConfig, getMotivationalMessage } from "@/lib/brand";
@@ -156,15 +156,55 @@ const navigation = [
     color: "text-secondary",
     voiceCommand: "team"
   },
-  { 
-    name: "Travel Guides", 
+  {
+    name: "Travel Guides",
     displayName: "Processes",
-    href: "/processes", 
-    icon: Workflow, 
+    href: "/processes",
+    icon: Workflow,
     moduleId: "process-inventory" as const,
     description: "Documented workflows",
     color: "text-muted-foreground",
     voiceCommand: "processes"
+  },
+  {
+    name: "Analytics & Insights",
+    displayName: "Analytics",
+    href: "/analytics",
+    icon: BarChart3,
+    moduleId: "analytics" as const,
+    description: "Data-driven insights",
+    color: "text-blue-600",
+    voiceCommand: "analytics"
+  },
+  {
+    name: "Time Tracking",
+    displayName: "Time Tracking",
+    href: "/time-tracking",
+    icon: Timer,
+    moduleId: "time-tracking" as const,
+    description: "AI-powered time insights",
+    color: "text-purple-600",
+    voiceCommand: "time tracking"
+  },
+  {
+    name: "Integrations & Connections",
+    displayName: "Integrations",
+    href: "/integrations",
+    icon: Globe,
+    moduleId: "integrations" as const,
+    description: "Connect your tools",
+    color: "text-green-600",
+    voiceCommand: "integrations"
+  },
+  {
+    name: "Enterprise Management",
+    displayName: "Enterprise",
+    href: "/enterprise",
+    icon: Building,
+    moduleId: "enterprise" as const,
+    description: "Security & access control",
+    color: "text-purple-600",
+    voiceCommand: "enterprise"
   },
 ];
 

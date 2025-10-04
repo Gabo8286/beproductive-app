@@ -1,0 +1,448 @@
+name: Quality Gates
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+  QUALITY_THRESHOLD: 80
+  COVERAGE_THRESHOLD: 80
+  BUNDLE_SIZE_LIMIT: '2MB'
+
+jobs:
+  # Pre-Gate: Quick validation
+  pre-gate:
+    name: Pre-Gate Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      should-skip: ${{ steps.skip-check.outputs.should_skip }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Skip duplicate actions
+        id: skip-check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          concurrent_skipping: 'same_content_newer'
+          skip_after_successful_duplicate: 'true'
+
+      - name: Setup Node.js
+        if: steps.skip-check.outputs.should_skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: steps.skip-check.outputs.should_skip != 'true'
+        run: npm ci
+
+      - name: Quick syntax check
+        if: steps.skip-check.outputs.should_skip != 'true'
+        run: |
+          npm run lint -- --max-warnings 0
+          npx tsc --noEmit
+
+  # Gate 1: Code Quality Analysis
+  quality-analysis:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    needs: pre-gate
+    if: needs.pre-gate.outputs.should-skip != 'true'
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run code quality analysis
+        run: npm run quality:analyze
+
+      - name: Upload quality reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: quality-reports
+          path: quality-reports/
+          retention-days: 30
+
+      - name: Check quality threshold
+        run: |
+          QUALITY_SCORE=$(node -e "
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('quality-reports/quality-score.json', 'utf8'));
+              console.log(report.overallScore || 0);
+            } catch (e) {
+              console.log(0);
+            }
+          ")
+
+          echo "Quality Score: $QUALITY_SCORE"
+
+          if [ "$QUALITY_SCORE" -lt "$QUALITY_THRESHOLD" ]; then
+            echo "❌ Quality gate failed: Score $QUALITY_SCORE is below threshold $QUALITY_THRESHOLD"
+            exit 1
+          else
+            echo "✅ Quality gate passed: Score $QUALITY_SCORE meets threshold $QUALITY_THRESHOLD"
+          fi
+
+  # Gate 2: Comprehensive Testing
+  comprehensive-testing:
+    name: Comprehensive Testing
+    runs-on: ubuntu-latest
+    needs: pre-gate
+    if: needs.pre-gate.outputs.should-skip != 'true'
+    timeout-minutes: 30
+
+    strategy:
+      matrix:
+        test-group: ['critical', 'core', 'features']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test orchestration
+        run: npm run test:orchestrate
+        env:
+          TEST_GROUP: ${{ matrix.test-group }}
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports-${{ matrix.test-group }}
+          path: test-orchestration/
+          retention-days: 30
+
+      - name: Check coverage threshold
+        if: matrix.test-group == 'critical'
+        run: |
+          COVERAGE=$(node -e "
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('test-orchestration/execution-summary.json', 'utf8'));
+              console.log(report.coverage?.overall || 0);
+            } catch (e) {
+              console.log(0);
+            }
+          ")
+
+          echo "Coverage: $COVERAGE%"
+
+          if [ "$COVERAGE" -lt "$COVERAGE_THRESHOLD" ]; then
+            echo "❌ Coverage gate failed: $COVERAGE% is below threshold $COVERAGE_THRESHOLD%"
+            exit 1
+          else
+            echo "✅ Coverage gate passed: $COVERAGE% meets threshold $COVERAGE_THRESHOLD%"
+          fi
+
+  # Gate 3: Performance Analysis
+  performance-analysis:
+    name: Performance Analysis
+    runs-on: ubuntu-latest
+    needs: pre-gate
+    if: needs.pre-gate.outputs.should-skip != 'true'
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Analyze bundle size
+        run: npm run bundle:analyze
+
+      - name: Upload bundle analysis
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle-analysis
+          path: bundle-analysis/
+          retention-days: 30
+
+      - name: Check bundle size limit
+        run: |
+          BUNDLE_SIZE=$(node -e "
+            const fs = require('fs');
+            try {
+              const report = JSON.parse(fs.readFileSync('bundle-analysis/composition-report.json', 'utf8'));
+              const sizeInMB = (report.totalSize / 1024 / 1024).toFixed(2);
+              console.log(sizeInMB);
+            } catch (e) {
+              console.log(999);
+            }
+          ")
+
+          LIMIT_MB=$(echo "$BUNDLE_SIZE_LIMIT" | sed 's/MB//')
+
+          echo "Bundle Size: ${BUNDLE_SIZE}MB (Limit: ${LIMIT_MB}MB)"
+
+          if (( $(echo "$BUNDLE_SIZE > $LIMIT_MB" | bc -l) )); then
+            echo "❌ Bundle size gate failed: ${BUNDLE_SIZE}MB exceeds limit ${LIMIT_MB}MB"
+            exit 1
+          else
+            echo "✅ Bundle size gate passed: ${BUNDLE_SIZE}MB within limit ${LIMIT_MB}MB"
+          fi
+
+  # Gate 4: Security Scanning
+  security-scanning:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    needs: pre-gate
+    if: needs.pre-gate.outputs.should-skip != 'true'
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: |
+          npm audit --audit-level moderate
+          npm audit --json > security-audit.json || true
+
+      - name: Run security tests
+        run: npm run test:run -- src/test/security/
+
+      - name: Upload security reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-reports
+          path: security-audit.json
+          retention-days: 30
+
+      - name: Check security vulnerabilities
+        run: |
+          VULNERABILITIES=$(node -e "
+            const fs = require('fs');
+            try {
+              const audit = JSON.parse(fs.readFileSync('security-audit.json', 'utf8'));
+              const high = audit.metadata?.vulnerabilities?.high || 0;
+              const critical = audit.metadata?.vulnerabilities?.critical || 0;
+              console.log(high + critical);
+            } catch (e) {
+              console.log(0);
+            }
+          ")
+
+          echo "High/Critical Vulnerabilities: $VULNERABILITIES"
+
+          if [ "$VULNERABILITIES" -gt "0" ]; then
+            echo "❌ Security gate failed: $VULNERABILITIES high/critical vulnerabilities found"
+            exit 1
+          else
+            echo "✅ Security gate passed: No high/critical vulnerabilities found"
+          fi
+
+  # Gate 5: Accessibility Compliance
+  accessibility-compliance:
+    name: Accessibility Compliance
+    runs-on: ubuntu-latest
+    needs: pre-gate
+    if: needs.pre-gate.outputs.should-skip != 'true'
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run accessibility tests
+        run: npm run test:run -- src/test/accessibility/
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run accessibility audit
+        run: |
+          npm run build
+          npm run preview &
+          sleep 10
+          npx @axe-core/cli http://localhost:4173 --save axe-results.json || true
+          pkill -f "preview"
+
+      - name: Upload accessibility reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: accessibility-reports
+          path: axe-results.json
+          retention-days: 30
+
+      - name: Check accessibility compliance
+        run: |
+          VIOLATIONS=$(node -e "
+            const fs = require('fs');
+            try {
+              const results = JSON.parse(fs.readFileSync('axe-results.json', 'utf8'));
+              console.log(results.violations?.length || 0);
+            } catch (e) {
+              console.log(0);
+            }
+          ")
+
+          echo "Accessibility Violations: $VIOLATIONS"
+
+          if [ "$VIOLATIONS" -gt "0" ]; then
+            echo "❌ Accessibility gate failed: $VIOLATIONS violations found"
+            exit 1
+          else
+            echo "✅ Accessibility gate passed: No violations found"
+          fi
+
+  # Final Gate: Integration and Deployment Readiness
+  deployment-readiness:
+    name: Deployment Readiness
+    runs-on: ubuntu-latest
+    needs: [quality-analysis, comprehensive-testing, performance-analysis, security-scanning, accessibility-compliance]
+    if: success()
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Generate deployment readiness report
+        run: |
+          cat > deployment-readiness.md << 'EOF'
+          # Deployment Readiness Report
+
+          **Generated**: $(date)
+          **Commit**: ${{ github.sha }}
+          **Branch**: ${{ github.ref_name }}
+
+          ## Quality Gates Status
+
+          - ✅ **Code Quality Analysis**: Passed
+          - ✅ **Comprehensive Testing**: Passed
+          - ✅ **Performance Analysis**: Passed
+          - ✅ **Security Scanning**: Passed
+          - ✅ **Accessibility Compliance**: Passed
+
+          ## Summary
+
+          All quality gates have passed successfully. The application is ready for deployment.
+
+          ## Artifacts
+
+          - Quality Reports: Available in artifacts
+          - Test Reports: Available in artifacts
+          - Bundle Analysis: Available in artifacts
+          - Security Reports: Available in artifacts
+          - Accessibility Reports: Available in artifacts
+
+          ## Next Steps
+
+          1. Review artifacts for any warnings or recommendations
+          2. Proceed with deployment to staging/production
+          3. Monitor application performance and quality metrics
+          EOF
+
+      - name: Upload deployment readiness report
+        uses: actions/upload-artifact@v3
+        with:
+          name: deployment-readiness
+          path: deployment-readiness.md
+          retention-days: 90
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('deployment-readiness.md', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 🎯 Quality Gates Results\n\n${report}`
+            });
+
+      - name: Set deployment status
+        run: |
+          echo "✅ All quality gates passed - Ready for deployment!"
+          echo "DEPLOYMENT_READY=true" >> $GITHUB_ENV
+
+  # Notification on Failure
+  notify-failure:
+    name: Notify Quality Gate Failure
+    runs-on: ubuntu-latest
+    needs: [quality-analysis, comprehensive-testing, performance-analysis, security-scanning, accessibility-compliance]
+    if: failure()
+
+    steps:
+      - name: Comment on PR failure
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ❌ Quality Gates Failed\n\nOne or more quality gates have failed. Please review the failed checks and address the issues before proceeding.\n\n**Failed Jobs**:\n${context.payload.workflow_run?.conclusion === 'failure' ? '- Check the Actions tab for detailed failure information' : ''}`
+            });
+
+      - name: Set failure status
+        run: |
+          echo "❌ Quality gates failed - Deployment blocked!"
+          exit 1

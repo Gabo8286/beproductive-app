@@ -12,6 +12,21 @@ dist
 dist-ssr
 *.local
 
+# Environment files
+.env.local
+.env.production
+.env.staging
+
+# Test and coverage
+coverage/
+test-results/
+.nyc_output/
+junit.xml
+
+# Quality reports
+quality-reports/
+5s-reports/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +37,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary files
+.tmp/
+.temp/
+
+# Security and secrets
+.secrets/
+*.pem
+*.key
+.env.backup

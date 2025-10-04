@@ -77,3 +77,49 @@ export interface UpdateGoalInput {
   assigned_to?: string;
   tags?: string[];
 }
+
+export interface SharedGoal {
+  id: string;
+  team_id: string;
+  title: string;
+  description?: string | null;
+  category: GoalCategory;
+  status: GoalStatus;
+  priority: number;
+  progress: number;
+  target_value?: number | null;
+  current_value?: number | null;
+  unit?: string | null;
+  start_date?: string | null;
+  target_date?: string | null;
+  completed_at?: string | null;
+  created_by: string;
+  assigned_members: string[];
+  tags: string[];
+  metadata: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SharedGoalMember {
+  id: string;
+  shared_goal_id: string;
+  user_id: string;
+  role: 'owner' | 'contributor' | 'viewer';
+  assigned_at: string;
+}
+
+export interface CreateSharedGoalInput {
+  team_id: string;
+  title: string;
+  description?: string;
+  category?: GoalCategory;
+  priority?: number;
+  target_value?: number;
+  current_value?: number;
+  unit?: string;
+  start_date?: Date;
+  target_date?: Date;
+  assigned_members?: string[];
+  tags?: string[];
+}

@@ -33,15 +33,17 @@ export function getNextDueDate(habit: Habit, lastEntry?: HabitEntry): Date | nul
     case 'daily':
       return today;
       
-    case 'weekly':
+    case 'weekly': {
       if (!lastCompletedDate) return today;
       const weeksSinceCompletion = Math.floor(differenceInDays(today, lastCompletedDate) / 7);
       return addDays(lastCompletedDate, (weeksSinceCompletion + 1) * 7);
-      
-    case 'monthly':
+    }
+
+    case 'monthly': {
       if (!lastCompletedDate) return today;
       const monthsSinceCompletion = Math.floor(differenceInDays(today, lastCompletedDate) / 30);
       return addDays(lastCompletedDate, (monthsSinceCompletion + 1) * 30);
+    }
       
     case 'custom':
       if (!habit.custom_frequency) return today;

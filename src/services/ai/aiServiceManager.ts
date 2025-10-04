@@ -196,6 +196,63 @@ export class AIServiceManager {
     }
   }
 
+  private async callGemini(request: AIServiceRequest, apiKey: APIKey): Promise<AIServiceResponse> {
+    const startTime = Date.now();
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${request.model || 'gemini-1.5-flash'}:generateContent?key=${apiKey.encrypted_key}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: request.prompt
+            }]
+          }],
+          generationConfig: {
+            temperature: request.temperature || 0.7,
+            maxOutputTokens: request.maxTokens || 1000,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const responseTime = Date.now() - startTime;
+
+      const tokensUsed = {
+        prompt: data.usageMetadata?.promptTokenCount || 0,
+        completion: data.usageMetadata?.candidatesTokenCount || 0,
+        total: data.usageMetadata?.totalTokenCount || 0,
+      };
+
+      // Calculate cost (approximate - Gemini pricing varies by model)
+      const cost = (tokensUsed.total / 1000) * 0.001; // $0.001 per 1K tokens for flash model
+
+      return {
+        content: data.candidates?.[0]?.content?.parts?.[0]?.text || '',
+        tokensUsed,
+        cost,
+        responseTime,
+        success: true,
+      };
+    } catch (error) {
+      return {
+        content: '',
+        tokensUsed: { prompt: 0, completion: 0, total: 0 },
+        cost: 0,
+        responseTime: Date.now() - startTime,
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
   private async callLovable(request: AIServiceRequest, apiKey: APIKey): Promise<AIServiceResponse> {
     const startTime = Date.now();
 
@@ -233,6 +290,9 @@ export class AIServiceManager {
         break;
       case 'claude':
         response = await this.callClaude(request, apiKey);
+        break;
+      case 'gemini':
+        response = await this.callGemini(request, apiKey);
         break;
       case 'lovable':
         response = await this.callLovable(request, apiKey);

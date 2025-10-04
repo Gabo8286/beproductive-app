@@ -10,6 +10,7 @@ import { useGoals } from "@/hooks/useGoals";
 import { Goal } from "@/types/goals";
 import { useNavigate } from "react-router-dom";
 import { GoalCard } from "@/components/goals/GoalCard";
+import { RecommendationsBanner } from "@/components/ai/RecommendationsBanner";
 
 type SortOption = 'newest' | 'oldest' | 'priority' | 'progress' | 'due_date' | 'title';
 type ViewMode = 'all' | 'draft' | 'active' | 'paused' | 'completed' | 'archived';
@@ -121,6 +122,9 @@ export default function Goals() {
           Create Goal
         </Button>
       </div>
+
+      {/* AI Recommendations Banner */}
+      <RecommendationsBanner context="goals" />
 
       {/* Stats Overview */}
       <div className="grid gap-4 md:grid-cols-6">

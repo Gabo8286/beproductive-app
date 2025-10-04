@@ -1,0 +1,159 @@
+{
+  "slack": {
+    "webhookUrl": "${SLACK_WEBHOOK_URL}",
+    "channels": {
+      "critical": "#alerts-critical",
+      "high": "#alerts-high",
+      "medium": "#alerts-medium",
+      "info": "#alerts-info"
+    },
+    "templates": {
+      "error": {
+        "title": "🔴 Critical Error Alert",
+        "color": "danger",
+        "fields": [
+          {
+            "title": "Environment",
+            "value": "${environment}",
+            "short": true
+          },
+          {
+            "title": "Error Rate",
+            "value": "${errorRate}%",
+            "short": true
+          },
+          {
+            "title": "Affected Users",
+            "value": "${affectedUsers}",
+            "short": true
+          },
+          {
+            "title": "Time Window",
+            "value": "${timeWindow}",
+            "short": true
+          }
+        ]
+      },
+      "performance": {
+        "title": "⚡ Performance Alert",
+        "color": "warning",
+        "fields": [
+          {
+            "title": "Metric",
+            "value": "${metric}",
+            "short": true
+          },
+          {
+            "title": "Current Value",
+            "value": "${currentValue}",
+            "short": true
+          },
+          {
+            "title": "Threshold",
+            "value": "${threshold}",
+            "short": true
+          },
+          {
+            "title": "Duration",
+            "value": "${duration}",
+            "short": true
+          }
+        ]
+      },
+      "recovery": {
+        "title": "✅ Service Recovered",
+        "color": "good",
+        "fields": [
+          {
+            "title": "Service",
+            "value": "${service}",
+            "short": true
+          },
+          {
+            "title": "Downtime",
+            "value": "${downtime}",
+            "short": true
+          }
+        ]
+      }
+    }
+  },
+  "email": {
+    "smtp": {
+      "host": "${EMAIL_SMTP_HOST}",
+      "port": 587,
+      "secure": false,
+      "auth": {
+        "user": "${EMAIL_SMTP_USER}",
+        "pass": "${EMAIL_SMTP_PASS}"
+      }
+    },
+    "templates": {
+      "critical": {
+        "subject": "[CRITICAL] ${appName} - ${alertType}",
+        "template": "critical-alert.html"
+      },
+      "warning": {
+        "subject": "[WARNING] ${appName} - ${alertType}",
+        "template": "warning-alert.html"
+      }
+    }
+  },
+  "pagerduty": {
+    "apiKey": "${PAGERDUTY_API_KEY}",
+    "serviceKey": "${PAGERDUTY_SERVICE_KEY}",
+    "escalationPolicy": "${PAGERDUTY_ESCALATION_POLICY}",
+    "severity": {
+      "critical": "critical",
+      "high": "error",
+      "medium": "warning",
+      "low": "info"
+    }
+  },
+  "rules": {
+    "errorRate": {
+      "threshold": 5,
+      "window": "5m",
+      "severity": "critical",
+      "enabled": true
+    },
+    "responseTime": {
+      "threshold": 2000,
+      "window": "5m",
+      "severity": "high",
+      "enabled": true
+    },
+    "availability": {
+      "threshold": 99,
+      "window": "15m",
+      "severity": "critical",
+      "enabled": true
+    },
+    "webVitals": {
+      "lcp": {
+        "threshold": 4000,
+        "severity": "medium"
+      },
+      "fid": {
+        "threshold": 300,
+        "severity": "medium"
+      },
+      "cls": {
+        "threshold": 0.25,
+        "severity": "low"
+      }
+    },
+    "customMetrics": {
+      "taskCreationFailure": {
+        "threshold": 10,
+        "window": "10m",
+        "severity": "high"
+      },
+      "habitTrackingLatency": {
+        "threshold": 1000,
+        "window": "5m",
+        "severity": "medium"
+      }
+    }
+  }
+}

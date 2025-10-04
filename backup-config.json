@@ -1,0 +1,110 @@
+{
+  "database": {
+    "supabase": {
+      "enabled": true,
+      "frequency": "daily",
+      "retention": {
+        "daily": 7,
+        "weekly": 4,
+        "monthly": 12
+      },
+      "encryption": true,
+      "compression": true,
+      "backup_script": {
+        "command": "npx supabase db dump",
+        "output_path": "./backups/database/${date}-backup.sql",
+        "environment_variables": [
+          "SUPABASE_PROJECT_REF",
+          "SUPABASE_ACCESS_TOKEN"
+        ]
+      }
+    },
+    "manual_backup": {
+      "script": "#!/bin/bash\n# Manual database backup script\nDATE=$(date +%Y%m%d_%H%M%S)\nBACKUP_DIR=\"./backups/database\"\nBACKUP_FILE=\"$BACKUP_DIR/$DATE-manual-backup.sql\"\n\n# Create backup directory if it doesn't exist\nmkdir -p $BACKUP_DIR\n\n# Create database dump\necho \"Creating database backup...\"\nnpx supabase db dump --db-url $SUPABASE_DB_URL > $BACKUP_FILE\n\n# Compress the backup\ngzip $BACKUP_FILE\n\necho \"Backup created: $BACKUP_FILE.gz\"\n\n# Upload to cloud storage (AWS S3 example)\nif [ ! -z \"$AWS_S3_BUCKET\" ]; then\n  aws s3 cp $BACKUP_FILE.gz s3://$AWS_S3_BUCKET/backups/database/\n  echo \"Backup uploaded to S3\"\nfi",
+      "verification": "#!/bin/bash\n# Backup verification script\nBACKUP_FILE=$1\n\nif [ -z \"$BACKUP_FILE\" ]; then\n  echo \"Usage: verify-backup.sh <backup_file>\"\n  exit 1\nfi\n\necho \"Verifying backup: $BACKUP_FILE\"\n\n# Check file integrity\nif gzip -t $BACKUP_FILE; then\n  echo \"✓ Backup file integrity check passed\"\nelse\n  echo \"✗ Backup file is corrupted\"\n  exit 1\nfi\n\n# Check backup content (basic validation)\nTEMP_FILE=$(mktemp)\ngunzip -c $BACKUP_FILE > $TEMP_FILE\n\n# Verify essential tables exist in backup\nTABLES=(\"profiles\" \"tasks\" \"goals\" \"habits\" \"notes\")\nfor table in \"${TABLES[@]}\"; do\n  if grep -q \"CREATE TABLE.*$table\" $TEMP_FILE; then\n    echo \"✓ Table $table found in backup\"\n  else\n    echo \"✗ Table $table missing from backup\"\n  fi\ndone\n\nrm $TEMP_FILE\necho \"Backup verification complete\""
+    }
+  },
+  "application": {
+    "static_assets": {
+      "enabled": true,
+      "source_directories": [
+        "./dist",
+        "./public",
+        "./src/assets"
+      ],
+      "destination": {
+        "s3": {
+          "bucket": "${AWS_S3_BUCKET}",
+          "prefix": "static-assets-backup/",
+          "versioning": true
+        },
+        "local": {
+          "path": "./backups/assets",
+          "retention_days": 30
+        }
+      }
+    },
+    "configuration": {
+      "files": [
+        ".env.production",
+        ".env.staging",
+        "package.json",
+        "package-lock.json",
+        "vite.config.ts",
+        "quality-gates.config.js",
+        "cdn-config.json",
+        "monitoring-alerts.json"
+      ],
+      "backup_frequency": "on_change",
+      "encryption": true
+    },
+    "user_generated_content": {
+      "enabled": false,
+      "note": "User content typically stored in Supabase Storage with built-in redundancy"
+    }
+  },
+  "schedule": {
+    "automated": {
+      "database_backup": {
+        "cron": "0 2 * * *",
+        "timezone": "UTC",
+        "enabled": true
+      },
+      "assets_backup": {
+        "cron": "0 3 * * 0",
+        "timezone": "UTC",
+        "enabled": true
+      },
+      "config_backup": {
+        "trigger": "on_deployment",
+        "enabled": true
+      }
+    },
+    "manual": {
+      "pre_deployment": true,
+      "on_demand": true,
+      "emergency": true
+    }
+  },
+  "storage": {
+    "primary": {
+      "provider": "aws_s3",
+      "bucket": "${AWS_S3_BACKUP_BUCKET}",
+      "region": "${AWS_REGION}",
+      "encryption": "AES256",
+      "versioning": true,
+      "lifecycle": {
+        "transition_to_ia": 30,
+        "transition_to_glacier": 90,
+        "expiration": 2555
+      }
+    },
+    "secondary": {
+      "provider": "google_cloud_storage",
+      "bucket": "${GCS_BACKUP_BUCKET}",
+      "region": "${GCS_REGION}",
+      "encryption": true,
+      "note": "Optional secondary backup location for geo-redundancy"
+    }
+  }
+}

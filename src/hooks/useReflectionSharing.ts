@@ -34,7 +34,7 @@ export function useSharedReflections(workspaceId?: string) {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) throw new Error('Not authenticated');
 
-      let query = supabase
+      const query = supabase
         .from('reflection_shares')
         .select(`
           *,

@@ -18,6 +18,7 @@ import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
+import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
 export function AppLayout() {
   const { profile, signOut } = useAuth();
@@ -77,6 +78,7 @@ export function AppLayout() {
             <Outlet />
           </main>
         </div>
+        <MobileNavigation />
       </div>
       <Timer />
     </SidebarProvider>

@@ -1,0 +1,143 @@
+{
+  "timestamp": "2025-10-03T18:18:47.757Z",
+  "assets": {
+    "css": [
+      {
+        "path": "assets/css/index-BBWLRwo0.css",
+        "size": 124202,
+        "sizeFormatted": "121.29 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      }
+    ],
+    "js": [
+      {
+        "path": "assets/js/index-DDdcyIny.js",
+        "size": 1091116,
+        "sizeFormatted": "1.04 MB",
+        "lastModified": "2025-10-03T17:58:35.691Z"
+      },
+      {
+        "path": "assets/js/vendor-D-qFeeT2.js",
+        "size": 802699,
+        "sizeFormatted": "783.89 KB",
+        "lastModified": "2025-10-03T17:58:35.691Z"
+      },
+      {
+        "path": "assets/js/react-vendor-DCe3nV-M.js",
+        "size": 400374,
+        "sizeFormatted": "390.99 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "assets/js/charts-vendor-DUcUnTLX.js",
+        "size": 343843,
+        "sizeFormatted": "335.78 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "assets/js/supabase-vendor-DEzwg6cg.js",
+        "size": 128984,
+        "sizeFormatted": "125.96 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "assets/js/motion-vendor-D_2_sYxX.js",
+        "size": 79264,
+        "sizeFormatted": "77.41 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "assets/js/utils-vendor-BmYHVdtz.js",
+        "size": 75270,
+        "sizeFormatted": "73.51 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "assets/js/dnd-vendor-aeNJutOJ.js",
+        "size": 49684,
+        "sizeFormatted": "48.52 KB",
+        "lastModified": "2025-10-03T17:58:35.691Z"
+      },
+      {
+        "path": "assets/js/date-vendor-BmkX55XG.js",
+        "size": 27238,
+        "sizeFormatted": "26.6 KB",
+        "lastModified": "2025-10-03T17:58:35.685Z"
+      },
+      {
+        "path": "assets/js/forms-vendor-C577sDGX.js",
+        "size": 1605,
+        "sizeFormatted": "1.57 KB",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "assets/js/ui-vendor-ByoYm48K.js",
+        "size": 199,
+        "sizeFormatted": "199 Bytes",
+        "lastModified": "2025-10-03T17:58:35.690Z"
+      },
+      {
+        "path": "registerSW.js",
+        "size": 134,
+        "sizeFormatted": "134 Bytes",
+        "lastModified": "2025-10-03T17:58:35.685Z"
+      }
+    ],
+    "images": [
+      {
+        "path": "favicon.ico",
+        "size": 7645,
+        "sizeFormatted": "7.47 KB",
+        "lastModified": "2025-10-03T17:58:28.508Z"
+      },
+      {
+        "path": "placeholder.svg",
+        "size": 3253,
+        "sizeFormatted": "3.18 KB",
+        "lastModified": "2025-10-03T17:58:28.508Z"
+      },
+      {
+        "path": "pwa-192x192.png",
+        "size": 31,
+        "sizeFormatted": "31 Bytes",
+        "lastModified": "2025-10-03T17:58:28.509Z"
+      },
+      {
+        "path": "pwa-512x512.png",
+        "size": 31,
+        "sizeFormatted": "31 Bytes",
+        "lastModified": "2025-10-03T17:58:28.509Z"
+      }
+    ],
+    "fonts": [],
+    "other": [
+      {
+        "path": "stats.html",
+        "size": 2095174,
+        "sizeFormatted": "2 MB",
+        "lastModified": "2025-10-03T17:58:35.676Z"
+      },
+      {
+        "path": "index.html",
+        "size": 2528,
+        "sizeFormatted": "2.47 KB",
+        "lastModified": "2025-10-03T17:58:35.685Z"
+      },
+      {
+        "path": "manifest.webmanifest",
+        "size": 554,
+        "sizeFormatted": "554 Bytes",
+        "lastModified": "2025-10-03T17:58:35.685Z"
+      },
+      {
+        "path": "robots.txt",
+        "size": 160,
+        "sizeFormatted": "160 Bytes",
+        "lastModified": "2025-10-03T17:58:28.509Z"
+      }
+    ]
+  },
+  "totalSize": 5233988,
+  "gzippedSize": 0,
+  "totalSizeFormatted": "4.99 MB"
+}

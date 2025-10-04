@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
@@ -13,149 +13,380 @@ import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
 import { KeyboardShortcutsDialog } from "@/components/dialogs/KeyboardShortcutsDialog";
 import { useKeyboardShortcutsDialog } from "@/hooks/useKeyboardShortcutsDialog";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { announceRouteChange } from "@/utils/accessibility/focusManagement";
+import { lazy, Suspense, useEffect } from "react";
+import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
+
+// Eagerly loaded routes (critical path)
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
-import Signup from "@/pages/Signup";
-import ForgotPassword from "@/pages/ForgotPassword";
 import Dashboard from "@/pages/Dashboard";
-import Profile from "@/pages/Profile";
-import Goals from "@/pages/Goals";
-import NewGoal from "@/pages/NewGoal";
-import GoalDetail from "@/pages/GoalDetail";
-import Tasks from "@/pages/Tasks";
-import TaskDetail from "@/pages/TaskDetail";
-import Templates from "@/pages/Templates";
-import RecurringTasks from "@/pages/RecurringTasks";
-import TagManagement from "@/pages/TagManagement";
-import Automation from "@/pages/Automation";
-import QuickTodos from "@/pages/QuickTodos";
-import Habits from "@/pages/Habits";
-import HabitDetail from "@/pages/HabitDetail";
-import Reflections from "@/pages/Reflections";
-import ReflectionDetail from "@/pages/ReflectionDetail";
-import Projects from "@/pages/Projects";
-import Notes from "@/pages/Notes";
-import Gamification from "@/pages/Gamification";
-import ProfileAssessment from "@/pages/ProfileAssessment";
-import AIInsights from "@/pages/AIInsights";
-import AccessibilitySettingsPage from "@/pages/AccessibilitySettings";
-import AccessibilityStatement from "@/pages/AccessibilityStatement";
-import NotFound from "@/pages/NotFound";
-import APIManagementDashboard from "@/components/admin/APIManagement/APIManagementDashboard";
-import { useMemo } from "react";
 
-const AppContent = () => {
-  // Enable offline detection
-  useOfflineDetection();
-  
+// Lazy loaded routes (code splitting)
+const Signup = lazy(() => import("@/pages/Signup"));
+const ForgotPassword = lazy(() => import("@/pages/ForgotPassword"));
+const Profile = lazy(() => import("@/pages/Profile"));
+const Goals = lazy(() => import("@/pages/Goals"));
+const NewGoal = lazy(() => import("@/pages/NewGoal"));
+const GoalDetail = lazy(() => import("@/pages/GoalDetail"));
+const Tasks = lazy(() => import("@/pages/Tasks"));
+const TaskDetail = lazy(() => import("@/pages/TaskDetail"));
+const Templates = lazy(() => import("@/pages/Templates"));
+const RecurringTasks = lazy(() => import("@/pages/RecurringTasks"));
+const TagManagement = lazy(() => import("@/pages/TagManagement"));
+const Automation = lazy(() => import("@/pages/Automation"));
+const QuickTodos = lazy(() => import("@/pages/QuickTodos"));
+const Habits = lazy(() => import("@/pages/Habits"));
+const HabitDetail = lazy(() => import("@/pages/HabitDetail"));
+const Reflections = lazy(() => import("@/pages/Reflections"));
+const ReflectionDetail = lazy(() => import("@/pages/ReflectionDetail"));
+const Projects = lazy(() => import("@/pages/Projects"));
+const Notes = lazy(() => import("@/pages/Notes"));
+const Gamification = lazy(() => import("@/pages/Gamification"));
+const ProfileAssessment = lazy(() => import("@/pages/ProfileAssessment"));
+const AIInsights = lazy(() => import("@/pages/AIInsights"));
+const Team = lazy(() => import("@/pages/Team"));
+const Processes = lazy(() => import("@/pages/Processes"));
+const AccessibilitySettingsPage = lazy(() => import("@/pages/AccessibilitySettings"));
+const AccessibilityStatement = lazy(() => import("@/pages/AccessibilityStatement"));
+const AcceptInvitation = lazy(() => import("@/pages/AcceptInvitation"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const APIManagementDashboard = lazy(() => import("@/components/admin/APIManagement/APIManagementDashboard"));
+const Analytics = lazy(() => import("@/pages/Analytics"));
+const SystemStatus = lazy(() => import("@/pages/SystemStatus"));
+
+// Lazy loaded AI components
+export const SmartRecommendationsWidget = lazy(() =>
+  import("@/components/widgets/SmartRecommendationsWidget").then(module => ({
+    default: module.SmartRecommendationsWidget
+  }))
+);
+
+export const TimeTrackingWidget = lazy(() =>
+  import("@/components/widgets/TimeTrackingWidget").then(module => ({
+    default: module.TimeTrackingWidget
+  }))
+);
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+// Loading fallback component
+const PageLoading = () => (
+  <div className="flex items-center justify-center h-screen">
+    <LoadingSkeleton type="page" />
+  </div>
+);
+
+// Component to handle route changes for accessibility
+function RouteAnnouncer() {
   const location = useLocation();
-  const { isOpen, close } = useKeyboardShortcutsDialog();
 
-  // Announce route changes to screen readers
   useEffect(() => {
-    announceRouteChange(location.pathname);
-  }, [location.pathname]);
+    // Announce route changes for screen readers
+    const pageName = location.pathname.split('/').pop() || 'home';
+    document.title = `${pageName} - BeProductive`;
+  }, [location]);
+
+  return null;
+}
+
+function AppContent() {
+  const { open, setOpen } = useKeyboardShortcutsDialog();
+  useOfflineDetection();
 
   return (
-    <>
-      {/* ARIA Live Regions for screen reader announcements */}
-      <div 
-        id="aria-live-polite" 
-        aria-live="polite" 
-        aria-atomic="true" 
-        className="sr-only" 
-      />
-      <div 
-        id="aria-live-assertive" 
-        aria-live="assertive" 
-        aria-atomic="true" 
-        className="sr-only" 
-      />
+    <ErrorBoundary fallback={<PageErrorFallback />}>
+      <TooltipProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/signup"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <Signup />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <ForgotPassword />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/accept-invitation"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <AcceptInvitation />
+              </Suspense>
+            }
+          />
 
-      {/* Keyboard Shortcuts Dialog */}
-      <KeyboardShortcutsDialog open={isOpen} onOpenChange={close} />
-      
-      <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/accessibility" element={<AccessibilityStatement />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      
-      <Route
-        element={
-          <ProtectedRoute>
-            <AppLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/goals" element={<Goals />} />
-        <Route path="/goals/new" element={<NewGoal />} />
-        <Route path="/goals/:id" element={<GoalDetail />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/tasks/:id" element={<TaskDetail />} />
-        <Route path="/quick-todos" element={<QuickTodos />} />
-        <Route path="/templates" element={<Templates />} />
-        <Route path="/recurring-tasks" element={<RecurringTasks />} />
-        <Route path="/tags" element={<TagManagement />} />
-        <Route path="/automation" element={<Automation />} />
-        <Route path="/habits" element={<Habits />} />
-        <Route path="/habits/:id" element={<HabitDetail />} />
-        <Route path="/reflections" element={<Reflections />} />
-        <Route path="/reflections/:id" element={<ReflectionDetail />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/notes" element={<Notes />} />
-        <Route path="/gamification" element={<Gamification />} />
-        <Route path="/profile-assessment" element={<ProfileAssessment />} />
-        <Route path="/ai-insights" element={<AIInsights />} />
-        <Route path="/admin/api-management" element={<APIManagementDashboard />} />
-        <Route path="/settings/accessibility" element={<AccessibilitySettingsPage />} />
-      </Route>
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route
+              path="/profile"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Profile />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/goals"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Goals />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/goals/new"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <NewGoal />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/goals/:id"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <GoalDetail />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/tasks"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Tasks />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/tasks/:id"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <TaskDetail />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/templates"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Templates />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/recurring-tasks"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <RecurringTasks />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/tags"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <TagManagement />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/automation"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Automation />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/quick-todos"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <QuickTodos />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/habits"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Habits />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/habits/:id"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <HabitDetail />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/reflections"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Reflections />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/reflections/:id"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <ReflectionDetail />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Projects />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/notes"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Notes />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/gamification"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Gamification />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/profile-assessment"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <ProfileAssessment />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/ai-insights"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <AIInsights />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Analytics />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/team"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Team />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/processes"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <Processes />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/settings/accessibility"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <AccessibilitySettingsPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/admin/api"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <APIManagementDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/system/status"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <SystemStatus />
+                </Suspense>
+              }
+            />
+          </Route>
 
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    </>
-  );
-};
+          <Route
+            path="/accessibility-statement"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <AccessibilityStatement />
+              </Suspense>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <NotFound />
+              </Suspense>
+            }
+          />
+        </Routes>
 
-const App = () => {
-  const queryClient = useMemo(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 5 * 60 * 1000,
-            refetchOnWindowFocus: false,
-          },
-        },
-      }),
-    []
-  );
-
-  return (
-    <ErrorBoundary fallback={PageErrorFallback} level="page">
-      <QueryClientProvider client={queryClient}>
-        <AccessibilityProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AuthProvider>
-                <ModulesProvider>
-                  <AppContent />
-                </ModulesProvider>
-              </AuthProvider>
-            </BrowserRouter>
-          </TooltipProvider>
-        </AccessibilityProvider>
-      </QueryClientProvider>
+        <KeyboardShortcutsDialog open={open} onOpenChange={setOpen} />
+        <Toaster />
+        <Sonner />
+      </TooltipProvider>
     </ErrorBoundary>
   );
-};
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ModulesProvider>
+          <AccessibilityProvider>
+            <BrowserRouter>
+              <RouteAnnouncer />
+              <AppContent />
+            </BrowserRouter>
+          </AccessibilityProvider>
+        </ModulesProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
