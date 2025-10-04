@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -64,7 +65,8 @@ const mockTemplates: IntegrationTemplate[] = [
       notification_settings: {
         success_notifications: true,
         error_notifications: true,
-        daily_summary: true
+        daily_summary: true,
+        email_notifications: true
       }
     },
     required_features: ["webhooks", "real_time_sync"],
@@ -96,7 +98,8 @@ const mockTemplates: IntegrationTemplate[] = [
       notification_settings: {
         success_notifications: false,
         error_notifications: true,
-        daily_summary: true
+        daily_summary: true,
+        email_notifications: false
       }
     },
     required_features: ["calendar_sync", "analytics"],
@@ -128,7 +131,8 @@ const mockTemplates: IntegrationTemplate[] = [
       notification_settings: {
         success_notifications: true,
         error_notifications: true,
-        daily_summary: false
+        daily_summary: false,
+        email_notifications: true
       }
     },
     required_features: ["document_sync", "collaboration_tracking"],
@@ -160,7 +164,8 @@ const mockTemplates: IntegrationTemplate[] = [
       notification_settings: {
         success_notifications: true,
         error_notifications: true,
-        daily_summary: true
+        daily_summary: true,
+        email_notifications: true
       }
     },
     required_features: ["bi_directional_sync", "webhooks"],
@@ -192,7 +197,8 @@ const mockTemplates: IntegrationTemplate[] = [
       notification_settings: {
         success_notifications: false,
         error_notifications: true,
-        daily_summary: true
+        daily_summary: true,
+        email_notifications: false
       }
     },
     required_features: ["real_time_sync", "analytics"],
@@ -221,7 +227,8 @@ const mockTemplates: IntegrationTemplate[] = [
       notification_settings: {
         success_notifications: true,
         error_notifications: true,
-        daily_summary: false
+        daily_summary: false,
+        email_notifications: true
       }
     },
     required_features: ["custom_endpoints", "data_transformation"],

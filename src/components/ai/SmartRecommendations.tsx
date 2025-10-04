@@ -21,7 +21,8 @@ import {
   CheckCircle,
   X,
   RotateCcw,
-  Filter
+  Filter,
+  BarChart3
 } from 'lucide-react';
 
 interface SmartRecommendation {
@@ -110,7 +111,11 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
           'Set recurring morning focus blocks'
         ],
         relatedData: {
-          tasks: userContext.currentTasks.filter(t => t.priority === 'high').slice(0, 3),
+          tasks: userContext.currentTasks.filter(t => t.priority === 'high').slice(0, 3).map(t => ({
+            id: t.id,
+            title: t.title,
+            status: 'pending'
+          })),
           patterns: [
             { type: 'peak_performance', description: 'Highest efficiency at 9-11 AM (78% completion rate)' },
             { type: 'task_completion', description: 'Morning tasks completed 23% faster' }

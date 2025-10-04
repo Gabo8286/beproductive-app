@@ -29,9 +29,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Calendar,
-  CalendarIcon
-} from "@/components/ui/calendar";
+  Calendar as CalendarIcon
+} from "lucide-react";
 import {
   Popover,
   PopoverContent,

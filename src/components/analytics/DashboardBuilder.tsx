@@ -42,7 +42,7 @@ import {
   Copy,
   Trash2,
   Move,
-  ResizableIcon,
+  Maximize2,
   BarChart3,
   LineChart,
   PieChart,
@@ -241,12 +241,8 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
           }
         });
       } else {
-        await createDashboard.mutateAsync({
-          ...editingDashboard,
-          id: undefined as any,
-          created_at: undefined as any,
-          updated_at: undefined as any
-        });
+        const { id, created_at, updated_at, ...dashboardData } = editingDashboard;
+        await createDashboard.mutateAsync(dashboardData);
       }
       onSave?.(editingDashboard);
     } catch (error) {
