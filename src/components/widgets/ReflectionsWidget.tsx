@@ -29,30 +29,32 @@ export function ReflectionsWidget() {
 
   const { data: reflections = [], isLoading } = useReflections(workspaceId);
 
-  const thisWeekReflections = reflections.filter(reflection => {
+  const thisWeekReflections = reflections.filter((reflection) => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(reflection.created_at) > weekAgo;
   });
 
   const recentReflection = reflections[0];
-  
+
   // Convert mood to numeric score for average calculation
   const moodToScore = (mood?: string) => {
     const scores: Record<string, number> = {
-      'amazing': 10,
-      'great': 8,
-      'good': 6,
-      'neutral': 5,
-      'bad': 3,
-      'terrible': 1
+      amazing: 10,
+      great: 8,
+      good: 6,
+      neutral: 5,
+      bad: 3,
+      terrible: 1,
     };
     return mood ? scores[mood] || 5 : 5;
   };
 
-  const averageMood = reflections.length > 0
-    ? reflections.reduce((sum, r) => sum + moodToScore(r.mood), 0) / reflections.length
-    : 5;
+  const averageMood =
+    reflections.length > 0
+      ? reflections.reduce((sum, r) => sum + moodToScore(r.mood), 0) /
+        reflections.length
+      : 5;
 
   const moodEmoji = averageMood >= 8 ? "😊" : averageMood >= 6 ? "😐" : "😔";
 
@@ -74,8 +76,12 @@ export function ReflectionsWidget() {
       <div className="space-y-4">
         {/* Week Overview */}
         <div className="text-center">
-          <div className="text-2xl font-bold text-success">{thisWeekReflections.length}</div>
-          <div className="text-xs text-muted-foreground">Reflections this week</div>
+          <div className="text-2xl font-bold text-success">
+            {thisWeekReflections.length}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Reflections this week
+          </div>
         </div>
 
         {/* Mood Indicator */}
@@ -105,9 +111,9 @@ export function ReflectionsWidget() {
 
         {/* Quick Actions */}
         <div className="flex gap-2 pt-2">
-          <Button 
-            size="sm" 
-            onClick={() => navigate('/reflections')}
+          <Button
+            size="sm"
+            onClick={() => navigate("/reflections")}
             className="flex-1 apple-button"
           >
             <TrendingUp className="h-4 w-4 mr-2" />

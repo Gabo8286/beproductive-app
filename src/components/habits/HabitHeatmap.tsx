@@ -3,8 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useHabitEntries } from "@/hooks/useHabitEntries";
-import { format, startOfYear, endOfYear, eachDayOfInterval, getDay } from "date-fns";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  format,
+  startOfYear,
+  endOfYear,
+  eachDayOfInterval,
+  getDay,
+} from "date-fns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface HabitHeatmapProps {
@@ -14,32 +25,32 @@ interface HabitHeatmapProps {
 
 export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
   const [year, setYear] = useState(new Date().getFullYear());
-  
+
   const yearStart = startOfYear(new Date(year, 0, 1));
   const yearEnd = endOfYear(new Date(year, 11, 31));
-  
+
   const { data: entries } = useHabitEntries(
     habitId,
-    format(yearStart, 'yyyy-MM-dd'),
-    format(yearEnd, 'yyyy-MM-dd')
+    format(yearStart, "yyyy-MM-dd"),
+    format(yearEnd, "yyyy-MM-dd"),
   );
 
   const days = eachDayOfInterval({ start: yearStart, end: yearEnd });
 
   const getEntryForDate = (date: Date) => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    return entries?.find(e => e.date === dateStr);
+    const dateStr = format(date, "yyyy-MM-dd");
+    return entries?.find((e) => e.date === dateStr);
   };
 
   const getIntensityLevel = (status?: string): 0 | 1 | 2 | 3 | 4 => {
     switch (status) {
-      case 'completed':
+      case "completed":
         return 4;
-      case 'partial':
+      case "partial":
         return 2;
-      case 'skipped':
+      case "skipped":
         return 1;
-      case 'missed':
+      case "missed":
         return 1;
       default:
         return 0;
@@ -64,7 +75,7 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
   // Group days by week
   const weeks: Date[][] = [];
   let currentWeek: Date[] = [];
-  
+
   // Pad beginning of year to start on Sunday
   const firstDayOfWeek = getDay(days[0]);
   for (let i = 0; i < firstDayOfWeek; i++) {
@@ -85,10 +96,14 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
 
   const stats = {
     totalDays: days.length,
-    completed: entries?.filter(e => e.status === 'completed').length || 0,
-    rate: entries?.length 
-      ? ((entries.filter(e => e.status === 'completed').length / days.length) * 100).toFixed(1)
-      : "0.0"
+    completed: entries?.filter((e) => e.status === "completed").length || 0,
+    rate: entries?.length
+      ? (
+          (entries.filter((e) => e.status === "completed").length /
+            days.length) *
+          100
+        ).toFixed(1)
+      : "0.0",
   };
 
   return (
@@ -126,8 +141,24 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
             {/* Month labels */}
             <div className="flex mb-2">
               <div className="w-6" />
-              {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((month, i) => (
-                <div key={month} className="flex-1 text-xs text-muted-foreground text-center">
+              {[
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ].map((month, i) => (
+                <div
+                  key={month}
+                  className="flex-1 text-xs text-muted-foreground text-center"
+                >
                   {i % 2 === 0 ? month : ""}
                 </div>
               ))}
@@ -156,7 +187,9 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
 
                       const entry = getEntryForDate(day);
                       const level = getIntensityLevel(entry?.status);
-                      const isToday = format(day, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
+                      const isToday =
+                        format(day, "yyyy-MM-dd") ===
+                        format(new Date(), "yyyy-MM-dd");
 
                       return (
                         <Tooltip key={dayIndex}>
@@ -165,14 +198,14 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
                               className={cn(
                                 "w-3 h-3 rounded-sm cursor-pointer transition-transform hover:scale-125",
                                 getIntensityColor(level),
-                                isToday && "ring-2 ring-primary"
+                                isToday && "ring-2 ring-primary",
                               )}
                             />
                           </TooltipTrigger>
                           <TooltipContent>
                             <div className="text-xs">
                               <div className="font-semibold">
-                                {format(day, 'MMM dd, yyyy')}
+                                {format(day, "MMM dd, yyyy")}
                               </div>
                               {entry ? (
                                 <div className="mt-1">
@@ -184,7 +217,9 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
                                   )}
                                 </div>
                               ) : (
-                                <div className="text-muted-foreground">No entry</div>
+                                <div className="text-muted-foreground">
+                                  No entry
+                                </div>
                               )}
                             </div>
                           </TooltipContent>
@@ -204,7 +239,10 @@ export function HabitHeatmap({ habitId, habitTitle }: HabitHeatmapProps) {
               {[0, 1, 2, 3, 4].map((level) => (
                 <div
                   key={level}
-                  className={cn("w-3 h-3 rounded-sm", getIntensityColor(level as 0 | 1 | 2 | 3 | 4))}
+                  className={cn(
+                    "w-3 h-3 rounded-sm",
+                    getIntensityColor(level as 0 | 1 | 2 | 3 | 4),
+                  )}
                 />
               ))}
             </div>

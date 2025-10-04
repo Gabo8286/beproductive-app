@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, TrendingUp, Calendar, Target, Heart, Sparkles } from "lucide-react";
+import {
+  Brain,
+  TrendingUp,
+  Calendar,
+  Target,
+  Heart,
+  Sparkles,
+} from "lucide-react";
 import MoodAnalytics from "./MoodAnalytics";
 import StreakAnalytics from "./StreakAnalytics";
 import PersonalGrowthMetrics from "./PersonalGrowthMetrics";
@@ -12,21 +19,30 @@ interface ReflectionAnalyticsDashboardProps {
   workspaceId: string;
 }
 
-export default function ReflectionAnalyticsDashboard({ workspaceId }: ReflectionAnalyticsDashboardProps) {
+export default function ReflectionAnalyticsDashboard({
+  workspaceId,
+}: ReflectionAnalyticsDashboardProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Reflection Analytics</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            Reflection Analytics
+          </h2>
           <p className="text-muted-foreground">
-            Discover patterns, track growth, and gain insights from your reflections
+            Discover patterns, track growth, and gain insights from your
+            reflections
           </p>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview" className="gap-2">
             <Brain className="h-4 w-4" />
@@ -60,21 +76,27 @@ export default function ReflectionAnalyticsDashboard({ workspaceId }: Reflection
             <PersonalGrowthMetrics workspaceId={workspaceId} compact />
             <Card className="p-6">
               <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">Quick Stats</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Quick Stats
+                </p>
                 <div className="space-y-3">
                   <div>
                     <p className="text-2xl font-bold">87%</p>
-                    <p className="text-xs text-muted-foreground">Consistency Score</p>
+                    <p className="text-xs text-muted-foreground">
+                      Consistency Score
+                    </p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold">156</p>
-                    <p className="text-xs text-muted-foreground">Total Reflections</p>
+                    <p className="text-xs text-muted-foreground">
+                      Total Reflections
+                    </p>
                   </div>
                 </div>
               </div>
             </Card>
           </div>
-          
+
           <div className="grid gap-6 lg:grid-cols-2">
             <MoodAnalytics workspaceId={workspaceId} />
             <ContentAnalytics workspaceId={workspaceId} />
@@ -101,8 +123,8 @@ export default function ReflectionAnalyticsDashboard({ workspaceId }: Reflection
           <Card className="p-6">
             <h3 className="text-lg font-semibold mb-4">Personal Insights</h3>
             <p className="text-muted-foreground">
-              AI-powered insights coming soon. We're analyzing your reflection patterns to provide
-              meaningful personal growth recommendations.
+              AI-powered insights coming soon. We're analyzing your reflection
+              patterns to provide meaningful personal growth recommendations.
             </p>
           </Card>
         </TabsContent>

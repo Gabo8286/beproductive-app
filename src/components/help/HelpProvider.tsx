@@ -1,5 +1,16 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { ContextualHelp, HelpArticle, ContextualTip, SupportTicket } from './ContextualHelp';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import {
+  ContextualHelp,
+  HelpArticle,
+  ContextualTip,
+  SupportTicket,
+} from "./ContextualHelp";
 
 export interface HelpContextValue {
   // Articles
@@ -15,7 +26,9 @@ export interface HelpContextValue {
   dismissedTips: string[];
 
   // Support
-  submitTicket: (ticket: Omit<SupportTicket, 'id' | 'createdAt' | 'status'>) => Promise<string>;
+  submitTicket: (
+    ticket: Omit<SupportTicket, "id" | "createdAt" | "status">,
+  ) => Promise<string>;
   getTickets: () => SupportTicket[];
 
   // Settings
@@ -25,7 +38,9 @@ export interface HelpContextValue {
     autoShowTips: boolean;
     tipDelay: number;
   };
-  updateHelpSettings: (settings: Partial<HelpContextValue['helpSettings']>) => void;
+  updateHelpSettings: (
+    settings: Partial<HelpContextValue["helpSettings"]>,
+  ) => void;
 
   // State
   currentPage: string;
@@ -44,8 +59,8 @@ interface HelpProviderProps {
 
 const DEFAULT_ARTICLES: HelpArticle[] = [
   {
-    id: 'getting-started',
-    title: 'Getting Started with Spark Bloom Flow',
+    id: "getting-started",
+    title: "Getting Started with Spark Bloom Flow",
     content: `
       Welcome to Spark Bloom Flow! This guide will help you get started with the basics.
 
@@ -73,19 +88,19 @@ const DEFAULT_ARTICLES: HelpArticle[] = [
 
       Need more help? Check out our video tutorials or contact support.
     `,
-    category: 'Getting Started',
-    tags: ['basics', 'tutorial', 'beginner'],
-    difficulty: 'beginner',
+    category: "Getting Started",
+    tags: ["basics", "tutorial", "beginner"],
+    difficulty: "beginner",
     readTime: 8,
     helpful: 125,
     notHelpful: 3,
-    lastUpdated: new Date('2024-01-15'),
-    videoUrl: 'https://example.com/getting-started',
-    relatedArticles: ['task-management-basics', 'habit-tracking-101']
+    lastUpdated: new Date("2024-01-15"),
+    videoUrl: "https://example.com/getting-started",
+    relatedArticles: ["task-management-basics", "habit-tracking-101"],
   },
   {
-    id: 'task-management-basics',
-    title: 'Task Management Basics',
+    id: "task-management-basics",
+    title: "Task Management Basics",
     content: `
       Master the fundamentals of task management in Spark Bloom Flow.
 
@@ -112,18 +127,18 @@ const DEFAULT_ARTICLES: HelpArticle[] = [
       - Use the Eisenhower Matrix for prioritization
       - Celebrate completed tasks!
     `,
-    category: 'Tasks',
-    tags: ['tasks', 'organization', 'productivity'],
-    difficulty: 'beginner',
+    category: "Tasks",
+    tags: ["tasks", "organization", "productivity"],
+    difficulty: "beginner",
     readTime: 6,
     helpful: 89,
     notHelpful: 2,
-    lastUpdated: new Date('2024-01-12'),
-    relatedArticles: ['getting-started', 'advanced-task-features']
+    lastUpdated: new Date("2024-01-12"),
+    relatedArticles: ["getting-started", "advanced-task-features"],
   },
   {
-    id: 'habit-tracking-101',
-    title: 'Habit Tracking 101',
+    id: "habit-tracking-101",
+    title: "Habit Tracking 101",
     content: `
       Build lasting habits with our comprehensive tracking system.
 
@@ -152,18 +167,18 @@ const DEFAULT_ARTICLES: HelpArticle[] = [
       - Skipping tracking when you miss a day
       - Not celebrating progress
     `,
-    category: 'Habits',
-    tags: ['habits', 'tracking', 'behavior'],
-    difficulty: 'beginner',
+    category: "Habits",
+    tags: ["habits", "tracking", "behavior"],
+    difficulty: "beginner",
     readTime: 7,
     helpful: 156,
     notHelpful: 4,
-    lastUpdated: new Date('2024-01-10'),
-    relatedArticles: ['getting-started', 'advanced-habit-features']
+    lastUpdated: new Date("2024-01-10"),
+    relatedArticles: ["getting-started", "advanced-habit-features"],
   },
   {
-    id: 'analytics-overview',
-    title: 'Understanding Your Analytics',
+    id: "analytics-overview",
+    title: "Understanding Your Analytics",
     content: `
       Get insights into your productivity patterns and progress.
 
@@ -193,63 +208,67 @@ const DEFAULT_ARTICLES: HelpArticle[] = [
       4. Select format (CSV, PDF)
       5. Download your report
     `,
-    category: 'Analytics',
-    tags: ['analytics', 'data', 'insights'],
-    difficulty: 'intermediate',
+    category: "Analytics",
+    tags: ["analytics", "data", "insights"],
+    difficulty: "intermediate",
     readTime: 10,
     helpful: 78,
     notHelpful: 5,
-    lastUpdated: new Date('2024-01-08'),
-    relatedArticles: ['advanced-analytics', 'data-export']
-  }
+    lastUpdated: new Date("2024-01-08"),
+    relatedArticles: ["advanced-analytics", "data-export"],
+  },
 ];
 
 const DEFAULT_TIPS: ContextualTip[] = [
   {
-    id: 'dashboard-welcome',
+    id: "dashboard-welcome",
     element: '[data-help="dashboard"]',
-    title: 'Welcome to Your Dashboard',
-    content: 'This is your command center. Here you can see today\'s tasks, habit progress, and quick stats.',
-    position: 'bottom',
-    trigger: 'auto',
+    title: "Welcome to Your Dashboard",
+    content:
+      "This is your command center. Here you can see today's tasks, habit progress, and quick stats.",
+    position: "bottom",
+    trigger: "auto",
     delay: 2000,
     showOnce: true,
-    category: 'dashboard'
+    category: "dashboard",
   },
   {
-    id: 'task-quick-add',
+    id: "task-quick-add",
     element: '[data-help="task-add"]',
-    title: 'Quick Task Creation',
-    content: 'Click here to quickly add a new task. You can also use Ctrl+N as a keyboard shortcut.',
-    position: 'bottom',
-    trigger: 'hover',
+    title: "Quick Task Creation",
+    content:
+      "Click here to quickly add a new task. You can also use Ctrl+N as a keyboard shortcut.",
+    position: "bottom",
+    trigger: "hover",
     delay: 500,
-    category: 'tasks'
+    category: "tasks",
   },
   {
-    id: 'habit-streak',
+    id: "habit-streak",
     element: '[data-help="habit-streak"]',
-    title: 'Habit Streaks',
-    content: 'Your streak shows how many consecutive days you\'ve completed this habit. Keep it going!',
-    position: 'top',
-    trigger: 'hover',
-    category: 'habits'
+    title: "Habit Streaks",
+    content:
+      "Your streak shows how many consecutive days you've completed this habit. Keep it going!",
+    position: "top",
+    trigger: "hover",
+    category: "habits",
   },
   {
-    id: 'analytics-filter',
+    id: "analytics-filter",
     element: '[data-help="analytics-filter"]',
-    title: 'Filter Your Data',
-    content: 'Use these filters to view specific time periods or categories in your analytics.',
-    position: 'left',
-    trigger: 'focus',
-    category: 'analytics'
-  }
+    title: "Filter Your Data",
+    content:
+      "Use these filters to view specific time periods or categories in your analytics.",
+    position: "left",
+    trigger: "focus",
+    category: "analytics",
+  },
 ];
 
 export const HelpProvider: React.FC<HelpProviderProps> = ({
   children,
   userId,
-  initialPage = 'dashboard'
+  initialPage = "dashboard",
 }) => {
   const [articles] = useState<HelpArticle[]>(DEFAULT_ARTICLES);
   const [tips] = useState<ContextualTip[]>(DEFAULT_TIPS);
@@ -261,12 +280,12 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({
     showTips: true,
     enableKeyboardShortcuts: true,
     autoShowTips: true,
-    tipDelay: 2000
+    tipDelay: 2000,
   });
 
   // Load dismissed tips from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('help-dismissed-tips');
+    const saved = localStorage.getItem("help-dismissed-tips");
     if (saved) {
       setDismissedTips(JSON.parse(saved));
     }
@@ -274,7 +293,7 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({
 
   // Save dismissed tips to localStorage
   useEffect(() => {
-    localStorage.setItem('help-dismissed-tips', JSON.stringify(dismissedTips));
+    localStorage.setItem("help-dismissed-tips", JSON.stringify(dismissedTips));
   }, [dismissedTips]);
 
   // Keyboard shortcuts
@@ -283,41 +302,47 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ctrl/Cmd + ? to toggle help
-      if ((e.ctrlKey || e.metaKey) && e.key === '?') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "?") {
         e.preventDefault();
         toggleHelp();
       }
       // F1 to show help
-      if (e.key === 'F1') {
+      if (e.key === "F1") {
         e.preventDefault();
         setIsHelpVisible(true);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [helpSettings.enableKeyboardShortcuts]);
 
   const searchArticles = (query: string, category?: string): HelpArticle[] => {
-    return articles.filter(article => {
-      const matchesQuery = query === '' ||
+    return articles.filter((article) => {
+      const matchesQuery =
+        query === "" ||
         article.title.toLowerCase().includes(query.toLowerCase()) ||
         article.content.toLowerCase().includes(query.toLowerCase()) ||
-        article.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()));
+        article.tags.some((tag) =>
+          tag.toLowerCase().includes(query.toLowerCase()),
+        );
 
-      const matchesCategory = !category || category === 'all' || article.category === category;
+      const matchesCategory =
+        !category || category === "all" || article.category === category;
 
       return matchesQuery && matchesCategory;
     });
   };
 
   const getArticle = (id: string): HelpArticle | undefined => {
-    return articles.find(article => article.id === id);
+    return articles.find((article) => article.id === id);
   };
 
   const rateArticle = (articleId: string, helpful: boolean) => {
     // In a real app, this would send data to the server
-    console.log(`Article ${articleId} rated as ${helpful ? 'helpful' : 'not helpful'}`);
+    console.log(
+      `Article ${articleId} rated as ${helpful ? "helpful" : "not helpful"}`,
+    );
 
     // Update local state (this would normally be handled by the server)
     // This is just for demo purposes
@@ -326,41 +351,45 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({
   const showTip = (tipId: string) => {
     if (!dismissedTips.includes(tipId)) {
       // Show tip implementation would go here
-      console.log('Showing tip:', tipId);
+      console.log("Showing tip:", tipId);
     }
   };
 
   const dismissTip = (tipId: string) => {
-    setDismissedTips(prev => [...prev, tipId]);
+    setDismissedTips((prev) => [...prev, tipId]);
   };
 
-  const submitTicket = async (ticketData: Omit<SupportTicket, 'id' | 'createdAt' | 'status'>): Promise<string> => {
+  const submitTicket = async (
+    ticketData: Omit<SupportTicket, "id" | "createdAt" | "status">,
+  ): Promise<string> => {
     const ticket: SupportTicket = {
       ...ticketData,
       id: `ticket_${Date.now()}`,
       createdAt: new Date(),
-      status: 'open',
-      userId: userId || 'anonymous'
+      status: "open",
+      userId: userId || "anonymous",
     };
 
-    setSupportTickets(prev => [...prev, ticket]);
+    setSupportTickets((prev) => [...prev, ticket]);
 
     // In a real app, this would send to the server
-    console.log('Support ticket submitted:', ticket);
+    console.log("Support ticket submitted:", ticket);
 
     return ticket.id;
   };
 
   const getTickets = (): SupportTicket[] => {
-    return supportTickets.filter(ticket => ticket.userId === userId);
+    return supportTickets.filter((ticket) => ticket.userId === userId);
   };
 
-  const updateHelpSettings = (newSettings: Partial<HelpContextValue['helpSettings']>) => {
-    setHelpSettings(prev => ({ ...prev, ...newSettings }));
+  const updateHelpSettings = (
+    newSettings: Partial<HelpContextValue["helpSettings"]>,
+  ) => {
+    setHelpSettings((prev) => ({ ...prev, ...newSettings }));
   };
 
   const toggleHelp = () => {
-    setIsHelpVisible(prev => !prev);
+    setIsHelpVisible((prev) => !prev);
   };
 
   const contextValue: HelpContextValue = {
@@ -379,7 +408,7 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({
     currentPage,
     setCurrentPage,
     isHelpVisible,
-    toggleHelp
+    toggleHelp,
   };
 
   return (
@@ -398,7 +427,7 @@ export const HelpProvider: React.FC<HelpProviderProps> = ({
 export const useHelp = (): HelpContextValue => {
   const context = useContext(HelpContext);
   if (!context) {
-    throw new Error('useHelp must be used within a HelpProvider');
+    throw new Error("useHelp must be used within a HelpProvider");
   }
   return context;
 };
@@ -411,15 +440,16 @@ export const usePageHelp = (pageName: string) => {
     setCurrentPage(pageName);
   }, [pageName, setCurrentPage]);
 
-  const pageTips = tips.filter(tip => tip.category === pageName);
-  const pageArticles = articles.filter(article =>
-    article.category.toLowerCase() === pageName.toLowerCase() ||
-    article.tags.includes(pageName.toLowerCase())
+  const pageTips = tips.filter((tip) => tip.category === pageName);
+  const pageArticles = articles.filter(
+    (article) =>
+      article.category.toLowerCase() === pageName.toLowerCase() ||
+      article.tags.includes(pageName.toLowerCase()),
   );
 
   return {
     tips: pageTips,
-    articles: pageArticles
+    articles: pageArticles,
   };
 };
 
@@ -427,10 +457,10 @@ export const usePageHelp = (pageName: string) => {
 export const useTips = () => {
   const { tips, showTip, dismissTip, dismissedTips, helpSettings } = useHelp();
 
-  const activeTips = tips.filter(tip => !dismissedTips.includes(tip.id));
+  const activeTips = tips.filter((tip) => !dismissedTips.includes(tip.id));
 
   const triggerTip = (tipId: string) => {
-    const tip = tips.find(t => t.id === tipId);
+    const tip = tips.find((t) => t.id === tipId);
     if (tip && helpSettings.showTips) {
       showTip(tipId);
     }
@@ -439,6 +469,6 @@ export const useTips = () => {
   return {
     tips: activeTips,
     triggerTip,
-    dismissTip
+    dismissTip,
   };
 };

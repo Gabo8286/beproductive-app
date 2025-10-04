@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -25,7 +31,7 @@ import {
   Play,
   Edit,
   Trash2,
-  HelpCircle
+  HelpCircle,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { NaturalLanguageRule } from "@/types/ai-automation";
@@ -33,99 +39,123 @@ import { NaturalLanguageRule } from "@/types/ai-automation";
 export function NaturalLanguageRuleBuilder() {
   const [userInput, setUserInput] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [currentRule, setCurrentRule] = useState<NaturalLanguageRule | null>(null);
+  const [currentRule, setCurrentRule] = useState<NaturalLanguageRule | null>(
+    null,
+  );
   const [showExamples, setShowExamples] = useState(false);
 
   // Mock natural language rules
   const mockRules: NaturalLanguageRule[] = [
     {
-      id: '1',
-      user_input: 'When I create a task with "urgent" in the title, automatically set it to high priority and add a red flag tag',
+      id: "1",
+      user_input:
+        'When I create a task with "urgent" in the title, automatically set it to high priority and add a red flag tag',
       parsed_intent: {
-        action: 'modify_task',
-        conditions: { title_contains: 'urgent' },
-        parameters: { priority: 'high', add_tags: ['urgent', 'red-flag'] },
-        confidence: 0.92
+        action: "modify_task",
+        conditions: { title_contains: "urgent" },
+        parameters: { priority: "high", add_tags: ["urgent", "red-flag"] },
+        confidence: 0.92,
       },
       generated_rule: {
-        name: 'Urgent Task Auto-Priority',
-        ai_type: 'intelligent_tagging',
-        smart_triggers: [{
-          type: 'pattern_based',
-          conditions: { title_keywords: ['urgent'] },
-          confidence_threshold: 0.8
-        }],
-        smart_actions: [{
-          type: 'modify_task',
-          parameters: { priority: 'high', add_tags: ['urgent', 'red-flag'] }
-        }]
+        name: "Urgent Task Auto-Priority",
+        ai_type: "intelligent_tagging",
+        smart_triggers: [
+          {
+            type: "pattern_based",
+            conditions: { title_keywords: ["urgent"] },
+            confidence_threshold: 0.8,
+          },
+        ],
+        smart_actions: [
+          {
+            type: "modify_task",
+            parameters: { priority: "high", add_tags: ["urgent", "red-flag"] },
+          },
+        ],
       },
-      status: 'active',
+      status: "active",
       clarifications_needed: [],
       examples: [
         'Task: "Urgent: Fix server issue" → Priority: High, Tags: urgent, red-flag',
-        'Task: "Urgent client meeting" → Priority: High, Tags: urgent, red-flag'
+        'Task: "Urgent client meeting" → Priority: High, Tags: urgent, red-flag',
       ],
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     },
     {
-      id: '2',
-      user_input: 'If I complete 3 tasks in the "exercise" category, mark my fitness habit as completed for today',
+      id: "2",
+      user_input:
+        'If I complete 3 tasks in the "exercise" category, mark my fitness habit as completed for today',
       parsed_intent: {
-        action: 'update_habit',
-        conditions: { completed_tasks_with_category: 'exercise', count: 3 },
-        parameters: { habit_name: 'fitness', mark_completed: true },
-        confidence: 0.88
+        action: "update_habit",
+        conditions: { completed_tasks_with_category: "exercise", count: 3 },
+        parameters: { habit_name: "fitness", mark_completed: true },
+        confidence: 0.88,
       },
       generated_rule: {
-        name: 'Exercise Tasks to Habit Sync',
-        ai_type: 'cross_module_chain',
-        smart_triggers: [{
-          type: 'event_based',
-          conditions: { event: 'task_completed', category: 'exercise', daily_count: 3 }
-        }],
-        smart_actions: [{
-          type: 'update_habit',
-          parameters: { habit_category: 'fitness', mark_completed: true }
-        }]
+        name: "Exercise Tasks to Habit Sync",
+        ai_type: "cross_module_chain",
+        smart_triggers: [
+          {
+            type: "event_based",
+            conditions: {
+              event: "task_completed",
+              category: "exercise",
+              daily_count: 3,
+            },
+          },
+        ],
+        smart_actions: [
+          {
+            type: "update_habit",
+            parameters: { habit_category: "fitness", mark_completed: true },
+          },
+        ],
       },
-      status: 'active',
+      status: "active",
       clarifications_needed: [],
       examples: [
         'Complete "Morning run" + "Gym session" + "Yoga" → Fitness habit marked complete',
-        'Complete 3 exercise tasks → Daily fitness goal achieved'
+        "Complete 3 exercise tasks → Daily fitness goal achieved",
       ],
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     },
     {
-      id: '3',
-      user_input: 'When it\'s Friday afternoon, automatically suggest I review my weekly goals',
+      id: "3",
+      user_input:
+        "When it's Friday afternoon, automatically suggest I review my weekly goals",
       parsed_intent: {
-        action: 'send_notification',
-        conditions: { day: 'friday', time: 'afternoon' },
-        parameters: { notification_type: 'goal_review_reminder', message: 'Time for weekly goal review' },
-        confidence: 0.85
+        action: "send_notification",
+        conditions: { day: "friday", time: "afternoon" },
+        parameters: {
+          notification_type: "goal_review_reminder",
+          message: "Time for weekly goal review",
+        },
+        confidence: 0.85,
       },
       generated_rule: {
-        name: 'Weekly Goal Review Reminder',
-        ai_type: 'predictive_scheduling',
-        smart_triggers: [{
-          type: 'time_based',
-          conditions: { day_of_week: 5, hour_range: [13, 17] }
-        }],
-        smart_actions: [{
-          type: 'send_notification',
-          parameters: { type: 'goal_review', include_progress: true }
-        }]
+        name: "Weekly Goal Review Reminder",
+        ai_type: "predictive_scheduling",
+        smart_triggers: [
+          {
+            type: "time_based",
+            conditions: { day_of_week: 5, hour_range: [13, 17] },
+          },
+        ],
+        smart_actions: [
+          {
+            type: "send_notification",
+            parameters: { type: "goal_review", include_progress: true },
+          },
+        ],
       },
-      status: 'active',
+      status: "active",
       clarifications_needed: [],
       examples: [
         'Friday 3 PM → "Time to review your weekly goals!"',
-        'Friday afternoon → Goal review notification sent'
+        "Friday afternoon → Goal review notification sent",
       ],
-      created_at: new Date().toISOString()
-    }
+      created_at: new Date().toISOString(),
+    },
   ];
 
   const exampleInputs = [
@@ -136,7 +166,7 @@ export function NaturalLanguageRuleBuilder() {
     "When someone assigns me a task in team collaboration, automatically add it to my personal task list",
     "If I complete a task that's part of a process, automatically move to the next process step",
     "When I finish writing a note, suggest related goals or tasks based on the content",
-    "If my productivity score drops below 70%, automatically suggest a break or schedule easier tasks"
+    "If my productivity score drops below 70%, automatically suggest a break or schedule easier tasks",
   ];
 
   const handleSubmit = async () => {
@@ -145,34 +175,38 @@ export function NaturalLanguageRuleBuilder() {
     setIsProcessing(true);
 
     // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Mock parsed rule
     const mockParsedRule: NaturalLanguageRule = {
       id: Date.now().toString(),
       user_input: userInput,
       parsed_intent: {
-        action: 'modify_task',
+        action: "modify_task",
         conditions: { parsed_from_input: true },
         parameters: { ai_generated: true },
-        confidence: 0.85
+        confidence: 0.85,
       },
       generated_rule: {
-        name: 'AI Generated Rule',
-        ai_type: 'natural_language_rule',
-        smart_triggers: [{
-          type: 'natural_language',
-          conditions: { user_input: userInput }
-        }],
-        smart_actions: [{
-          type: 'ai_suggestion',
-          parameters: { generated_from_nl: true }
-        }]
+        name: "AI Generated Rule",
+        ai_type: "natural_language_rule",
+        smart_triggers: [
+          {
+            type: "natural_language",
+            conditions: { user_input: userInput },
+          },
+        ],
+        smart_actions: [
+          {
+            type: "ai_suggestion",
+            parameters: { generated_from_nl: true },
+          },
+        ],
       },
-      status: 'confirmed',
+      status: "confirmed",
       clarifications_needed: [],
       examples: [`Based on: "${userInput}"`],
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     };
 
     setCurrentRule(mockParsedRule);
@@ -183,33 +217,33 @@ export function NaturalLanguageRuleBuilder() {
     setUserInput(example);
   };
 
-  const getStatusIcon = (status: NaturalLanguageRule['status']) => {
+  const getStatusIcon = (status: NaturalLanguageRule["status"]) => {
     switch (status) {
-      case 'active':
+      case "active":
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'parsing':
+      case "parsing":
         return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'confirmed':
+      case "confirmed":
         return <Brain className="h-4 w-4 text-blue-600" />;
-      case 'failed':
+      case "failed":
         return <AlertCircle className="h-4 w-4 text-red-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-600" />;
     }
   };
 
-  const getStatusColor = (status: NaturalLanguageRule['status']) => {
+  const getStatusColor = (status: NaturalLanguageRule["status"]) => {
     switch (status) {
-      case 'active':
-        return 'text-green-600 bg-green-100';
-      case 'parsing':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'confirmed':
-        return 'text-blue-600 bg-blue-100';
-      case 'failed':
-        return 'text-red-600 bg-red-100';
+      case "active":
+        return "text-green-600 bg-green-100";
+      case "parsing":
+        return "text-yellow-600 bg-yellow-100";
+      case "confirmed":
+        return "text-blue-600 bg-blue-100";
+      case "failed":
+        return "text-red-600 bg-red-100";
       default:
-        return 'text-gray-600 bg-gray-100';
+        return "text-gray-600 bg-gray-100";
     }
   };
 
@@ -240,13 +274,16 @@ export function NaturalLanguageRuleBuilder() {
             Describe Your Automation
           </CardTitle>
           <CardDescription>
-            Describe what you want to automate in plain English, and our AI will create the rule for you
+            Describe what you want to automate in plain English, and our AI will
+            create the rule for you
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="automation-input">What would you like to automate?</Label>
+              <Label htmlFor="automation-input">
+                What would you like to automate?
+              </Label>
               <Textarea
                 id="automation-input"
                 placeholder="e.g., When I create a task with 'urgent' in the title, automatically set it to high priority..."
@@ -309,7 +346,9 @@ export function NaturalLanguageRuleBuilder() {
             <div className="space-y-4">
               <div className="bg-muted p-4 rounded-lg">
                 <h5 className="font-medium mb-2">Original Request</h5>
-                <p className="text-sm text-muted-foreground italic">"{currentRule.user_input}"</p>
+                <p className="text-sm text-muted-foreground italic">
+                  "{currentRule.user_input}"
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -317,12 +356,14 @@ export function NaturalLanguageRuleBuilder() {
                   <h5 className="font-medium mb-2">Parsed Intent</h5>
                   <div className="space-y-2 text-sm">
                     <div>
-                      <span className="font-medium">Action:</span> {currentRule.parsed_intent.action}
+                      <span className="font-medium">Action:</span>{" "}
+                      {currentRule.parsed_intent.action}
                     </div>
                     <div>
-                      <span className="font-medium">Confidence:</span>{' '}
+                      <span className="font-medium">Confidence:</span>{" "}
                       <Badge variant="outline">
-                        {Math.round(currentRule.parsed_intent.confidence * 100)}%
+                        {Math.round(currentRule.parsed_intent.confidence * 100)}
+                        %
                       </Badge>
                     </div>
                   </div>
@@ -332,11 +373,14 @@ export function NaturalLanguageRuleBuilder() {
                   <h5 className="font-medium mb-2">Generated Rule</h5>
                   <div className="space-y-2 text-sm">
                     <div>
-                      <span className="font-medium">Name:</span> {currentRule.generated_rule.name}
+                      <span className="font-medium">Name:</span>{" "}
+                      {currentRule.generated_rule.name}
                     </div>
                     <div>
-                      <span className="font-medium">Type:</span>{' '}
-                      <Badge variant="secondary">{currentRule.generated_rule.ai_type}</Badge>
+                      <span className="font-medium">Type:</span>{" "}
+                      <Badge variant="secondary">
+                        {currentRule.generated_rule.ai_type}
+                      </Badge>
                     </div>
                   </div>
                 </div>
@@ -373,8 +417,13 @@ export function NaturalLanguageRuleBuilder() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         {getStatusIcon(rule.status)}
-                        <h4 className="font-medium">{rule.generated_rule.name}</h4>
-                        <Badge variant="outline" className={getStatusColor(rule.status)}>
+                        <h4 className="font-medium">
+                          {rule.generated_rule.name}
+                        </h4>
+                        <Badge
+                          variant="outline"
+                          className={getStatusColor(rule.status)}
+                        >
                           {rule.status}
                         </Badge>
                       </div>
@@ -394,15 +443,24 @@ export function NaturalLanguageRuleBuilder() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <h5 className="font-medium text-sm mb-1">Confidence Score</h5>
+                      <h5 className="font-medium text-sm mb-1">
+                        Confidence Score
+                      </h5>
                       <div className="flex items-center gap-2">
-                        <Progress value={rule.parsed_intent.confidence * 100} className="h-2 flex-1" />
-                        <span className="text-sm">{Math.round(rule.parsed_intent.confidence * 100)}%</span>
+                        <Progress
+                          value={rule.parsed_intent.confidence * 100}
+                          className="h-2 flex-1"
+                        />
+                        <span className="text-sm">
+                          {Math.round(rule.parsed_intent.confidence * 100)}%
+                        </span>
                       </div>
                     </div>
                     <div>
                       <h5 className="font-medium text-sm mb-1">Type</h5>
-                      <Badge variant="secondary">{rule.generated_rule.ai_type}</Badge>
+                      <Badge variant="secondary">
+                        {rule.generated_rule.ai_type}
+                      </Badge>
                     </div>
                   </div>
 
@@ -432,13 +490,17 @@ export function NaturalLanguageRuleBuilder() {
           <DialogHeader>
             <DialogTitle>Natural Language Automation Examples</DialogTitle>
             <DialogDescription>
-              Click on any example to use it as a starting point for your own automation rule
+              Click on any example to use it as a starting point for your own
+              automation rule
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {exampleInputs.map((example, index) => (
-              <Card key={index} className="cursor-pointer hover:bg-muted/50 transition-colors">
+              <Card
+                key={index}
+                className="cursor-pointer hover:bg-muted/50 transition-colors"
+              >
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm flex-1">{example}</p>

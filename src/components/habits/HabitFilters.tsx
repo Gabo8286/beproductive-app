@@ -1,10 +1,22 @@
 import { Search, Grid, List, SortAsc } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { HabitCategory, HabitType, HabitFrequency, HabitDifficulty, HabitSortBy } from "@/types/habits";
+import {
+  HabitCategory,
+  HabitType,
+  HabitFrequency,
+  HabitDifficulty,
+  HabitSortBy,
+} from "@/types/habits";
 
 interface HabitFiltersProps {
   filters: {
@@ -39,7 +51,9 @@ export function HabitFilters({
           <Input
             placeholder="Search habits..."
             value={filters.search}
-            onChange={(e) => onFiltersChange({ ...filters, search: e.target.value })}
+            onChange={(e) =>
+              onFiltersChange({ ...filters, search: e.target.value })
+            }
             className="pl-10"
           />
         </div>
@@ -123,7 +137,10 @@ export function HabitFilters({
         <Select
           value={filters.difficulty}
           onValueChange={(value) =>
-            onFiltersChange({ ...filters, difficulty: value as HabitDifficulty })
+            onFiltersChange({
+              ...filters,
+              difficulty: value as HabitDifficulty,
+            })
           }
         >
           <SelectTrigger className="w-[150px]">
@@ -138,7 +155,10 @@ export function HabitFilters({
           </SelectContent>
         </Select>
 
-        <Select value={sortBy} onValueChange={(value) => onSortChange(value as HabitSortBy)}>
+        <Select
+          value={sortBy}
+          onValueChange={(value) => onSortChange(value as HabitSortBy)}
+        >
           <SelectTrigger className="w-[150px]">
             <SortAsc className="h-4 w-4 mr-2" />
             <SelectValue placeholder="Sort by" />

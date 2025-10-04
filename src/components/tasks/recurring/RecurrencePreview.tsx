@@ -1,15 +1,24 @@
-import { format } from 'date-fns';
-import { Calendar } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { RecurrencePattern, useUpcomingInstances } from '@/hooks/useRecurringTasks';
+import { format } from "date-fns";
+import { Calendar } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  RecurrencePattern,
+  useUpcomingInstances,
+} from "@/hooks/useRecurringTasks";
 
 interface RecurrencePreviewProps {
   templateId?: string;
   pattern: RecurrencePattern;
 }
 
-export function RecurrencePreview({ templateId, pattern }: RecurrencePreviewProps) {
-  const { data: upcomingDates } = useUpcomingInstances(templateId || 'preview', pattern);
+export function RecurrencePreview({
+  templateId,
+  pattern,
+}: RecurrencePreviewProps) {
+  const { data: upcomingDates } = useUpcomingInstances(
+    templateId || "preview",
+    pattern,
+  );
 
   if (!upcomingDates || upcomingDates.length === 0) {
     return null;
@@ -28,7 +37,7 @@ export function RecurrencePreview({ templateId, pattern }: RecurrencePreviewProp
           {upcomingDates.map((date, index) => (
             <li key={index} className="flex items-center gap-2 text-sm">
               <div className="h-2 w-2 rounded-full bg-primary" />
-              <span>{format(date, 'EEEE, MMMM d, yyyy')}</span>
+              <span>{format(date, "EEEE, MMMM d, yyyy")}</span>
             </li>
           ))}
         </ul>

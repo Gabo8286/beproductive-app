@@ -1,147 +1,45 @@
-import { useAuth } from "@/contexts/AuthContext";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, CheckSquare, Repeat, BookOpen, Sparkles, Users, StickyNote } from "lucide-react";
-import { DatabaseTest } from "@/components/DatabaseTest";
-import { getWelcomeMessage, getMotivationalMessage } from "@/lib/brand";
-import { QuickTodosWidget } from "@/components/quickTodos/QuickTodosWidget";
-import { WidgetProvider } from "@/contexts/WidgetContext";
-import { SmartWidgetGrid } from "@/components/widgets/SmartWidgetGrid";
-import { LayoutConfigPanel } from "@/components/widgets/LayoutConfigPanel";
-import { PersonalizationPanel } from "@/components/widgets/PersonalizationPanel";
-import { JourneyProgressWidget } from "@/components/widgets/JourneyProgressWidget";
-import { QuickActionsWidget } from "@/components/widgets/QuickActionsWidget";
-import { GreetingHeader } from "@/components/dashboard/GreetingHeader";
-import { usePersonalization } from "@/hooks/usePersonalization";
-import { useTheme } from "@/hooks/useTheme";
+import React from "react";
+import { WidgetGrid } from "@/components/widgets/WidgetGrid";
 import {
-  GoalsWidget,
-  TasksWidget,
-  NewQuickTodosWidget,
-  HabitsWidget,
-  ReflectionsWidget,
-  NotesWidget,
-  GamificationWidget,
-  ProductivityProfileWidget,
-  TimeTrackingWidget,
-  SmartRecommendationsWidget
-} from "@/components/widgets";
+  CommandPalette,
+  useCommandPalette,
+} from "@/components/widgets/CommandPalette";
+import { GreetingHeader } from "@/components/dashboard/GreetingHeader";
 
-const journeyFeatures = [
-  {
-    icon: Target,
-    title: "Destinations",
-    subtitle: "Goals",
-    description: "Set meaningful destinations for your journey",
-    color: "text-primary",
-    status: "active" as const,
-  },
-  {
-    icon: CheckSquare,
-    title: "Next Steps",
-    subtitle: "Tasks",
-    description: "Organize the steps needed to move forward",
-    color: "text-warning",
-    status: "active" as const,
-  },
-  {
-    icon: StickyNote,
-    title: "Travel Notes",
-    subtitle: "Quick To-Dos",
-    description: "Capture quick thoughts and reminders",
-    color: "text-warning",
-    status: "active" as const,
-  },
-  {
-    icon: Repeat,
-    title: "Daily Routines",
-    subtitle: "Habits",
-    description: "Build consistent practices that power progress",
-    color: "text-secondary",
-    status: "active" as const,
-  },
-  {
-    icon: BookOpen,
-    title: "Route Adjustments",
-    subtitle: "Reflections",
-    description: "Learn from experiences and adjust your path",
-    color: "text-success",
-    status: "active" as const,
-  },
-  {
-    icon: Sparkles,
-    title: "Journey Insights",
-    subtitle: "AI Guidance",
-    description: "Receive intelligent recommendations for your path",
-    color: "text-primary",
-    status: "coming_soon" as const,
-  },
-  {
-    icon: Users,
-    title: "Shared Journeys",
-    subtitle: "Team Collaboration",
-    description: "Travel together with your team",
-    color: "text-secondary",
-    status: "coming_soon" as const,
-  },
-];
-
-export default function Dashboard() {
-  const { profile } = useAuth();
-  const {
-    personalizedContent,
-    userPreferences,
-    updatePreferences,
-    getTimeBasedGreeting,
-    getMotivationalInsight
-  } = usePersonalization();
-
-  // Apply theme preferences
-  useTheme();
-
-  // Get time-based content
-  const greeting = getTimeBasedGreeting();
-  const insight = getMotivationalInsight();
+const Dashboard: React.FC = () => {
+  const commandPalette = useCommandPalette();
 
   return (
-    <WidgetProvider>
-      <div className="space-y-6 pb-6">
-        {/* Personalized Header */}
-        <GreetingHeader
-          name={profile?.full_name}
-          greeting={greeting}
-          insight={insight}
-        />
+    <div className="container mx-auto px-4 py-6 space-y-6">
+      <GreetingHeader />
 
-        {/* Dashboard Controls */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary journey-float" />
-            <span className="text-sm text-muted-foreground">
-              Your personalized productivity journey
-            </span>
-          </div>
-          <div className="flex gap-2">
-            <PersonalizationPanel />
-            <LayoutConfigPanel />
-          </div>
-        </div>
+      <WidgetGrid className="min-h-[600px]" />
 
-        {/* Smart Widget Grid */}
-        <SmartWidgetGrid enableDragDrop={userPreferences.enableDragDrop}>
-          <GoalsWidget />
-          <TasksWidget />
-          <TimeTrackingWidget />
-          <SmartRecommendationsWidget />
-          <GamificationWidget />
-          <NewQuickTodosWidget />
-          <ProductivityProfileWidget />
-          <NotesWidget />
-          <HabitsWidget />
-          <ReflectionsWidget />
-        </SmartWidgetGrid>
+      <CommandPalette
+        isOpen={commandPalette.isOpen}
+        onOpenChange={commandPalette.close}
+      />
 
-        <DatabaseTest />
+      {/* Quick tip for new users */}
+      <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+        <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+          💡 Pro Tips
+        </h3>
+        <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+          <li>
+            • Press{" "}
+            <kbd className="px-1 py-0.5 bg-blue-100 dark:bg-blue-800 rounded text-xs">
+              ⌘K
+            </kbd>{" "}
+            to open the command palette
+          </li>
+          <li>• Drag widgets to rearrange your dashboard</li>
+          <li>• Click the expand icon on any widget to view the full module</li>
+          <li>• Add up to 6 widgets for optimal productivity</li>
+        </ul>
       </div>
-    </WidgetProvider>
+    </div>
   );
-}
+};
+
+export default Dashboard;

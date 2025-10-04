@@ -40,7 +40,10 @@ export function useCreateQuickTodo() {
       // Optimistic update
       await queryClient.cancelQueries({ queryKey: ["quick-todos"] });
 
-      const previousQuickTodos = queryClient.getQueryData(["quick-todos", profile?.id]);
+      const previousQuickTodos = queryClient.getQueryData([
+        "quick-todos",
+        profile?.id,
+      ]);
 
       const optimisticQuickTodo: QuickTodo = {
         id: `temp-${Date.now()}`,
@@ -55,7 +58,7 @@ export function useCreateQuickTodo() {
 
       queryClient.setQueryData(
         ["quick-todos", profile?.id],
-        (old: QuickTodo[] | undefined) => [optimisticQuickTodo, ...(old || [])]
+        (old: QuickTodo[] | undefined) => [optimisticQuickTodo, ...(old || [])],
       );
 
       return { previousQuickTodos };
@@ -63,7 +66,10 @@ export function useCreateQuickTodo() {
     onError: (error, variables, context) => {
       // Revert optimistic update
       if (context?.previousQuickTodos) {
-        queryClient.setQueryData(["quick-todos", profile?.id], context.previousQuickTodos);
+        queryClient.setQueryData(
+          ["quick-todos", profile?.id],
+          context.previousQuickTodos,
+        );
       }
       toast.error("Failed to create travel note");
       console.error("Create quick todo error:", error);

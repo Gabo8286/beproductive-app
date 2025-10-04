@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -21,7 +27,7 @@ import {
   ArrowRight,
   Eye,
   ThumbsUp,
-  ThumbsDown
+  ThumbsDown,
 } from "lucide-react";
 import {
   Dialog,
@@ -41,7 +47,7 @@ import {
   useAIInsights,
   useLearningData,
   useGenerateAutomationSuggestions,
-  useOptimizeWorkflow
+  useOptimizeWorkflow,
 } from "@/hooks/useAIAutomation";
 import { AutomationSuggestion } from "@/types/ai-automation";
 
@@ -49,23 +55,25 @@ const impactColors = {
   low: "text-green-600 bg-green-100",
   medium: "text-yellow-600 bg-yellow-100",
   high: "text-orange-600 bg-orange-100",
-  critical: "text-red-600 bg-red-100"
+  critical: "text-red-600 bg-red-100",
 };
 
 const complexityColors = {
   simple: "text-green-600 bg-green-100",
   moderate: "text-yellow-600 bg-yellow-100",
-  complex: "text-orange-600 bg-orange-100"
+  complex: "text-orange-600 bg-orange-100",
 };
 
 export function AIAutomationDashboard() {
   const [activeTab, setActiveTab] = useState("suggestions");
-  const [selectedSuggestion, setSelectedSuggestion] = useState<AutomationSuggestion | null>(null);
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<AutomationSuggestion | null>(null);
   const [implementDialogOpen, setImplementDialogOpen] = useState(false);
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
 
-  const { data: suggestions = [], isLoading: suggestionsLoading } = useAutomationSuggestions();
+  const { data: suggestions = [], isLoading: suggestionsLoading } =
+    useAutomationSuggestions();
   const { data: insights = [], isLoading: insightsLoading } = useAIInsights();
   const { data: learningData, isLoading: learningLoading } = useLearningData();
   const implementSuggestion = useImplementSuggestion();
@@ -78,7 +86,7 @@ export function AIAutomationDashboard() {
 
     try {
       await implementSuggestion.mutateAsync({
-        suggestionId: selectedSuggestion.id
+        suggestionId: selectedSuggestion.id,
       });
       setImplementDialogOpen(false);
       setSelectedSuggestion(null);
@@ -93,7 +101,7 @@ export function AIAutomationDashboard() {
     try {
       await rejectSuggestion.mutateAsync({
         suggestionId: selectedSuggestion.id,
-        reason: rejectionReason
+        reason: rejectionReason,
       });
       setRejectDialogOpen(false);
       setSelectedSuggestion(null);
@@ -103,7 +111,11 @@ export function AIAutomationDashboard() {
     }
   };
 
-  const SuggestionCard = ({ suggestion }: { suggestion: AutomationSuggestion }) => (
+  const SuggestionCard = ({
+    suggestion,
+  }: {
+    suggestion: AutomationSuggestion;
+  }) => (
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader>
         <div className="flex items-start justify-between">
@@ -119,10 +131,16 @@ export function AIAutomationDashboard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className={impactColors[suggestion.potential_impact]}>
+            <Badge
+              variant="outline"
+              className={impactColors[suggestion.potential_impact]}
+            >
               {suggestion.potential_impact} impact
             </Badge>
-            <Badge variant="outline" className={complexityColors[suggestion.implementation_complexity]}>
+            <Badge
+              variant="outline"
+              className={complexityColors[suggestion.implementation_complexity]}
+            >
               {suggestion.implementation_complexity}
             </Badge>
           </div>
@@ -151,7 +169,9 @@ export function AIAutomationDashboard() {
           {/* Reasoning */}
           <div className="bg-muted p-3 rounded-lg">
             <h5 className="font-medium text-sm mb-1">AI Reasoning</h5>
-            <p className="text-sm text-muted-foreground">{suggestion.reasoning}</p>
+            <p className="text-sm text-muted-foreground">
+              {suggestion.reasoning}
+            </p>
           </div>
 
           {/* Evidence */}
@@ -159,7 +179,10 @@ export function AIAutomationDashboard() {
             <h5 className="font-medium text-sm mb-2">Supporting Evidence</h5>
             <ul className="space-y-1">
               {suggestion.evidence.map((evidence, index) => (
-                <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                <li
+                  key={index}
+                  className="text-sm text-muted-foreground flex items-start gap-2"
+                >
                   <CheckCircle className="h-3 w-3 mt-0.5 text-green-500 flex-shrink-0" />
                   {evidence}
                 </li>
@@ -217,7 +240,9 @@ export function AIAutomationDashboard() {
             onClick={() => generateSuggestions.mutate({})}
             disabled={generateSuggestions.isPending}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${generateSuggestions.isPending ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${generateSuggestions.isPending ? "animate-spin" : ""}`}
+            />
             Analyze Patterns
           </Button>
           <Button>
@@ -231,25 +256,40 @@ export function AIAutomationDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Suggestions</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Suggestions
+            </CardTitle>
             <Lightbulb className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{suggestions.length}</div>
             <p className="text-xs text-muted-foreground">
-              {suggestions.filter(s => s.potential_impact === 'high' || s.potential_impact === 'critical').length} high impact
+              {
+                suggestions.filter(
+                  (s) =>
+                    s.potential_impact === "high" ||
+                    s.potential_impact === "critical",
+                ).length
+              }{" "}
+              high impact
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Potential Time Saved</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Potential Time Saved
+            </CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {suggestions.reduce((sum, s) => sum + s.estimated_time_saved_minutes, 0)}m
+              {suggestions.reduce(
+                (sum, s) => sum + s.estimated_time_saved_minutes,
+                0,
+              )}
+              m
             </div>
             <p className="text-xs text-muted-foreground">Per week estimated</p>
           </CardContent>
@@ -262,7 +302,12 @@ export function AIAutomationDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {Math.round((suggestions.reduce((sum, s) => sum + s.confidence, 0) / suggestions.length) * 100)}%
+              {Math.round(
+                (suggestions.reduce((sum, s) => sum + s.confidence, 0) /
+                  suggestions.length) *
+                  100,
+              )}
+              %
             </div>
             <p className="text-xs text-muted-foreground">Average accuracy</p>
           </CardContent>
@@ -270,20 +315,34 @@ export function AIAutomationDashboard() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Learning Score</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Learning Score
+            </CardTitle>
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {learningData ? Math.round(learningData.feedback_history.suggestion_acceptance_rate * 100) : 0}%
+              {learningData
+                ? Math.round(
+                    learningData.feedback_history.suggestion_acceptance_rate *
+                      100,
+                  )
+                : 0}
+              %
             </div>
-            <p className="text-xs text-muted-foreground">Suggestion acceptance</p>
+            <p className="text-xs text-muted-foreground">
+              Suggestion acceptance
+            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
           <TabsTrigger value="insights">AI Insights</TabsTrigger>
@@ -308,9 +367,12 @@ export function AIAutomationDashboard() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Sparkles className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-                <h3 className="text-lg font-semibold mb-2">No suggestions available</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  No suggestions available
+                </h3>
                 <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
-                  Let AI analyze your patterns to generate personalized automation suggestions
+                  Let AI analyze your patterns to generate personalized
+                  automation suggestions
                 </p>
                 <Button onClick={() => generateSuggestions.mutate({})}>
                   <Brain className="h-4 w-4 mr-2" />
@@ -394,11 +456,18 @@ export function AIAutomationDashboard() {
                     <div>
                       <h5 className="font-medium mb-2">Completion Rate</h5>
                       <Progress
-                        value={learningData.patterns.completion_patterns.completion_rate * 100}
+                        value={
+                          learningData.patterns.completion_patterns
+                            .completion_rate * 100
+                        }
                         className="h-3"
                       />
                       <p className="text-sm text-muted-foreground mt-1">
-                        {Math.round(learningData.patterns.completion_patterns.completion_rate * 100)}%
+                        {Math.round(
+                          learningData.patterns.completion_patterns
+                            .completion_rate * 100,
+                        )}
+                        %
                       </p>
                     </div>
                   </div>
@@ -415,11 +484,22 @@ export function AIAutomationDashboard() {
                       <h5 className="font-medium mb-2">Productivity Score</h5>
                       <div className="flex items-center gap-2">
                         <Progress
-                          value={learningData.performance_trends.productivity_score[learningData.performance_trends.productivity_score.length - 1] * 100}
+                          value={
+                            learningData.performance_trends.productivity_score[
+                              learningData.performance_trends.productivity_score
+                                .length - 1
+                            ] * 100
+                          }
                           className="h-3 flex-1"
                         />
                         <span className="text-sm">
-                          {Math.round(learningData.performance_trends.productivity_score[learningData.performance_trends.productivity_score.length - 1] * 100)}%
+                          {Math.round(
+                            learningData.performance_trends.productivity_score[
+                              learningData.performance_trends.productivity_score
+                                .length - 1
+                            ] * 100,
+                          )}
+                          %
                         </span>
                       </div>
                     </div>
@@ -427,11 +507,24 @@ export function AIAutomationDashboard() {
                       <h5 className="font-medium mb-2">Goal Achievement</h5>
                       <div className="flex items-center gap-2">
                         <Progress
-                          value={learningData.performance_trends.goal_achievement_rate[learningData.performance_trends.goal_achievement_rate.length - 1] * 100}
+                          value={
+                            learningData.performance_trends
+                              .goal_achievement_rate[
+                              learningData.performance_trends
+                                .goal_achievement_rate.length - 1
+                            ] * 100
+                          }
                           className="h-3 flex-1"
                         />
                         <span className="text-sm">
-                          {Math.round(learningData.performance_trends.goal_achievement_rate[learningData.performance_trends.goal_achievement_rate.length - 1] * 100)}%
+                          {Math.round(
+                            learningData.performance_trends
+                              .goal_achievement_rate[
+                              learningData.performance_trends
+                                .goal_achievement_rate.length - 1
+                            ] * 100,
+                          )}
+                          %
                         </span>
                       </div>
                     </div>
@@ -453,16 +546,20 @@ export function AIAutomationDashboard() {
             <CardContent>
               <div className="text-center py-8">
                 <Zap className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Workflow Optimization</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Workflow Optimization
+                </h3>
                 <p className="text-muted-foreground mb-4">
                   Analyze and optimize your workflows for better efficiency
                 </p>
                 <Button
-                  onClick={() => optimizeWorkflow.mutate('default-workflow')}
+                  onClick={() => optimizeWorkflow.mutate("default-workflow")}
                   disabled={optimizeWorkflow.isPending}
                 >
                   <TrendingUp className="h-4 w-4 mr-2" />
-                  {optimizeWorkflow.isPending ? 'Optimizing...' : 'Optimize Workflows'}
+                  {optimizeWorkflow.isPending
+                    ? "Optimizing..."
+                    : "Optimize Workflows"}
                 </Button>
               </div>
             </CardContent>
@@ -483,7 +580,9 @@ export function AIAutomationDashboard() {
             <div className="space-y-4">
               <div>
                 <h4 className="font-medium">{selectedSuggestion.title}</h4>
-                <p className="text-sm text-muted-foreground">{selectedSuggestion.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {selectedSuggestion.description}
+                </p>
               </div>
               <div className="bg-muted p-3 rounded-lg">
                 <h5 className="font-medium text-sm mb-1">This will:</h5>
@@ -496,11 +595,17 @@ export function AIAutomationDashboard() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setImplementDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setImplementDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleImplement} disabled={implementSuggestion.isPending}>
-              {implementSuggestion.isPending ? 'Implementing...' : 'Implement'}
+            <Button
+              onClick={handleImplement}
+              disabled={implementSuggestion.isPending}
+            >
+              {implementSuggestion.isPending ? "Implementing..." : "Implement"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -527,11 +632,17 @@ export function AIAutomationDashboard() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setRejectDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleReject} disabled={rejectSuggestion.isPending}>
-              {rejectSuggestion.isPending ? 'Dismissing...' : 'Dismiss'}
+            <Button
+              onClick={handleReject}
+              disabled={rejectSuggestion.isPending}
+            >
+              {rejectSuggestion.isPending ? "Dismissing..." : "Dismiss"}
             </Button>
           </DialogFooter>
         </DialogContent>

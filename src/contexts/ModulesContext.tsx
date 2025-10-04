@@ -35,14 +35,14 @@ export function ModulesProvider({ children }: { children: React.ReactNode }) {
         ...prev,
         [moduleId]: { ...prev[moduleId], enabled },
       };
-      
+
       // Save to localStorage
       const states: Record<string, boolean> = {};
       Object.entries(updated).forEach(([key, config]) => {
         states[key] = config.enabled;
       });
       localStorage.setItem("moduleStates", JSON.stringify(states));
-      
+
       return updated;
     });
   };

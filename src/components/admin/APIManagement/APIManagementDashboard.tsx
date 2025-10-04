@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Key,
   Activity,
@@ -14,13 +20,13 @@ import {
   TrendingUp,
   TrendingDown,
   Clock,
-  Shield
-} from 'lucide-react';
-import { withSuperAdminAccess } from '@/hooks/useSupeRadminAccess';
-import { APIKeyManagement } from './APIKeyManagement';
-import { SystemLimitsConfig } from './SystemLimitsConfig';
-import { UsageAnalytics } from './UsageAnalytics';
-import { SystemConfig } from './SystemConfig';
+  Shield,
+} from "lucide-react";
+import { withSuperAdminAccess } from "@/hooks/useSupeRadminAccess";
+import { APIKeyManagement } from "./APIKeyManagement";
+import { SystemLimitsConfig } from "./SystemLimitsConfig";
+import { UsageAnalytics } from "./UsageAnalytics";
+import { SystemConfig } from "./SystemConfig";
 
 interface DashboardStats {
   totalApiKeys: number;
@@ -34,11 +40,11 @@ interface DashboardStats {
 interface TrendData {
   value: number;
   change: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
 }
 
 const APIManagementDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Mock data - will be replaced with real API calls
   const stats: DashboardStats = {
@@ -51,25 +57,34 @@ const APIManagementDashboard: React.FC = () => {
   };
 
   const trends: Record<string, TrendData> = {
-    spend: { value: 247.32, change: 12.5, trend: 'up' },
-    requests: { value: 15420, change: -5.2, trend: 'down' },
-    users: { value: 156, change: 8.3, trend: 'up' },
+    spend: { value: 247.32, change: 12.5, trend: "up" },
+    requests: { value: 15420, change: -5.2, trend: "down" },
+    users: { value: 156, change: 8.3, trend: "up" },
   };
 
-  const renderTrendIcon = (trend: 'up' | 'down' | 'stable') => {
-    if (trend === 'up') return <TrendingUp className="h-4 w-4 text-green-500" />;
-    if (trend === 'down') return <TrendingDown className="h-4 w-4 text-red-500" />;
+  const renderTrendIcon = (trend: "up" | "down" | "stable") => {
+    if (trend === "up")
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    if (trend === "down")
+      return <TrendingDown className="h-4 w-4 text-red-500" />;
     return <div className="h-4 w-4" />;
   };
 
-  const renderTrendBadge = (change: number, trend: 'up' | 'down' | 'stable') => {
-    const color = trend === 'up' ? 'bg-green-50 text-green-700' :
-                  trend === 'down' ? 'bg-red-50 text-red-700' :
-                  'bg-gray-50 text-gray-700';
+  const renderTrendBadge = (
+    change: number,
+    trend: "up" | "down" | "stable",
+  ) => {
+    const color =
+      trend === "up"
+        ? "bg-green-50 text-green-700"
+        : trend === "down"
+          ? "bg-red-50 text-red-700"
+          : "bg-gray-50 text-gray-700";
 
     return (
       <Badge variant="secondary" className={color}>
-        {change > 0 ? '+' : ''}{change.toFixed(1)}%
+        {change > 0 ? "+" : ""}
+        {change.toFixed(1)}%
       </Badge>
     );
   };
@@ -81,7 +96,8 @@ const APIManagementDashboard: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">API Management</h1>
           <p className="text-gray-600 mt-1">
-            Manage API connections, monitor usage, and control costs across the platform
+            Manage API connections, monitor usage, and control costs across the
+            platform
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -96,7 +112,11 @@ const APIManagementDashboard: React.FC = () => {
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="api-keys">API Keys</TabsTrigger>
@@ -114,7 +134,8 @@ const APIManagementDashboard: React.FC = () => {
                   <AlertTriangle className="h-5 w-5 text-amber-600" />
                   <div>
                     <p className="text-amber-800 font-medium">
-                      {stats.alertCount} cost alert{stats.alertCount > 1 ? 's' : ''} require attention
+                      {stats.alertCount} cost alert
+                      {stats.alertCount > 1 ? "s" : ""} require attention
                     </p>
                     <p className="text-amber-700 text-sm">
                       Some API keys are approaching their monthly limits
@@ -147,11 +168,15 @@ const APIManagementDashboard: React.FC = () => {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Monthly Spend</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Monthly Spend
+                </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">${trends.spend.value.toFixed(2)}</div>
+                <div className="text-2xl font-bold">
+                  ${trends.spend.value.toFixed(2)}
+                </div>
                 <div className="flex items-center gap-2 mt-1">
                   {renderTrendIcon(trends.spend.trend)}
                   {renderTrendBadge(trends.spend.change, trends.spend.trend)}
@@ -161,7 +186,9 @@ const APIManagementDashboard: React.FC = () => {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Monthly Requests</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Monthly Requests
+                </CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -170,14 +197,19 @@ const APIManagementDashboard: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 mt-1">
                   {renderTrendIcon(trends.requests.trend)}
-                  {renderTrendBadge(trends.requests.change, trends.requests.trend)}
+                  {renderTrendBadge(
+                    trends.requests.change,
+                    trends.requests.trend,
+                  )}
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Active Users
+                </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -207,14 +239,18 @@ const APIManagementDashboard: React.FC = () => {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">OpenAI API key rotated</p>
+                      <p className="text-sm font-medium">
+                        OpenAI API key rotated
+                      </p>
                       <p className="text-xs text-gray-500">2 minutes ago</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Claude usage limit warning</p>
+                      <p className="text-sm font-medium">
+                        Claude usage limit warning
+                      </p>
                       <p className="text-xs text-gray-500">1 hour ago</p>
                     </div>
                   </div>
@@ -247,27 +283,42 @@ const APIManagementDashboard: React.FC = () => {
                   <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium">All systems operational</span>
+                      <span className="text-sm font-medium">
+                        All systems operational
+                      </span>
                     </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge
+                      variant="secondary"
+                      className="bg-green-100 text-green-700"
+                    >
                       Healthy
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium">API keys encrypted</span>
+                      <span className="text-sm font-medium">
+                        API keys encrypted
+                      </span>
                     </div>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                    <Badge
+                      variant="secondary"
+                      className="bg-blue-100 text-blue-700"
+                    >
                       6/6
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-amber-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Keys need rotation</span>
+                      <span className="text-sm font-medium">
+                        Keys need rotation
+                      </span>
                     </div>
-                    <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+                    <Badge
+                      variant="secondary"
+                      className="bg-amber-100 text-amber-700"
+                    >
                       2
                     </Badge>
                   </div>

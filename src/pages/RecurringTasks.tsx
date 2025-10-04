@@ -1,16 +1,33 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, RefreshCw } from 'lucide-react';
-import { useRecurringTasks, useGenerateInstances, RecurrencePattern } from '@/hooks/useRecurringTasks';
-import { TaskCard } from '@/components/tasks/TaskCard';
-import { RecurrencePatternEditor } from '@/components/tasks/recurring/RecurrencePatternEditor';
-import { RecurringInstancesList } from '@/components/tasks/recurring/RecurringInstancesList';
-import { RecurrencePreview } from '@/components/tasks/recurring/RecurrencePreview';
-import { RecurrenceIndicator } from '@/components/tasks/recurring/RecurrenceIndicator';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus, RefreshCw } from "lucide-react";
+import {
+  useRecurringTasks,
+  useGenerateInstances,
+  RecurrencePattern,
+} from "@/hooks/useRecurringTasks";
+import { TaskCard } from "@/components/tasks/TaskCard";
+import { RecurrencePatternEditor } from "@/components/tasks/recurring/RecurrencePatternEditor";
+import { RecurringInstancesList } from "@/components/tasks/recurring/RecurringInstancesList";
+import { RecurrencePreview } from "@/components/tasks/recurring/RecurrencePreview";
+import { RecurrenceIndicator } from "@/components/tasks/recurring/RecurrenceIndicator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function RecurringTasks() {
   const { data: recurringTasks, isLoading } = useRecurringTasks();
@@ -38,7 +55,9 @@ export default function RecurringTasks() {
             onClick={handleGenerateInstances}
             disabled={generateInstances.isPending}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${generateInstances.isPending ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${generateInstances.isPending ? "animate-spin" : ""}`}
+            />
             Generate Instances
           </Button>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
@@ -52,12 +71,17 @@ export default function RecurringTasks() {
               <DialogHeader>
                 <DialogTitle>Create Recurring Task</DialogTitle>
                 <DialogDescription>
-                  Create a new recurring task template. Instances will be generated automatically.
+                  Create a new recurring task template. Instances will be
+                  generated automatically.
                 </DialogDescription>
               </DialogHeader>
               <div className="text-center py-8 text-muted-foreground">
-                <p className="text-sm">Use the Task Form and enable recurring options</p>
-                <p className="text-xs mt-2">This feature will be integrated into the task creation flow</p>
+                <p className="text-sm">
+                  Use the Task Form and enable recurring options
+                </p>
+                <p className="text-xs mt-2">
+                  This feature will be integrated into the task creation flow
+                </p>
               </div>
             </DialogContent>
           </Dialog>
@@ -75,7 +99,9 @@ export default function RecurringTasks() {
         <Card>
           <CardContent className="text-center py-12">
             <div className="text-muted-foreground">
-              <p className="text-lg font-semibold mb-2">No recurring tasks yet</p>
+              <p className="text-lg font-semibold mb-2">
+                No recurring tasks yet
+              </p>
               <p className="text-sm mb-4">
                 Create your first recurring task to automate routine activities
               </p>
@@ -90,12 +116,14 @@ export default function RecurringTasks() {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Templates Sidebar */}
           <div className="space-y-3">
-            <h2 className="text-lg font-semibold">Templates ({recurringTasks.length})</h2>
+            <h2 className="text-lg font-semibold">
+              Templates ({recurringTasks.length})
+            </h2>
             {recurringTasks.map((task) => (
               <Card
                 key={task.id}
                 className={`cursor-pointer transition-all hover:shadow-md ${
-                  selectedTemplate === task.id ? 'ring-2 ring-primary' : ''
+                  selectedTemplate === task.id ? "ring-2 ring-primary" : ""
                 }`}
                 onClick={() => setSelectedTemplate(task.id)}
               >
@@ -110,7 +138,9 @@ export default function RecurringTasks() {
                 <CardContent>
                   {task.recurrence_pattern && (
                     <RecurrenceIndicator
-                      pattern={task.recurrence_pattern as unknown as RecurrencePattern}
+                      pattern={
+                        task.recurrence_pattern as unknown as RecurrencePattern
+                      }
                       size="sm"
                     />
                   )}
@@ -153,11 +183,15 @@ export default function RecurringTasks() {
                     </CardHeader>
                     <CardContent>
                       {(() => {
-                        const template = recurringTasks.find(t => t.id === selectedTemplate);
+                        const template = recurringTasks.find(
+                          (t) => t.id === selectedTemplate,
+                        );
                         return template?.recurrence_pattern ? (
                           <div className="space-y-4">
                             <RecurrencePatternEditor
-                              value={template.recurrence_pattern as unknown as RecurrencePattern}
+                              value={
+                                template.recurrence_pattern as unknown as RecurrencePattern
+                              }
                               onChange={() => {}}
                             />
                             <p className="text-xs text-muted-foreground">
@@ -176,11 +210,15 @@ export default function RecurringTasks() {
 
                 <TabsContent value="preview" className="space-y-4">
                   {(() => {
-                    const template = recurringTasks.find(t => t.id === selectedTemplate);
+                    const template = recurringTasks.find(
+                      (t) => t.id === selectedTemplate,
+                    );
                     return template?.recurrence_pattern ? (
                       <RecurrencePreview
                         templateId={selectedTemplate}
-                        pattern={template.recurrence_pattern as unknown as RecurrencePattern}
+                        pattern={
+                          template.recurrence_pattern as unknown as RecurrencePattern
+                        }
                       />
                     ) : null;
                   })()}

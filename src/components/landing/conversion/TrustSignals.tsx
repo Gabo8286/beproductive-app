@@ -61,7 +61,9 @@ export function TrustSignals() {
                 <signal.icon className="w-6 h-6 text-primary" />
               </div>
               <h4 className="text-sm font-semibold mb-1">{signal.title}</h4>
-              <p className="text-xs text-muted-foreground">{signal.description}</p>
+              <p className="text-xs text-muted-foreground">
+                {signal.description}
+              </p>
             </motion.div>
           ))}
         </div>

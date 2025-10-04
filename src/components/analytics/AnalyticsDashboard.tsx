@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -10,12 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -54,14 +55,14 @@ import {
   AlertTriangle,
   CheckCircle,
   Star,
-  Building
+  Building,
 } from "lucide-react";
 import {
   CustomDashboard,
   AnalyticsMetric,
   AnalyticsDataset,
   AnalyticsTimeframe,
-  ReportTemplate
+  ReportTemplate,
 } from "@/types/analytics";
 import {
   useAnalyticsDashboards,
@@ -69,37 +70,49 @@ import {
   useMetricData,
   useDeleteDashboard,
   useAnalyticsInsights,
-  useReportTemplates
+  useReportTemplates,
 } from "@/hooks/useAnalytics";
 import { DashboardBuilder } from "./DashboardBuilder";
 
 export function AnalyticsDashboard() {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<AnalyticsTimeframe>('30d');
+  const [selectedTimeframe, setSelectedTimeframe] =
+    useState<AnalyticsTimeframe>("30d");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDashboard, setSelectedDashboard] = useState<CustomDashboard | null>(null);
+  const [selectedDashboard, setSelectedDashboard] =
+    useState<CustomDashboard | null>(null);
   const [builderOpen, setBuilderOpen] = useState(false);
-  const [editingDashboard, setEditingDashboard] = useState<CustomDashboard | null>(null);
+  const [editingDashboard, setEditingDashboard] =
+    useState<CustomDashboard | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
-  const { data: dashboardsResponse, isLoading: dashboardsLoading } = useAnalyticsDashboards();
-  const { data: metricsResponse, isLoading: metricsLoading } = useAnalyticsMetrics();
+  const { data: dashboardsResponse, isLoading: dashboardsLoading } =
+    useAnalyticsDashboards();
+  const { data: metricsResponse, isLoading: metricsLoading } =
+    useAnalyticsMetrics();
   const { data: insightsData } = useAnalyticsInsights();
   const { data: templatesResponse } = useReportTemplates();
   const deleteDashboard = useDeleteDashboard();
 
   // Sample metric data queries for overview
-  const { data: taskCompletionData } = useMetricData('metric_1', selectedTimeframe);
-  const { data: goalAchievementData } = useMetricData('metric_2', selectedTimeframe);
-  const { data: aiUsageData } = useMetricData('metric_3', selectedTimeframe);
+  const { data: taskCompletionData } = useMetricData(
+    "metric_1",
+    selectedTimeframe,
+  );
+  const { data: goalAchievementData } = useMetricData(
+    "metric_2",
+    selectedTimeframe,
+  );
+  const { data: aiUsageData } = useMetricData("metric_3", selectedTimeframe);
 
   const dashboards = dashboardsResponse?.data || [];
   const metrics = metricsResponse?.data || [];
   const insights = insightsData || [];
   const templates = templatesResponse?.data || [];
 
-  const filteredDashboards = dashboards.filter(dashboard =>
-    dashboard.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    dashboard.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDashboards = dashboards.filter(
+    (dashboard) =>
+      dashboard.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      dashboard.description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleCreateDashboard = () => {
@@ -116,41 +129,53 @@ export function AnalyticsDashboard() {
     try {
       await deleteDashboard.mutateAsync(dashboardId);
     } catch (error) {
-      console.error('Failed to delete dashboard:', error);
+      console.error("Failed to delete dashboard:", error);
     }
   };
 
   const handleCloneDashboard = (dashboard: CustomDashboard) => {
     const clonedDashboard: CustomDashboard = {
       ...dashboard,
-      id: '',
+      id: "",
       name: `${dashboard.name} (Copy)`,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
     setEditingDashboard(clonedDashboard);
     setBuilderOpen(true);
   };
 
-  const MetricCard = ({ title, value, change, trend, color = "blue" }: {
+  const MetricCard = ({
+    title,
+    value,
+    change,
+    trend,
+    color = "blue",
+  }: {
     title: string;
     value: string;
     change: string;
-    trend: 'up' | 'down' | 'stable';
+    trend: "up" | "down" | "stable";
     color?: string;
   }) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <div className={`h-4 w-4 text-${color}-600`}>
-          {trend === 'up' ? <TrendingUp className="h-4 w-4" /> :
-           trend === 'down' ? <TrendingUp className="h-4 w-4 rotate-180" /> :
-           <Activity className="h-4 w-4" />}
+          {trend === "up" ? (
+            <TrendingUp className="h-4 w-4" />
+          ) : trend === "down" ? (
+            <TrendingUp className="h-4 w-4 rotate-180" />
+          ) : (
+            <Activity className="h-4 w-4" />
+          )}
         </div>
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        <p className={`text-xs ${trend === 'up' ? 'text-green-600' : trend === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
+        <p
+          className={`text-xs ${trend === "up" ? "text-green-600" : trend === "down" ? "text-red-600" : "text-gray-600"}`}
+        >
           {change} from last period
         </p>
       </CardContent>
@@ -162,12 +187,26 @@ export function AnalyticsDashboard() {
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
-            {insight.type === 'trend' && <TrendingUp className="h-4 w-4 text-blue-600" />}
-            {insight.type === 'anomaly' && <AlertTriangle className="h-4 w-4 text-yellow-600" />}
-            {insight.type === 'recommendation' && <Target className="h-4 w-4 text-green-600" />}
+            {insight.type === "trend" && (
+              <TrendingUp className="h-4 w-4 text-blue-600" />
+            )}
+            {insight.type === "anomaly" && (
+              <AlertTriangle className="h-4 w-4 text-yellow-600" />
+            )}
+            {insight.type === "recommendation" && (
+              <Target className="h-4 w-4 text-green-600" />
+            )}
             <CardTitle className="text-base">{insight.title}</CardTitle>
           </div>
-          <Badge variant={insight.severity === 'high' ? 'destructive' : insight.severity === 'medium' ? 'default' : 'secondary'}>
+          <Badge
+            variant={
+              insight.severity === "high"
+                ? "destructive"
+                : insight.severity === "medium"
+                  ? "default"
+                  : "secondary"
+            }
+          >
             {insight.severity}
           </Badge>
         </div>
@@ -177,7 +216,9 @@ export function AnalyticsDashboard() {
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-1">
             <CheckCircle className="h-3 w-3 text-green-600" />
-            <span>Confidence: {Math.round(insight.confidence_score * 100)}%</span>
+            <span>
+              Confidence: {Math.round(insight.confidence_score * 100)}%
+            </span>
           </div>
           {insight.is_actionable && (
             <Badge variant="outline" className="text-xs">
@@ -209,11 +250,17 @@ export function AnalyticsDashboard() {
             Advanced Analytics & Reporting
           </h1>
           <p className="text-muted-foreground">
-            Create custom dashboards, track KPIs, and gain insights from your productivity data
+            Create custom dashboards, track KPIs, and gain insights from your
+            productivity data
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Select value={selectedTimeframe} onValueChange={(value: AnalyticsTimeframe) => setSelectedTimeframe(value)}>
+          <Select
+            value={selectedTimeframe}
+            onValueChange={(value: AnalyticsTimeframe) =>
+              setSelectedTimeframe(value)
+            }
+          >
             <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
@@ -233,7 +280,11 @@ export function AnalyticsDashboard() {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="dashboards">My Dashboards</TabsTrigger>
@@ -247,29 +298,53 @@ export function AnalyticsDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MetricCard
               title="Task Completion Rate"
-              value={taskCompletionData ? `${Math.round(taskCompletionData.data.aggregated_value)}%` : "Loading..."}
-              change={taskCompletionData ? `${taskCompletionData.data.trend_percentage > 0 ? '+' : ''}${taskCompletionData.data.trend_percentage.toFixed(1)}%` : ""}
-              trend={taskCompletionData?.data.trend_direction || 'stable'}
+              value={
+                taskCompletionData
+                  ? `${Math.round(taskCompletionData.data.aggregated_value)}%`
+                  : "Loading..."
+              }
+              change={
+                taskCompletionData
+                  ? `${taskCompletionData.data.trend_percentage > 0 ? "+" : ""}${taskCompletionData.data.trend_percentage.toFixed(1)}%`
+                  : ""
+              }
+              trend={taskCompletionData?.data.trend_direction || "stable"}
               color="green"
             />
             <MetricCard
               title="Goal Achievement"
-              value={goalAchievementData ? `${Math.round(goalAchievementData.data.aggregated_value)}` : "Loading..."}
-              change={goalAchievementData ? `${goalAchievementData.data.trend_percentage > 0 ? '+' : ''}${goalAchievementData.data.trend_percentage.toFixed(1)}%` : ""}
-              trend={goalAchievementData?.data.trend_direction || 'stable'}
+              value={
+                goalAchievementData
+                  ? `${Math.round(goalAchievementData.data.aggregated_value)}`
+                  : "Loading..."
+              }
+              change={
+                goalAchievementData
+                  ? `${goalAchievementData.data.trend_percentage > 0 ? "+" : ""}${goalAchievementData.data.trend_percentage.toFixed(1)}%`
+                  : ""
+              }
+              trend={goalAchievementData?.data.trend_direction || "stable"}
               color="blue"
             />
             <MetricCard
               title="AI Usage Hours"
-              value={aiUsageData ? `${Math.round(aiUsageData.data.aggregated_value)}h` : "Loading..."}
-              change={aiUsageData ? `${aiUsageData.data.trend_percentage > 0 ? '+' : ''}${aiUsageData.data.trend_percentage.toFixed(1)}%` : ""}
-              trend={aiUsageData?.data.trend_direction || 'stable'}
+              value={
+                aiUsageData
+                  ? `${Math.round(aiUsageData.data.aggregated_value)}h`
+                  : "Loading..."
+              }
+              change={
+                aiUsageData
+                  ? `${aiUsageData.data.trend_percentage > 0 ? "+" : ""}${aiUsageData.data.trend_percentage.toFixed(1)}%`
+                  : ""
+              }
+              trend={aiUsageData?.data.trend_direction || "stable"}
               color="purple"
             />
             <MetricCard
               title="Active Dashboards"
               value={dashboards.length.toString()}
-              change={`${dashboards.filter(d => d.widgets.length > 0).length} configured`}
+              change={`${dashboards.filter((d) => d.widgets.length > 0).length} configured`}
               trend="stable"
               color="orange"
             />
@@ -293,8 +368,8 @@ export function AnalyticsDashboard() {
                     </div>
                     <span className="font-semibold">
                       {(taskCompletionData?.data.total_count || 0) +
-                       (goalAchievementData?.data.total_count || 0) +
-                       (aiUsageData?.data.total_count || 0)}
+                        (goalAchievementData?.data.total_count || 0) +
+                        (aiUsageData?.data.total_count || 0)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -332,14 +407,22 @@ export function AnalyticsDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {dashboards.slice(0, 3).map((dashboard) => (
-                    <div key={dashboard.id} className="flex items-center justify-between p-2 border rounded">
+                    <div
+                      key={dashboard.id}
+                      className="flex items-center justify-between p-2 border rounded"
+                    >
                       <div>
                         <p className="font-medium text-sm">{dashboard.name}</p>
                         <p className="text-xs text-muted-foreground">
-                          Updated {new Date(dashboard.updated_at).toLocaleDateString()}
+                          Updated{" "}
+                          {new Date(dashboard.updated_at).toLocaleDateString()}
                         </p>
                       </div>
-                      <Button variant="ghost" size="sm" onClick={() => setSelectedDashboard(dashboard)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedDashboard(dashboard)}
+                      >
                         <Eye className="h-4 w-4" />
                       </Button>
                     </div>
@@ -391,7 +474,10 @@ export function AnalyticsDashboard() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredDashboards.map((dashboard) => (
-                <Card key={dashboard.id} className="hover:shadow-lg transition-all duration-200 cursor-pointer group">
+                <Card
+                  key={dashboard.id}
+                  className="hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
@@ -409,19 +495,27 @@ export function AnalyticsDashboard() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                          <DropdownMenuItem onClick={() => setSelectedDashboard(dashboard)}>
+                          <DropdownMenuItem
+                            onClick={() => setSelectedDashboard(dashboard)}
+                          >
                             <Eye className="h-4 w-4 mr-2" />
                             View
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleEditDashboard(dashboard)}>
+                          <DropdownMenuItem
+                            onClick={() => handleEditDashboard(dashboard)}
+                          >
                             <Edit className="h-4 w-4 mr-2" />
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleCloneDashboard(dashboard)}>
+                          <DropdownMenuItem
+                            onClick={() => handleCloneDashboard(dashboard)}
+                          >
                             <Copy className="h-4 w-4 mr-2" />
                             Clone
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDeleteDashboard(dashboard.id)}>
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteDashboard(dashboard.id)}
+                          >
                             <Trash2 className="h-4 w-4 mr-2" />
                             Delete
                           </DropdownMenuItem>
@@ -448,7 +542,11 @@ export function AnalyticsDashboard() {
                       {dashboard.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {dashboard.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="outline" className="text-xs">
+                            <Badge
+                              key={tag}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {tag}
                             </Badge>
                           ))}
@@ -462,7 +560,8 @@ export function AnalyticsDashboard() {
 
                       {/* Last Updated */}
                       <div className="text-xs text-muted-foreground">
-                        Updated {new Date(dashboard.updated_at).toLocaleDateString()}
+                        Updated{" "}
+                        {new Date(dashboard.updated_at).toLocaleDateString()}
                       </div>
                     </div>
                   </CardContent>
@@ -475,9 +574,13 @@ export function AnalyticsDashboard() {
                   <Card>
                     <CardContent className="flex flex-col items-center justify-center py-12">
                       <BarChart3 className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-                      <h3 className="text-lg font-semibold mb-2">No dashboards found</h3>
+                      <h3 className="text-lg font-semibold mb-2">
+                        No dashboards found
+                      </h3>
                       <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
-                        {searchQuery ? 'Try adjusting your search criteria' : 'Create your first custom dashboard to start visualizing your data'}
+                        {searchQuery
+                          ? "Try adjusting your search criteria"
+                          : "Create your first custom dashboard to start visualizing your data"}
                       </p>
                       <Button onClick={handleCreateDashboard}>
                         <Plus className="h-4 w-4 mr-2" />
@@ -501,9 +604,12 @@ export function AnalyticsDashboard() {
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <Zap className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-                  <h3 className="text-lg font-semibold mb-2">No insights available</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    No insights available
+                  </h3>
                   <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
-                    AI insights will appear here as we analyze your productivity data patterns
+                    AI insights will appear here as we analyze your productivity
+                    data patterns
                   </p>
                   <Button variant="outline">
                     <RefreshCw className="h-4 w-4 mr-2" />
@@ -518,7 +624,10 @@ export function AnalyticsDashboard() {
         <TabsContent value="templates" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {templates.map((template) => (
-              <Card key={template.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={template.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>

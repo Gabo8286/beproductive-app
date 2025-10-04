@@ -5,8 +5,21 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCreateHabit } from "@/hooks/useHabits";
 import { CreateHabitInput } from "@/types/habits";
@@ -15,11 +28,22 @@ import { HabitTemplates } from "./HabitTemplates";
 const habitSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
   description: z.string().max(500).optional(),
-  category: z.enum(['health', 'productivity', 'learning', 'mindfulness', 'social', 'financial', 'creative', 'other']),
-  type: z.enum(['build', 'break', 'maintain']),
-  frequency: z.enum(['daily', 'weekly', 'monthly', 'custom']),
-  difficulty: z.enum(['easy', 'medium', 'hard', 'extreme']),
-  time_of_day: z.enum(['morning', 'afternoon', 'evening', 'anytime']).optional(),
+  category: z.enum([
+    "health",
+    "productivity",
+    "learning",
+    "mindfulness",
+    "social",
+    "financial",
+    "creative",
+    "other",
+  ]),
+  type: z.enum(["build", "break", "maintain"]),
+  frequency: z.enum(["daily", "weekly", "monthly", "custom"]),
+  difficulty: z.enum(["easy", "medium", "hard", "extreme"]),
+  time_of_day: z
+    .enum(["morning", "afternoon", "evening", "anytime"])
+    .optional(),
   duration_minutes: z.coerce.number().min(1).optional(),
   target_streak: z.coerce.number().min(1).optional(),
   reminder_enabled: z.boolean().default(false),
@@ -36,7 +60,11 @@ interface HabitCreateFormProps {
   onCancel: () => void;
 }
 
-export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreateFormProps) {
+export function HabitCreateForm({
+  workspaceId,
+  onSuccess,
+  onCancel,
+}: HabitCreateFormProps) {
   const [useTemplate, setUseTemplate] = useState(false);
   const createHabit = useCreateHabit();
 
@@ -82,7 +110,7 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
       title: template.title,
       description: template.description,
       category: template.category,
-      type: 'build',
+      type: "build",
       frequency: template.frequency,
       difficulty: template.difficulty,
       time_of_day: template.time_of_day,
@@ -95,7 +123,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
   };
 
   return (
-    <Tabs value={useTemplate ? "templates" : "custom"} onValueChange={(v) => setUseTemplate(v === "templates")}>
+    <Tabs
+      value={useTemplate ? "templates" : "custom"}
+      onValueChange={(v) => setUseTemplate(v === "templates")}
+    >
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="custom">Custom</TabsTrigger>
         <TabsTrigger value="templates">From Template</TabsTrigger>
@@ -130,7 +161,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="What is this habit about?" {...field} />
+                    <Textarea
+                      placeholder="What is this habit about?"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,7 +179,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue />
@@ -153,7 +190,9 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="health">Health</SelectItem>
-                        <SelectItem value="productivity">Productivity</SelectItem>
+                        <SelectItem value="productivity">
+                          Productivity
+                        </SelectItem>
                         <SelectItem value="learning">Learning</SelectItem>
                         <SelectItem value="mindfulness">Mindfulness</SelectItem>
                         <SelectItem value="social">Social</SelectItem>
@@ -173,7 +212,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Type *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue />
@@ -199,7 +241,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Frequency *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue />
@@ -223,7 +268,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Difficulty *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue />
@@ -250,7 +298,10 @@ export function HabitCreateForm({ workspaceId, onSuccess, onCancel }: HabitCreat
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Time of Day</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue />

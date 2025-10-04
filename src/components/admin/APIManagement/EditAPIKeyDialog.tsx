@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,19 +6,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { APIKey, UpdateAPIKeyRequest, API_KEY_STATUS_LABELS, PROVIDER_CONFIGS } from '@/types/api-management';
+} from "@/components/ui/select";
+import {
+  APIKey,
+  UpdateAPIKeyRequest,
+  API_KEY_STATUS_LABELS,
+  PROVIDER_CONFIGS,
+} from "@/types/api-management";
 
 interface EditAPIKeyDialogProps {
   apiKey: APIKey;
@@ -57,10 +62,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
 
     try {
       // TODO: Implement API call to update the key
-      console.log('Updating API key:', apiKey.id, formData);
+      console.log("Updating API key:", apiKey.id, formData);
       onOpenChange(false);
     } catch (error) {
-      console.error('Error updating API key:', error);
+      console.error("Error updating API key:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -84,8 +89,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
               <Label htmlFor="key_name">Key Name</Label>
               <Input
                 id="key_name"
-                value={formData.key_name || ''}
-                onChange={(e) => setFormData({ ...formData, key_name: e.target.value })}
+                value={formData.key_name || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, key_name: e.target.value })
+                }
                 required
               />
             </div>
@@ -94,17 +101,21 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) => setFormData({ ...formData, status: value as any })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value as any })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(API_KEY_STATUS_LABELS).map(([value, label]) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
+                  {Object.entries(API_KEY_STATUS_LABELS).map(
+                    ([value, label]) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -114,8 +125,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              value={formData.description || ''}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              value={formData.description || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               rows={3}
             />
           </div>
@@ -123,8 +136,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
           <div className="space-y-2">
             <Label htmlFor="model_name">Model</Label>
             <Select
-              value={formData.model_name || ''}
-              onValueChange={(value) => setFormData({ ...formData, model_name: value })}
+              value={formData.model_name || ""}
+              onValueChange={(value) =>
+                setFormData({ ...formData, model_name: value })
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -149,7 +164,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
                 step="0.01"
                 value={formData.monthly_limit_usd || 0}
                 onChange={(e) =>
-                  setFormData({ ...formData, monthly_limit_usd: parseFloat(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    monthly_limit_usd: parseFloat(e.target.value),
+                  })
                 }
               />
             </div>
@@ -162,7 +180,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
                 min="0"
                 value={formData.daily_request_limit || 0}
                 onChange={(e) =>
-                  setFormData({ ...formData, daily_request_limit: parseInt(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    daily_request_limit: parseInt(e.target.value),
+                  })
                 }
               />
             </div>
@@ -175,7 +196,10 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
                 min="0"
                 value={formData.monthly_token_limit || 0}
                 onChange={(e) =>
-                  setFormData({ ...formData, monthly_token_limit: parseInt(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    monthly_token_limit: parseInt(e.target.value),
+                  })
                 }
               />
             </div>
@@ -185,18 +209,24 @@ export const EditAPIKeyDialog: React.FC<EditAPIKeyDialogProps> = ({
             <Label htmlFor="base_url">Base URL (Optional)</Label>
             <Input
               id="base_url"
-              value={formData.base_url || ''}
-              onChange={(e) => setFormData({ ...formData, base_url: e.target.value })}
+              value={formData.base_url || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, base_url: e.target.value })
+              }
               placeholder={providerConfig.base_url}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || !formData.key_name}>
-              {isSubmitting ? 'Updating...' : 'Update API Key'}
+              {isSubmitting ? "Updating..." : "Update API Key"}
             </Button>
           </DialogFooter>
         </form>

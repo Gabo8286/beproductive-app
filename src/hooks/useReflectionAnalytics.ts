@@ -20,37 +20,37 @@ export function useReflectionAnalytics(
   userId: string,
   periodType: AnalyticsPeriod,
   periodStart: string,
-  periodEnd: string
+  periodEnd: string,
 ) {
   return useQuery({
     queryKey: [ANALYTICS_QUERY_KEY, userId, periodType, periodStart, periodEnd],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflection_analytics')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('period_type', periodType)
-        .eq('period_start', periodStart)
-        .eq('period_end', periodEnd)
+        .from("reflection_analytics")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("period_type", periodType)
+        .eq("period_start", periodStart)
+        .eq("period_end", periodEnd)
         .maybeSingle();
 
       if (error) throw error;
 
       // If no analytics exist, calculate them
       if (!data) {
-        await supabase.rpc('update_reflection_analytics', {
+        await supabase.rpc("update_reflection_analytics", {
           p_user_id: userId,
           p_period_type: periodType,
         });
 
         // Fetch again
         const { data: newData, error: newError } = await supabase
-          .from('reflection_analytics')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('period_type', periodType)
-          .eq('period_start', periodStart)
-          .eq('period_end', periodEnd)
+          .from("reflection_analytics")
+          .select("*")
+          .eq("user_id", userId)
+          .eq("period_type", periodType)
+          .eq("period_start", periodStart)
+          .eq("period_end", periodEnd)
           .maybeSingle();
 
         if (newError) throw newError;
@@ -69,18 +69,20 @@ export function useReflectionAnalytics(
 export function useReflectionTrends(
   workspaceId: string,
   startDate: string,
-  endDate: string
+  endDate: string,
 ) {
   return useQuery({
-    queryKey: ['reflection-trends', workspaceId, startDate, endDate],
+    queryKey: ["reflection-trends", workspaceId, startDate, endDate],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflections')
-        .select('reflection_date, mood, energy_level, stress_level, satisfaction_level')
-        .eq('workspace_id', workspaceId)
-        .gte('reflection_date', startDate)
-        .lte('reflection_date', endDate)
-        .order('reflection_date', { ascending: true });
+        .from("reflections")
+        .select(
+          "reflection_date, mood, energy_level, stress_level, satisfaction_level",
+        )
+        .eq("workspace_id", workspaceId)
+        .gte("reflection_date", startDate)
+        .lte("reflection_date", endDate)
+        .order("reflection_date", { ascending: true });
 
       if (error) throw error;
 
@@ -104,20 +106,39 @@ export function useReflectionTrends(
         trend.reflection_count++;
 
         if (reflection.mood) {
-          const moodScores = { amazing: 6, great: 5, good: 4, neutral: 3, bad: 2, terrible: 1 };
-          trend.mood = ((trend.mood || 0) * (trend.reflection_count - 1) + moodScores[reflection.mood]) / trend.reflection_count;
+          const moodScores = {
+            amazing: 6,
+            great: 5,
+            good: 4,
+            neutral: 3,
+            bad: 2,
+            terrible: 1,
+          };
+          trend.mood =
+            ((trend.mood || 0) * (trend.reflection_count - 1) +
+              moodScores[reflection.mood]) /
+            trend.reflection_count;
         }
 
         if (reflection.energy_level) {
-          trend.energy = ((trend.energy || 0) * (trend.reflection_count - 1) + reflection.energy_level) / trend.reflection_count;
+          trend.energy =
+            ((trend.energy || 0) * (trend.reflection_count - 1) +
+              reflection.energy_level) /
+            trend.reflection_count;
         }
 
         if (reflection.stress_level) {
-          trend.stress = ((trend.stress || 0) * (trend.reflection_count - 1) + reflection.stress_level) / trend.reflection_count;
+          trend.stress =
+            ((trend.stress || 0) * (trend.reflection_count - 1) +
+              reflection.stress_level) /
+            trend.reflection_count;
         }
 
         if (reflection.satisfaction_level) {
-          trend.satisfaction = ((trend.satisfaction || 0) * (trend.reflection_count - 1) + reflection.satisfaction_level) / trend.reflection_count;
+          trend.satisfaction =
+            ((trend.satisfaction || 0) * (trend.reflection_count - 1) +
+              reflection.satisfaction_level) /
+            trend.reflection_count;
         }
       });
 
@@ -132,23 +153,23 @@ export function useReflectionTrends(
  */
 export function useReflectionInsights(workspaceId: string, days: number = 30) {
   return useQuery({
-    queryKey: ['reflection-insights', workspaceId, days],
+    queryKey: ["reflection-insights", workspaceId, days],
     queryFn: async () => {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
-      const startDateStr = startDate.toISOString().split('T')[0];
+      const startDateStr = startDate.toISOString().split("T")[0];
 
       const { data, error } = await supabase
-        .from('reflections')
-        .select('*')
-        .eq('workspace_id', workspaceId)
-        .gte('reflection_date', startDateStr)
-        .order('reflection_date', { ascending: true });
+        .from("reflections")
+        .select("*")
+        .eq("workspace_id", workspaceId)
+        .gte("reflection_date", startDateStr)
+        .order("reflection_date", { ascending: true });
 
       if (error) throw error;
 
       // Generate insights using utility function
-      const reflections = data.map(r => ({
+      const reflections = data.map((r) => ({
         ...r,
         metadata: r.metadata as Record<string, any>,
       })) as any[];
@@ -168,20 +189,23 @@ export function useReflectionStreak(workspaceId: string) {
     queryKey: [STREAK_QUERY_KEY, workspaceId],
     queryFn: async () => {
       const { data: user } = await supabase.auth.getUser();
-      if (!user.user) throw new Error('Not authenticated');
+      if (!user.user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase.rpc('calculate_reflection_streak', {
-        p_user_id: user.user.id,
-      });
+      const { data, error } = await supabase.rpc(
+        "calculate_reflection_streak",
+        {
+          p_user_id: user.user.id,
+        },
+      );
 
       if (error) throw error;
 
       // Fetch recent reflections to calculate longest streak
       const { data: reflections, error: reflectionsError } = await supabase
-        .from('reflections')
-        .select('reflection_date')
-        .eq('workspace_id', workspaceId)
-        .order('reflection_date', { ascending: false });
+        .from("reflections")
+        .select("reflection_date")
+        .eq("workspace_id", workspaceId)
+        .order("reflection_date", { ascending: false });
 
       if (reflectionsError) throw reflectionsError;
 
@@ -192,11 +216,14 @@ export function useReflectionStreak(workspaceId: string) {
 
       reflections.forEach((r) => {
         const currentDate = new Date(r.reflection_date);
-        
+
         if (!lastDate) {
           tempStreak = 1;
         } else {
-          const dayDiff = Math.floor((lastDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24));
+          const dayDiff = Math.floor(
+            (lastDate.getTime() - currentDate.getTime()) /
+              (1000 * 60 * 60 * 24),
+          );
           if (dayDiff === 1) {
             tempStreak++;
           } else {
@@ -204,7 +231,7 @@ export function useReflectionStreak(workspaceId: string) {
             tempStreak = 1;
           }
         }
-        
+
         lastDate = currentDate;
       });
 
@@ -212,7 +239,8 @@ export function useReflectionStreak(workspaceId: string) {
 
       // Calculate next milestone
       const milestones = [7, 14, 30, 60, 90, 180, 365];
-      const nextMilestone = milestones.find(m => m > (data || 0)) || (data || 0) + 100;
+      const nextMilestone =
+        milestones.find((m) => m > (data || 0)) || (data || 0) + 100;
 
       const streakData: ReflectionStreakData = {
         current_streak: data || 0,
@@ -241,7 +269,7 @@ export function useCalculateAnalytics() {
       userId: string;
       periodType: AnalyticsPeriod;
     }) => {
-      const { error } = await supabase.rpc('update_reflection_analytics', {
+      const { error } = await supabase.rpc("update_reflection_analytics", {
         p_user_id: userId,
         p_period_type: periodType,
       });

@@ -17,18 +17,18 @@ export default function ReflectionDetail() {
   const { mutate: deleteReflection } = useDeleteReflection();
 
   const moodEmojis = {
-    amazing: '🤩',
-    great: '😊',
-    good: '🙂',
-    neutral: '😐',
-    bad: '😔',
-    terrible: '😢',
+    amazing: "🤩",
+    great: "😊",
+    good: "🙂",
+    neutral: "😐",
+    bad: "😔",
+    terrible: "😢",
   };
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this reflection?')) {
+    if (window.confirm("Are you sure you want to delete this reflection?")) {
       deleteReflection(id!, {
-        onSuccess: () => navigate('/reflections'),
+        onSuccess: () => navigate("/reflections"),
       });
     }
   };
@@ -53,7 +53,7 @@ export default function ReflectionDetail() {
     <div className="container mx-auto p-6 max-w-4xl animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <Button variant="ghost" onClick={() => navigate('/reflections')}>
+        <Button variant="ghost" onClick={() => navigate("/reflections")}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Reflections
         </Button>
@@ -80,7 +80,12 @@ export default function ReflectionDetail() {
             )}
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
-            <time>{format(new Date(reflection.reflection_date), 'EEEE, MMMM d, yyyy')}</time>
+            <time>
+              {format(
+                new Date(reflection.reflection_date),
+                "EEEE, MMMM d, yyyy",
+              )}
+            </time>
             <span>•</span>
             <Badge variant="secondary">{reflection.reflection_type}</Badge>
             {!reflection.is_private && (
@@ -93,26 +98,34 @@ export default function ReflectionDetail() {
         </div>
 
         {/* Wellness Metrics */}
-        {(reflection.energy_level || reflection.stress_level || reflection.satisfaction_level) && (
+        {(reflection.energy_level ||
+          reflection.stress_level ||
+          reflection.satisfaction_level) && (
           <>
             <Separator />
             <div className="grid grid-cols-3 gap-6">
               {reflection.energy_level && (
                 <div>
                   <p className="text-sm font-medium mb-2">⚡ Energy</p>
-                  <p className="text-2xl font-bold">{reflection.energy_level}/10</p>
+                  <p className="text-2xl font-bold">
+                    {reflection.energy_level}/10
+                  </p>
                 </div>
               )}
               {reflection.stress_level && (
                 <div>
                   <p className="text-sm font-medium mb-2">😰 Stress</p>
-                  <p className="text-2xl font-bold">{reflection.stress_level}/10</p>
+                  <p className="text-2xl font-bold">
+                    {reflection.stress_level}/10
+                  </p>
                 </div>
               )}
               {reflection.satisfaction_level && (
                 <div>
                   <p className="text-sm font-medium mb-2">😊 Satisfaction</p>
-                  <p className="text-2xl font-bold">{reflection.satisfaction_level}/10</p>
+                  <p className="text-2xl font-bold">
+                    {reflection.satisfaction_level}/10
+                  </p>
                 </div>
               )}
             </div>
@@ -189,7 +202,9 @@ export default function ReflectionDetail() {
           <>
             <Separator />
             <div>
-              <h2 className="text-lg font-semibold mb-3">🌟 Tomorrow's Focus</h2>
+              <h2 className="text-lg font-semibold mb-3">
+                🌟 Tomorrow's Focus
+              </h2>
               <ul className="list-disc list-inside space-y-1">
                 {reflection.tomorrow_focus.map((item, i) => (
                   <li key={i}>{item}</li>
@@ -207,7 +222,9 @@ export default function ReflectionDetail() {
               <h2 className="text-lg font-semibold mb-3">Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {reflection.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">{tag}</Badge>
+                  <Badge key={tag} variant="secondary">
+                    {tag}
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -218,7 +235,10 @@ export default function ReflectionDetail() {
         <Separator />
         <div>
           <h2 className="text-lg font-semibold mb-3">Linked Goals</h2>
-          <GoalReflectionLinker reflectionId={id!} reflectionContent={reflection.content} />
+          <GoalReflectionLinker
+            reflectionId={id!}
+            reflectionContent={reflection.content}
+          />
         </div>
       </Card>
     </div>

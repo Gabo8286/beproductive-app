@@ -22,12 +22,15 @@ export function useDeleteQuickTodo() {
       // Optimistic update
       await queryClient.cancelQueries({ queryKey: ["quick-todos"] });
 
-      const previousQuickTodos = queryClient.getQueryData(["quick-todos", profile?.id]);
+      const previousQuickTodos = queryClient.getQueryData([
+        "quick-todos",
+        profile?.id,
+      ]);
 
       queryClient.setQueryData(
         ["quick-todos", profile?.id],
         (old: QuickTodo[] | undefined) =>
-          old?.filter((todo) => todo.id !== id) || []
+          old?.filter((todo) => todo.id !== id) || [],
       );
 
       return { previousQuickTodos };
@@ -35,7 +38,10 @@ export function useDeleteQuickTodo() {
     onError: (error, variables, context) => {
       // Revert optimistic update
       if (context?.previousQuickTodos) {
-        queryClient.setQueryData(["quick-todos", profile?.id], context.previousQuickTodos);
+        queryClient.setQueryData(
+          ["quick-todos", profile?.id],
+          context.previousQuickTodos,
+        );
       }
       toast.error("Failed to delete travel note");
       console.error("Delete quick todo error:", error);

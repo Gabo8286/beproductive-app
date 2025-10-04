@@ -14,7 +14,7 @@ export function WidgetInteractionWrapper({
   children,
   onRefresh,
   onSuccess,
-  className
+  className,
 }: WidgetInteractionWrapperProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { animate } = useSpringAnimation();
@@ -24,22 +24,24 @@ export function WidgetInteractionWrapper({
     if (!onRefresh) return;
 
     setIsRefreshing(true);
-    triggerHaptic('light');
+    triggerHaptic("light");
 
     try {
       await onRefresh();
-      triggerHaptic('success');
+      triggerHaptic("success");
 
       // Success animation
-      const element = document.querySelector('[data-widget-content]') as HTMLElement;
+      const element = document.querySelector(
+        "[data-widget-content]",
+      ) as HTMLElement;
       if (element) {
-        element.classList.add('success-bounce');
+        element.classList.add("success-bounce");
         setTimeout(() => {
-          element.classList.remove('success-bounce');
+          element.classList.remove("success-bounce");
         }, 600);
       }
     } catch (error) {
-      triggerHaptic('error');
+      triggerHaptic("error");
     } finally {
       setIsRefreshing(false);
     }
@@ -48,21 +50,18 @@ export function WidgetInteractionWrapper({
   const handleSuccess = () => {
     if (onSuccess) {
       onSuccess();
-      triggerHaptic('success');
+      triggerHaptic("success");
     }
   };
 
   return (
-    <div 
+    <div
       className={cn("gpu-accelerated", className)}
       data-widget-interaction-wrapper
     >
-      <div 
+      <div
         data-widget-content
-        className={cn(
-          "smooth-transition",
-          isRefreshing && "update-pulse"
-        )}
+        className={cn("smooth-transition", isRefreshing && "update-pulse")}
       >
         {children}
       </div>

@@ -1,2 +1,2 @@
 // Analytics Components
-export { PredictiveAnalytics } from './PredictiveAnalytics';
+export { PredictiveAnalytics } from "./PredictiveAnalytics";

@@ -4,21 +4,32 @@ import App from "./App.tsx";
 import "./index.css";
 import { initWebVitals } from "./utils/performance/webVitals";
 import { initializeAccessibilityTesting } from "./utils/accessibility/testing";
-import { logEnvironmentValidation, isEnvironmentReady, createEnvironmentErrorMessage } from "./utils/environment/validation";
+import {
+  logEnvironmentValidation,
+  isEnvironmentReady,
+  createEnvironmentErrorMessage,
+} from "./utils/environment/validation";
 import { AppErrorBoundary } from "./components/errors/AppErrorBoundary";
 import { diagnostics, diagnostic } from "./utils/diagnostics/logger";
 
 // Step 1: Start diagnostic logging and validate environment
-diagnostics.startStep('Application Initialization');
-diagnostic.checkpoint('App Start', { timestamp: Date.now(), url: window.location.href });
+diagnostics.startStep("Application Initialization");
+diagnostic.checkpoint("App Start", {
+  timestamp: Date.now(),
+  url: window.location.href,
+});
 
-const envValidation = diagnostic.measureSync('Environment Validation', () => {
-  console.log('[Main] Starting application initialization...');
+const envValidation = diagnostic.measureSync("Environment Validation", () => {
+  console.log("[Main] Starting application initialization...");
   return logEnvironmentValidation();
 });
 
 if (!isEnvironmentReady()) {
-  diagnostics.failStep('Environment Validation', 'Environment validation failed', envValidation);
+  diagnostics.failStep(
+    "Environment Validation",
+    "Environment validation failed",
+    envValidation,
+  );
   diagnostics.printReport();
 
   // Show environment error in the DOM instead of blank screen
@@ -55,41 +66,43 @@ if (!isEnvironmentReady()) {
       </div>
     `;
   }
-  throw new Error('Environment validation failed - cannot start application');
+  throw new Error("Environment validation failed - cannot start application");
 }
 
 // Step 2: Initialize Web Vitals tracking (with safe storage)
-diagnostic.measureSync('Web Vitals Initialization', () => {
+diagnostic.measureSync("Web Vitals Initialization", () => {
   try {
     initWebVitals();
-    console.log('[Main] Web Vitals initialized');
+    console.log("[Main] Web Vitals initialized");
   } catch (error) {
-    console.warn('[Main] Web Vitals initialization failed:', error);
+    console.warn("[Main] Web Vitals initialization failed:", error);
     // Continue without Web Vitals - don't block the app
-    diagnostic.logBrowserBehavior('Web Vitals Failed', { error: error instanceof Error ? error.message : error });
+    diagnostic.logBrowserBehavior("Web Vitals Failed", {
+      error: error instanceof Error ? error.message : error,
+    });
   }
 });
 
 // Step 3: Prepare for React rendering
-diagnostic.checkpoint('Pre-React Setup');
-console.log('[Main] Environment validated - rendering React app...');
+diagnostic.checkpoint("Pre-React Setup");
+console.log("[Main] Environment validated - rendering React app...");
 
-const rootElement = diagnostic.measureSync('Root Element Check', () => {
+const rootElement = diagnostic.measureSync("Root Element Check", () => {
   const element = document.getElementById("root");
   if (!element) {
-    throw new Error('Root element not found - cannot mount React app');
+    throw new Error("Root element not found - cannot mount React app");
   }
   return element;
 });
 
-const root = diagnostic.measureSync('React Root Creation', () => {
+const root = diagnostic.measureSync("React Root Creation", () => {
   return createRoot(rootElement);
 });
 
 // Add global error handler for unhandled errors
-window.addEventListener('error', (event) => {
-  console.error('[Main] Unhandled error:', event.error);
-  diagnostics.logEvent('Unhandled Error', {
+window.addEventListener("error", (event) => {
+  console.error("[Main] Unhandled error:", event.error);
+  diagnostics.logEvent("Unhandled Error", {
     message: event.error?.message,
     filename: event.filename,
     lineno: event.lineno,
@@ -97,34 +110,34 @@ window.addEventListener('error', (event) => {
   });
 });
 
-window.addEventListener('unhandledrejection', (event) => {
-  console.error('[Main] Unhandled promise rejection:', event.reason);
-  diagnostics.logEvent('Unhandled Promise Rejection', {
+window.addEventListener("unhandledrejection", (event) => {
+  console.error("[Main] Unhandled promise rejection:", event.reason);
+  diagnostics.logEvent("Unhandled Promise Rejection", {
     reason: event.reason instanceof Error ? event.reason.message : event.reason,
   });
 });
 
 // Step 4: Render React application
-diagnostic.measureSync('React Render', () => {
+diagnostic.measureSync("React Render", () => {
   try {
     root.render(
       <StrictMode>
         <AppErrorBoundary
           onError={(error, errorInfo) => {
-            console.error('[Main] App-level error caught by boundary:', error);
-            console.error('[Main] Error info:', errorInfo);
-            diagnostics.failStep('React Error Boundary', error, { errorInfo });
+            console.error("[Main] App-level error caught by boundary:", error);
+            console.error("[Main] Error info:", errorInfo);
+            diagnostics.failStep("React Error Boundary", error, { errorInfo });
           }}
         >
           <App />
         </AppErrorBoundary>
-      </StrictMode>
+      </StrictMode>,
     );
-    console.log('[Main] React app render initiated successfully');
-    diagnostics.completeStep('Application Initialization');
+    console.log("[Main] React app render initiated successfully");
+    diagnostics.completeStep("Application Initialization");
   } catch (error) {
-    console.error('[Main] Failed to render React app:', error);
-    diagnostics.failStep('React Render', error as Error);
+    console.error("[Main] Failed to render React app:", error);
+    diagnostics.failStep("React Render", error as Error);
     diagnostics.printReport();
 
     // Show error in DOM instead of blank screen
@@ -151,7 +164,7 @@ diagnostic.measureSync('React Render', () => {
           overflow-x: auto;
           margin-top: 0.5rem;
           color: #374151;
-        ">${error instanceof Error ? error.message : 'Unknown error'}</pre>
+        ">${error instanceof Error ? error.message : "Unknown error"}</pre>
       </details>
       <details style="margin-top: 1rem;">
         <summary style="cursor: pointer;">Diagnostic Report</summary>
@@ -167,19 +180,26 @@ diagnostic.measureSync('React Render', () => {
 // Step 5: Initialize accessibility testing AFTER React mount (non-blocking)
 if (import.meta.env.DEV) {
   setTimeout(() => {
-    diagnostic.measure('Accessibility Testing Setup', async () => {
-      await initializeAccessibilityTesting();
-    }).catch(error => {
-      console.warn('[Main] Failed to initialize accessibility testing:', error);
-      diagnostic.logBrowserBehavior('Accessibility Testing Failed', { error: error.message });
-    });
+    diagnostic
+      .measure("Accessibility Testing Setup", async () => {
+        await initializeAccessibilityTesting();
+      })
+      .catch((error) => {
+        console.warn(
+          "[Main] Failed to initialize accessibility testing:",
+          error,
+        );
+        diagnostic.logBrowserBehavior("Accessibility Testing Failed", {
+          error: error.message,
+        });
+      });
   }, 100);
 }
 
 // Final completion
 setTimeout(() => {
-  diagnostic.checkpoint('Initialization Complete');
-  console.log('[Main] Application initialization completed');
+  diagnostic.checkpoint("Initialization Complete");
+  console.log("[Main] Application initialization completed");
 
   // Print final diagnostic report for debugging
   if (import.meta.env.DEV) {

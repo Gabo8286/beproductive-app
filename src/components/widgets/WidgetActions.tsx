@@ -15,11 +15,11 @@ interface WidgetActionsProps {
   isRefreshing?: boolean;
 }
 
-export function WidgetActions({ 
-  onRefresh, 
-  onConfigure, 
+export function WidgetActions({
+  onRefresh,
+  onConfigure,
   onRemove,
-  isRefreshing = false 
+  isRefreshing = false,
 }: WidgetActionsProps) {
   return (
     <div className="flex items-center gap-1">
@@ -31,10 +31,9 @@ export function WidgetActions({
           disabled={isRefreshing}
           className="h-8 w-8 p-0 apple-button hover:bg-primary/10"
         >
-          <RefreshCw className={cn(
-            "h-4 w-4",
-            isRefreshing && "animate-spin"
-          )} />
+          <RefreshCw
+            className={cn("h-4 w-4", isRefreshing && "animate-spin")}
+          />
         </Button>
       )}
 

@@ -1,15 +1,15 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { Database } from '@/integrations/supabase/types';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Database } from "@/integrations/supabase/types";
 
-type Task = Database['public']['Tables']['tasks']['Row'] & {
+type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
   created_by_profile?: { full_name: string | null; avatar_url: string | null };
 };
 
-type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
-type TaskUpdate = Database['public']['Tables']['tasks']['Update'];
+type TaskInsert = Database["public"]["Tables"]["tasks"]["Insert"];
+type TaskUpdate = Database["public"]["Tables"]["tasks"]["Update"];
 
 interface SubtaskProgress {
   total: number;
@@ -20,20 +20,22 @@ interface SubtaskProgress {
 // Fetch all direct subtasks of a parent task
 export const useSubtasks = (parentId: string | undefined) => {
   return useQuery({
-    queryKey: ['subtasks', parentId],
+    queryKey: ["subtasks", parentId],
     queryFn: async () => {
       if (!parentId) return [];
-      
+
       const { data, error } = await supabase
-        .from('tasks')
-        .select(`
+        .from("tasks")
+        .select(
+          `
           *,
           assigned_to_profile:profiles!tasks_assigned_to_fkey(full_name, avatar_url),
           created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
-        `)
-        .eq('parent_task_id', parentId)
-        .order('position', { ascending: true })
-        .order('created_at', { ascending: true });
+        `,
+        )
+        .eq("parent_task_id", parentId)
+        .order("position", { ascending: true })
+        .order("created_at", { ascending: true });
 
       if (error) throw error;
       return data as Task[];
@@ -45,38 +47,44 @@ export const useSubtasks = (parentId: string | undefined) => {
 // Fetch complete task hierarchy tree
 export const useTaskHierarchy = (taskId: string | undefined) => {
   return useQuery({
-    queryKey: ['task-hierarchy', taskId],
+    queryKey: ["task-hierarchy", taskId],
     queryFn: async () => {
       if (!taskId) return null;
 
       // Fetch the root task and all its descendants
       const { data, error } = await supabase
-        .from('tasks')
-        .select(`
+        .from("tasks")
+        .select(
+          `
           *,
           assigned_to_profile:profiles!tasks_assigned_to_fkey(full_name, avatar_url),
           created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
-        `)
-        .eq('id', taskId)
+        `,
+        )
+        .eq("id", taskId)
         .single();
 
       if (error) throw error;
-      
+
       // Build hierarchy tree recursively
-      const buildTree = async (parentTask: Task): Promise<Task & { subtasks?: Task[] }> => {
+      const buildTree = async (
+        parentTask: Task,
+      ): Promise<Task & { subtasks?: Task[] }> => {
         const { data: subtasks } = await supabase
-          .from('tasks')
-          .select(`
+          .from("tasks")
+          .select(
+            `
             *,
             assigned_to_profile:profiles!tasks_assigned_to_fkey(full_name, avatar_url),
             created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
-          `)
-          .eq('parent_task_id', parentTask.id)
-          .order('position', { ascending: true });
+          `,
+          )
+          .eq("parent_task_id", parentTask.id)
+          .order("position", { ascending: true });
 
         if (subtasks && subtasks.length > 0) {
           const subtasksWithChildren = await Promise.all(
-            subtasks.map((subtask) => buildTree(subtask as Task))
+            subtasks.map((subtask) => buildTree(subtask as Task)),
           );
           return { ...parentTask, subtasks: subtasksWithChildren };
         }
@@ -93,18 +101,18 @@ export const useTaskHierarchy = (taskId: string | undefined) => {
 // Get subtask progress for a parent task
 export const useSubtaskProgress = (parentId: string | undefined) => {
   return useQuery({
-    queryKey: ['subtask-progress', parentId],
+    queryKey: ["subtask-progress", parentId],
     queryFn: async () => {
       if (!parentId) return null;
 
       const { data, error } = await supabase
-        .from('tasks')
-        .select('metadata')
-        .eq('id', parentId)
+        .from("tasks")
+        .select("metadata")
+        .eq("id", parentId)
         .single();
 
       if (error) throw error;
-      
+
       const metadata = data.metadata as any;
       return metadata?.subtask_progress as SubtaskProgress | null;
     },
@@ -122,22 +130,27 @@ export const useCreateSubtask = () => {
       taskData,
     }: {
       parentId: string;
-      taskData: Omit<TaskInsert, 'parent_task_id' | 'created_by' | 'workspace_id'>;
+      taskData: Omit<
+        TaskInsert,
+        "parent_task_id" | "created_by" | "workspace_id"
+      >;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
 
       // Get parent task to inherit workspace
       const { data: parentTask, error: parentError } = await supabase
-        .from('tasks')
-        .select('workspace_id')
-        .eq('id', parentId)
+        .from("tasks")
+        .select("workspace_id")
+        .eq("id", parentId)
         .single();
 
       if (parentError) throw parentError;
 
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .insert({
           ...taskData,
           parent_task_id: parentId,
@@ -151,15 +164,21 @@ export const useCreateSubtask = () => {
       return data;
     },
     onSuccess: (_, variables) => {
-      toast.success('Subtask created successfully');
-      queryClient.invalidateQueries({ queryKey: ['subtasks', variables.parentId] });
-      queryClient.invalidateQueries({ queryKey: ['task-hierarchy', variables.parentId] });
-      queryClient.invalidateQueries({ queryKey: ['subtask-progress', variables.parentId] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success("Subtask created successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["subtasks", variables.parentId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["task-hierarchy", variables.parentId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["subtask-progress", variables.parentId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
-      console.error('Error creating subtask:', error);
-      toast.error('Failed to create subtask');
+      console.error("Error creating subtask:", error);
+      toast.error("Failed to create subtask");
     },
   });
 };
@@ -177,9 +196,9 @@ export const useConvertToSubtask = () => {
       parentId: string;
     }) => {
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .update({ parent_task_id: parentId })
-        .eq('id', taskId)
+        .eq("id", taskId)
         .select()
         .single();
 
@@ -187,16 +206,20 @@ export const useConvertToSubtask = () => {
       return data;
     },
     onSuccess: (_, variables) => {
-      toast.success('Task converted to subtask');
-      queryClient.invalidateQueries({ queryKey: ['subtasks', variables.parentId] });
-      queryClient.invalidateQueries({ queryKey: ['task-hierarchy'] });
-      queryClient.invalidateQueries({ queryKey: ['subtask-progress', variables.parentId] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
+      toast.success("Task converted to subtask");
+      queryClient.invalidateQueries({
+        queryKey: ["subtasks", variables.parentId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["task-hierarchy"] });
+      queryClient.invalidateQueries({
+        queryKey: ["subtask-progress", variables.parentId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task", variables.taskId] });
     },
     onError: (error) => {
-      console.error('Error converting to subtask:', error);
-      toast.error('Failed to convert task to subtask');
+      console.error("Error converting to subtask:", error);
+      toast.error("Failed to convert task to subtask");
     },
   });
 };
@@ -209,15 +232,15 @@ export const usePromoteToParent = () => {
     mutationFn: async ({ taskId }: { taskId: string }) => {
       // Get current parent before updating
       const { data: currentTask } = await supabase
-        .from('tasks')
-        .select('parent_task_id')
-        .eq('id', taskId)
+        .from("tasks")
+        .select("parent_task_id")
+        .eq("id", taskId)
         .single();
 
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .update({ parent_task_id: null })
-        .eq('id', taskId)
+        .eq("id", taskId)
         .select()
         .single();
 
@@ -225,18 +248,22 @@ export const usePromoteToParent = () => {
       return { data, oldParentId: currentTask?.parent_task_id };
     },
     onSuccess: (result) => {
-      toast.success('Task promoted to parent task');
+      toast.success("Task promoted to parent task");
       if (result.oldParentId) {
-        queryClient.invalidateQueries({ queryKey: ['subtasks', result.oldParentId] });
-        queryClient.invalidateQueries({ queryKey: ['subtask-progress', result.oldParentId] });
+        queryClient.invalidateQueries({
+          queryKey: ["subtasks", result.oldParentId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["subtask-progress", result.oldParentId],
+        });
       }
-      queryClient.invalidateQueries({ queryKey: ['task-hierarchy'] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['task', result.data.id] });
+      queryClient.invalidateQueries({ queryKey: ["task-hierarchy"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task", result.data.id] });
     },
     onError: (error) => {
-      console.error('Error promoting task:', error);
-      toast.error('Failed to promote task');
+      console.error("Error promoting task:", error);
+      toast.error("Failed to promote task");
     },
   });
 };
@@ -255,15 +282,15 @@ export const useMoveSubtask = () => {
     }) => {
       // Get old parent for cache invalidation
       const { data: currentTask } = await supabase
-        .from('tasks')
-        .select('parent_task_id')
-        .eq('id', taskId)
+        .from("tasks")
+        .select("parent_task_id")
+        .eq("id", taskId)
         .single();
 
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .update({ parent_task_id: newParentId })
-        .eq('id', taskId)
+        .eq("id", taskId)
         .select()
         .single();
 
@@ -271,26 +298,34 @@ export const useMoveSubtask = () => {
       return { data, oldParentId: currentTask?.parent_task_id };
     },
     onSuccess: (result, variables) => {
-      toast.success('Subtask moved successfully');
-      
+      toast.success("Subtask moved successfully");
+
       // Invalidate old parent caches
       if (result.oldParentId) {
-        queryClient.invalidateQueries({ queryKey: ['subtasks', result.oldParentId] });
-        queryClient.invalidateQueries({ queryKey: ['subtask-progress', result.oldParentId] });
+        queryClient.invalidateQueries({
+          queryKey: ["subtasks", result.oldParentId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["subtask-progress", result.oldParentId],
+        });
       }
-      
+
       // Invalidate new parent caches
       if (variables.newParentId) {
-        queryClient.invalidateQueries({ queryKey: ['subtasks', variables.newParentId] });
-        queryClient.invalidateQueries({ queryKey: ['subtask-progress', variables.newParentId] });
+        queryClient.invalidateQueries({
+          queryKey: ["subtasks", variables.newParentId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["subtask-progress", variables.newParentId],
+        });
       }
-      
-      queryClient.invalidateQueries({ queryKey: ['task-hierarchy'] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+
+      queryClient.invalidateQueries({ queryKey: ["task-hierarchy"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
-      console.error('Error moving subtask:', error);
-      toast.error('Failed to move subtask');
+      console.error("Error moving subtask:", error);
+      toast.error("Failed to move subtask");
     },
   });
 };

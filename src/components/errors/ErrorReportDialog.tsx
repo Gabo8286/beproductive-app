@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 interface ErrorReportDialogProps {
   error: Error;
@@ -24,7 +24,7 @@ export const ErrorReportDialog = ({
   open,
   onOpenChange,
 }: ErrorReportDialogProps) => {
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -33,9 +33,9 @@ export const ErrorReportDialog = ({
 
     try {
       // Submit error report to backend
-      await fetch('/api/errors/user-report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/errors/user-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           error: {
             message: error.message,
@@ -54,17 +54,17 @@ export const ErrorReportDialog = ({
       });
 
       toast({
-        title: 'Report Submitted',
-        description: 'Thank you for helping us improve!',
+        title: "Report Submitted",
+        description: "Thank you for helping us improve!",
       });
 
       onOpenChange(false);
-      setDescription('');
+      setDescription("");
     } catch (submitError) {
       toast({
-        title: 'Failed to Submit',
-        description: 'Could not send the error report. Please try again.',
-        variant: 'destructive',
+        title: "Failed to Submit",
+        description: "Could not send the error report. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);

@@ -1,13 +1,15 @@
-import { useRecurringInstances } from '@/hooks/useRecurringTasks';
-import { TaskCard } from '../TaskCard';
-import { Skeleton } from '@/components/ui/skeleton';
-import { format } from 'date-fns';
+import { useRecurringInstances } from "@/hooks/useRecurringTasks";
+import { TaskCard } from "../TaskCard";
+import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
 
 interface RecurringInstancesListProps {
   templateId: string;
 }
 
-export function RecurringInstancesList({ templateId }: RecurringInstancesListProps) {
+export function RecurringInstancesList({
+  templateId,
+}: RecurringInstancesListProps) {
   const { data: instances, isLoading } = useRecurringInstances(templateId);
 
   if (isLoading) {
@@ -30,20 +32,25 @@ export function RecurringInstancesList({ templateId }: RecurringInstancesListPro
   }
 
   // Group by month
-  const groupedInstances = instances.reduce((acc, instance) => {
-    if (!instance.instance_date) return acc;
-    
-    const monthKey = format(new Date(instance.instance_date), 'MMMM yyyy');
-    if (!acc[monthKey]) acc[monthKey] = [];
-    acc[monthKey].push(instance);
-    return acc;
-  }, {} as Record<string, typeof instances>);
+  const groupedInstances = instances.reduce(
+    (acc, instance) => {
+      if (!instance.instance_date) return acc;
+
+      const monthKey = format(new Date(instance.instance_date), "MMMM yyyy");
+      if (!acc[monthKey]) acc[monthKey] = [];
+      acc[monthKey].push(instance);
+      return acc;
+    },
+    {} as Record<string, typeof instances>,
+  );
 
   return (
     <div className="space-y-6">
       {Object.entries(groupedInstances).map(([month, monthInstances]) => (
         <div key={month} className="space-y-2">
-          <h3 className="text-sm font-semibold text-muted-foreground">{month}</h3>
+          <h3 className="text-sm font-semibold text-muted-foreground">
+            {month}
+          </h3>
           <div className="space-y-2">
             {monthInstances.map((instance) => (
               <div key={instance.id} className="relative">

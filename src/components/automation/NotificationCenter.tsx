@@ -1,16 +1,19 @@
-import { useState } from 'react';
-import { useNotifications, useMarkNotificationRead } from '@/hooks/useAutomation';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Badge } from '@/components/ui/badge';
-import { Bell, Check, X } from 'lucide-react';
+import { useState } from "react";
+import {
+  useNotifications,
+  useMarkNotificationRead,
+} from "@/hooks/useAutomation";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
+import { Bell, Check, X } from "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { formatDistanceToNow } from 'date-fns';
-import { Link } from 'react-router-dom';
+} from "@/components/ui/popover";
+import { formatDistanceToNow } from "date-fns";
+import { Link } from "react-router-dom";
 
 export function NotificationCenter() {
   const { data: notifications = [] } = useNotifications();
@@ -26,18 +29,18 @@ export function NotificationCenter() {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'due_reminder':
-        return '⏰';
-      case 'overdue_alert':
-        return '🚨';
-      case 'completion':
-        return '🎉';
-      case 'time_reminder':
-        return '⏱️';
-      case 'weekly_summary':
-        return '📊';
+      case "due_reminder":
+        return "⏰";
+      case "overdue_alert":
+        return "🚨";
+      case "completion":
+        return "🎉";
+      case "time_reminder":
+        return "⏱️";
+      case "weekly_summary":
+        return "📊";
       default:
-        return '📬';
+        return "📬";
     }
   };
 
@@ -51,7 +54,7 @@ export function NotificationCenter() {
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
             >
-              {unreadCount > 9 ? '9+' : unreadCount}
+              {unreadCount > 9 ? "9+" : unreadCount}
             </Badge>
           )}
         </Button>
@@ -68,7 +71,9 @@ export function NotificationCenter() {
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <Bell className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-              <p className="text-sm text-muted-foreground">No notifications yet</p>
+              <p className="text-sm text-muted-foreground">
+                No notifications yet
+              </p>
             </div>
           ) : (
             <div className="divide-y">
@@ -76,7 +81,7 @@ export function NotificationCenter() {
                 <div
                   key={notification.id}
                   className={`p-4 hover:bg-accent/50 transition-colors ${
-                    !notification.read_at ? 'bg-accent/20' : ''
+                    !notification.read_at ? "bg-accent/20" : ""
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -112,9 +117,12 @@ export function NotificationCenter() {
                         </Link>
                       )}
                       <p className="text-xs text-muted-foreground mt-1">
-                        {formatDistanceToNow(new Date(notification.created_at), {
-                          addSuffix: true,
-                        })}
+                        {formatDistanceToNow(
+                          new Date(notification.created_at),
+                          {
+                            addSuffix: true,
+                          },
+                        )}
                       </p>
                     </div>
                   </div>

@@ -1,7 +1,8 @@
-import { useId, InputHTMLAttributes } from 'react';
-import { cn } from '@/lib/utils';
+import { useId, InputHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-interface AccessibleInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'id'> {
+interface AccessibleInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "id"> {
   label: string;
   error?: string;
   helperText?: string;
@@ -24,20 +25,17 @@ export const AccessibleInput = ({
   const id = useId();
   const errorId = `${id}-error`;
   const helperId = `${id}-helper`;
-  
-  const describedBy = [
-    error ? errorId : null,
-    helperText ? helperId : null,
-  ].filter(Boolean).join(' ') || undefined;
+
+  const describedBy =
+    [error ? errorId : null, helperText ? helperId : null]
+      .filter(Boolean)
+      .join(" ") || undefined;
 
   return (
     <div className="space-y-2">
-      <label 
-        htmlFor={id} 
-        className={cn(
-          "block text-sm font-medium",
-          hideLabel && "sr-only"
-        )}
+      <label
+        htmlFor={id}
+        className={cn("block text-sm font-medium", hideLabel && "sr-only")}
       >
         {label}
         {required && (
@@ -46,7 +44,7 @@ export const AccessibleInput = ({
           </span>
         )}
       </label>
-      
+
       <input
         id={id}
         aria-invalid={!!error}
@@ -59,17 +57,17 @@ export const AccessibleInput = ({
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
           error && "border-destructive focus-visible:ring-destructive",
-          className
+          className,
         )}
         {...props}
       />
-      
+
       {helperText && !error && (
         <p id={helperId} className="text-sm text-muted-foreground">
           {helperText}
         </p>
       )}
-      
+
       {error && (
         <p id={errorId} role="alert" className="text-sm text-destructive">
           {error}

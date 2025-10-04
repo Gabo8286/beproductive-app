@@ -32,7 +32,7 @@ export interface MilestoneTemplate {
   id: string;
   name: string;
   description: string;
-  milestones: Omit<CreateMilestoneInput, 'goal_id'>[];
+  milestones: Omit<CreateMilestoneInput, "goal_id">[];
   category: string;
   created_by: string;
   created_at: string;
@@ -51,24 +51,32 @@ export interface MilestoneAnalytics {
 // Get milestones for a goal with enhanced data
 export function useGoalMilestones(goalId: string) {
   return useQuery({
-    queryKey: ['goal-milestones', goalId],
+    queryKey: ["goal-milestones", goalId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('goal_milestones')
-        .select(`
+        .from("goal_milestones")
+        .select(
+          `
           *,
           dependencies:goal_milestone_dependencies!goal_milestone_dependencies_milestone_id_fkey(
             depends_on_milestone:goal_milestones!goal_milestone_dependencies_depends_on_id_fkey(
               id, title, completed_at
             )
           )
-        `)
-        .eq('goal_id', goalId)
-        .order('target_date', { ascending: true });
+        `,
+        )
+        .eq("goal_id", goalId)
+        .order("target_date", { ascending: true });
 
       if (error) throw error;
       return data as (GoalMilestone & {
-        dependencies: { depends_on_milestone: { id: string; title: string; completed_at: string | null } }[];
+        dependencies: {
+          depends_on_milestone: {
+            id: string;
+            title: string;
+            completed_at: string | null;
+          };
+        }[];
       })[];
     },
     enabled: !!goalId,
@@ -78,11 +86,14 @@ export function useGoalMilestones(goalId: string) {
 // Get milestone analytics
 export function useMilestoneAnalytics(goalId: string) {
   return useQuery({
-    queryKey: ['milestone-analytics', goalId],
+    queryKey: ["milestone-analytics", goalId],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('calculate_milestone_analytics', {
-        goal_id: goalId
-      });
+      const { data, error } = await supabase.rpc(
+        "calculate_milestone_analytics",
+        {
+          goal_id: goalId,
+        },
+      );
 
       if (error) throw error;
       return data as unknown as MilestoneAnalytics;
@@ -104,7 +115,10 @@ export function useCreateMilestone() {
       if (input.title.length > 200) {
         throw new Error("Milestone title must be less than 200 characters");
       }
-      if (input.target_progress && (input.target_progress < 0 || input.target_progress > 100)) {
+      if (
+        input.target_progress &&
+        (input.target_progress < 0 || input.target_progress > 100)
+      ) {
         throw new Error("Target progress must be between 0 and 100");
       }
 
@@ -112,7 +126,7 @@ export function useCreateMilestone() {
         goal_id: input.goal_id,
         title: input.title.trim(),
         description: input.description?.trim() || null,
-        target_date: input.target_date?.toISOString().split('T')[0] || null,
+        target_date: input.target_date?.toISOString().split("T")[0] || null,
         progress_percentage: input.target_progress || 0,
         priority: input.priority || 3,
         estimated_hours: input.estimated_hours || null,
@@ -121,7 +135,7 @@ export function useCreateMilestone() {
       };
 
       const { data, error } = await supabase
-        .from('goal_milestones')
+        .from("goal_milestones")
         .insert(milestoneData)
         .select()
         .single();
@@ -130,13 +144,13 @@ export function useCreateMilestone() {
 
       // Add dependencies if provided
       if (input.depends_on && input.depends_on.length > 0) {
-        const dependencies = input.depends_on.map(dependsOnId => ({
+        const dependencies = input.depends_on.map((dependsOnId) => ({
           milestone_id: data.id,
-          depends_on_id: dependsOnId
+          depends_on_id: dependsOnId,
         }));
 
         const { error: depError } = await supabase
-          .from('goal_milestone_dependencies')
+          .from("goal_milestone_dependencies")
           .insert(dependencies);
 
         if (depError) throw depError;
@@ -145,14 +159,18 @@ export function useCreateMilestone() {
       return data as GoalMilestone;
     },
     onSuccess: (milestone) => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones', milestone.goal_id] });
-      queryClient.invalidateQueries({ queryKey: ['milestone-analytics', milestone.goal_id] });
-      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      queryClient.invalidateQueries({
+        queryKey: ["goal-milestones", milestone.goal_id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["milestone-analytics", milestone.goal_id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
       toast.success("Milestone created successfully!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to create milestone");
-      console.error('Create milestone error:', error);
+      console.error("Create milestone error:", error);
     },
   });
 }
@@ -162,7 +180,10 @@ export function useUpdateMilestone() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...input }: UpdateMilestoneInput & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...input
+    }: UpdateMilestoneInput & { id: string }) => {
       if (input.title !== undefined) {
         if (!input.title.trim()) {
           throw new Error("Milestone title is required");
@@ -171,26 +192,33 @@ export function useUpdateMilestone() {
           throw new Error("Milestone title must be less than 200 characters");
         }
       }
-      if (input.target_progress && (input.target_progress < 0 || input.target_progress > 100)) {
+      if (
+        input.target_progress &&
+        (input.target_progress < 0 || input.target_progress > 100)
+      ) {
         throw new Error("Target progress must be between 0 and 100");
       }
 
       const updateData: any = {};
       if (input.title !== undefined) updateData.title = input.title.trim();
-      if (input.description !== undefined) updateData.description = input.description?.trim() || null;
+      if (input.description !== undefined)
+        updateData.description = input.description?.trim() || null;
       if (input.target_date !== undefined) {
-        updateData.target_date = input.target_date?.toISOString().split('T')[0] || null;
+        updateData.target_date =
+          input.target_date?.toISOString().split("T")[0] || null;
       }
-      if (input.target_progress !== undefined) updateData.progress_percentage = input.target_progress;
+      if (input.target_progress !== undefined)
+        updateData.progress_percentage = input.target_progress;
       if (input.priority !== undefined) updateData.priority = input.priority;
-      if (input.estimated_hours !== undefined) updateData.estimated_hours = input.estimated_hours;
+      if (input.estimated_hours !== undefined)
+        updateData.estimated_hours = input.estimated_hours;
       if (input.tags !== undefined) updateData.tags = input.tags;
       if (input.metadata !== undefined) updateData.metadata = input.metadata;
 
       const { data, error } = await supabase
-        .from('goal_milestones')
+        .from("goal_milestones")
         .update(updateData)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -199,18 +227,18 @@ export function useUpdateMilestone() {
       // Update dependencies if provided
       if (input.depends_on !== undefined) {
         await supabase
-          .from('goal_milestone_dependencies')
+          .from("goal_milestone_dependencies")
           .delete()
-          .eq('milestone_id', id);
+          .eq("milestone_id", id);
 
         if (input.depends_on.length > 0) {
-          const dependencies = input.depends_on.map(dependsOnId => ({
+          const dependencies = input.depends_on.map((dependsOnId) => ({
             milestone_id: id,
-            depends_on_id: dependsOnId
+            depends_on_id: dependsOnId,
           }));
 
           const { error: depError } = await supabase
-            .from('goal_milestone_dependencies')
+            .from("goal_milestone_dependencies")
             .insert(dependencies);
 
           if (depError) throw depError;
@@ -220,14 +248,18 @@ export function useUpdateMilestone() {
       return data as GoalMilestone;
     },
     onSuccess: (milestone) => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones', milestone.goal_id] });
-      queryClient.invalidateQueries({ queryKey: ['milestone-analytics', milestone.goal_id] });
-      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      queryClient.invalidateQueries({
+        queryKey: ["goal-milestones", milestone.goal_id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["milestone-analytics", milestone.goal_id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
       toast.success("Milestone updated successfully!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to update milestone");
-      console.error('Update milestone error:', error);
+      console.error("Update milestone error:", error);
     },
   });
 }
@@ -240,31 +272,34 @@ export function useCompleteMilestone() {
     mutationFn: async ({
       milestoneId,
       notes,
-      actualHours
+      actualHours,
     }: {
       milestoneId: string;
       notes?: string;
       actualHours?: number;
     }) => {
-      const { data, error } = await supabase.rpc('complete_milestone_enhanced', {
-        milestone_id: milestoneId,
-        completion_notes: notes || null,
-        actual_hours: actualHours || null
-      });
+      const { data, error } = await supabase.rpc(
+        "complete_milestone_enhanced",
+        {
+          milestone_id: milestoneId,
+          completion_notes: notes || null,
+          actual_hours: actualHours || null,
+        },
+      );
 
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones'] });
-      queryClient.invalidateQueries({ queryKey: ['milestone-analytics'] });
-      queryClient.invalidateQueries({ queryKey: ['goals'] });
-      queryClient.invalidateQueries({ queryKey: ['goal-progress-analytics'] });
+      queryClient.invalidateQueries({ queryKey: ["goal-milestones"] });
+      queryClient.invalidateQueries({ queryKey: ["milestone-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["goal-progress-analytics"] });
       toast.success("Milestone completed!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to complete milestone");
-      console.error('Complete milestone error:', error);
+      console.error("Complete milestone error:", error);
     },
   });
 }
@@ -276,21 +311,21 @@ export function useDeleteMilestone() {
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('goal_milestones')
+        .from("goal_milestones")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones'] });
-      queryClient.invalidateQueries({ queryKey: ['milestone-analytics'] });
-      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      queryClient.invalidateQueries({ queryKey: ["goal-milestones"] });
+      queryClient.invalidateQueries({ queryKey: ["milestone-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
       toast.success("Milestone deleted successfully!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to delete milestone");
-      console.error('Delete milestone error:', error);
+      console.error("Delete milestone error:", error);
     },
   });
 }
@@ -303,30 +338,35 @@ export function useBulkMilestoneOperations() {
     mutationFn: async ({
       operation,
       milestoneIds,
-      data
+      data,
     }: {
-      operation: 'complete' | 'delete' | 'update';
+      operation: "complete" | "delete" | "update";
       milestoneIds: string[];
       data?: any;
     }) => {
-      const { data: result, error } = await supabase.rpc('bulk_milestone_operations', {
-        operation_type: operation,
-        milestone_ids: milestoneIds,
-        operation_data: data || null
-      });
+      const { data: result, error } = await supabase.rpc(
+        "bulk_milestone_operations",
+        {
+          operation_type: operation,
+          milestone_ids: milestoneIds,
+          operation_data: data || null,
+        },
+      );
 
       if (error) throw error;
       return result;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones'] });
-      queryClient.invalidateQueries({ queryKey: ['milestone-analytics'] });
-      queryClient.invalidateQueries({ queryKey: ['goals'] });
-      toast.success(`Bulk ${variables.operation} completed for ${variables.milestoneIds.length} milestones`);
+      queryClient.invalidateQueries({ queryKey: ["goal-milestones"] });
+      queryClient.invalidateQueries({ queryKey: ["milestone-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      toast.success(
+        `Bulk ${variables.operation} completed for ${variables.milestoneIds.length} milestones`,
+      );
     },
     onError: (error: any) => {
       toast.error(error.message || "Bulk operation failed");
-      console.error('Bulk milestone operation error:', error);
+      console.error("Bulk milestone operation error:", error);
     },
   });
 }
@@ -334,12 +374,12 @@ export function useBulkMilestoneOperations() {
 // Milestone templates
 export function useMilestoneTemplates() {
   return useQuery({
-    queryKey: ['milestone-templates'],
+    queryKey: ["milestone-templates"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('milestone_templates')
-        .select('*')
-        .order('name');
+        .from("milestone_templates")
+        .select("*")
+        .order("name");
 
       if (error) throw error;
       return (data || []) as any as MilestoneTemplate[];
@@ -355,30 +395,34 @@ export function useApplyMilestoneTemplate() {
     mutationFn: async ({
       goalId,
       templateId,
-      startDate
+      startDate,
     }: {
       goalId: string;
       templateId: string;
       startDate?: Date;
     }) => {
-      const { data, error } = await supabase.rpc('apply_milestone_template', {
+      const { data, error } = await supabase.rpc("apply_milestone_template", {
         goal_id: goalId,
         template_id: templateId,
-        start_date: startDate?.toISOString().split('T')[0] || null
+        start_date: startDate?.toISOString().split("T")[0] || null,
       });
 
       if (error) throw error;
       return data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['goal-milestones', variables.goalId] });
-      queryClient.invalidateQueries({ queryKey: ['milestone-analytics', variables.goalId] });
-      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      queryClient.invalidateQueries({
+        queryKey: ["goal-milestones", variables.goalId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["milestone-analytics", variables.goalId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["goals"] });
       toast.success("Milestone template applied successfully!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to apply template");
-      console.error('Apply template error:', error);
+      console.error("Apply template error:", error);
     },
   });
 }

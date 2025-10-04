@@ -1,30 +1,35 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from './types';
-import { safeStorage } from '@/utils/storage/safeStorage';
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "./types";
+import { safeStorage } from "@/utils/storage/safeStorage";
 
 /**
  * Environment variable validation
  */
-function validateEnvironment(): { url: string; key: string; isValid: boolean; errors: string[] } {
+function validateEnvironment(): {
+  url: string;
+  key: string;
+  isValid: boolean;
+  errors: string[];
+} {
   const url = import.meta.env.VITE_SUPABASE_URL;
   const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   const errors: string[] = [];
 
   if (!url) {
-    errors.push('VITE_SUPABASE_URL is not defined');
-  } else if (!url.startsWith('http')) {
-    errors.push('VITE_SUPABASE_URL must be a valid URL');
+    errors.push("VITE_SUPABASE_URL is not defined");
+  } else if (!url.startsWith("http")) {
+    errors.push("VITE_SUPABASE_URL must be a valid URL");
   }
 
   if (!key) {
-    errors.push('VITE_SUPABASE_PUBLISHABLE_KEY is not defined');
+    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY is not defined");
   } else if (key.length < 20) {
-    errors.push('VITE_SUPABASE_PUBLISHABLE_KEY appears to be invalid');
+    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY appears to be invalid");
   }
 
   return {
-    url: url || '',
-    key: key || '',
+    url: url || "",
+    key: key || "",
     isValid: errors.length === 0,
     errors,
   };
@@ -67,7 +72,8 @@ class SafeStorageAdapter {
  */
 class SafeSupabaseClient {
   private client: SupabaseClient<Database> | null = null;
-  private initializationPromise: Promise<SupabaseClient<Database> | null> | null = null;
+  private initializationPromise: Promise<SupabaseClient<Database> | null> | null =
+    null;
   private initializationTimeout = 10000; // 10 seconds
   private isInitialized = false;
   private initializationError: string | null = null;
@@ -89,8 +95,12 @@ class SafeSupabaseClient {
     return new Promise((resolve) => {
       // Set timeout for initialization
       const timeoutId = setTimeout(() => {
-        console.error('[SafeSupabase] Initialization timed out after', this.initializationTimeout, 'ms');
-        this.initializationError = 'Supabase initialization timed out';
+        console.error(
+          "[SafeSupabase] Initialization timed out after",
+          this.initializationTimeout,
+          "ms",
+        );
+        this.initializationError = "Supabase initialization timed out";
         this.isInitialized = true;
         resolve(null);
       }, this.initializationTimeout);
@@ -99,15 +109,18 @@ class SafeSupabaseClient {
         // Validate environment variables first
         const env = validateEnvironment();
         if (!env.isValid) {
-          console.error('[SafeSupabase] Environment validation failed:', env.errors);
-          this.initializationError = `Environment validation failed: ${env.errors.join(', ')}`;
+          console.error(
+            "[SafeSupabase] Environment validation failed:",
+            env.errors,
+          );
+          this.initializationError = `Environment validation failed: ${env.errors.join(", ")}`;
           clearTimeout(timeoutId);
           this.isInitialized = true;
           resolve(null);
           return;
         }
 
-        console.log('[SafeSupabase] Creating Supabase client...');
+        console.log("[SafeSupabase] Creating Supabase client...");
 
         // Create client with safe storage
         const client = createClient<Database>(env.url, env.key, {
@@ -116,45 +129,55 @@ class SafeSupabaseClient {
             persistSession: true,
             autoRefreshToken: true,
             detectSessionInUrl: true,
-            flowType: 'pkce',
+            flowType: "pkce",
           },
           // Add connection timeout
           global: {
             headers: {
-              'x-client-timeout': '10000',
+              "x-client-timeout": "10000",
             },
           },
         });
 
         // Test the client connection
         client.auth.onAuthStateChange((event, session) => {
-          console.log('[SafeSupabase] Auth state changed:', event, session ? 'session exists' : 'no session');
+          console.log(
+            "[SafeSupabase] Auth state changed:",
+            event,
+            session ? "session exists" : "no session",
+          );
         });
 
         // Try to get initial session to test connectivity
-        client.auth.getSession()
+        client.auth
+          .getSession()
           .then(({ data, error }) => {
             if (error) {
-              console.warn('[SafeSupabase] Initial session check warning:', error.message);
+              console.warn(
+                "[SafeSupabase] Initial session check warning:",
+                error.message,
+              );
               // Don't fail initialization for session errors - they might not be logged in
             }
-            console.log('[SafeSupabase] Client initialized successfully');
+            console.log("[SafeSupabase] Client initialized successfully");
             this.client = client;
             this.isInitialized = true;
             clearTimeout(timeoutId);
             resolve(client);
           })
           .catch((error) => {
-            console.error('[SafeSupabase] Failed to get initial session:', error);
+            console.error(
+              "[SafeSupabase] Failed to get initial session:",
+              error,
+            );
             this.initializationError = `Failed to connect to Supabase: ${error.message}`;
             this.isInitialized = true;
             clearTimeout(timeoutId);
             resolve(null);
           });
-
       } catch (error) {
-        console.error('[SafeSupabase] Failed to create client:', error);
-        this.initializationError = `Failed to create Supabase client: ${error instanceof Error ? error.message : 'Unknown error'}`;
+        console.error("[SafeSupabase] Failed to create client:", error);
+        this.initializationError = `Failed to create Supabase client: ${error instanceof Error ? error.message : "Unknown error"}`;
         this.isInitialized = true;
         clearTimeout(timeoutId);
         resolve(null);
@@ -227,9 +250,11 @@ export const supabase = new Proxy({} as SupabaseClient<Database>, {
     const client = safeSupabaseClient.getClientSync();
     if (!client) {
       // Return a placeholder that throws meaningful errors
-      if (typeof prop === 'string') {
+      if (typeof prop === "string") {
         return () => {
-          const error = safeSupabaseClient.getInitializationError() || 'Supabase client not ready';
+          const error =
+            safeSupabaseClient.getInitializationError() ||
+            "Supabase client not ready";
           throw new Error(`[SafeSupabase] Cannot access ${prop}: ${error}`);
         };
       }

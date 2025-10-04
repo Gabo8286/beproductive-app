@@ -1,7 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useHabitTrends } from "@/hooks/useHabitAnalytics";
-import { Line, LineChart, Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import {
+  Line,
+  LineChart,
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from "recharts";
 import { format } from "date-fns";
 import { TrendingUp, Calendar, Clock } from "lucide-react";
 
@@ -15,13 +25,15 @@ export function CompletionTrends({ habitId }: CompletionTrendsProps) {
   const { data: trends90 } = useHabitTrends(habitId, 90);
 
   const formatChartData = (data: any[] | undefined) => {
-    return data?.map(t => ({
-      date: format(new Date(t.date), 'MMM dd'),
-      fullDate: t.date,
-      rate: t.completion_rate,
-      streak: t.streak,
-      mood: t.mood,
-    })) || [];
+    return (
+      data?.map((t) => ({
+        date: format(new Date(t.date), "MMM dd"),
+        fullDate: t.date,
+        rate: t.completion_rate,
+        streak: t.streak,
+        mood: t.mood,
+      })) || []
+    );
   };
 
   const weekData = formatChartData(trends7);
@@ -29,21 +41,25 @@ export function CompletionTrends({ habitId }: CompletionTrendsProps) {
   const quarterData = formatChartData(trends90);
 
   // Calculate day of week patterns
-  const dayOfWeekData = trends30?.reduce((acc, t) => {
-    const day = new Date(t.date).getDay();
-    const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][day];
-    
-    if (!acc[dayName]) {
-      acc[dayName] = { day: dayName, completions: 0, total: 0 };
-    }
-    
-    acc[dayName].total++;
-    if (t.completions > 0) acc[dayName].completions++;
-    
-    return acc;
-  }, {} as Record<string, { day: string; completions: number; total: number }>) || {};
+  const dayOfWeekData =
+    trends30?.reduce(
+      (acc, t) => {
+        const day = new Date(t.date).getDay();
+        const dayName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day];
 
-  const dayPatternData = Object.values(dayOfWeekData).map(d => ({
+        if (!acc[dayName]) {
+          acc[dayName] = { day: dayName, completions: 0, total: 0 };
+        }
+
+        acc[dayName].total++;
+        if (t.completions > 0) acc[dayName].completions++;
+
+        return acc;
+      },
+      {} as Record<string, { day: string; completions: number; total: number }>,
+    ) || {};
+
+  const dayPatternData = Object.values(dayOfWeekData).map((d) => ({
     day: d.day,
     rate: d.total > 0 ? (d.completions / d.total) * 100 : 0,
   }));

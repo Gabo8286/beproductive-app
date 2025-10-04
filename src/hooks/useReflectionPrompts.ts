@@ -14,25 +14,25 @@ const PROMPTS_QUERY_KEY = "reflection-prompts";
  */
 export function useReflectionPrompts(
   category?: PromptCategory,
-  frequency?: PromptFrequency
+  frequency?: PromptFrequency,
 ) {
   return useQuery({
     queryKey: [PROMPTS_QUERY_KEY, category, frequency],
     queryFn: async () => {
       const user = await supabase.auth.getUser();
-      
+
       let query = supabase
-        .from('reflection_prompts')
-        .select('*')
+        .from("reflection_prompts")
+        .select("*")
         .or(`is_system.eq.true,created_by.eq.${user.data.user?.id}`)
-        .order('effectiveness_score', { ascending: false, nullsFirst: false });
+        .order("effectiveness_score", { ascending: false, nullsFirst: false });
 
       if (category) {
-        query = query.eq('category', category);
+        query = query.eq("category", category);
       }
 
       if (frequency) {
-        query = query.eq('frequency', frequency);
+        query = query.eq("frequency", frequency);
       }
 
       const { data, error } = await query;
@@ -48,12 +48,12 @@ export function useReflectionPrompts(
  */
 export function useDailyPrompts(reflectionDate: string) {
   return useQuery({
-    queryKey: ['daily-prompts', reflectionDate],
+    queryKey: ["daily-prompts", reflectionDate],
     queryFn: async () => {
       const { data: user } = await supabase.auth.getUser();
-      if (!user.user) throw new Error('Not authenticated');
+      if (!user.user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase.rpc('generate_daily_prompts', {
+      const { data, error } = await supabase.rpc("generate_daily_prompts", {
         p_user_id: user.user.id,
         p_reflection_date: reflectionDate,
       });
@@ -82,11 +82,11 @@ export function useCreatePrompt() {
       const user = await supabase.auth.getUser();
 
       if (input.difficulty_level < 1 || input.difficulty_level > 5) {
-        throw new Error('Difficulty level must be between 1 and 5');
+        throw new Error("Difficulty level must be between 1 and 5");
       }
 
       const { data, error } = await supabase
-        .from('reflection_prompts')
+        .from("reflection_prompts")
         .insert({
           prompt_text: input.prompt_text,
           category: input.category,
@@ -121,9 +121,9 @@ export function useDeletePrompt() {
   return useMutation({
     mutationFn: async (promptId: string) => {
       const { error } = await supabase
-        .from('reflection_prompts')
+        .from("reflection_prompts")
         .delete()
-        .eq('id', promptId);
+        .eq("id", promptId);
 
       if (error) throw error;
       return promptId;
@@ -154,9 +154,9 @@ export function useTrackPromptEffectiveness() {
     }) => {
       // Fetch current prompt
       const { data: prompt, error: fetchError } = await supabase
-        .from('reflection_prompts')
-        .select('effectiveness_score, usage_count')
-        .eq('id', promptId)
+        .from("reflection_prompts")
+        .select("effectiveness_score, usage_count")
+        .eq("id", promptId)
         .single();
 
       if (fetchError) throw fetchError;
@@ -164,15 +164,16 @@ export function useTrackPromptEffectiveness() {
       // Calculate new effectiveness score (weighted average)
       const currentScore = prompt.effectiveness_score || 0.5;
       const usageCount = prompt.usage_count || 0;
-      const newScore = (currentScore * usageCount + (wasHelpful ? 1 : 0)) / (usageCount + 1);
+      const newScore =
+        (currentScore * usageCount + (wasHelpful ? 1 : 0)) / (usageCount + 1);
 
       const { error } = await supabase
-        .from('reflection_prompts')
+        .from("reflection_prompts")
         .update({
           effectiveness_score: newScore,
           usage_count: usageCount + 1,
         })
-        .eq('id', promptId);
+        .eq("id", promptId);
 
       if (error) throw error;
       return { promptId, newScore };
@@ -181,7 +182,7 @@ export function useTrackPromptEffectiveness() {
       queryClient.invalidateQueries({ queryKey: [PROMPTS_QUERY_KEY] });
     },
     onError: (error: Error) => {
-      console.error('Failed to track prompt effectiveness:', error);
+      console.error("Failed to track prompt effectiveness:", error);
     },
   });
 }
@@ -191,46 +192,49 @@ export function useTrackPromptEffectiveness() {
  */
 export function useContextualPrompts(workspaceId: string) {
   return useQuery({
-    queryKey: ['contextual-prompts', workspaceId],
+    queryKey: ["contextual-prompts", workspaceId],
     queryFn: async () => {
       // Fetch active goals and habits
       const [goalsResult, habitsResult] = await Promise.all([
         supabase
-          .from('goals')
-          .select('title, status')
-          .eq('workspace_id', workspaceId)
-          .in('status', ['active', 'draft'])
+          .from("goals")
+          .select("title, status")
+          .eq("workspace_id", workspaceId)
+          .in("status", ["active", "draft"])
           .limit(5),
         supabase
-          .from('habits')
-          .select('title, current_streak')
-          .eq('workspace_id', workspaceId)
-          .is('archived_at', null)
+          .from("habits")
+          .select("title, current_streak")
+          .eq("workspace_id", workspaceId)
+          .is("archived_at", null)
           .limit(5),
       ]);
 
       if (goalsResult.error) throw goalsResult.error;
       if (habitsResult.error) throw habitsResult.error;
 
-      const contextualPrompts: { prompt_text: string; category: PromptCategory }[] = [];
+      const contextualPrompts: {
+        prompt_text: string;
+        category: PromptCategory;
+      }[] = [];
 
       // Generate goal-related prompts
       if (goalsResult.data.length > 0) {
-        goalsResult.data.forEach(goal => {
+        goalsResult.data.forEach((goal) => {
           contextualPrompts.push({
             prompt_text: `What progress did you make today on "${goal.title}"?`,
-            category: 'goals',
+            category: "goals",
           });
         });
       }
 
       // Generate habit-related prompts
       if (habitsResult.data.length > 0) {
-        habitsResult.data.forEach(habit => {
+        habitsResult.data.forEach((habit) => {
           if (habit.current_streak > 0) {
             contextualPrompts.push({
               prompt_text: `You're on a ${habit.current_streak}-day streak with "${habit.title}". How are you feeling about it?`,
-              category: 'habits',
+              category: "habits",
             });
           }
         });

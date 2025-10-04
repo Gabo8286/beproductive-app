@@ -1,10 +1,25 @@
 import { useState, useEffect, useRef } from "react";
-import { Save, X, Mic, MicOff, Clock, Link2, Tag, ArrowLeft } from "lucide-react";
+import {
+  Save,
+  X,
+  Mic,
+  MicOff,
+  Clock,
+  Link2,
+  Tag,
+  ArrowLeft,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Note, NoteType, CreateNoteData, UpdateNoteData } from "@/types/notes";
 import { cn } from "@/lib/utils";
@@ -18,10 +33,18 @@ interface NoteEditorProps {
   isLoading?: boolean;
 }
 
-export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false }: NoteEditorProps) => {
+export const NoteEditor = ({
+  note,
+  onSave,
+  onClose,
+  onDelete,
+  isLoading = false,
+}: NoteEditorProps) => {
   const [title, setTitle] = useState(note?.title || "");
   const [content, setContent] = useState(note?.content || "");
-  const [noteType, setNoteType] = useState<NoteType>(note?.note_type || "fleeting");
+  const [noteType, setNoteType] = useState<NoteType>(
+    note?.note_type || "fleeting",
+  );
   const [isRecording, setIsRecording] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -51,11 +74,13 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
 
   const generateId = () => {
     const now = new Date();
-    return now.getFullYear().toString() +
-           (now.getMonth() + 1).toString().padStart(2, '0') +
-           now.getDate().toString().padStart(2, '0') +
-           now.getHours().toString().padStart(2, '0') +
-           now.getMinutes().toString().padStart(2, '0');
+    return (
+      now.getFullYear().toString() +
+      (now.getMonth() + 1).toString().padStart(2, "0") +
+      now.getDate().toString().padStart(2, "0") +
+      now.getHours().toString().padStart(2, "0") +
+      now.getMinutes().toString().padStart(2, "0")
+    );
   };
 
   const handleSave = async () => {
@@ -63,7 +88,7 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
       toast({
         title: "Cannot save empty note",
         description: "Please add a title or content before saving.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -81,13 +106,15 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
 
       toast({
         title: "Note saved",
-        description: note ? "Your changes have been saved." : "New note has been created.",
+        description: note
+          ? "Your changes have been saved."
+          : "New note has been created.",
       });
     } catch (error) {
       toast({
         title: "Failed to save note",
         description: "Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSaving(false);
@@ -97,7 +124,11 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
   const handleDelete = async () => {
     if (!note || !onDelete) return;
 
-    if (confirm("Are you sure you want to delete this note? This action cannot be undone.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this note? This action cannot be undone.",
+      )
+    ) {
       try {
         await onDelete(note.id);
         toast({
@@ -109,7 +140,7 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
         toast({
           title: "Failed to delete note",
           description: "Please try again.",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
     }
@@ -123,33 +154,43 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
     const end = textarea.selectionEnd;
     const selectedText = content.substring(start, end);
     const linkText = selectedText || "Note Title";
-    const newContent = content.substring(0, start) + `[[${linkText}]]` + content.substring(end);
+    const newContent =
+      content.substring(0, start) + `[[${linkText}]]` + content.substring(end);
 
     setContent(newContent);
 
     // Set cursor position
     setTimeout(() => {
       textarea.focus();
-      const newPosition = start + (selectedText ? `[[${selectedText}]]`.length : 2);
+      const newPosition =
+        start + (selectedText ? `[[${selectedText}]]`.length : 2);
       textarea.setSelectionRange(newPosition, newPosition);
     }, 0);
   };
 
   const getTypeColor = (type: NoteType) => {
     switch (type) {
-      case "permanent": return "bg-success/10 text-success border-success/20";
-      case "literature": return "bg-primary/10 text-primary border-primary/20";
-      case "fleeting": return "bg-warning/10 text-warning border-warning/20";
-      default: return "bg-muted text-muted-foreground";
+      case "permanent":
+        return "bg-success/10 text-success border-success/20";
+      case "literature":
+        return "bg-primary/10 text-primary border-primary/20";
+      case "fleeting":
+        return "bg-warning/10 text-warning border-warning/20";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getTypeDescription = (type: NoteType) => {
     switch (type) {
-      case "permanent": return "Atomic, evergreen knowledge";
-      case "literature": return "Notes from books, articles, etc.";
-      case "fleeting": return "Quick thoughts and ideas";
-      default: return "";
+      case "permanent":
+        return "Atomic, evergreen knowledge";
+      case "literature":
+        return "Notes from books, articles, etc.";
+      case "fleeting":
+        return "Quick thoughts and ideas";
+      default:
+        return "";
     }
   };
 
@@ -171,12 +212,7 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
       {/* Header */}
       <div className="border-b bg-card/50 p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="gap-2"
-          >
+          <Button variant="ghost" size="sm" onClick={onClose} className="gap-2">
             <ArrowLeft className="w-4 h-4" />
             Back to Notes
           </Button>
@@ -195,11 +231,17 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
               title="Voice input (coming soon)"
               disabled
             >
-              {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              {isRecording ? (
+                <MicOff className="w-4 h-4" />
+              ) : (
+                <Mic className="w-4 h-4" />
+              )}
             </Button>
             <Button
               onClick={handleSave}
-              disabled={isSaving || isLoading || (!title.trim() && !content.trim())}
+              disabled={
+                isSaving || isLoading || (!title.trim() && !content.trim())
+              }
               className="apple-button gap-2"
             >
               <Save className="w-4 h-4" />
@@ -211,31 +253,47 @@ export const NoteEditor = ({ note, onSave, onClose, onDelete, isLoading = false 
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="w-4 h-4" />
-            <span>
-              {note?.id || generateId()}
-            </span>
+            <span>{note?.id || generateId()}</span>
           </div>
 
-          <Select value={noteType} onValueChange={(value) => setNoteType(value as NoteType)}>
+          <Select
+            value={noteType}
+            onValueChange={(value) => setNoteType(value as NoteType)}
+          >
             <SelectTrigger className="w-48">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="fleeting">
                 <div className="flex items-center gap-2">
-                  <div className={cn("w-2 h-2 rounded-full", getTypeColor("fleeting"))} />
+                  <div
+                    className={cn(
+                      "w-2 h-2 rounded-full",
+                      getTypeColor("fleeting"),
+                    )}
+                  />
                   Fleeting
                 </div>
               </SelectItem>
               <SelectItem value="literature">
                 <div className="flex items-center gap-2">
-                  <div className={cn("w-2 h-2 rounded-full", getTypeColor("literature"))} />
+                  <div
+                    className={cn(
+                      "w-2 h-2 rounded-full",
+                      getTypeColor("literature"),
+                    )}
+                  />
                   Literature
                 </div>
               </SelectItem>
               <SelectItem value="permanent">
                 <div className="flex items-center gap-2">
-                  <div className={cn("w-2 h-2 rounded-full", getTypeColor("permanent"))} />
+                  <div
+                    className={cn(
+                      "w-2 h-2 rounded-full",
+                      getTypeColor("permanent"),
+                    )}
+                  />
                   Permanent
                 </div>
               </SelectItem>
@@ -308,7 +366,12 @@ Zettelkasten Tips:
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Words</span>
-                <span>{content.split(/\s+/).filter(word => word.length > 0).length}</span>
+                <span>
+                  {
+                    content.split(/\s+/).filter((word) => word.length > 0)
+                      .length
+                  }
+                </span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Characters</span>

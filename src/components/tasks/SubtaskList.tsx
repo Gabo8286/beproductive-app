@@ -1,18 +1,21 @@
-import { useState } from 'react';
-import { useSubtasks, useSubtaskProgress } from '@/hooks/useSubtasks';
-import { TaskCard } from './TaskCard';
-import { SubtaskCreator } from './SubtaskCreator';
-import { ProgressIndicator } from './ProgressIndicator';
-import { ChevronDown, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useState } from "react";
+import { useSubtasks, useSubtaskProgress } from "@/hooks/useSubtasks";
+import { TaskCard } from "./TaskCard";
+import { SubtaskCreator } from "./SubtaskCreator";
+import { ProgressIndicator } from "./ProgressIndicator";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SubtaskListProps {
   parentId: string;
   defaultExpanded?: boolean;
 }
 
-export function SubtaskList({ parentId, defaultExpanded = true }: SubtaskListProps) {
+export function SubtaskList({
+  parentId,
+  defaultExpanded = true,
+}: SubtaskListProps) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const { data: subtasks, isLoading } = useSubtasks(parentId);
   const { data: progress } = useSubtaskProgress(parentId);
@@ -49,7 +52,7 @@ export function SubtaskList({ parentId, defaultExpanded = true }: SubtaskListPro
             <ChevronRight className="h-4 w-4" />
           )}
           <span className="ml-1 text-sm text-muted-foreground">
-            {subtasks.length} {subtasks.length === 1 ? 'subtask' : 'subtasks'}
+            {subtasks.length} {subtasks.length === 1 ? "subtask" : "subtasks"}
           </span>
         </Button>
         {progress && (

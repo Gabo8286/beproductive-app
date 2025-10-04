@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, Target, Flame, BookOpen, TrendingUp, Award } from "lucide-react";
+import {
+  Users,
+  Target,
+  Flame,
+  BookOpen,
+  TrendingUp,
+  Award,
+} from "lucide-react";
 
 interface Stat {
   id: string;
@@ -100,7 +107,9 @@ function AnimatedCounter({
 
       // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      const currentCount = Math.floor(startValue + (endValue - startValue) * easeOutQuart);
+      const currentCount = Math.floor(
+        startValue + (endValue - startValue) * easeOutQuart,
+      );
 
       setCount(currentCount);
 
@@ -129,7 +138,8 @@ export function CommunityStatsCounter() {
           Trusted by Thousands
         </h3>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Join a thriving community of ambitious professionals achieving their goals every day
+          Join a thriving community of ambitious professionals achieving their
+          goals every day
         </p>
       </div>
 

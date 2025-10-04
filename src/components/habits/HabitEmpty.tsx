@@ -15,7 +15,8 @@ export function HabitEmpty({ onCreateClick }: HabitEmptyProps) {
         </div>
         <h3 className="text-2xl font-semibold mb-2">No routines set yet</h3>
         <p className="text-muted-foreground mb-6 max-w-md">
-          Build your daily routines to power your journey. Consistent practices lead to meaningful progress.
+          Build your daily routines to power your journey. Consistent practices
+          lead to meaningful progress.
         </p>
         <div className="flex gap-3">
           <Button onClick={onCreateClick} className="apple-button">

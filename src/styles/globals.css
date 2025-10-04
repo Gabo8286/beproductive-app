@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties for Theme System */
+:root {
+  /* Light theme colors */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+
+  /* Success colors */
+  --success: 142.1 76.2% 36.3%;
+  --success-foreground: 355.7 100% 97.3%;
+
+  /* Warning colors */
+  --warning: 32.2 95% 44.1%;
+  --warning-foreground: 355.7 100% 97.3%;
+
+  /* Info colors */
+  --info: 198.6 88.7% 48.4%;
+  --info-foreground: 355.7 100% 97.3%;
+}
+
+/* Light theme (default) */
+[data-theme="light"] {
+  /* Light theme colors */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+
+  /* Success colors */
+  --success: 142.1 76.2% 36.3%;
+  --success-foreground: 355.7 100% 97.3%;
+
+  /* Warning colors */
+  --warning: 32.2 95% 44.1%;
+  --warning-foreground: 355.7 100% 97.3%;
+
+  /* Info colors */
+  --info: 198.6 88.7% 48.4%;
+  --info-foreground: 355.7 100% 97.3%;
+}
+
+.dark,
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 94.0%;
+
+  /* Success colors */
+  --success: 142.1 70.6% 45.3%;
+  --success-foreground: 144.9 80.4% 10%;
+
+  /* Warning colors */
+  --warning: 32.2 95% 44.1%;
+  --warning-foreground: 20.5 90.2% 4.3%;
+
+  /* Info colors */
+  --info: 198.6 88.7% 48.4%;
+  --info-foreground: 204 100% 9%;
+}
+
+.high-contrast,
+[data-theme="high-contrast"] {
+  /* High contrast theme for accessibility */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 0%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 213 100% 60%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 20%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 80%;
+  --accent: 0 0% 20%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 40%;
+  --input: 0 0% 30%;
+  --ring: 213 100% 60%;
+
+  /* High contrast success/warning/info */
+  --success: 120 100% 50%;
+  --success-foreground: 0 0% 0%;
+  --warning: 45 100% 50%;
+  --warning-foreground: 0 0% 0%;
+  --info: 200 100% 50%;
+  --info-foreground: 0 0% 0%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Ensure proper focus styles in all themes */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* Better focus styles for high contrast */
+  .high-contrast :focus-visible {
+    @apply outline-4 outline-offset-4 outline-primary;
+  }
+}
+
+@layer components {
+  /* Component-specific theme styles */
+  .widget-card {
+    @apply bg-card text-card-foreground border border-border;
+    transition: all 0.3s ease;
+  }
+
+  .widget-card:hover {
+    @apply border-primary/20 shadow-lg;
+  }
+
+  .high-contrast .widget-card {
+    @apply border-2;
+  }
+
+  .high-contrast .widget-card:hover {
+    @apply border-primary border-4;
+  }
+}
+
+@layer utilities {
+  /* Theme-aware utilities */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent;
+  }
+
+  .dark .text-gradient {
+    @apply from-primary to-blue-400;
+  }
+
+  .high-contrast .text-gradient {
+    @apply from-primary to-primary bg-clip-text text-transparent;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Forced colors support for Windows High Contrast */
+  @media (forced-colors: active) {
+    .widget-card {
+      border: 1px solid ButtonText;
+    }
+
+    .text-gradient {
+      background: none;
+      color: ButtonText;
+    }
+  }
+}

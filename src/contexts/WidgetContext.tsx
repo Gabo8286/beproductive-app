@@ -1,4 +1,10 @@
-import { createContext, useContext, ReactNode, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from "react";
 
 interface WidgetConfig {
   id: string;
@@ -25,12 +31,36 @@ const WidgetContext = createContext<WidgetContextType | undefined>(undefined);
 const defaultWidgets: WidgetConfig[] = [
   { id: "goals", type: "goals", size: "medium", position: 0, visible: true },
   { id: "tasks", type: "tasks", size: "medium", position: 1, visible: true },
-  { id: "gamification", type: "gamification", size: "medium", position: 2, visible: true },
-  { id: "quick-todos", type: "quick-todos", size: "small", position: 3, visible: true },
-  { id: "productivity-profile", type: "productivity-profile", size: "medium", position: 4, visible: true },
+  {
+    id: "gamification",
+    type: "gamification",
+    size: "medium",
+    position: 2,
+    visible: true,
+  },
+  {
+    id: "quick-todos",
+    type: "quick-todos",
+    size: "small",
+    position: 3,
+    visible: true,
+  },
+  {
+    id: "productivity-profile",
+    type: "productivity-profile",
+    size: "medium",
+    position: 4,
+    visible: true,
+  },
   { id: "notes", type: "notes", size: "medium", position: 5, visible: true },
   { id: "habits", type: "habits", size: "medium", position: 6, visible: true },
-  { id: "reflections", type: "reflections", size: "small", position: 7, visible: true },
+  {
+    id: "reflections",
+    type: "reflections",
+    size: "small",
+    position: 7,
+    visible: true,
+  },
 ];
 
 export function WidgetProvider({ children }: { children: ReactNode }) {
@@ -40,7 +70,7 @@ export function WidgetProvider({ children }: { children: ReactNode }) {
 
   // Load saved layout from localStorage on mount
   useEffect(() => {
-    const savedLayout = localStorage.getItem('widget-layout');
+    const savedLayout = localStorage.getItem("widget-layout");
     if (savedLayout) {
       try {
         const parsed = JSON.parse(savedLayout);
@@ -48,7 +78,7 @@ export function WidgetProvider({ children }: { children: ReactNode }) {
         setLayoutHistory([parsed]);
         setCurrentLayoutIndex(0);
       } catch (error) {
-        console.error('Failed to load saved layout:', error);
+        console.error("Failed to load saved layout:", error);
       }
     } else {
       setLayoutHistory([defaultWidgets]);
@@ -59,7 +89,7 @@ export function WidgetProvider({ children }: { children: ReactNode }) {
   // Save layout to localStorage whenever it changes
   useEffect(() => {
     if (widgets.length > 0) {
-      localStorage.setItem('widget-layout', JSON.stringify(widgets));
+      localStorage.setItem("widget-layout", JSON.stringify(widgets));
     }
   }, [widgets]);
 
@@ -71,15 +101,15 @@ export function WidgetProvider({ children }: { children: ReactNode }) {
   };
 
   const updateWidget = (id: string, config: Partial<WidgetConfig>) => {
-    const newWidgets = widgets.map(widget =>
-      widget.id === id ? { ...widget, ...config } : widget
+    const newWidgets = widgets.map((widget) =>
+      widget.id === id ? { ...widget, ...config } : widget,
     );
     setWidgets(newWidgets);
     saveLayoutState(newWidgets);
   };
 
   const toggleWidget = (id: string) => {
-    const widget = widgets.find(w => w.id === id);
+    const widget = widgets.find((w) => w.id === id);
     if (widget) {
       updateWidget(id, { visible: !widget.visible });
     }
@@ -113,17 +143,19 @@ export function WidgetProvider({ children }: { children: ReactNode }) {
   const canRedo = currentLayoutIndex < layoutHistory.length - 1;
 
   return (
-    <WidgetContext.Provider value={{
-      widgets,
-      updateWidget,
-      toggleWidget,
-      reorderWidgets,
-      resetLayout,
-      undoLayout,
-      redoLayout,
-      canUndo,
-      canRedo
-    }}>
+    <WidgetContext.Provider
+      value={{
+        widgets,
+        updateWidget,
+        toggleWidget,
+        reorderWidgets,
+        resetLayout,
+        undoLayout,
+        redoLayout,
+        canUndo,
+        canRedo,
+      }}
+    >
       {children}
     </WidgetContext.Provider>
   );

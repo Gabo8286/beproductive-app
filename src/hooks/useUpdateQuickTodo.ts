@@ -29,7 +29,10 @@ export function useUpdateQuickTodo() {
       // Optimistic update
       await queryClient.cancelQueries({ queryKey: ["quick-todos"] });
 
-      const previousQuickTodos = queryClient.getQueryData(["quick-todos", profile?.id]);
+      const previousQuickTodos = queryClient.getQueryData([
+        "quick-todos",
+        profile?.id,
+      ]);
 
       queryClient.setQueryData(
         ["quick-todos", profile?.id],
@@ -37,8 +40,8 @@ export function useUpdateQuickTodo() {
           old?.map((todo) =>
             todo.id === request.id
               ? { ...todo, ...request, updated_at: new Date().toISOString() }
-              : todo
-          ) || []
+              : todo,
+          ) || [],
       );
 
       return { previousQuickTodos };
@@ -46,7 +49,10 @@ export function useUpdateQuickTodo() {
     onError: (error, variables, context) => {
       // Revert optimistic update
       if (context?.previousQuickTodos) {
-        queryClient.setQueryData(["quick-todos", profile?.id], context.previousQuickTodos);
+        queryClient.setQueryData(
+          ["quick-todos", profile?.id],
+          context.previousQuickTodos,
+        );
       }
       toast.error("Failed to update travel note");
       console.error("Update quick todo error:", error);

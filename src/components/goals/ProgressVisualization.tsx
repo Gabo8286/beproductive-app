@@ -1,11 +1,21 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Goal } from "@/types/goals";
-import { useGoalProgressHistory, useGoalProgressAnalytics, useProgressSuggestions } from "@/hooks/useGoalProgress";
+import {
+  useGoalProgressHistory,
+  useGoalProgressAnalytics,
+  useProgressSuggestions,
+} from "@/hooks/useGoalProgress";
 import { ProgressChart } from "./ProgressChart";
 import { ProgressSuggestions } from "./ProgressSuggestions";
 import { ProgressHistory } from "./ProgressHistory";
@@ -18,7 +28,10 @@ interface ProgressVisualizationProps {
   showEditor?: boolean;
 }
 
-export function ProgressVisualization({ goal, showEditor = true }: ProgressVisualizationProps) {
+export function ProgressVisualization({
+  goal,
+  showEditor = true,
+}: ProgressVisualizationProps) {
   const { data: progressHistory } = useGoalProgressHistory(goal.id);
   const { data: analytics } = useGoalProgressAnalytics(goal.id);
   const { data: suggestions } = useProgressSuggestions(goal.id);
@@ -36,9 +49,12 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
   const getTrendIcon = () => {
     if (!analytics) return <Minus className="h-4 w-4" />;
     switch (analytics.progressTrend) {
-      case 'increasing': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'decreasing': return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return <Minus className="h-4 w-4 text-gray-500" />;
+      case "increasing":
+        return <TrendingUp className="h-4 w-4 text-green-500" />;
+      case "decreasing":
+        return <TrendingDown className="h-4 w-4 text-red-500" />;
+      default:
+        return <Minus className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -55,8 +71,8 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
           <div className="flex items-center justify-between">
             <CardTitle>Progress Overview</CardTitle>
             {showEditor && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => setShowProgressEditor(true)}
               >
@@ -74,9 +90,9 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
             <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
               {getTrendIcon()}
               <span>
-                {analytics?.progressTrend === 'increasing' && 'Trending up'}
-                {analytics?.progressTrend === 'decreasing' && 'Trending down'}
-                {analytics?.progressTrend === 'stable' && 'Stable progress'}
+                {analytics?.progressTrend === "increasing" && "Trending up"}
+                {analytics?.progressTrend === "decreasing" && "Trending down"}
+                {analytics?.progressTrend === "stable" && "Stable progress"}
               </span>
             </div>
           </div>
@@ -84,10 +100,14 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
           {analytics && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className={`text-lg font-semibold ${getVelocityColor(analytics.weeklyVelocity)}`}>
+                <div
+                  className={`text-lg font-semibold ${getVelocityColor(analytics.weeklyVelocity)}`}
+                >
                   {analytics.weeklyVelocity.toFixed(1)}%
                 </div>
-                <div className="text-xs text-muted-foreground">Weekly Velocity</div>
+                <div className="text-xs text-muted-foreground">
+                  Weekly Velocity
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-blue-500">
@@ -118,8 +138,12 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
                   {goal.current_value || 0} / {goal.target_value} {goal.unit}
                 </span>
               </div>
-              <Progress 
-                value={goal.target_value > 0 ? ((goal.current_value || 0) / goal.target_value) * 100 : 0}
+              <Progress
+                value={
+                  goal.target_value > 0
+                    ? ((goal.current_value || 0) / goal.target_value) * 100
+                    : 0
+                }
                 className="h-2"
               />
             </div>
@@ -129,10 +153,12 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
             <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Projected Completion</span>
+                <span className="text-sm font-medium">
+                  Projected Completion
+                </span>
               </div>
               <div className="text-sm text-right">
-                {format(analytics.projectedCompletion, 'MMM d, yyyy')}
+                {format(analytics.projectedCompletion, "MMM d, yyyy")}
                 <div className="text-xs text-muted-foreground">
                   {formatDistanceToNow(analytics.projectedCompletion)} from now
                 </div>
@@ -150,7 +176,10 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
           <TabsTrigger value="suggestions">
             Suggestions
             {suggestions && suggestions.length > 0 && (
-              <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 flex items-center justify-center">
+              <Badge
+                variant="destructive"
+                className="ml-2 h-5 w-5 p-0 flex items-center justify-center"
+              >
                 {suggestions.length}
               </Badge>
             )}
@@ -182,17 +211,27 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
                       <div className="text-sm space-y-1">
                         <div className="flex justify-between">
                           <span>Daily Average:</span>
-                          <span>{analytics.averageDailyProgress.toFixed(2)}%</span>
+                          <span>
+                            {analytics.averageDailyProgress.toFixed(2)}%
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Weekly Velocity:</span>
-                          <span className={getVelocityColor(analytics.weeklyVelocity)}>
+                          <span
+                            className={getVelocityColor(
+                              analytics.weeklyVelocity,
+                            )}
+                          >
                             {analytics.weeklyVelocity.toFixed(1)}%
                           </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Monthly Velocity:</span>
-                          <span className={getVelocityColor(analytics.monthlyVelocity)}>
+                          <span
+                            className={getVelocityColor(
+                              analytics.monthlyVelocity,
+                            )}
+                          >
                             {analytics.monthlyVelocity.toFixed(1)}%
                           </span>
                         </div>
@@ -204,7 +243,9 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
                       <div className="text-sm space-y-1">
                         <div className="flex justify-between">
                           <span>Milestone Progress:</span>
-                          <span>{analytics.milestoneCompletion.toFixed(0)}%</span>
+                          <span>
+                            {analytics.milestoneCompletion.toFixed(0)}%
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span>Sub-Goal Progress:</span>
@@ -227,7 +268,8 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
                         </span>
                       </div>
                       <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
-                        At current velocity, you'll reach your target in {analytics.timeToTarget} days
+                        At current velocity, you'll reach your target in{" "}
+                        {analytics.timeToTarget} days
                       </p>
                     </div>
                   )}
@@ -235,7 +277,9 @@ export function ProgressVisualization({ goal, showEditor = true }: ProgressVisua
               ) : (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                  <p className="text-muted-foreground mt-2">Calculating insights...</p>
+                  <p className="text-muted-foreground mt-2">
+                    Calculating insights...
+                  </p>
                 </div>
               )}
             </CardContent>

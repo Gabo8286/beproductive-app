@@ -1,77 +1,79 @@
 // Project Form Component
 // Form for creating and editing projects
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Calendar } from '@/components/ui/calendar';
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   ProjectWithRelations,
   CreateProjectInput,
   UpdateProjectInput,
   PROJECT_DEFAULTS,
   PROJECT_STATUS_CONFIG,
-  PROJECT_PRIORITY_CONFIG
-} from '@/types/projects';
-import { useAuth } from '@/contexts/AuthContext';
-import { CalendarIcon, X, Plus } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
+  PROJECT_PRIORITY_CONFIG,
+} from "@/types/projects";
+import { useAuth } from "@/contexts/AuthContext";
+import { CalendarIcon, X, Plus } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface ProjectFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   project?: ProjectWithRelations;
-  onSubmit: (data: CreateProjectInput | (UpdateProjectInput & { id: string })) => void;
+  onSubmit: (
+    data: CreateProjectInput | (UpdateProjectInput & { id: string }),
+  ) => void;
   isLoading?: boolean;
 }
 
 const PROJECT_COLORS = [
-  '#3b82f6', // Blue
-  '#10b981', // Green
-  '#f59e0b', // Yellow
-  '#ef4444', // Red
-  '#8b5cf6', // Purple
-  '#06b6d4', // Cyan
-  '#f97316', // Orange
-  '#84cc16', // Lime
-  '#ec4899', // Pink
-  '#6b7280', // Gray
+  "#3b82f6", // Blue
+  "#10b981", // Green
+  "#f59e0b", // Yellow
+  "#ef4444", // Red
+  "#8b5cf6", // Purple
+  "#06b6d4", // Cyan
+  "#f97316", // Orange
+  "#84cc16", // Lime
+  "#ec4899", // Pink
+  "#6b7280", // Gray
 ];
 
 const PROJECT_ICONS = [
-  'folder',
-  'briefcase',
-  'target',
-  'rocket',
-  'lightbulb',
-  'star',
-  'heart',
-  'shield',
-  'zap',
-  'globe',
+  "folder",
+  "briefcase",
+  "target",
+  "rocket",
+  "lightbulb",
+  "star",
+  "heart",
+  "shield",
+  "zap",
+  "globe",
 ];
 
 export function ProjectForm({
@@ -79,7 +81,7 @@ export function ProjectForm({
   onOpenChange,
   project,
   onSubmit,
-  isLoading = false
+  isLoading = false,
 }: ProjectFormProps) {
   const { user } = useAuth();
   const isEditing = !!project;
@@ -99,21 +101,21 @@ export function ProjectForm({
     icon: string;
     tags: string[];
   }>({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     status: PROJECT_DEFAULTS.status,
     priority: PROJECT_DEFAULTS.priority,
     visibility: PROJECT_DEFAULTS.visibility,
-    start_date: '',
-    target_date: '',
-    estimated_hours: '',
-    budget_amount: '',
+    start_date: "",
+    target_date: "",
+    estimated_hours: "",
+    budget_amount: "",
     color: PROJECT_DEFAULTS.color,
     icon: PROJECT_DEFAULTS.icon,
     tags: [] as string[],
   });
 
-  const [tagInput, setTagInput] = useState('');
+  const [tagInput, setTagInput] = useState("");
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [targetDateOpen, setTargetDateOpen] = useState(false);
 
@@ -122,29 +124,29 @@ export function ProjectForm({
     if (project) {
       setFormData({
         title: project.title,
-        description: project.description || '',
+        description: project.description || "",
         status: project.status,
         priority: project.priority,
         visibility: project.visibility,
-        start_date: project.start_date || '',
-        target_date: project.target_date || '',
-        estimated_hours: project.estimated_hours?.toString() || '',
-        budget_amount: project.budget_amount?.toString() || '',
+        start_date: project.start_date || "",
+        target_date: project.target_date || "",
+        estimated_hours: project.estimated_hours?.toString() || "",
+        budget_amount: project.budget_amount?.toString() || "",
         color: project.color || PROJECT_DEFAULTS.color,
         icon: project.icon || PROJECT_DEFAULTS.icon,
         tags: project.tags || [],
       });
     } else {
       setFormData({
-        title: '',
-        description: '',
+        title: "",
+        description: "",
         status: PROJECT_DEFAULTS.status,
         priority: PROJECT_DEFAULTS.priority,
         visibility: PROJECT_DEFAULTS.visibility,
-        start_date: '',
-        target_date: '',
-        estimated_hours: '',
-        budget_amount: '',
+        start_date: "",
+        target_date: "",
+        estimated_hours: "",
+        budget_amount: "",
         color: PROJECT_DEFAULTS.color,
         icon: PROJECT_DEFAULTS.icon,
         tags: [],
@@ -163,8 +165,12 @@ export function ProjectForm({
       visibility: formData.visibility,
       start_date: formData.start_date || undefined,
       target_date: formData.target_date || undefined,
-      estimated_hours: formData.estimated_hours ? parseInt(formData.estimated_hours) : undefined,
-      budget_amount: formData.budget_amount ? parseFloat(formData.budget_amount) : undefined,
+      estimated_hours: formData.estimated_hours
+        ? parseInt(formData.estimated_hours)
+        : undefined,
+      budget_amount: formData.budget_amount
+        ? parseFloat(formData.budget_amount)
+        : undefined,
       color: formData.color,
       icon: formData.icon,
       tags: formData.tags,
@@ -173,7 +179,7 @@ export function ProjectForm({
     if (isEditing && project) {
       onSubmit({ id: project.id, ...submitData });
     } else {
-      onSubmit({ workspace_id: 'temp-workspace-id', ...submitData });
+      onSubmit({ workspace_id: "temp-workspace-id", ...submitData });
     }
   };
 
@@ -181,19 +187,19 @@ export function ProjectForm({
     const tag = tagInput.trim();
     if (tag && !formData.tags.includes(tag)) {
       setFormData({ ...formData, tags: [...formData.tags, tag] });
-      setTagInput('');
+      setTagInput("");
     }
   };
 
   const removeTag = (tagToRemove: string) => {
     setFormData({
       ...formData,
-      tags: formData.tags.filter(tag => tag !== tagToRemove)
+      tags: formData.tags.filter((tag) => tag !== tagToRemove),
     });
   };
 
   const handleTagInputKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       addTag();
     }
@@ -204,7 +210,7 @@ export function ProjectForm({
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? 'Edit Project' : 'Create New Project'}
+            {isEditing ? "Edit Project" : "Create New Project"}
           </DialogTitle>
         </DialogHeader>
 
@@ -216,7 +222,9 @@ export function ProjectForm({
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="Enter project title..."
                 required
                 maxLength={200}
@@ -228,7 +236,9 @@ export function ProjectForm({
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 placeholder="Enter project description..."
                 rows={3}
                 maxLength={2000}
@@ -242,17 +252,21 @@ export function ProjectForm({
               <Label>Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) => setFormData({ ...formData, status: value as any })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value as any })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(PROJECT_STATUS_CONFIG).map(([key, config]) => (
-                    <SelectItem key={key} value={key}>
-                      {config.label}
-                    </SelectItem>
-                  ))}
+                  {Object.entries(PROJECT_STATUS_CONFIG).map(
+                    ([key, config]) => (
+                      <SelectItem key={key} value={key}>
+                        {config.label}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -261,17 +275,21 @@ export function ProjectForm({
               <Label>Priority</Label>
               <Select
                 value={formData.priority}
-                onValueChange={(value) => setFormData({ ...formData, priority: value as any })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, priority: value as any })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(PROJECT_PRIORITY_CONFIG).map(([key, config]) => (
-                    <SelectItem key={key} value={key}>
-                      {config.label}
-                    </SelectItem>
-                  ))}
+                  {Object.entries(PROJECT_PRIORITY_CONFIG).map(
+                    ([key, config]) => (
+                      <SelectItem key={key} value={key}>
+                        {config.label}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -287,7 +305,7 @@ export function ProjectForm({
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal",
-                      !formData.start_date && "text-muted-foreground"
+                      !formData.start_date && "text-muted-foreground",
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -301,11 +319,15 @@ export function ProjectForm({
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={formData.start_date ? new Date(formData.start_date) : undefined}
+                    selected={
+                      formData.start_date
+                        ? new Date(formData.start_date)
+                        : undefined
+                    }
                     onSelect={(date) => {
                       setFormData({
                         ...formData,
-                        start_date: date ? format(date, 'yyyy-MM-dd') : ''
+                        start_date: date ? format(date, "yyyy-MM-dd") : "",
                       });
                       setStartDateOpen(false);
                     }}
@@ -323,7 +345,7 @@ export function ProjectForm({
                     variant="outline"
                     className={cn(
                       "w-full justify-start text-left font-normal",
-                      !formData.target_date && "text-muted-foreground"
+                      !formData.target_date && "text-muted-foreground",
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
@@ -337,11 +359,15 @@ export function ProjectForm({
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={formData.target_date ? new Date(formData.target_date) : undefined}
+                    selected={
+                      formData.target_date
+                        ? new Date(formData.target_date)
+                        : undefined
+                    }
                     onSelect={(date) => {
                       setFormData({
                         ...formData,
-                        target_date: date ? format(date, 'yyyy-MM-dd') : ''
+                        target_date: date ? format(date, "yyyy-MM-dd") : "",
                       });
                       setTargetDateOpen(false);
                     }}
@@ -360,7 +386,9 @@ export function ProjectForm({
                 id="estimated_hours"
                 type="number"
                 value={formData.estimated_hours}
-                onChange={(e) => setFormData({ ...formData, estimated_hours: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, estimated_hours: e.target.value })
+                }
                 placeholder="0"
                 min="0"
                 max="10000"
@@ -374,7 +402,9 @@ export function ProjectForm({
                 type="number"
                 step="0.01"
                 value={formData.budget_amount}
-                onChange={(e) => setFormData({ ...formData, budget_amount: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, budget_amount: e.target.value })
+                }
                 placeholder="0.00"
                 min="0"
               />
@@ -392,7 +422,9 @@ export function ProjectForm({
                     type="button"
                     className={cn(
                       "w-8 h-8 rounded-full border-2",
-                      formData.color === color ? "border-gray-900" : "border-gray-300"
+                      formData.color === color
+                        ? "border-gray-900"
+                        : "border-gray-300",
                     )}
                     style={{ backgroundColor: color }}
                     onClick={() => setFormData({ ...formData, color })}
@@ -410,7 +442,9 @@ export function ProjectForm({
                     type="button"
                     className={cn(
                       "w-10 h-10 rounded border-2 flex items-center justify-center",
-                      formData.icon === icon ? "border-gray-900 bg-gray-100" : "border-gray-300"
+                      formData.icon === icon
+                        ? "border-gray-900 bg-gray-100"
+                        : "border-gray-300",
                     )}
                     onClick={() => setFormData({ ...formData, icon })}
                   >
@@ -439,7 +473,11 @@ export function ProjectForm({
               {formData.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {formData.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="flex items-center space-x-1">
+                    <Badge
+                      key={tag}
+                      variant="secondary"
+                      className="flex items-center space-x-1"
+                    >
                       <span>{tag}</span>
                       <button
                         type="button"
@@ -464,8 +502,15 @@ export function ProjectForm({
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading || !formData.title.trim()}>
-              {isLoading ? 'Saving...' : isEditing ? 'Update Project' : 'Create Project'}
+            <Button
+              type="submit"
+              disabled={isLoading || !formData.title.trim()}
+            >
+              {isLoading
+                ? "Saving..."
+                : isEditing
+                  ? "Update Project"
+                  : "Create Project"}
             </Button>
           </DialogFooter>
         </form>

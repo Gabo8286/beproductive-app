@@ -22,7 +22,7 @@ export function DemoNavigation({
   demoSteps,
   onSkipTo,
   onReset,
-  onExit
+  onExit,
 }: DemoNavigationProps) {
   return (
     <motion.div

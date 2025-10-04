@@ -1,12 +1,29 @@
 import { useState, useRef, useEffect } from "react";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { TagBadge } from "./TagBadge";
 import { useTags, useCreateTag } from "@/hooks/useTags";
 import { Plus, X } from "lucide-react";
 import { TagColorPicker } from "./TagColorPicker";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -26,8 +43,8 @@ export function TagSelector({ value, onChange }: TagSelectorProps) {
   const { data: tags = [] } = useTags();
   const createTag = useCreateTag();
 
-  const availableTags = tags.filter(tag => !value.includes(tag.name));
-  const selectedTags = tags.filter(tag => value.includes(tag.name));
+  const availableTags = tags.filter((tag) => !value.includes(tag.name));
+  const selectedTags = tags.filter((tag) => value.includes(tag.name));
 
   const handleSelect = (tagName: string) => {
     if (!value.includes(tagName)) {
@@ -37,7 +54,7 @@ export function TagSelector({ value, onChange }: TagSelectorProps) {
   };
 
   const handleRemove = (tagName: string) => {
-    onChange(value.filter(t => t !== tagName));
+    onChange(value.filter((t) => t !== tagName));
   };
 
   const handleCreateTag = async () => {
@@ -57,8 +74,8 @@ export function TagSelector({ value, onChange }: TagSelectorProps) {
   };
 
   const filteredTags = searchQuery
-    ? availableTags.filter(tag => 
-        tag.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ? availableTags.filter((tag) =>
+        tag.name.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : availableTags;
 
@@ -93,15 +110,17 @@ export function TagSelector({ value, onChange }: TagSelectorProps) {
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
           <Command>
-            <CommandInput 
-              placeholder="Search tags..." 
+            <CommandInput
+              placeholder="Search tags..."
               value={searchQuery}
               onValueChange={setSearchQuery}
             />
             <CommandList>
               <CommandEmpty>
                 <div className="text-center py-6">
-                  <p className="text-sm text-muted-foreground mb-3">No tags found</p>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    No tags found
+                  </p>
                   <Button
                     size="sm"
                     onClick={() => {
@@ -185,7 +204,10 @@ export function TagSelector({ value, onChange }: TagSelectorProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setCreateDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleCreateTag} disabled={!newTagName.trim()}>

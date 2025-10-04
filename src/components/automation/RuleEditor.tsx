@@ -1,12 +1,28 @@
-import { useState, useEffect } from 'react';
-import { useCreateAutomationRule, useUpdateAutomationRule, type AutomationRule } from '@/hooks/useAutomation';
-import { useDefaultWorkspace } from '@/hooks/useTasks';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useState, useEffect } from "react";
+import {
+  useCreateAutomationRule,
+  useUpdateAutomationRule,
+  type AutomationRule,
+} from "@/hooks/useAutomation";
+import { useDefaultWorkspace } from "@/hooks/useTasks";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface RuleEditorProps {
   trigger: React.ReactNode;
@@ -20,27 +36,29 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
   const updateRule = useUpdateAutomationRule();
 
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    rule_type: 'auto_tag',
-    titleContains: '',
-    priority: '',
-    addTags: '',
-    setStatus: '',
-    setPriority: '',
+    name: "",
+    description: "",
+    rule_type: "auto_tag",
+    titleContains: "",
+    priority: "",
+    addTags: "",
+    setStatus: "",
+    setPriority: "",
   });
 
   useEffect(() => {
     if (rule) {
       setFormData({
         name: rule.name,
-        description: rule.description || '',
+        description: rule.description || "",
         rule_type: rule.rule_type,
-        titleContains: (rule.trigger_conditions.task_title_contains || []).join(', '),
-        priority: rule.trigger_conditions.task_priority?.[0] || '',
-        addTags: (rule.actions.add_tags || []).join(', '),
-        setStatus: rule.actions.set_status || '',
-        setPriority: rule.actions.set_priority || '',
+        titleContains: (rule.trigger_conditions.task_title_contains || []).join(
+          ", ",
+        ),
+        priority: rule.trigger_conditions.task_priority?.[0] || "",
+        addTags: (rule.actions.add_tags || []).join(", "),
+        setStatus: rule.actions.set_status || "",
+        setPriority: rule.actions.set_priority || "",
       });
     }
   }, [rule]);
@@ -58,7 +76,7 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
     // Build conditions
     if (formData.titleContains) {
       trigger_conditions.task_title_contains = formData.titleContains
-        .split(',')
+        .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
     }
@@ -69,7 +87,7 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
     // Build actions
     if (formData.addTags) {
       actions.add_tags = formData.addTags
-        .split(',')
+        .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
     }
@@ -98,14 +116,14 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
     setOpen(false);
     // Reset form
     setFormData({
-      name: '',
-      description: '',
-      rule_type: 'auto_tag',
-      titleContains: '',
-      priority: '',
-      addTags: '',
-      setStatus: '',
-      setPriority: '',
+      name: "",
+      description: "",
+      rule_type: "auto_tag",
+      titleContains: "",
+      priority: "",
+      addTags: "",
+      setStatus: "",
+      setPriority: "",
     });
   };
 
@@ -115,7 +133,7 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {rule ? 'Edit Automation Rule' : 'Create Automation Rule'}
+            {rule ? "Edit Automation Rule" : "Create Automation Rule"}
           </DialogTitle>
         </DialogHeader>
 
@@ -126,7 +144,9 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 placeholder="e.g., Auto-tag urgent meetings"
                 required
               />
@@ -172,7 +192,9 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
             </p>
 
             <div>
-              <Label htmlFor="titleContains">Title Contains (comma-separated)</Label>
+              <Label htmlFor="titleContains">
+                Title Contains (comma-separated)
+              </Label>
               <Input
                 id="titleContains"
                 value={formData.titleContains}
@@ -216,7 +238,9 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
               <Input
                 id="addTags"
                 value={formData.addTags}
-                onChange={(e) => setFormData({ ...formData, addTags: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, addTags: e.target.value })
+                }
                 placeholder="automated, important"
               />
             </div>
@@ -265,14 +289,18 @@ export function RuleEditor({ trigger, rule }: RuleEditorProps) {
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={createRule.isPending || updateRule.isPending}
             >
-              {rule ? 'Update Rule' : 'Create Rule'}
+              {rule ? "Update Rule" : "Create Rule"}
             </Button>
           </div>
         </form>

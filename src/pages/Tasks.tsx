@@ -1,73 +1,86 @@
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Search, Plus } from 'lucide-react';
-import { useTasks, useSortedTasks } from '@/hooks/useTasks';
-import { TaskCard } from '@/components/tasks/TaskCard';
-import { TaskListView } from '@/components/tasks/TaskListView';
-import { TaskBoardView } from '@/components/tasks/TaskBoardView';
-import { TaskCalendarView } from '@/components/tasks/TaskCalendarView';
-import { TaskForm } from '@/components/tasks/TaskForm';
-import { ViewModeSelector } from '@/components/tasks/ViewModeSelector';
-import { TaskViewProvider, useTaskView } from '@/contexts/TaskViewContext';
-import { Database } from '@/integrations/supabase/types';
-import { CategoryFilter } from '@/components/tags/CategoryFilter';
-import { useTags } from '@/hooks/useTags';
-import { TagBadge } from '@/components/tags/TagBadge';
-import { X, Zap } from 'lucide-react';
-import { FloatingTaskButton } from '@/components/tasks/FloatingTaskButton';
-import { QuickTaskModal } from '@/components/tasks/QuickTaskModal';
-import { RecommendationsBanner } from '@/components/ai/RecommendationsBanner';
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Search, Plus } from "lucide-react";
+import { useTasks, useSortedTasks } from "@/hooks/useTasks";
+import { TaskCard } from "@/components/tasks/TaskCard";
+import { TaskListView } from "@/components/tasks/TaskListView";
+import { TaskBoardView } from "@/components/tasks/TaskBoardView";
+import { TaskCalendarView } from "@/components/tasks/TaskCalendarView";
+import { TaskForm } from "@/components/tasks/TaskForm";
+import { ViewModeSelector } from "@/components/tasks/ViewModeSelector";
+import { TaskViewProvider, useTaskView } from "@/contexts/TaskViewContext";
+import { Database } from "@/integrations/supabase/types";
+import { CategoryFilter } from "@/components/tags/CategoryFilter";
+import { useTags } from "@/hooks/useTags";
+import { TagBadge } from "@/components/tags/TagBadge";
+import { X, Zap } from "lucide-react";
+import { FloatingTaskButton } from "@/components/tasks/FloatingTaskButton";
+import { QuickTaskModal } from "@/components/tasks/QuickTaskModal";
+import { RecommendationsBanner } from "@/components/ai/RecommendationsBanner";
 
-type TaskStatus = Database['public']['Enums']['task_status'];
-type TaskPriority = Database['public']['Enums']['task_priority'];
+type TaskStatus = Database["public"]["Enums"]["task_status"];
+type TaskPriority = Database["public"]["Enums"]["task_priority"];
 
 function TasksContent() {
   const { data: tasks, isLoading, error } = useTasks();
   const { sortTasks, groupTasks } = useSortedTasks();
   const { viewMode, sortBy, sortOrder, groupBy } = useTaskView();
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | 'all'>('all');
-  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | 'all'>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
+  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "all">(
+    "all",
+  );
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isQuickModalOpen, setIsQuickModalOpen] = useState(false);
-  
+
   const { data: allTags = [] } = useTags();
 
   // Filter tags by category
-  const categoryFilteredTags = selectedCategory 
-    ? allTags.filter(tag => tag.category === selectedCategory)
+  const categoryFilteredTags = selectedCategory
+    ? allTags.filter((tag) => tag.category === selectedCategory)
     : allTags;
 
   // Filter and sort tasks
-  const filteredTasks = tasks?.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || task.status === statusFilter;
-    const matchesPriority = priorityFilter === 'all' || task.priority === priorityFilter;
-    const matchesTags = selectedTags.length === 0 || 
-                       selectedTags.every(tag => task.tags?.includes(tag));
+  const filteredTasks =
+    tasks?.filter((task) => {
+      const matchesSearch =
+        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || task.status === statusFilter;
+      const matchesPriority =
+        priorityFilter === "all" || task.priority === priorityFilter;
+      const matchesTags =
+        selectedTags.length === 0 ||
+        selectedTags.every((tag) => task.tags?.includes(tag));
 
-    return matchesSearch && matchesStatus && matchesPriority && matchesTags;
-  }) || [];
-  
+      return matchesSearch && matchesStatus && matchesPriority && matchesTags;
+    }) || [];
+
   const handleTagToggle = (tagName: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tagName) 
-        ? prev.filter(t => t !== tagName)
-        : [...prev, tagName]
+    setSelectedTags((prev) =>
+      prev.includes(tagName)
+        ? prev.filter((t) => t !== tagName)
+        : [...prev, tagName],
     );
   };
-  
+
   const clearAllFilters = () => {
-    setSearchTerm('');
-    setStatusFilter('all');
-    setPriorityFilter('all');
+    setSearchTerm("");
+    setStatusFilter("all");
+    setPriorityFilter("all");
     setSelectedTags([]);
     setSelectedCategory(null);
   };
@@ -76,8 +89,10 @@ function TasksContent() {
   const groupedTasks = groupTasks(sortedTasks, groupBy);
 
   const totalTasks = tasks?.length || 0;
-  const completedTasks = tasks?.filter(task => task.status === 'done').length || 0;
-  const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const completedTasks =
+    tasks?.filter((task) => task.status === "done").length || 0;
+  const completionRate =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   if (isLoading) {
     return (
@@ -117,12 +132,14 @@ function TasksContent() {
               <span className="text-xs">⌘</span>N
             </kbd>
           </Button>
-          <TaskForm trigger={
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              New Task
-            </Button>
-          } />
+          <TaskForm
+            trigger={
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
+                New Task
+              </Button>
+            }
+          />
         </div>
       </div>
 
@@ -147,25 +164,31 @@ function TasksContent() {
             <Badge variant="secondary">{completedTasks}</Badge>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{completedTasks}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">In Progress</CardTitle>
-            <Badge variant="secondary">{sortedTasks.filter(t => t.status === 'in_progress').length}</Badge>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {sortedTasks.filter(t => t.status === 'in_progress').length}
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+              {completedTasks}
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+            <Badge variant="secondary">
+              {sortedTasks.filter((t) => t.status === "in_progress").length}
+            </Badge>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+              {sortedTasks.filter((t) => t.status === "in_progress").length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Completion Rate
+            </CardTitle>
             <Badge variant="secondary">{completionRate}%</Badge>
           </CardHeader>
           <CardContent>
@@ -181,7 +204,11 @@ function TasksContent() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">Filters</CardTitle>
-          {(searchTerm || statusFilter !== 'all' || priorityFilter !== 'all' || selectedTags.length > 0 || selectedCategory) && (
+          {(searchTerm ||
+            statusFilter !== "all" ||
+            priorityFilter !== "all" ||
+            selectedTags.length > 0 ||
+            selectedCategory) && (
             <Button variant="outline" size="sm" onClick={clearAllFilters}>
               <X className="w-4 h-4 mr-2" />
               Clear Filters
@@ -202,7 +229,12 @@ function TasksContent() {
               </div>
             </div>
 
-            <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as TaskStatus | 'all')}>
+            <Select
+              value={statusFilter}
+              onValueChange={(value) =>
+                setStatusFilter(value as TaskStatus | "all")
+              }
+            >
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -215,7 +247,12 @@ function TasksContent() {
               </SelectContent>
             </Select>
 
-            <Select value={priorityFilter} onValueChange={(value) => setPriorityFilter(value as TaskPriority | 'all')}>
+            <Select
+              value={priorityFilter}
+              onValueChange={(value) =>
+                setPriorityFilter(value as TaskPriority | "all")
+              }
+            >
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Priority" />
               </SelectTrigger>
@@ -230,7 +267,7 @@ function TasksContent() {
           </div>
 
           {/* Category Filter */}
-          <CategoryFilter 
+          <CategoryFilter
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}
           />
@@ -245,10 +282,14 @@ function TasksContent() {
                     key={tag.id}
                     onClick={() => handleTagToggle(tag.name)}
                   >
-                    <TagBadge 
+                    <TagBadge
                       name={tag.name}
                       color={tag.color || undefined}
-                      className={selectedTags.includes(tag.name) ? 'ring-2 ring-primary' : ''}
+                      className={
+                        selectedTags.includes(tag.name)
+                          ? "ring-2 ring-primary"
+                          : ""
+                      }
                     />
                   </button>
                 ))}
@@ -256,10 +297,10 @@ function TasksContent() {
               {selectedTags.length > 0 && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span>Selected tags:</span>
-                  {selectedTags.map(tagName => {
-                    const tag = allTags.find(t => t.name === tagName);
+                  {selectedTags.map((tagName) => {
+                    const tag = allTags.find((t) => t.name === tagName);
                     return (
-                      <TagBadge 
+                      <TagBadge
                         key={tagName}
                         name={tagName}
                         color={tag?.color || undefined}
@@ -281,29 +322,34 @@ function TasksContent() {
             <div className="text-center">
               <h3 className="text-lg font-semibold mb-2">No tasks found</h3>
               <p className="text-muted-foreground mb-4">
-                {searchTerm || statusFilter !== 'all' || priorityFilter !== 'all'
-                  ? 'Try adjusting your filters'
-                  : 'Create your first task to get started'
-                }
+                {searchTerm ||
+                statusFilter !== "all" ||
+                priorityFilter !== "all"
+                  ? "Try adjusting your filters"
+                  : "Create your first task to get started"}
               </p>
-              {!searchTerm && statusFilter === 'all' && priorityFilter === 'all' && (
-                <TaskForm trigger={
-                  <Button>
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create First Task
-                  </Button>
-                } />
-              )}
+              {!searchTerm &&
+                statusFilter === "all" &&
+                priorityFilter === "all" && (
+                  <TaskForm
+                    trigger={
+                      <Button>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create First Task
+                      </Button>
+                    }
+                  />
+                )}
             </div>
           </CardContent>
         </Card>
       ) : (
         <>
-          {viewMode === 'list' && <TaskListView tasks={sortedTasks} />}
-          {viewMode === 'board' && <TaskBoardView tasks={sortedTasks} />}
-          {viewMode === 'calendar' && <TaskCalendarView tasks={sortedTasks} />}
-          {viewMode === 'grid' && (
-            groupBy === 'none' ? (
+          {viewMode === "list" && <TaskListView tasks={sortedTasks} />}
+          {viewMode === "board" && <TaskBoardView tasks={sortedTasks} />}
+          {viewMode === "calendar" && <TaskCalendarView tasks={sortedTasks} />}
+          {viewMode === "grid" &&
+            (groupBy === "none" ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {sortedTasks.map((task) => (
                   <TaskCard key={task.id} task={task} />
@@ -325,18 +371,17 @@ function TasksContent() {
                   </div>
                 ))}
               </div>
-            )
-          )}
+            ))}
         </>
       )}
 
       {/* Quick Create Modal */}
-      <QuickTaskModal 
+      <QuickTaskModal
         open={isQuickModalOpen}
         onOpenChange={setIsQuickModalOpen}
         defaults={{
-          status: statusFilter !== 'all' ? statusFilter : 'todo',
-          priority: priorityFilter !== 'all' ? priorityFilter : 'medium',
+          status: statusFilter !== "all" ? statusFilter : "todo",
+          priority: priorityFilter !== "all" ? priorityFilter : "medium",
           tags: selectedTags,
         }}
       />

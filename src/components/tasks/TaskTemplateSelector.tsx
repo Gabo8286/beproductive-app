@@ -1,12 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { useTaskTemplates, QuickTaskDefaults } from '@/hooks/useQuickTask';
-import { Sparkles } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { useTaskTemplates, QuickTaskDefaults } from "@/hooks/useQuickTask";
+import { Sparkles } from "lucide-react";
 
 interface TaskTemplateSelectorProps {
   onTemplateSelect: (defaults: QuickTaskDefaults) => void;
 }
 
-export function TaskTemplateSelector({ onTemplateSelect }: TaskTemplateSelectorProps) {
+export function TaskTemplateSelector({
+  onTemplateSelect,
+}: TaskTemplateSelectorProps) {
   const { data: templates } = useTaskTemplates();
 
   return (

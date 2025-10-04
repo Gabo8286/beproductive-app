@@ -11,42 +11,38 @@ const Notes = () => {
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  const {
-    notes,
-    isLoading,
-    createNote,
-    updateNote,
-    deleteNote,
-    getNote
-  } = useNotes();
+  const { notes, isLoading, createNote, updateNote, deleteNote, getNote } =
+    useNotes();
 
   const { toast } = useToast();
 
   // Handle URL parameters for deep linking
   useEffect(() => {
-    const noteId = searchParams.get('note');
-    const edit = searchParams.get('edit') === 'true';
+    const noteId = searchParams.get("note");
+    const edit = searchParams.get("edit") === "true";
 
     if (noteId) {
-      const note = notes.find(n => n.id === noteId);
+      const note = notes.find((n) => n.id === noteId);
       if (note) {
         setSelectedNote(note);
         setIsEditing(edit);
       } else {
         // Try to fetch the note if not in current list
-        getNote(noteId).then(note => {
-          if (note) {
-            setSelectedNote(note);
-            setIsEditing(edit);
-          }
-        }).catch(() => {
-          toast({
-            title: "Note not found",
-            description: "The requested note could not be found.",
-            variant: "destructive"
+        getNote(noteId)
+          .then((note) => {
+            if (note) {
+              setSelectedNote(note);
+              setIsEditing(edit);
+            }
+          })
+          .catch(() => {
+            toast({
+              title: "Note not found",
+              description: "The requested note could not be found.",
+              variant: "destructive",
+            });
+            setSearchParams({});
           });
-          setSearchParams({});
-        });
       }
     } else {
       // No noteId in params - creating a new note if edit=true
@@ -58,13 +54,13 @@ const Notes = () => {
   const handleNewNote = () => {
     setSelectedNote(null);
     setIsEditing(true);
-    setSearchParams({ edit: 'true' });
+    setSearchParams({ edit: "true" });
   };
 
   const handleNoteClick = (note: Note) => {
     setSelectedNote(note);
     setIsEditing(true);
-    setSearchParams({ note: note.id, edit: 'true' });
+    setSearchParams({ note: note.id, edit: "true" });
   };
 
   const handleSaveNote = async (noteData: CreateNoteData | UpdateNoteData) => {
@@ -73,13 +69,16 @@ const Notes = () => {
 
       if (selectedNote) {
         // Update existing note
-        savedNote = await updateNote(selectedNote.id, noteData as UpdateNoteData);
+        savedNote = await updateNote(
+          selectedNote.id,
+          noteData as UpdateNoteData,
+        );
         setSelectedNote(savedNote);
       } else {
         // Create new note
         savedNote = await createNote(noteData as CreateNoteData);
         setSelectedNote(savedNote);
-        setSearchParams({ note: savedNote.id, edit: 'true' });
+        setSearchParams({ note: savedNote.id, edit: "true" });
       }
     } catch (error) {
       throw error; // Let NoteEditor handle the error display

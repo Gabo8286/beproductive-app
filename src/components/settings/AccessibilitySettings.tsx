@@ -1,9 +1,15 @@
-import { useAccessibilityPreferences } from '@/contexts/AccessibilityContext';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { useAccessibilityPreferences } from "@/contexts/AccessibilityContext";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 /**
  * Accessibility Settings Panel
@@ -19,7 +25,9 @@ export function AccessibilitySettings() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h2 className="text-2xl font-heading font-bold mb-2">Accessibility Settings</h2>
+        <h2 className="text-2xl font-heading font-bold mb-2">
+          Accessibility Settings
+        </h2>
         <p className="text-muted-foreground">
           Customize your experience to meet your accessibility needs
         </p>
@@ -46,7 +54,9 @@ export function AccessibilitySettings() {
             <Switch
               id="reduce-motion"
               checked={preferences.reduceMotion}
-              onCheckedChange={(checked) => updatePreferences({ reduceMotion: checked })}
+              onCheckedChange={(checked) =>
+                updatePreferences({ reduceMotion: checked })
+              }
               aria-label="Reduce motion and animations"
             />
           </div>
@@ -72,7 +82,9 @@ export function AccessibilitySettings() {
             <Switch
               id="high-contrast"
               checked={preferences.highContrast}
-              onCheckedChange={(checked) => updatePreferences({ highContrast: checked })}
+              onCheckedChange={(checked) =>
+                updatePreferences({ highContrast: checked })
+              }
               aria-label="Enable high contrast mode"
             />
           </div>
@@ -82,14 +94,19 @@ export function AccessibilitySettings() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="font-size">Font Size</Label>
-              <span className="text-sm text-muted-foreground" aria-live="polite">
+              <span
+                className="text-sm text-muted-foreground"
+                aria-live="polite"
+              >
                 {preferences.fontSize}px
               </span>
             </div>
             <Slider
               id="font-size"
               value={[preferences.fontSize]}
-              onValueChange={([value]) => updatePreferences({ fontSize: value })}
+              onValueChange={([value]) =>
+                updatePreferences({ fontSize: value })
+              }
               min={12}
               max={24}
               step={1}
@@ -128,7 +145,9 @@ export function AccessibilitySettings() {
             <Switch
               id="focus-mode"
               checked={preferences.focusMode}
-              onCheckedChange={(checked) => updatePreferences({ focusMode: checked })}
+              onCheckedChange={(checked) =>
+                updatePreferences({ focusMode: checked })
+              }
               aria-label="Enable focus mode for distraction-free interface"
             />
           </div>
@@ -145,7 +164,9 @@ export function AccessibilitySettings() {
             <Switch
               id="simplified-language"
               checked={preferences.simplifiedLanguage}
-              onCheckedChange={(checked) => updatePreferences({ simplifiedLanguage: checked })}
+              onCheckedChange={(checked) =>
+                updatePreferences({ simplifiedLanguage: checked })
+              }
               aria-label="Enable simplified language mode"
             />
           </div>
@@ -159,8 +180,9 @@ export function AccessibilitySettings() {
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <p>
-            BeProductive is committed to making our platform accessible to everyone.
-            These settings help customize your experience based on your needs.
+            BeProductive is committed to making our platform accessible to
+            everyone. These settings help customize your experience based on
+            your needs.
           </p>
           <p className="text-muted-foreground">
             We strive to meet WCAG 2.1 Level AA standards. If you encounter any

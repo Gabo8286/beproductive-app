@@ -1,5 +1,5 @@
 // Time Tracking Components
-export { IntelligentTimeTracker } from './IntelligentTimeTracker';
+export { IntelligentTimeTracker } from "./IntelligentTimeTracker";
 
 // Types
 export type {
@@ -7,5 +7,5 @@ export type {
   TimeEstimate,
   EstimationFactor,
   ProductivityPattern,
-  TimeTrackingAnalytics
-} from './IntelligentTimeTracker';
+  TimeTrackingAnalytics,
+} from "./IntelligentTimeTracker";

@@ -1,5 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,10 +31,7 @@ export function TagColorPicker({ value, onChange }: TagColorPickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-start gap-2"
-        >
+        <Button variant="outline" className="w-full justify-start gap-2">
           <div
             className="w-4 h-4 rounded border"
             style={{ backgroundColor: value }}
@@ -45,7 +46,7 @@ export function TagColorPicker({ value, onChange }: TagColorPickerProps) {
               key={color}
               className={cn(
                 "w-8 h-8 rounded border-2 transition-all hover:scale-110",
-                value === color ? "border-foreground" : "border-transparent"
+                value === color ? "border-foreground" : "border-transparent",
               )}
               style={{ backgroundColor: color }}
               onClick={() => onChange(color)}

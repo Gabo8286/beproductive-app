@@ -10,7 +10,11 @@ interface GreetingHeaderProps {
   insight: string;
 }
 
-export function GreetingHeader({ name, greeting, insight }: GreetingHeaderProps) {
+export function GreetingHeader({
+  name,
+  greeting,
+  insight,
+}: GreetingHeaderProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -33,10 +37,12 @@ export function GreetingHeader({ name, greeting, insight }: GreetingHeaderProps)
   };
 
   return (
-    <Card className={cn(
-      "p-6 journey-card relative overflow-hidden",
-      `bg-gradient-to-br ${getTimeGradient()}`
-    )}>
+    <Card
+      className={cn(
+        "p-6 journey-card relative overflow-hidden",
+        `bg-gradient-to-br ${getTimeGradient()}`,
+      )}
+    >
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -55,7 +61,10 @@ export function GreetingHeader({ name, greeting, insight }: GreetingHeaderProps)
               {currentTime.toLocaleDateString()}
             </div>
             <div className="text-lg font-medium">
-              {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {currentTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
           </div>
         </div>

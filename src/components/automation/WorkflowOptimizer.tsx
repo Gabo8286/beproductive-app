@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -20,7 +26,7 @@ import {
   Pause,
   RefreshCw,
   Lightbulb,
-  Activity
+  Activity,
 } from "lucide-react";
 import {
   LineChart,
@@ -33,19 +39,19 @@ import {
   AreaChart,
   Area,
   BarChart,
-  Bar
-} from 'recharts';
+  Bar,
+} from "recharts";
 import { OptimizationResult } from "@/types/ai-automation";
 
 interface OptimizationSuggestion {
   id: string;
-  type: 'efficiency' | 'time' | 'accuracy' | 'user_experience';
+  type: "efficiency" | "time" | "accuracy" | "user_experience";
   title: string;
   description: string;
   current_metric: number;
   projected_improvement: number;
   confidence: number;
-  complexity: 'low' | 'medium' | 'high';
+  complexity: "low" | "medium" | "high";
   estimated_implementation_time: number;
   affected_modules: string[];
   actions: string[];
@@ -63,96 +69,123 @@ export function WorkflowOptimizer() {
     average_response_time: 2.3,
     user_satisfaction: 4.2,
     automation_success_rate: 0.91,
-    cross_module_sync: 0.85
+    cross_module_sync: 0.85,
   };
 
   const optimizationHistory = [
-    { date: '2024-01-01', efficiency: 0.72, completion_rate: 0.75, satisfaction: 3.8 },
-    { date: '2024-01-08', efficiency: 0.74, completion_rate: 0.77, satisfaction: 3.9 },
-    { date: '2024-01-15', efficiency: 0.76, completion_rate: 0.79, satisfaction: 4.0 },
-    { date: '2024-01-22', efficiency: 0.78, completion_rate: 0.82, satisfaction: 4.2 },
+    {
+      date: "2024-01-01",
+      efficiency: 0.72,
+      completion_rate: 0.75,
+      satisfaction: 3.8,
+    },
+    {
+      date: "2024-01-08",
+      efficiency: 0.74,
+      completion_rate: 0.77,
+      satisfaction: 3.9,
+    },
+    {
+      date: "2024-01-15",
+      efficiency: 0.76,
+      completion_rate: 0.79,
+      satisfaction: 4.0,
+    },
+    {
+      date: "2024-01-22",
+      efficiency: 0.78,
+      completion_rate: 0.82,
+      satisfaction: 4.2,
+    },
   ];
 
   const suggestions: OptimizationSuggestion[] = [
     {
-      id: '1',
-      type: 'efficiency',
-      title: 'Optimize Task Batching',
-      description: 'Group similar tasks together to reduce context switching and improve focus time',
+      id: "1",
+      type: "efficiency",
+      title: "Optimize Task Batching",
+      description:
+        "Group similar tasks together to reduce context switching and improve focus time",
       current_metric: 0.68,
       projected_improvement: 0.23,
       confidence: 0.89,
-      complexity: 'medium',
+      complexity: "medium",
       estimated_implementation_time: 45,
-      affected_modules: ['tasks', 'habits', 'goals'],
+      affected_modules: ["tasks", "habits", "goals"],
       actions: [
-        'Implement intelligent task grouping algorithm',
-        'Add context-aware scheduling',
-        'Create focus time blocks',
-        'Enable smart notifications batching'
-      ]
+        "Implement intelligent task grouping algorithm",
+        "Add context-aware scheduling",
+        "Create focus time blocks",
+        "Enable smart notifications batching",
+      ],
     },
     {
-      id: '2',
-      type: 'time',
-      title: 'Predictive Deadline Adjustment',
-      description: 'Use AI to predict realistic completion times and automatically adjust deadlines',
+      id: "2",
+      type: "time",
+      title: "Predictive Deadline Adjustment",
+      description:
+        "Use AI to predict realistic completion times and automatically adjust deadlines",
       current_metric: 0.73,
       projected_improvement: 0.18,
       confidence: 0.82,
-      complexity: 'high',
+      complexity: "high",
       estimated_implementation_time: 90,
-      affected_modules: ['tasks', 'projects', 'team'],
+      affected_modules: ["tasks", "projects", "team"],
       actions: [
-        'Implement ML-based time estimation',
-        'Add historical performance analysis',
-        'Create dynamic deadline adjustment',
-        'Enable stakeholder notifications'
-      ]
+        "Implement ML-based time estimation",
+        "Add historical performance analysis",
+        "Create dynamic deadline adjustment",
+        "Enable stakeholder notifications",
+      ],
     },
     {
-      id: '3',
-      type: 'user_experience',
-      title: 'Smart Interface Adaptation',
-      description: 'Adapt the interface based on user behavior patterns and preferences',
+      id: "3",
+      type: "user_experience",
+      title: "Smart Interface Adaptation",
+      description:
+        "Adapt the interface based on user behavior patterns and preferences",
       current_metric: 0.75,
       projected_improvement: 0.15,
       confidence: 0.76,
-      complexity: 'low',
+      complexity: "low",
       estimated_implementation_time: 30,
-      affected_modules: ['all'],
+      affected_modules: ["all"],
       actions: [
-        'Implement adaptive UI layouts',
-        'Add personalized quick actions',
-        'Create smart widget arrangement',
-        'Enable context-sensitive shortcuts'
-      ]
-    }
+        "Implement adaptive UI layouts",
+        "Add personalized quick actions",
+        "Create smart widget arrangement",
+        "Enable context-sensitive shortcuts",
+      ],
+    },
   ];
 
   const recentOptimizations: OptimizationResult[] = [
     {
-      id: '1',
-      optimization_type: 'Task Priority Algorithm',
+      id: "1",
+      optimization_type: "Task Priority Algorithm",
       before_metrics: { efficiency: 0.72, completion_rate: 0.75 },
       after_metrics: { efficiency: 0.78, completion_rate: 0.82 },
       improvement_percentage: 8.3,
       actions_taken: [
-        'Implemented smart priority scoring',
-        'Added urgency-importance matrix',
-        'Enhanced deadline awareness',
-        'Improved context switching detection'
+        "Implemented smart priority scoring",
+        "Added urgency-importance matrix",
+        "Enhanced deadline awareness",
+        "Improved context switching detection",
       ],
       time_period: {
-        start: '2024-01-01',
-        end: '2024-01-22'
+        start: "2024-01-01",
+        end: "2024-01-22",
       },
-      affected_workflows: ['Daily Planning', 'Goal Tracking', 'Project Management'],
+      affected_workflows: [
+        "Daily Planning",
+        "Goal Tracking",
+        "Project Management",
+      ],
       user_feedback: {
         rating: 4.3,
-        comments: 'Much better at identifying what needs attention first'
-      }
-    }
+        comments: "Much better at identifying what needs attention first",
+      },
+    },
   ];
 
   const handleOptimize = async () => {
@@ -161,15 +194,15 @@ export function WorkflowOptimizer() {
 
     // Simulate optimization process
     const steps = [
-      'Analyzing current workflow patterns...',
-      'Identifying optimization opportunities...',
-      'Running performance simulations...',
-      'Applying optimizations...',
-      'Validating improvements...'
+      "Analyzing current workflow patterns...",
+      "Identifying optimization opportunities...",
+      "Running performance simulations...",
+      "Applying optimizations...",
+      "Validating improvements...",
     ];
 
     for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setOptimizationProgress((i + 1) * 20);
     }
 
@@ -181,27 +214,38 @@ export function WorkflowOptimizer() {
   };
 
   const getImprovementIcon = (improvement: number) => {
-    if (improvement > 0.15) return <ArrowUp className="h-4 w-4 text-green-600" />;
-    if (improvement > 0.05) return <ArrowUp className="h-4 w-4 text-yellow-600" />;
+    if (improvement > 0.15)
+      return <ArrowUp className="h-4 w-4 text-green-600" />;
+    if (improvement > 0.05)
+      return <ArrowUp className="h-4 w-4 text-yellow-600" />;
     return <ArrowDown className="h-4 w-4 text-red-600" />;
   };
 
   const getComplexityColor = (complexity: string) => {
     switch (complexity) {
-      case 'low': return 'text-green-600 bg-green-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'high': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case "low":
+        return "text-green-600 bg-green-100";
+      case "medium":
+        return "text-yellow-600 bg-yellow-100";
+      case "high":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-gray-600 bg-gray-100";
     }
   };
 
-  const getTypeIcon = (type: OptimizationSuggestion['type']) => {
+  const getTypeIcon = (type: OptimizationSuggestion["type"]) => {
     switch (type) {
-      case 'efficiency': return <Zap className="h-4 w-4" />;
-      case 'time': return <Clock className="h-4 w-4" />;
-      case 'accuracy': return <Target className="h-4 w-4" />;
-      case 'user_experience': return <Activity className="h-4 w-4" />;
-      default: return <BarChart3 className="h-4 w-4" />;
+      case "efficiency":
+        return <Zap className="h-4 w-4" />;
+      case "time":
+        return <Clock className="h-4 w-4" />;
+      case "accuracy":
+        return <Target className="h-4 w-4" />;
+      case "user_experience":
+        return <Activity className="h-4 w-4" />;
+      default:
+        return <BarChart3 className="h-4 w-4" />;
     }
   };
 
@@ -249,12 +293,17 @@ export function WorkflowOptimizer() {
           <CardContent className="pt-6">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Optimization in Progress</span>
-                <span className="text-sm text-muted-foreground">{optimizationProgress}%</span>
+                <span className="text-sm font-medium">
+                  Optimization in Progress
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {optimizationProgress}%
+                </span>
               </div>
               <Progress value={optimizationProgress} className="h-3" />
               <p className="text-sm text-muted-foreground">
-                Analyzing your workflow patterns and identifying optimization opportunities...
+                Analyzing your workflow patterns and identifying optimization
+                opportunities...
               </p>
             </div>
           </CardContent>
@@ -267,12 +316,19 @@ export function WorkflowOptimizer() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Overall Efficiency</p>
-                <p className="text-2xl font-bold">{Math.round(currentMetrics.overall_efficiency * 100)}%</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Overall Efficiency
+                </p>
+                <p className="text-2xl font-bold">
+                  {Math.round(currentMetrics.overall_efficiency * 100)}%
+                </p>
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
-            <Progress value={currentMetrics.overall_efficiency * 100} className="h-2 mt-2" />
+            <Progress
+              value={currentMetrics.overall_efficiency * 100}
+              className="h-2 mt-2"
+            />
           </CardContent>
         </Card>
 
@@ -280,12 +336,19 @@ export function WorkflowOptimizer() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Completion Rate</p>
-                <p className="text-2xl font-bold">{Math.round(currentMetrics.task_completion_rate * 100)}%</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Completion Rate
+                </p>
+                <p className="text-2xl font-bold">
+                  {Math.round(currentMetrics.task_completion_rate * 100)}%
+                </p>
               </div>
               <CheckCircle className="h-8 w-8 text-blue-600" />
             </div>
-            <Progress value={currentMetrics.task_completion_rate * 100} className="h-2 mt-2" />
+            <Progress
+              value={currentMetrics.task_completion_rate * 100}
+              className="h-2 mt-2"
+            />
           </CardContent>
         </Card>
 
@@ -293,18 +356,28 @@ export function WorkflowOptimizer() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Response Time</p>
-                <p className="text-2xl font-bold">{currentMetrics.average_response_time}s</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Response Time
+                </p>
+                <p className="text-2xl font-bold">
+                  {currentMetrics.average_response_time}s
+                </p>
               </div>
               <Clock className="h-8 w-8 text-purple-600" />
             </div>
-            <div className="text-xs text-muted-foreground mt-1">Average system response</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Average system response
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
@@ -326,12 +399,42 @@ export function WorkflowOptimizer() {
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={optimizationHistory}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" tickFormatter={(date) => new Date(date).toLocaleDateString('en', { month: 'short', day: 'numeric' })} />
+                    <XAxis
+                      dataKey="date"
+                      tickFormatter={(date) =>
+                        new Date(date).toLocaleDateString("en", {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      }
+                    />
                     <YAxis />
-                    <Tooltip labelFormatter={(date) => new Date(date).toLocaleDateString()} />
-                    <Line type="monotone" dataKey="efficiency" stroke="#10b981" strokeWidth={2} name="Efficiency" />
-                    <Line type="monotone" dataKey="completion_rate" stroke="#3b82f6" strokeWidth={2} name="Completion Rate" />
-                    <Line type="monotone" dataKey="satisfaction" stroke="#f59e0b" strokeWidth={2} name="Satisfaction" />
+                    <Tooltip
+                      labelFormatter={(date) =>
+                        new Date(date).toLocaleDateString()
+                      }
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="efficiency"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      name="Efficiency"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="completion_rate"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      name="Completion Rate"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="satisfaction"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      name="Satisfaction"
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -360,7 +463,10 @@ export function WorkflowOptimizer() {
                     </div>
                     <div className="space-y-1">
                       {opt.actions_taken.slice(0, 2).map((action, index) => (
-                        <div key={index} className="flex items-center gap-2 text-sm">
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 text-sm"
+                        >
                           <CheckCircle className="h-3 w-3 text-green-500" />
                           {action}
                         </div>
@@ -388,16 +494,19 @@ export function WorkflowOptimizer() {
                           {suggestion.title}
                           {getImprovementIcon(suggestion.projected_improvement)}
                         </CardTitle>
-                        <CardDescription>{suggestion.description}</CardDescription>
+                        <CardDescription>
+                          {suggestion.description}
+                        </CardDescription>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={getComplexityColor(suggestion.complexity)}>
+                      <Badge
+                        variant="outline"
+                        className={getComplexityColor(suggestion.complexity)}
+                      >
                         {suggestion.complexity} complexity
                       </Badge>
-                      <Badge variant="outline">
-                        {suggestion.type}
-                      </Badge>
+                      <Badge variant="outline">{suggestion.type}</Badge>
                     </div>
                   </div>
                 </CardHeader>
@@ -409,31 +518,50 @@ export function WorkflowOptimizer() {
                       <div>
                         <div className="flex items-center justify-between text-sm mb-1">
                           <span>Projected Improvement</span>
-                          <span>+{Math.round(suggestion.projected_improvement * 100)}%</span>
+                          <span>
+                            +
+                            {Math.round(suggestion.projected_improvement * 100)}
+                            %
+                          </span>
                         </div>
-                        <Progress value={suggestion.projected_improvement * 100} className="h-2" />
+                        <Progress
+                          value={suggestion.projected_improvement * 100}
+                          className="h-2"
+                        />
                       </div>
                       <div>
                         <div className="flex items-center justify-between text-sm mb-1">
                           <span>Confidence</span>
-                          <span>{Math.round(suggestion.confidence * 100)}%</span>
+                          <span>
+                            {Math.round(suggestion.confidence * 100)}%
+                          </span>
                         </div>
-                        <Progress value={suggestion.confidence * 100} className="h-2" />
+                        <Progress
+                          value={suggestion.confidence * 100}
+                          className="h-2"
+                        />
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">
-                          ~{suggestion.estimated_implementation_time} min to implement
+                          ~{suggestion.estimated_implementation_time} min to
+                          implement
                         </span>
                       </div>
                     </div>
 
                     {/* Affected Modules */}
                     <div>
-                      <h5 className="font-medium text-sm mb-2">Affected Modules</h5>
+                      <h5 className="font-medium text-sm mb-2">
+                        Affected Modules
+                      </h5>
                       <div className="flex flex-wrap gap-1">
                         {suggestion.affected_modules.map((module) => (
-                          <Badge key={module} variant="secondary" className="text-xs">
+                          <Badge
+                            key={module}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             {module}
                           </Badge>
                         ))}
@@ -442,10 +570,15 @@ export function WorkflowOptimizer() {
 
                     {/* Actions */}
                     <div>
-                      <h5 className="font-medium text-sm mb-2">Optimization Actions</h5>
+                      <h5 className="font-medium text-sm mb-2">
+                        Optimization Actions
+                      </h5>
                       <ul className="space-y-1">
                         {suggestion.actions.map((action, index) => (
-                          <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                          <li
+                            key={index}
+                            className="text-sm text-muted-foreground flex items-start gap-2"
+                          >
                             <Lightbulb className="h-3 w-3 mt-0.5 text-yellow-500 flex-shrink-0" />
                             {action}
                           </li>
@@ -482,7 +615,10 @@ export function WorkflowOptimizer() {
             <CardContent>
               <div className="space-y-6">
                 {recentOptimizations.map((opt) => (
-                  <div key={opt.id} className="border-l-4 border-green-500 pl-4 space-y-2">
+                  <div
+                    key={opt.id}
+                    className="border-l-4 border-green-500 pl-4 space-y-2"
+                  >
                     <div className="flex items-center justify-between">
                       <h4 className="font-medium">{opt.optimization_type}</h4>
                       <div className="flex items-center gap-2">
@@ -499,21 +635,31 @@ export function WorkflowOptimizer() {
                       <div>
                         <h5 className="font-medium mb-1">Before</h5>
                         <ul className="space-y-1 text-muted-foreground">
-                          {Object.entries(opt.before_metrics).map(([key, value]) => (
-                            <li key={key}>
-                              {key.replace(/_/g, ' ')}: {typeof value === 'number' ? Math.round(value * 100) + '%' : value}
-                            </li>
-                          ))}
+                          {Object.entries(opt.before_metrics).map(
+                            ([key, value]) => (
+                              <li key={key}>
+                                {key.replace(/_/g, " ")}:{" "}
+                                {typeof value === "number"
+                                  ? Math.round(value * 100) + "%"
+                                  : value}
+                              </li>
+                            ),
+                          )}
                         </ul>
                       </div>
                       <div>
                         <h5 className="font-medium mb-1">After</h5>
                         <ul className="space-y-1 text-muted-foreground">
-                          {Object.entries(opt.after_metrics).map(([key, value]) => (
-                            <li key={key}>
-                              {key.replace(/_/g, ' ')}: {typeof value === 'number' ? Math.round(value * 100) + '%' : value}
-                            </li>
-                          ))}
+                          {Object.entries(opt.after_metrics).map(
+                            ([key, value]) => (
+                              <li key={key}>
+                                {key.replace(/_/g, " ")}:{" "}
+                                {typeof value === "number"
+                                  ? Math.round(value * 100) + "%"
+                                  : value}
+                              </li>
+                            ),
+                          )}
                         </ul>
                       </div>
                     </div>
@@ -522,7 +668,8 @@ export function WorkflowOptimizer() {
                       <div className="bg-muted p-3 rounded-lg">
                         <p className="text-sm font-medium">User Feedback</p>
                         <p className="text-sm text-muted-foreground">
-                          Rating: {opt.user_feedback.rating}/5 - "{opt.user_feedback.comments}"
+                          Rating: {opt.user_feedback.rating}/5 - "
+                          {opt.user_feedback.comments}"
                         </p>
                       </div>
                     )}
@@ -545,13 +692,15 @@ export function WorkflowOptimizer() {
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={[
-                    { module: 'Tasks', efficiency: 0.85 },
-                    { module: 'Goals', efficiency: 0.78 },
-                    { module: 'Habits', efficiency: 0.92 },
-                    { module: 'Projects', efficiency: 0.73 },
-                    { module: 'Notes', efficiency: 0.81 },
-                  ]}>
+                  <BarChart
+                    data={[
+                      { module: "Tasks", efficiency: 0.85 },
+                      { module: "Goals", efficiency: 0.78 },
+                      { module: "Habits", efficiency: 0.92 },
+                      { module: "Projects", efficiency: 0.73 },
+                      { module: "Notes", efficiency: 0.81 },
+                    ]}
+                  >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="module" />
                     <YAxis />
@@ -574,10 +723,25 @@ export function WorkflowOptimizer() {
                 <ResponsiveContainer width="100%" height={300}>
                   <AreaChart data={optimizationHistory}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" tickFormatter={(date) => new Date(date).toLocaleDateString('en', { month: 'short', day: 'numeric' })} />
+                    <XAxis
+                      dataKey="date"
+                      tickFormatter={(date) =>
+                        new Date(date).toLocaleDateString("en", {
+                          month: "short",
+                          day: "numeric",
+                        })
+                      }
+                    />
                     <YAxis />
                     <Tooltip />
-                    <Area type="monotone" dataKey="efficiency" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
+                    <Area
+                      type="monotone"
+                      dataKey="efficiency"
+                      stackId="1"
+                      stroke="#10b981"
+                      fill="#10b981"
+                      fillOpacity={0.6}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </CardContent>

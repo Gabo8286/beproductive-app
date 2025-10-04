@@ -29,9 +29,7 @@ export function useHabitGoalLinks(habitId?: string, goalId?: string) {
   return useQuery({
     queryKey: ["habit-goal-links", habitId, goalId],
     queryFn: async () => {
-      let query = supabase
-        .from("habit_goal_links")
-        .select(`
+      let query = supabase.from("habit_goal_links").select(`
           *,
           habits:habit_id (id, title, category, current_streak),
           goals:goal_id (id, title, category, progress)
@@ -172,7 +170,8 @@ export function useGoalProgressFromHabits(goalId: string) {
       // Get all linked habits
       const { data: links, error: linksError } = await supabase
         .from("habit_goal_links")
-        .select(`
+        .select(
+          `
           *,
           habits:habit_id (
             id,
@@ -181,7 +180,8 @@ export function useGoalProgressFromHabits(goalId: string) {
             longest_streak,
             frequency
           )
-        `)
+        `,
+        )
         .eq("goal_id", goalId);
 
       if (linksError) throw linksError;
@@ -204,7 +204,8 @@ export function useGoalProgressFromHabits(goalId: string) {
           if (entriesError) throw entriesError;
 
           const completionRate = entries ? (entries.length / 30) * 100 : 0;
-          const weightedContribution = completionRate * link.contribution_weight;
+          const weightedContribution =
+            completionRate * link.contribution_weight;
 
           return {
             habitId: link.habit_id,
@@ -214,18 +215,18 @@ export function useGoalProgressFromHabits(goalId: string) {
             weightedContribution,
             currentStreak: link.habits?.current_streak || 0,
           };
-        })
+        }),
       );
 
       // Calculate total weighted progress
       const totalWeight = links.reduce(
         (sum, link) => sum + link.contribution_weight,
-        0
+        0,
       );
       const totalProgress =
         habitContributions.reduce(
           (sum, contrib) => sum + contrib.weightedContribution,
-          0
+          0,
         ) / (totalWeight || 1);
 
       return {

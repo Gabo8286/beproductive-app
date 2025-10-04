@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, ButtonProps } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React, { useState, useRef, useEffect } from "react";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface TouchOptimizedButtonProps extends ButtonProps {
   hapticFeedback?: boolean;
@@ -16,18 +16,20 @@ export function TouchOptimizedButton({
   longPressMs = 800,
   onLongPress,
   onClick,
-  rippleColor = 'rgba(255, 255, 255, 0.3)',
+  rippleColor = "rgba(255, 255, 255, 0.3)",
   ...props
 }: TouchOptimizedButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
-  const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [ripples, setRipples] = useState<
+    Array<{ id: number; x: number; y: number }>
+  >([]);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const longPressTimerRef = useRef<NodeJS.Timeout>();
   const rippleIdRef = useRef(0);
 
   // Haptic feedback function
   const triggerHapticFeedback = () => {
-    if (hapticFeedback && 'vibrate' in navigator) {
+    if (hapticFeedback && "vibrate" in navigator) {
       navigator.vibrate(10); // Very light vibration
     }
   };
@@ -43,11 +45,13 @@ export function TouchOptimizedButton({
       const x = e.touches[0].clientX - rect.left;
       const y = e.touches[0].clientY - rect.top;
       const newRipple = { id: rippleIdRef.current++, x, y };
-      setRipples(prev => [...prev, newRipple]);
+      setRipples((prev) => [...prev, newRipple]);
 
       // Remove ripple after animation
       setTimeout(() => {
-        setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+        setRipples((prev) =>
+          prev.filter((ripple) => ripple.id !== newRipple.id),
+        );
       }, 600);
     }
 
@@ -88,18 +92,18 @@ export function TouchOptimizedButton({
       ref={buttonRef}
       className={cn(
         // Base touch optimization styles
-        'touch-manipulation select-none relative overflow-hidden',
+        "touch-manipulation select-none relative overflow-hidden",
         // Minimum touch target size (44px as per Apple HIG)
-        'min-h-[44px] min-w-[44px]',
+        "min-h-[44px] min-w-[44px]",
         // Enhanced visual feedback
-        'transition-all duration-150 ease-out',
+        "transition-all duration-150 ease-out",
         // Active state
-        isPressed && 'scale-[0.97] brightness-95',
+        isPressed && "scale-[0.97] brightness-95",
         // Hover state for desktop
-        'hover:scale-[1.02] hover:shadow-md',
+        "hover:scale-[1.02] hover:shadow-md",
         // Focus state for accessibility
-        'focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
-        className
+        "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+        className,
       )}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -108,27 +112,25 @@ export function TouchOptimizedButton({
       {...props}
     >
       {/* Ripple effect */}
-      {ripples.map(ripple => (
+      {ripples.map((ripple) => (
         <span
           key={ripple.id}
           className="absolute pointer-events-none"
           style={{
             left: ripple.x,
             top: ripple.y,
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
             backgroundColor: rippleColor,
-            transform: 'translate(-50%, -50%)',
-            animation: 'ripple 0.6s ease-out',
+            transform: "translate(-50%, -50%)",
+            animation: "ripple 0.6s ease-out",
           }}
         />
       ))}
 
       {/* Button content */}
-      <span className="relative z-10">
-        {children}
-      </span>
+      <span className="relative z-10">{children}</span>
 
       {/* CSS for ripple animation */}
       <style>{`
@@ -149,9 +151,11 @@ export function TouchOptimizedButton({
 
 // Higher-order component for touch optimization
 export function withTouchOptimization<T extends ButtonProps>(
-  WrappedComponent: React.ComponentType<T>
+  WrappedComponent: React.ComponentType<T>,
 ) {
-  return function TouchOptimizedComponent(props: T & TouchOptimizedButtonProps) {
+  return function TouchOptimizedComponent(
+    props: T & TouchOptimizedButtonProps,
+  ) {
     return (
       <TouchOptimizedButton {...props}>
         <WrappedComponent {...props} />
@@ -183,7 +187,7 @@ export function TouchOptimizedCard({
   const longPressTimerRef = useRef<NodeJS.Timeout>();
 
   const triggerHapticFeedback = () => {
-    if (hapticFeedback && 'vibrate' in navigator) {
+    if (hapticFeedback && "vibrate" in navigator) {
       navigator.vibrate(10);
     }
   };
@@ -229,14 +233,14 @@ export function TouchOptimizedCard({
   return (
     <div
       className={cn(
-        'touch-manipulation select-none transition-all duration-150 ease-out',
+        "touch-manipulation select-none transition-all duration-150 ease-out",
         pressable && [
-          'cursor-pointer',
-          'hover:scale-[1.01] hover:shadow-md',
-          'active:scale-[0.99]',
-          isPressed && 'scale-[0.99] brightness-95'
+          "cursor-pointer",
+          "hover:scale-[1.01] hover:shadow-md",
+          "active:scale-[0.99]",
+          isPressed && "scale-[0.99] brightness-95",
         ],
-        className
+        className,
       )}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}

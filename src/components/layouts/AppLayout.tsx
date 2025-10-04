@@ -23,7 +23,7 @@ import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 export function AppLayout() {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
-  
+
   // Enable global keyboard shortcuts
   useKeyboardShortcuts();
 
@@ -32,11 +32,12 @@ export function AppLayout() {
     navigate("/login");
   };
 
-  const initials = profile?.full_name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase() || "U";
+  const initials =
+    profile?.full_name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase() || "U";
 
   return (
     <SidebarProvider>
@@ -44,33 +45,39 @@ export function AppLayout() {
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <div className="flex flex-1 flex-col">
-          <header 
+          <header
             className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4"
             role="banner"
             aria-label="Main header"
           >
-            <SidebarTrigger className="md:hidden" aria-label="Toggle sidebar navigation" />
+            <SidebarTrigger
+              className="md:hidden"
+              aria-label="Toggle sidebar navigation"
+            />
             <div className="flex-1" />
             <NotificationCenter />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   className="relative h-10 w-10 rounded-full apple-button"
                   aria-label="User menu"
                   data-voice-command="profile menu"
                 >
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={profile?.avatar_url || ""} alt={profile?.full_name || ""} />
+                    <AvatarImage
+                      src={profile?.avatar_url || ""}
+                      alt={profile?.full_name || ""}
+                    />
                     <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-...
+              ...
             </DropdownMenu>
           </header>
-          <main 
-            id="main-content" 
+          <main
+            id="main-content"
             className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand"
             role="main"
             aria-label="Main content"

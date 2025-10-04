@@ -105,10 +105,7 @@ export function TrustBadges() {
                     {indicator.icon}
                   </div>
                   {indicator.badge && (
-                    <Badge
-                      variant="outline"
-                      className="text-xs font-medium"
-                    >
+                    <Badge variant="outline" className="text-xs font-medium">
                       {indicator.badge}
                     </Badge>
                   )}
@@ -164,10 +161,16 @@ export function TrustBadges() {
           Featured In
         </p>
         <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
-          <div className="text-xl font-bold text-muted-foreground">TechCrunch</div>
+          <div className="text-xl font-bold text-muted-foreground">
+            TechCrunch
+          </div>
           <div className="text-xl font-bold text-muted-foreground">Forbes</div>
-          <div className="text-xl font-bold text-muted-foreground">Product Hunt</div>
-          <div className="text-xl font-bold text-muted-foreground">The Verge</div>
+          <div className="text-xl font-bold text-muted-foreground">
+            Product Hunt
+          </div>
+          <div className="text-xl font-bold text-muted-foreground">
+            The Verge
+          </div>
           <div className="text-xl font-bold text-muted-foreground">Wired</div>
         </div>
       </div>

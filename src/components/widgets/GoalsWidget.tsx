@@ -12,27 +12,33 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
-  Tooltip
-} from 'recharts';
+  Tooltip,
+} from "recharts";
 
 export function GoalsWidget() {
   const navigate = useNavigate();
   const { goals = [], isLoading } = useGoals();
 
-  const activeGoals = goals.filter(goal => goal.status === 'active');
-  const completedThisMonth = goals.filter(goal =>
-    goal.status === 'completed' &&
-    goal.completed_at &&
-    new Date(goal.completed_at).getMonth() === new Date().getMonth()
+  const activeGoals = goals.filter((goal) => goal.status === "active");
+  const completedThisMonth = goals.filter(
+    (goal) =>
+      goal.status === "completed" &&
+      goal.completed_at &&
+      new Date(goal.completed_at).getMonth() === new Date().getMonth(),
   );
 
-  const averageProgress = activeGoals.length > 0
-    ? activeGoals.reduce((sum, goal) => sum + (goal.progress || 0), 0) / activeGoals.length
-    : 0;
+  const averageProgress =
+    activeGoals.length > 0
+      ? activeGoals.reduce((sum, goal) => sum + (goal.progress || 0), 0) /
+        activeGoals.length
+      : 0;
 
   const upcomingDeadlines = activeGoals
-    .filter(goal => goal.target_date)
-    .sort((a, b) => new Date(a.target_date!).getTime() - new Date(b.target_date!).getTime())
+    .filter((goal) => goal.target_date)
+    .sort(
+      (a, b) =>
+        new Date(a.target_date!).getTime() - new Date(b.target_date!).getTime(),
+    )
     .slice(0, 3);
 
   // Generate progress trend data (last 7 days)
@@ -40,8 +46,8 @@ export function GoalsWidget() {
     const date = new Date();
     date.setDate(date.getDate() - (6 - i));
     return {
-      day: date.toLocaleDateString('en', { weekday: 'short' }),
-      progress: Math.max(0, averageProgress - Math.random() * 10 + (i * 2)) // Simulate trending upward
+      day: date.toLocaleDateString("en", { weekday: "short" }),
+      progress: Math.max(0, averageProgress - Math.random() * 10 + i * 2), // Simulate trending upward
     };
   });
 
@@ -73,12 +79,20 @@ export function GoalsWidget() {
         {/* Key Metrics */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
-            <div className="text-2xl font-bold text-primary">{activeGoals.length}</div>
-            <div className="text-xs text-muted-foreground">Active destinations</div>
+            <div className="text-2xl font-bold text-primary">
+              {activeGoals.length}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Active destinations
+            </div>
           </div>
           <div className="space-y-1">
-            <div className="text-2xl font-bold text-success">{completedThisMonth.length}</div>
-            <div className="text-xs text-muted-foreground">Reached this month</div>
+            <div className="text-2xl font-bold text-success">
+              {completedThisMonth.length}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Reached this month
+            </div>
           </div>
         </div>
 
@@ -93,7 +107,10 @@ export function GoalsWidget() {
                 <XAxis dataKey="day" hide />
                 <YAxis hide />
                 <Tooltip
-                  formatter={(value) => [`${Math.round(value as number)}%`, 'Progress']}
+                  formatter={(value) => [
+                    `${Math.round(value as number)}%`,
+                    "Progress",
+                  ]}
                   labelFormatter={(label) => `${label}`}
                 />
                 <Line
@@ -117,9 +134,14 @@ export function GoalsWidget() {
             </h4>
             <div className="space-y-2">
               {upcomingDeadlines.map((goal) => (
-                <div key={goal.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
+                <div
+                  key={goal.id}
+                  className="flex items-center justify-between p-2 rounded-lg bg-muted/30"
+                >
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium truncate">{goal.title}</div>
+                    <div className="text-sm font-medium truncate">
+                      {goal.title}
+                    </div>
                     <div className="text-xs text-muted-foreground">
                       {new Date(goal.target_date!).toLocaleDateString()}
                     </div>
@@ -135,18 +157,18 @@ export function GoalsWidget() {
 
         {/* Quick Actions */}
         <div className="flex gap-2 pt-2">
-          <Button 
-            size="sm" 
-            onClick={() => navigate('/goals')}
+          <Button
+            size="sm"
+            onClick={() => navigate("/goals")}
             className="flex-1 apple-button"
           >
             <TrendingUp className="h-4 w-4 mr-2" />
             View Progress
           </Button>
-          <Button 
-            size="sm" 
+          <Button
+            size="sm"
             variant="outline"
-            onClick={() => navigate('/goals/new')}
+            onClick={() => navigate("/goals/new")}
             className="apple-button"
           >
             <Plus className="h-4 w-4" />

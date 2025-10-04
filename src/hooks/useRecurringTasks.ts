@@ -1,14 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { Database } from '@/integrations/supabase/types';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Database } from "@/integrations/supabase/types";
 
-type Task = Database['public']['Tables']['tasks']['Row'];
-type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
-type TaskUpdate = Database['public']['Tables']['tasks']['Update'];
+type Task = Database["public"]["Tables"]["tasks"]["Row"];
+type TaskInsert = Database["public"]["Tables"]["tasks"]["Insert"];
+type TaskUpdate = Database["public"]["Tables"]["tasks"]["Update"];
 
 export interface RecurrencePattern {
-  frequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  frequency: "daily" | "weekly" | "monthly" | "yearly";
   interval: number;
   daysOfWeek?: number[]; // 0=Sunday, 6=Saturday
   dayOfMonth?: number;
@@ -20,14 +20,14 @@ export interface RecurrencePattern {
 // Fetch all recurring task templates
 export const useRecurringTasks = () => {
   return useQuery({
-    queryKey: ['recurring-tasks'],
+    queryKey: ["recurring-tasks"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('is_recurring', true)
-        .is('recurring_template_id', null)
-        .order('created_at', { ascending: false });
+        .from("tasks")
+        .select("*")
+        .eq("is_recurring", true)
+        .is("recurring_template_id", null)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data as Task[];
@@ -38,19 +38,21 @@ export const useRecurringTasks = () => {
 // Fetch instances of a recurring task
 export const useRecurringInstances = (templateId: string | undefined) => {
   return useQuery({
-    queryKey: ['recurring-instances', templateId],
+    queryKey: ["recurring-instances", templateId],
     queryFn: async () => {
       if (!templateId) return [];
 
       const { data, error } = await supabase
-        .from('tasks')
-        .select(`
+        .from("tasks")
+        .select(
+          `
           *,
           assigned_to_profile:profiles!tasks_assigned_to_fkey(full_name, avatar_url),
           created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
-        `)
-        .eq('recurring_template_id', templateId)
-        .order('instance_date', { ascending: true });
+        `,
+        )
+        .eq("recurring_template_id", templateId)
+        .order("instance_date", { ascending: true });
 
       if (error) throw error;
       return data;
@@ -68,24 +70,26 @@ export const useCreateRecurringTask = () => {
       taskData,
       pattern,
     }: {
-      taskData: Omit<TaskInsert, 'created_by' | 'workspace_id'>;
+      taskData: Omit<TaskInsert, "created_by" | "workspace_id">;
       pattern: RecurrencePattern;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
 
       // Get user's default workspace
       const { data: workspace } = await supabase
-        .from('workspace_members')
-        .select('workspace_id')
-        .eq('user_id', user.id)
+        .from("workspace_members")
+        .select("workspace_id")
+        .eq("user_id", user.id)
         .limit(1)
         .single();
 
-      if (!workspace) throw new Error('No workspace found');
+      if (!workspace) throw new Error("No workspace found");
 
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .insert({
           ...taskData,
           created_by: user.id,
@@ -100,13 +104,13 @@ export const useCreateRecurringTask = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success('Recurring task created successfully');
-      queryClient.invalidateQueries({ queryKey: ['recurring-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success("Recurring task created successfully");
+      queryClient.invalidateQueries({ queryKey: ["recurring-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
-      console.error('Error creating recurring task:', error);
-      toast.error('Failed to create recurring task');
+      console.error("Error creating recurring task:", error);
+      toast.error("Failed to create recurring task");
     },
   });
 };
@@ -124,9 +128,9 @@ export const useUpdateRecurrence = () => {
       pattern: RecurrencePattern;
     }) => {
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .update({ recurrence_pattern: pattern as any })
-        .eq('id', taskId)
+        .eq("id", taskId)
         .select()
         .single();
 
@@ -134,13 +138,13 @@ export const useUpdateRecurrence = () => {
       return data;
     },
     onSuccess: (_, variables) => {
-      toast.success('Recurrence pattern updated');
-      queryClient.invalidateQueries({ queryKey: ['recurring-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['task', variables.taskId] });
+      toast.success("Recurrence pattern updated");
+      queryClient.invalidateQueries({ queryKey: ["recurring-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task", variables.taskId] });
     },
     onError: (error) => {
-      console.error('Error updating recurrence:', error);
-      toast.error('Failed to update recurrence pattern');
+      console.error("Error updating recurrence:", error);
+      toast.error("Failed to update recurrence pattern");
     },
   });
 };
@@ -158,12 +162,12 @@ export const useConvertToRecurring = () => {
       pattern: RecurrencePattern;
     }) => {
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .update({
           is_recurring: true,
           recurrence_pattern: pattern as any,
         })
-        .eq('id', taskId)
+        .eq("id", taskId)
         .select()
         .single();
 
@@ -171,13 +175,13 @@ export const useConvertToRecurring = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success('Task converted to recurring');
-      queryClient.invalidateQueries({ queryKey: ['recurring-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success("Task converted to recurring");
+      queryClient.invalidateQueries({ queryKey: ["recurring-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
-      console.error('Error converting to recurring:', error);
-      toast.error('Failed to convert task');
+      console.error("Error converting to recurring:", error);
+      toast.error("Failed to convert task");
     },
   });
 };
@@ -189,12 +193,12 @@ export const useRemoveRecurrence = () => {
   return useMutation({
     mutationFn: async ({ taskId }: { taskId: string }) => {
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .update({
           is_recurring: false,
           recurrence_pattern: null,
         })
-        .eq('id', taskId)
+        .eq("id", taskId)
         .select()
         .single();
 
@@ -202,13 +206,13 @@ export const useRemoveRecurrence = () => {
       return data;
     },
     onSuccess: () => {
-      toast.success('Recurrence removed');
-      queryClient.invalidateQueries({ queryKey: ['recurring-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success("Recurrence removed");
+      queryClient.invalidateQueries({ queryKey: ["recurring-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
-      console.error('Error removing recurrence:', error);
-      toast.error('Failed to remove recurrence');
+      console.error("Error removing recurrence:", error);
+      toast.error("Failed to remove recurrence");
     },
   });
 };
@@ -219,41 +223,51 @@ export const useGenerateInstances = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.rpc('generate_recurring_instances');
+      const { data, error } = await supabase.rpc(
+        "generate_recurring_instances",
+      );
       if (error) throw error;
       return data;
     },
     onSuccess: (data) => {
-      const totalInstances = data?.reduce((sum: number, item: any) => sum + (item.instances_created || 0), 0) || 0;
+      const totalInstances =
+        data?.reduce(
+          (sum: number, item: any) => sum + (item.instances_created || 0),
+          0,
+        ) || 0;
       toast.success(`Generated ${totalInstances} task instances`);
-      queryClient.invalidateQueries({ queryKey: ['recurring-instances'] });
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["recurring-instances"] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
-      console.error('Error generating instances:', error);
-      toast.error('Failed to generate instances');
+      console.error("Error generating instances:", error);
+      toast.error("Failed to generate instances");
     },
   });
 };
 
 // Get upcoming instances preview
-export const useUpcomingInstances = (templateId: string | undefined, pattern: RecurrencePattern | undefined) => {
+export const useUpcomingInstances = (
+  templateId: string | undefined,
+  pattern: RecurrencePattern | undefined,
+) => {
   return useQuery({
-    queryKey: ['upcoming-instances', templateId, pattern],
+    queryKey: ["upcoming-instances", templateId, pattern],
     queryFn: async () => {
       if (!templateId || !pattern) return [];
 
       // Calculate next 5 occurrences locally for preview
       const dates: Date[] = [];
       let currentDate = new Date();
-      
+
       for (let i = 0; i < 5 && dates.length < 5; i++) {
         const nextDate = calculateNextDate(currentDate, pattern);
         if (!nextDate) break;
-        
+
         if (pattern.endDate && nextDate > new Date(pattern.endDate)) break;
-        if (pattern.maxOccurrences && dates.length >= pattern.maxOccurrences) break;
-        
+        if (pattern.maxOccurrences && dates.length >= pattern.maxOccurrences)
+          break;
+
         dates.push(nextDate);
         currentDate = nextDate;
       }
@@ -265,15 +279,18 @@ export const useUpcomingInstances = (templateId: string | undefined, pattern: Re
 };
 
 // Helper function to calculate next date (client-side preview)
-function calculateNextDate(fromDate: Date, pattern: RecurrencePattern): Date | null {
+function calculateNextDate(
+  fromDate: Date,
+  pattern: RecurrencePattern,
+): Date | null {
   const next = new Date(fromDate);
-  
+
   switch (pattern.frequency) {
-    case 'daily':
+    case "daily":
       next.setDate(next.getDate() + pattern.interval);
       break;
-      
-    case 'weekly':
+
+    case "weekly":
       if (pattern.daysOfWeek && pattern.daysOfWeek.length > 0) {
         // Find next matching day of week
         let daysToAdd = 1;
@@ -286,23 +303,23 @@ function calculateNextDate(fromDate: Date, pattern: RecurrencePattern): Date | n
           daysToAdd++;
         }
       }
-      next.setDate(next.getDate() + (pattern.interval * 7));
+      next.setDate(next.getDate() + pattern.interval * 7);
       break;
-      
-    case 'monthly':
+
+    case "monthly":
       next.setMonth(next.getMonth() + pattern.interval);
       if (pattern.dayOfMonth) {
         next.setDate(pattern.dayOfMonth);
       }
       break;
-      
-    case 'yearly':
+
+    case "yearly":
       next.setFullYear(next.getFullYear() + pattern.interval);
       break;
-      
+
     default:
       return null;
   }
-  
+
   return next;
 }

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 /**
  * Global keyboard shortcuts for quick navigation
  * Follow macOS conventions (Cmd+Shift) and Windows conventions (Ctrl+Shift)
- * 
+ *
  * Available shortcuts:
  * - Cmd/Ctrl + Shift + D: Dashboard
  * - Cmd/Ctrl + Shift + G: Goals
@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
  * - Cmd/Ctrl + Shift + H: Habits
  * - Cmd/Ctrl + Shift + R: Reflections
  * - ?: Show keyboard shortcuts help (coming soon)
- * 
+ *
  * Note: These shortcuts are designed to not conflict with screen reader shortcuts
  * which typically use Insert/CapsLock + other keys
  */
@@ -24,54 +24,55 @@ export function useKeyboardShortcuts() {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ignore shortcuts when typing in input fields
       const target = event.target as HTMLElement;
-      const isInputField = ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
-                          target.isContentEditable;
-      
+      const isInputField =
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) ||
+        target.isContentEditable;
+
       const isMod = event.ctrlKey || event.metaKey; // Ctrl on Windows, Cmd on Mac
-      
+
       // Only trigger if modifier + shift is pressed (and not in input field)
       if (!isMod || !event.shiftKey || isInputField) return;
 
       switch (event.key.toUpperCase()) {
-        case 'D':
+        case "D":
           // Cmd/Ctrl + Shift + D -> Dashboard
           event.preventDefault();
-          navigate('/dashboard');
+          navigate("/dashboard");
           break;
-          
-        case 'G':
+
+        case "G":
           // Cmd/Ctrl + Shift + G -> Goals
           event.preventDefault();
-          navigate('/goals');
+          navigate("/goals");
           break;
-          
-        case 'T':
+
+        case "T":
           // Cmd/Ctrl + Shift + T -> Quick To-Dos (Travel Notes)
           event.preventDefault();
-          navigate('/quick-todos');
+          navigate("/quick-todos");
           break;
-          
-        case 'K':
+
+        case "K":
           // Cmd/Ctrl + Shift + K -> Tasks
           event.preventDefault();
-          navigate('/tasks');
+          navigate("/tasks");
           break;
-          
-        case 'H':
+
+        case "H":
           // Cmd/Ctrl + Shift + H -> Habits
           event.preventDefault();
-          navigate('/habits');
+          navigate("/habits");
           break;
-          
-        case 'R':
+
+        case "R":
           // Cmd/Ctrl + Shift + R -> Reflections
           event.preventDefault();
-          navigate('/reflections');
+          navigate("/reflections");
           break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [navigate]);
 }

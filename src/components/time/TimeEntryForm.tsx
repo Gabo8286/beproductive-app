@@ -1,12 +1,18 @@
-import { useState } from 'react';
-import { useCreateTimeEntry } from '@/hooks/useTimeTracking';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus } from 'lucide-react';
-import { format } from 'date-fns';
+import { useState } from "react";
+import { useCreateTimeEntry } from "@/hooks/useTimeTracking";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Plus } from "lucide-react";
+import { format } from "date-fns";
 
 interface TimeEntryFormProps {
   taskId: string;
@@ -15,15 +21,15 @@ interface TimeEntryFormProps {
 export function TimeEntryForm({ taskId }: TimeEntryFormProps) {
   const [open, setOpen] = useState(false);
   const createEntry = useCreateTimeEntry();
-  
-  const today = format(new Date(), 'yyyy-MM-dd');
-  const now = format(new Date(), 'HH:mm');
+
+  const today = format(new Date(), "yyyy-MM-dd");
+  const now = format(new Date(), "HH:mm");
 
   const [formData, setFormData] = useState({
     date: today,
     startTime: now,
     endTime: now,
-    description: '',
+    description: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,7 +50,7 @@ export function TimeEntryForm({ taskId }: TimeEntryFormProps) {
       date: today,
       startTime: now,
       endTime: now,
-      description: '',
+      description: "",
     });
   };
 
@@ -67,7 +73,9 @@ export function TimeEntryForm({ taskId }: TimeEntryFormProps) {
               id="date"
               type="date"
               value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, date: e.target.value })
+              }
               required
             />
           </div>
@@ -79,7 +87,9 @@ export function TimeEntryForm({ taskId }: TimeEntryFormProps) {
                 id="startTime"
                 type="time"
                 value={formData.startTime}
-                onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, startTime: e.target.value })
+                }
                 required
               />
             </div>
@@ -89,7 +99,9 @@ export function TimeEntryForm({ taskId }: TimeEntryFormProps) {
                 id="endTime"
                 type="time"
                 value={formData.endTime}
-                onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, endTime: e.target.value })
+                }
                 required
               />
             </div>
@@ -100,14 +112,20 @@ export function TimeEntryForm({ taskId }: TimeEntryFormProps) {
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="What did you work on?"
               rows={3}
             />
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={createEntry.isPending}>

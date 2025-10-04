@@ -54,7 +54,7 @@ export function useQuickTodos(filters: QuickTodosFilters = {}) {
         },
         () => {
           queryClient.invalidateQueries({ queryKey: ["quick-todos"] });
-        }
+        },
       )
       .subscribe();
 

@@ -1,18 +1,18 @@
-import { render, RenderOptions } from '@testing-library/react';
-import { screen } from '@testing-library/dom';
-import { ReactElement, ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { vi } from 'vitest';
-import { ModulesProvider } from '@/contexts/ModulesContext';
-import { TaskViewProvider } from '@/contexts/TaskViewContext';
-import { WidgetProvider } from '@/contexts/WidgetContext';
-import { AccessibilityProvider } from '@/contexts/AccessibilityContext';
-import { AuthContext } from '@/contexts/AuthContext';
-import { runAccessibilityAudit } from '@/utils/accessibility/testing';
+import { render, RenderOptions } from "@testing-library/react";
+import { screen } from "@testing-library/dom";
+import { ReactElement, ReactNode } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { vi } from "vitest";
+import { ModulesProvider } from "@/contexts/ModulesContext";
+import { TaskViewProvider } from "@/contexts/TaskViewContext";
+import { WidgetProvider } from "@/contexts/WidgetContext";
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
+import { AuthContext } from "@/contexts/AuthContext";
+import { runAccessibilityAudit } from "@/utils/accessibility/testing";
 
 // Create a custom render function that includes all providers
-interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
   initialRoute?: string;
   authValue?: any;
 }
@@ -20,7 +20,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
 export function renderWithProviders(
   ui: ReactElement,
   {
-    initialRoute = '/',
+    initialRoute = "/",
     authValue = {
       user: null,
       session: null,
@@ -34,7 +34,7 @@ export function renderWithProviders(
       updateProfile: vi.fn(),
     },
     ...renderOptions
-  }: CustomRenderOptions = {}
+  }: CustomRenderOptions = {},
 ) {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -44,7 +44,7 @@ export function renderWithProviders(
     },
   });
 
-  window.history.pushState({}, 'Test page', initialRoute);
+  window.history.pushState({}, "Test page", initialRoute);
 
   function Wrapper({ children }: { children: ReactNode }) {
     return (
@@ -56,8 +56,18 @@ export function renderWithProviders(
                 <TaskViewProvider>
                   <WidgetProvider>
                     {/* ARIA Live Regions for testing */}
-                    <div id="aria-live-polite" aria-live="polite" aria-atomic="true" className="sr-only" />
-                    <div id="aria-live-assertive" aria-live="assertive" aria-atomic="true" className="sr-only" />
+                    <div
+                      id="aria-live-polite"
+                      aria-live="polite"
+                      aria-atomic="true"
+                      className="sr-only"
+                    />
+                    <div
+                      id="aria-live-assertive"
+                      aria-live="assertive"
+                      aria-atomic="true"
+                      className="sr-only"
+                    />
                     {children}
                   </WidgetProvider>
                 </TaskViewProvider>
@@ -78,13 +88,13 @@ export function renderWithProviders(
  */
 export async function a11yRender(
   ui: ReactElement,
-  options?: CustomRenderOptions
+  options?: CustomRenderOptions,
 ) {
   const renderResult = renderWithProviders(ui, options);
-  
+
   // Run accessibility audit on rendered component
   const auditResult = await runAccessibilityAudit(renderResult.container);
-  
+
   return {
     ...renderResult,
     accessibility: auditResult,
@@ -97,7 +107,7 @@ export async function a11yRender(
 export const customMatchers = {
   toBeAccessible: async (element: HTMLElement) => {
     const result = await runAccessibilityAudit(element);
-    
+
     return {
       pass: result.passed,
       message: () => result.summary,
@@ -106,18 +116,18 @@ export const customMatchers = {
 
   toHaveNoViolations: async (element: HTMLElement) => {
     const result = await runAccessibilityAudit(element);
-    
+
     return {
       pass: result.violations.length === 0,
-      message: () => 
+      message: () =>
         result.violations.length > 0
           ? `Expected no violations, but found ${result.violations.length}`
-          : 'No accessibility violations found',
+          : "No accessibility violations found",
     };
   },
 };
 
 // Re-export everything from React Testing Library
-export * from '@testing-library/react';
+export * from "@testing-library/react";
 export { screen };
 export { renderWithProviders as render };

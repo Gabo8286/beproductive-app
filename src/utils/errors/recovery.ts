@@ -11,7 +11,7 @@ interface RetryOptions {
  */
 export const withRetry = async <T>(
   fn: () => Promise<T>,
-  options: RetryOptions = {}
+  options: RetryOptions = {},
 ): Promise<T> => {
   const {
     maxAttempts = 3,
@@ -92,7 +92,7 @@ interface CacheOptions<T> {
  */
 export const withCache = <T>(
   fn: () => Promise<T>,
-  options: CacheOptions<T>
+  options: CacheOptions<T>,
 ): Promise<T> => {
   const { key, ttl = 5 * 60 * 1000, fallback } = options; // Default 5 minutes
 
@@ -112,11 +112,11 @@ export const withCache = <T>(
 
       // Fetch fresh data
       const data = await fn();
-      
+
       // Store in cache
       localStorage.setItem(
         key,
-        JSON.stringify({ data, timestamp: Date.now() })
+        JSON.stringify({ data, timestamp: Date.now() }),
       );
 
       resolve(data);
@@ -141,7 +141,7 @@ export const withCache = <T>(
  */
 export const debounce = <T extends (...args: any[]) => any>(
   fn: T,
-  delay: number
+  delay: number,
 ): ((...args: Parameters<T>) => void) => {
   let timeoutId: NodeJS.Timeout;
 

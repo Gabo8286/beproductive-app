@@ -1,9 +1,15 @@
-import { Button } from '@/components/ui/button';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LayoutGrid, List, Columns, Calendar, ArrowUpDown } from 'lucide-react';
-import { useTaskView } from '@/contexts/TaskViewContext';
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LayoutGrid, List, Columns, Calendar, ArrowUpDown } from "lucide-react";
+import { useTaskView } from "@/contexts/TaskViewContext";
 
 const viewModeIcons = {
   grid: LayoutGrid,
@@ -25,7 +31,7 @@ export function ViewModeSelector() {
   } = useTaskView();
 
   const toggleSortOrder = () => {
-    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
   return (
@@ -56,7 +62,10 @@ export function ViewModeSelector() {
           {/* Sort Options */}
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Sort:</span>
-            <Select value={sortBy} onValueChange={(value) => setSortBy(value as any)}>
+            <Select
+              value={sortBy}
+              onValueChange={(value) => setSortBy(value as any)}
+            >
               <SelectTrigger className="w-[140px]">
                 <SelectValue />
               </SelectTrigger>
@@ -70,14 +79,17 @@ export function ViewModeSelector() {
             </Select>
             <Button variant="outline" size="sm" onClick={toggleSortOrder}>
               <ArrowUpDown className="w-4 h-4" />
-              {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}
+              {sortOrder === "asc" ? "A-Z" : "Z-A"}
             </Button>
           </div>
 
           {/* Group Options */}
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Group:</span>
-            <Select value={groupBy} onValueChange={(value) => setGroupBy(value as any)}>
+            <Select
+              value={groupBy}
+              onValueChange={(value) => setGroupBy(value as any)}
+            >
               <SelectTrigger className="w-[120px]">
                 <SelectValue />
               </SelectTrigger>

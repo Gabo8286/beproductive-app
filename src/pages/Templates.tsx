@@ -1,45 +1,60 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Search, FileText, X } from 'lucide-react';
-import { useTaskTemplates, useTemplateCategories, useDeleteTemplate } from '@/hooks/useTaskTemplates';
-import { TemplateCard } from '@/components/templates/TemplateCard';
-import { TemplateSelector } from '@/components/templates/TemplateSelector';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Plus, Search, FileText, X } from "lucide-react";
+import {
+  useTaskTemplates,
+  useTemplateCategories,
+  useDeleteTemplate,
+} from "@/hooks/useTaskTemplates";
+import { TemplateCard } from "@/components/templates/TemplateCard";
+import { TemplateSelector } from "@/components/templates/TemplateSelector";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_CATEGORIES = [
-  'Project Management',
-  'Development',
-  'Marketing',
-  'Sales',
-  'Operations',
-  'Personal',
-  'Meeting Prep',
-  'Review Process'
+  "Project Management",
+  "Development",
+  "Marketing",
+  "Sales",
+  "Operations",
+  "Personal",
+  "Meeting Prep",
+  "Review Process",
 ];
 
 export default function Templates() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | undefined
+  >();
   const [showSelector, setShowSelector] = useState(false);
 
   const { data: templates, isLoading } = useTaskTemplates(selectedCategory);
   const { data: existingCategories } = useTemplateCategories();
   const deleteTemplate = useDeleteTemplate();
 
-  const allCategories = [...new Set([...DEFAULT_CATEGORIES, ...(existingCategories || [])])];
+  const allCategories = [
+    ...new Set([...DEFAULT_CATEGORIES, ...(existingCategories || [])]),
+  ];
 
-  const filteredTemplates = templates?.filter(template =>
-    template.name.toLowerCase().includes(search.toLowerCase()) ||
-    template.description?.toLowerCase().includes(search.toLowerCase())
+  const filteredTemplates = templates?.filter(
+    (template) =>
+      template.name.toLowerCase().includes(search.toLowerCase()) ||
+      template.description?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this template?')) {
+    if (confirm("Are you sure you want to delete this template?")) {
       deleteTemplate.mutate(id);
     }
   };
@@ -82,7 +97,7 @@ export default function Templates() {
               <p className="text-sm font-medium">Categories</p>
               <div className="flex items-center gap-2 flex-wrap">
                 <Badge
-                  variant={!selectedCategory ? 'default' : 'outline'}
+                  variant={!selectedCategory ? "default" : "outline"}
                   className="cursor-pointer"
                   onClick={() => setSelectedCategory(undefined)}
                 >
@@ -91,16 +106,21 @@ export default function Templates() {
                 {allCategories.map((category) => (
                   <Badge
                     key={category}
-                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    variant={
+                      selectedCategory === category ? "default" : "outline"
+                    }
                     className="cursor-pointer"
                     onClick={() => setSelectedCategory(category)}
                   >
                     {category}
                     {selectedCategory === category && (
-                      <X className="ml-1 h-3 w-3" onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedCategory(undefined);
-                      }} />
+                      <X
+                        className="ml-1 h-3 w-3"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedCategory(undefined);
+                        }}
+                      />
                     )}
                   </Badge>
                 ))}
@@ -142,18 +162,16 @@ export default function Templates() {
                 <h3 className="text-lg font-semibold">No templates yet</h3>
                 <p className="text-sm text-muted-foreground max-w-sm">
                   {search
-                    ? 'No templates match your search. Try different keywords or clear filters.'
-                    : 'Create your first template to quickly generate tasks with predefined settings.'}
+                    ? "No templates match your search. Try different keywords or clear filters."
+                    : "Create your first template to quickly generate tasks with predefined settings."}
                 </p>
               </div>
               {search ? (
-                <Button variant="outline" onClick={() => setSearch('')}>
+                <Button variant="outline" onClick={() => setSearch("")}>
                   Clear search
                 </Button>
               ) : (
-                <Button onClick={() => navigate('/tasks')}>
-                  Go to Tasks
-                </Button>
+                <Button onClick={() => navigate("/tasks")}>Go to Tasks</Button>
               )}
             </div>
           </CardContent>

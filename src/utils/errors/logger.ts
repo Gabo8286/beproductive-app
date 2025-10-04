@@ -2,7 +2,7 @@
  * Centralized error logging utility
  */
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+export type LogLevel = "debug" | "info" | "warn" | "error" | "fatal";
 
 export interface LogContext {
   component?: string;
@@ -12,38 +12,47 @@ export interface LogContext {
 }
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV === 'development';
+  private isDevelopment = process.env.NODE_ENV === "development";
 
-  private formatMessage(level: LogLevel, message: string, context?: LogContext): string {
+  private formatMessage(
+    level: LogLevel,
+    message: string,
+    context?: LogContext,
+  ): string {
     const timestamp = new Date().toISOString();
-    const contextStr = context ? ` [${JSON.stringify(context)}]` : '';
+    const contextStr = context ? ` [${JSON.stringify(context)}]` : "";
     return `[${timestamp}] [${level.toUpperCase()}]${contextStr} ${message}`;
   }
 
-  private log(level: LogLevel, message: string, error?: Error, context?: LogContext) {
+  private log(
+    level: LogLevel,
+    message: string,
+    error?: Error,
+    context?: LogContext,
+  ) {
     const formattedMessage = this.formatMessage(level, message, context);
 
     // Console logging
     switch (level) {
-      case 'debug':
+      case "debug":
         if (this.isDevelopment) {
           console.debug(formattedMessage, error);
         }
         break;
-      case 'info':
+      case "info":
         console.info(formattedMessage, error);
         break;
-      case 'warn':
+      case "warn":
         console.warn(formattedMessage, error);
         break;
-      case 'error':
-      case 'fatal':
+      case "error":
+      case "fatal":
         console.error(formattedMessage, error);
         break;
     }
 
     // Send to backend in production
-    if (!this.isDevelopment && (level === 'error' || level === 'fatal')) {
+    if (!this.isDevelopment && (level === "error" || level === "fatal")) {
       this.sendToBackend(level, message, error, context);
     }
   }
@@ -52,12 +61,12 @@ class Logger {
     level: LogLevel,
     message: string,
     error?: Error,
-    context?: LogContext
+    context?: LogContext,
   ) {
     try {
-      await fetch('/api/errors/log', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/errors/log", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           level,
           message,
@@ -75,28 +84,28 @@ class Logger {
         }),
       });
     } catch (logError) {
-      console.error('Failed to send log to backend:', logError);
+      console.error("Failed to send log to backend:", logError);
     }
   }
 
   debug(message: string, context?: LogContext) {
-    this.log('debug', message, undefined, context);
+    this.log("debug", message, undefined, context);
   }
 
   info(message: string, context?: LogContext) {
-    this.log('info', message, undefined, context);
+    this.log("info", message, undefined, context);
   }
 
   warn(message: string, error?: Error, context?: LogContext) {
-    this.log('warn', message, error, context);
+    this.log("warn", message, error, context);
   }
 
   error(message: string, error?: Error, context?: LogContext) {
-    this.log('error', message, error, context);
+    this.log("error", message, error, context);
   }
 
   fatal(message: string, error?: Error, context?: LogContext) {
-    this.log('fatal', message, error, context);
+    this.log("fatal", message, error, context);
   }
 }
 

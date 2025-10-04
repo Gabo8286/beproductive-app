@@ -3,7 +3,13 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Quote, ArrowRight, Target, Briefcase, GraduationCap } from "lucide-react";
+import {
+  Quote,
+  ArrowRight,
+  Target,
+  Briefcase,
+  GraduationCap,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -96,7 +102,8 @@ export function SuccessStoriesGrid() {
             Real Journeys, Real Results
           </h3>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover how professionals like you transformed their productivity and achieved their most ambitious goals
+            Discover how professionals like you transformed their productivity
+            and achieved their most ambitious goals
           </p>
         </div>
 
@@ -120,7 +127,9 @@ export function SuccessStoriesGrid() {
                         {story.avatar}
                       </div>
                       <div>
-                        <div className="font-heading font-bold">{story.name}</div>
+                        <div className="font-heading font-bold">
+                          {story.name}
+                        </div>
                         <div className="text-xs text-muted-foreground">
                           {story.role}
                         </div>
@@ -172,7 +181,10 @@ export function SuccessStoriesGrid() {
       </div>
 
       {/* Story Detail Dialog */}
-      <Dialog open={!!selectedStory} onOpenChange={() => setSelectedStory(null)}>
+      <Dialog
+        open={!!selectedStory}
+        onOpenChange={() => setSelectedStory(null)}
+      >
         <DialogContent className="max-w-2xl glass-effect">
           <DialogHeader>
             <DialogTitle className="sr-only">Success Story Details</DialogTitle>
@@ -222,7 +234,11 @@ export function SuccessStoriesGrid() {
                 ))}
               </div>
 
-              <Button className="w-full apple-button shadow-lg" size="lg" asChild>
+              <Button
+                className="w-full apple-button shadow-lg"
+                size="lg"
+                asChild
+              >
                 <a href="/signup">Start Your Success Story</a>
               </Button>
             </div>

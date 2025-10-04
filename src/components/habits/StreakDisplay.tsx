@@ -23,7 +23,7 @@ export function StreakDisplay({ habit, streaks }: StreakDisplayProps) {
 
   const getMilestones = (streak: number) => {
     const milestones = [7, 21, 30, 66, 100, 365];
-    return milestones.filter(m => m <= streak);
+    return milestones.filter((m) => m <= streak);
   };
 
   return (
@@ -39,7 +39,9 @@ export function StreakDisplay({ habit, streaks }: StreakDisplayProps) {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-4xl font-bold">{currentStreak} days 🔥</div>
+                <div className="text-4xl font-bold">
+                  {currentStreak} days 🔥
+                </div>
                 <p className="text-sm text-muted-foreground mt-1">
                   {getMotivationMessage(currentStreak)}
                 </p>
@@ -47,9 +49,13 @@ export function StreakDisplay({ habit, streaks }: StreakDisplayProps) {
               {targetStreak && (
                 <div className="text-right">
                   <div className="text-2xl font-semibold text-muted-foreground">
-                    {targetStreak - currentStreak > 0 ? targetStreak - currentStreak : 0}
+                    {targetStreak - currentStreak > 0
+                      ? targetStreak - currentStreak
+                      : 0}
                   </div>
-                  <p className="text-xs text-muted-foreground">days to target</p>
+                  <p className="text-xs text-muted-foreground">
+                    days to target
+                  </p>
                 </div>
               )}
             </div>
@@ -58,12 +64,20 @@ export function StreakDisplay({ habit, streaks }: StreakDisplayProps) {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Progress to target</span>
-                  <span>{Math.min(100, (currentStreak / targetStreak) * 100).toFixed(0)}%</span>
+                  <span>
+                    {Math.min(
+                      100,
+                      (currentStreak / targetStreak) * 100,
+                    ).toFixed(0)}
+                    %
+                  </span>
                 </div>
                 <div className="w-full bg-secondary rounded-full h-2">
                   <div
                     className="bg-primary h-2 rounded-full transition-all"
-                    style={{ width: `${Math.min(100, (currentStreak / targetStreak) * 100)}%` }}
+                    style={{
+                      width: `${Math.min(100, (currentStreak / targetStreak) * 100)}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -97,7 +111,7 @@ export function StreakDisplay({ habit, streaks }: StreakDisplayProps) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {getMilestones(longestStreak).map(milestone => (
+              {getMilestones(longestStreak).map((milestone) => (
                 <Badge key={milestone} variant="outline">
                   {milestone} days
                 </Badge>
@@ -119,13 +133,17 @@ export function StreakDisplay({ habit, streaks }: StreakDisplayProps) {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              {streaks.slice(0, 5).map(streak => (
-                <div key={streak.id} className="flex items-center justify-between p-2 border rounded">
+              {streaks.slice(0, 5).map((streak) => (
+                <div
+                  key={streak.id}
+                  className="flex items-center justify-between p-2 border rounded"
+                >
                   <div>
                     <span className="font-medium">{streak.length} days</span>
                     {streak.broken_at && (
                       <p className="text-xs text-muted-foreground">
-                        {new Date(streak.start_date).toLocaleDateString()} - {new Date(streak.broken_at).toLocaleDateString()}
+                        {new Date(streak.start_date).toLocaleDateString()} -{" "}
+                        {new Date(streak.broken_at).toLocaleDateString()}
                       </p>
                     )}
                   </div>

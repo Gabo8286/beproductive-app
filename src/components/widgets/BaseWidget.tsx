@@ -35,24 +35,26 @@ export function BaseWidget({
   const sizeClasses = {
     small: "col-span-1 row-span-1 min-h-[200px]",
     medium: "col-span-2 row-span-1 min-h-[200px]",
-    large: "col-span-2 row-span-2 min-h-[400px]"
+    large: "col-span-2 row-span-2 min-h-[400px]",
   };
 
   const variantClasses = {
     default: "bg-card border-border shadow-sm",
     glass: "bg-card/60 backdrop-blur-md border-border/50 shadow-lg",
-    elevated: "bg-card shadow-xl border-0"
+    elevated: "bg-card shadow-xl border-0",
   };
 
   return (
-    <Card className={cn(
-      "group relative overflow-hidden transition-all duration-300",
-      "hover:shadow-xl hover:scale-[1.02] apple-hover",
-      sizeClasses[size],
-      variantClasses[variant],
-      isLoading && "animate-pulse",
-      className
-    )}>
+    <Card
+      className={cn(
+        "group relative overflow-hidden transition-all duration-300",
+        "hover:shadow-xl hover:scale-[1.02] apple-hover",
+        sizeClasses[size],
+        variantClasses[variant],
+        isLoading && "animate-pulse",
+        className,
+      )}
+    >
       {/* Header */}
       {(title || actions) && (
         <div className="flex items-center justify-between p-4 pb-2">
@@ -69,9 +71,7 @@ export function BaseWidget({
                 </h3>
               )}
               {subtitle && (
-                <p className="text-xs text-muted-foreground">
-                  {subtitle}
-                </p>
+                <p className="text-xs text-muted-foreground">{subtitle}</p>
               )}
             </div>
           </div>

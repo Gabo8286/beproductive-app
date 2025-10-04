@@ -1,12 +1,26 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { ArrowLeft, ArrowRight, User, Target, Lightbulb, TrendingUp, RefreshCw } from 'lucide-react';
-import { useProductivityProfile } from '@/hooks/useProductivityProfile';
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import {
+  ArrowLeft,
+  ArrowRight,
+  User,
+  Target,
+  Lightbulb,
+  TrendingUp,
+  RefreshCw,
+} from "lucide-react";
+import { useProductivityProfile } from "@/hooks/useProductivityProfile";
 
 export default function ProfileAssessment() {
   const {
@@ -16,7 +30,7 @@ export default function ProfileAssessment() {
     submitAssessment,
     retakeAssessment,
     questions,
-    profiles
+    profiles,
   } = useProductivityProfile();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -29,9 +43,9 @@ export default function ProfileAssessment() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   const handleResponseChange = (value: string) => {
-    setResponses(prev => ({
+    setResponses((prev) => ({
       ...prev,
-      [currentQuestion.id]: value
+      [currentQuestion.id]: value,
     }));
   };
 
@@ -39,12 +53,12 @@ export default function ProfileAssessment() {
     if (isLastQuestion) {
       handleSubmit();
     } else {
-      setCurrentQuestionIndex(prev => prev + 1);
+      setCurrentQuestionIndex((prev) => prev + 1);
     }
   };
 
   const handlePrevious = () => {
-    setCurrentQuestionIndex(prev => Math.max(0, prev - 1));
+    setCurrentQuestionIndex((prev) => Math.max(0, prev - 1));
   };
 
   const handleSubmit = async () => {
@@ -52,7 +66,7 @@ export default function ProfileAssessment() {
       await submitAssessment(responses);
       setShowResults(true);
     } catch (error) {
-      console.error('Failed to submit assessment:', error);
+      console.error("Failed to submit assessment:", error);
     }
   };
 
@@ -75,7 +89,11 @@ export default function ProfileAssessment() {
   }
 
   // Show results if assessment is completed and we're not retaking
-  if (currentAssessment && !showResults && Object.keys(responses).length === 0) {
+  if (
+    currentAssessment &&
+    !showResults &&
+    Object.keys(responses).length === 0
+  ) {
     const dominantProfile = profiles[currentAssessment.dominant_profile];
     const secondaryProfile = currentAssessment.secondary_profile
       ? profiles[currentAssessment.secondary_profile]
@@ -85,8 +103,12 @@ export default function ProfileAssessment() {
       <div className="container mx-auto p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Your Productivity Profile</h1>
-            <p className="text-gray-600 mt-1">Understanding your unique productivity style</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Your Productivity Profile
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Understanding your unique productivity style
+            </p>
           </div>
           <Button onClick={handleRetake} variant="outline">
             <RefreshCw className="h-4 w-4 mr-2" />
@@ -105,8 +127,12 @@ export default function ProfileAssessment() {
                 <User className="h-6 w-6" />
               </div>
               <div>
-                <CardTitle className="text-2xl">{dominantProfile.name}</CardTitle>
-                <CardDescription className="text-lg">{dominantProfile.description}</CardDescription>
+                <CardTitle className="text-2xl">
+                  {dominantProfile.name}
+                </CardTitle>
+                <CardDescription className="text-lg">
+                  {dominantProfile.description}
+                </CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -119,12 +145,14 @@ export default function ProfileAssessment() {
                   Your Strengths
                 </h3>
                 <ul className="space-y-2">
-                  {(currentAssessment.strengths as string[]).map((strength, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span className="text-gray-700">{strength}</span>
-                    </li>
-                  ))}
+                  {(currentAssessment.strengths as string[]).map(
+                    (strength, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                        <span className="text-gray-700">{strength}</span>
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
 
@@ -135,27 +163,36 @@ export default function ProfileAssessment() {
                   Growth Opportunities
                 </h3>
                 <ul className="space-y-2">
-                  {(currentAssessment.growth_areas as string[]).map((area, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      <span className="text-gray-700">{area}</span>
-                    </li>
-                  ))}
+                  {(currentAssessment.growth_areas as string[]).map(
+                    (area, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                        <span className="text-gray-700">{area}</span>
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
             </div>
 
             {secondaryProfile && (
               <div className="mt-6 pt-6 border-t border-blue-200">
-                <h3 className="font-semibold text-blue-700 mb-2">Secondary Profile</h3>
+                <h3 className="font-semibold text-blue-700 mb-2">
+                  Secondary Profile
+                </h3>
                 <div className="flex items-center space-x-2">
                   <Badge
-                    style={{ backgroundColor: secondaryProfile.color, color: 'white' }}
+                    style={{
+                      backgroundColor: secondaryProfile.color,
+                      color: "white",
+                    }}
                     className="px-3 py-1"
                   >
                     {secondaryProfile.name}
                   </Badge>
-                  <span className="text-gray-600">{secondaryProfile.description}</span>
+                  <span className="text-gray-600">
+                    {secondaryProfile.description}
+                  </span>
                 </div>
               </div>
             )}
@@ -170,16 +207,22 @@ export default function ProfileAssessment() {
               <span>Personalized Strategies</span>
             </CardTitle>
             <CardDescription>
-              Based on your profile, here are strategies to enhance your productivity
+              Based on your profile, here are strategies to enhance your
+              productivity
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {(currentAssessment.recommended_strategies as string[]).map((strategy, index) => (
-                <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-gray-700">{strategy}</p>
-                </div>
-              ))}
+              {(currentAssessment.recommended_strategies as string[]).map(
+                (strategy, index) => (
+                  <div
+                    key={index}
+                    className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+                  >
+                    <p className="text-gray-700">{strategy}</p>
+                  </div>
+                ),
+              )}
             </div>
           </CardContent>
         </Card>
@@ -188,7 +231,9 @@ export default function ProfileAssessment() {
         <Card>
           <CardHeader>
             <CardTitle>Profile Characteristics</CardTitle>
-            <CardDescription>Key traits of {dominantProfile.name}</CardDescription>
+            <CardDescription>
+              Key traits of {dominantProfile.name}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -211,16 +256,21 @@ export default function ProfileAssessment() {
       <div className="space-y-6">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Productivity Profile Assessment</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Productivity Profile Assessment
+          </h1>
           <p className="text-gray-600 mt-2">
-            Discover your unique productivity style and get personalized insights
+            Discover your unique productivity style and get personalized
+            insights
           </p>
         </div>
 
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm text-gray-600">
-            <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
+            <span>
+              Question {currentQuestionIndex + 1} of {questions.length}
+            </span>
             <span>{Math.round(progress)}% Complete</span>
           </div>
           <Progress value={progress} className="h-2" />
@@ -233,17 +283,23 @@ export default function ProfileAssessment() {
               <Target className="h-4 w-4" />
               <span>{currentQuestion?.category}</span>
             </div>
-            <CardTitle className="text-xl">{currentQuestion?.question}</CardTitle>
+            <CardTitle className="text-xl">
+              {currentQuestion?.question}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <RadioGroup
-              value={responses[currentQuestion?.id] || ''}
+              value={responses[currentQuestion?.id] || ""}
               onValueChange={handleResponseChange}
               className="space-y-4"
             >
               {currentQuestion?.options.map((option) => (
                 <div key={option.value} className="flex items-start space-x-3">
-                  <RadioGroupItem value={option.value} id={option.value} className="mt-1" />
+                  <RadioGroupItem
+                    value={option.value}
+                    id={option.value}
+                    className="mt-1"
+                  />
                   <Label
                     htmlFor={option.value}
                     className="flex-1 cursor-pointer text-gray-700 leading-relaxed"
@@ -291,10 +347,14 @@ export default function ProfileAssessment() {
             <div className="flex items-start space-x-3">
               <User className="h-5 w-5 text-blue-600 mt-0.5" />
               <div>
-                <p className="font-medium text-blue-900">About This Assessment</p>
+                <p className="font-medium text-blue-900">
+                  About This Assessment
+                </p>
                 <p className="text-sm text-blue-700 mt-1">
-                  This assessment helps identify your natural productivity style among 8 different profiles.
-                  Your results will unlock personalized strategies and insights to enhance your productivity journey.
+                  This assessment helps identify your natural productivity style
+                  among 8 different profiles. Your results will unlock
+                  personalized strategies and insights to enhance your
+                  productivity journey.
                 </p>
               </div>
             </div>

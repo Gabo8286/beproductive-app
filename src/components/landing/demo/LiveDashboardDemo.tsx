@@ -12,18 +12,25 @@ interface LiveDashboardDemoProps {
   onInteraction?: (type: string, id: string) => void;
 }
 
-export function LiveDashboardDemo({ userData, onInteraction }: LiveDashboardDemoProps) {
+export function LiveDashboardDemo({
+  userData,
+  onInteraction,
+}: LiveDashboardDemoProps) {
   const [completedItems, setCompletedItems] = useState<Set<string>>(new Set());
 
   const handleComplete = (type: string, id: string) => {
-    setCompletedItems(prev => new Set([...prev, `${type}-${id}`]));
+    setCompletedItems((prev) => new Set([...prev, `${type}-${id}`]));
     onInteraction?.(type, id);
   };
 
-  const isCompleted = (type: string, id: string) => completedItems.has(`${type}-${id}`);
+  const isCompleted = (type: string, id: string) =>
+    completedItems.has(`${type}-${id}`);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-demo="dashboard">
+    <div
+      className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      data-demo="dashboard"
+    >
       {/* Goals Widget */}
       <Card className="glass-card p-6" data-demo="goals">
         <div className="flex items-center gap-2 mb-4">
@@ -40,7 +47,7 @@ export function LiveDashboardDemo({ userData, onInteraction }: LiveDashboardDemo
               data-demo="goal-card"
               whileHover={{ scale: 1.02 }}
               className="p-3 rounded-lg bg-background/50 cursor-pointer"
-              onClick={() => handleComplete('goal', goal.id)}
+              onClick={() => handleComplete("goal", goal.id)}
             >
               <div className="flex items-start justify-between mb-2">
                 <h4 className="font-medium text-sm">{goal.title}</h4>
@@ -73,20 +80,24 @@ export function LiveDashboardDemo({ userData, onInteraction }: LiveDashboardDemo
               data-demo="habit-complete"
               whileHover={{ scale: 1.02 }}
               className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                isCompleted('habit', habit.id)
-                  ? 'bg-success/20 border border-success/30'
-                  : 'bg-background/50'
+                isCompleted("habit", habit.id)
+                  ? "bg-success/20 border border-success/30"
+                  : "bg-background/50"
               }`}
-              onClick={() => handleComplete('habit', habit.id)}
+              onClick={() => handleComplete("habit", habit.id)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                    isCompleted('habit', habit.id)
-                      ? 'bg-success text-white'
-                      : 'bg-muted'
-                  }`}>
-                    {isCompleted('habit', habit.id) && <CheckCircle2 className="w-3 h-3" />}
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      isCompleted("habit", habit.id)
+                        ? "bg-success text-white"
+                        : "bg-muted"
+                    }`}
+                  >
+                    {isCompleted("habit", habit.id) && (
+                      <CheckCircle2 className="w-3 h-3" />
+                    )}
                   </div>
                   <span className="text-sm font-medium">{habit.name}</span>
                 </div>
@@ -116,27 +127,39 @@ export function LiveDashboardDemo({ userData, onInteraction }: LiveDashboardDemo
               data-demo="task-complete"
               whileHover={{ scale: 1.02 }}
               className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                isCompleted('task', task.id)
-                  ? 'bg-success/20 border border-success/30'
-                  : 'bg-background/50'
+                isCompleted("task", task.id)
+                  ? "bg-success/20 border border-success/30"
+                  : "bg-background/50"
               }`}
-              onClick={() => handleComplete('task', task.id)}
+              onClick={() => handleComplete("task", task.id)}
             >
               <div className="flex items-center gap-2">
-                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                  isCompleted('task', task.id)
-                    ? 'border-success bg-success'
-                    : 'border-muted-foreground'
-                }`}>
-                  {isCompleted('task', task.id) && <CheckCircle2 className="w-3 h-3 text-white" />}
+                <div
+                  className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                    isCompleted("task", task.id)
+                      ? "border-success bg-success"
+                      : "border-muted-foreground"
+                  }`}
+                >
+                  {isCompleted("task", task.id) && (
+                    <CheckCircle2 className="w-3 h-3 text-white" />
+                  )}
                 </div>
                 <div className="flex-1">
-                  <p className={`text-sm ${isCompleted('task', task.id) ? 'line-through text-muted-foreground' : ''}`}>
+                  <p
+                    className={`text-sm ${isCompleted("task", task.id) ? "line-through text-muted-foreground" : ""}`}
+                  >
                     {task.title}
                   </p>
                 </div>
                 <Badge
-                  variant={task.priority === 'high' ? 'destructive' : task.priority === 'medium' ? 'default' : 'secondary'}
+                  variant={
+                    task.priority === "high"
+                      ? "destructive"
+                      : task.priority === "medium"
+                        ? "default"
+                        : "secondary"
+                  }
                   className="text-xs"
                 >
                   {task.priority}
@@ -162,25 +185,31 @@ export function LiveDashboardDemo({ userData, onInteraction }: LiveDashboardDemo
               key={todo.id}
               whileHover={{ scale: 1.02 }}
               className={`p-2 rounded-lg cursor-pointer transition-colors ${
-                todo.completed || isCompleted('todo', todo.id)
-                  ? 'bg-success/20 border border-success/30'
-                  : 'bg-background/50'
+                todo.completed || isCompleted("todo", todo.id)
+                  ? "bg-success/20 border border-success/30"
+                  : "bg-background/50"
               }`}
-              onClick={() => handleComplete('todo', todo.id)}
+              onClick={() => handleComplete("todo", todo.id)}
             >
               <div className="flex items-center gap-2">
-                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                  todo.completed || isCompleted('todo', todo.id)
-                    ? 'border-success bg-success'
-                    : 'border-muted-foreground'
-                }`}>
-                  {(todo.completed || isCompleted('todo', todo.id)) && (
+                <div
+                  className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                    todo.completed || isCompleted("todo", todo.id)
+                      ? "border-success bg-success"
+                      : "border-muted-foreground"
+                  }`}
+                >
+                  {(todo.completed || isCompleted("todo", todo.id)) && (
                     <CheckCircle2 className="w-3 h-3 text-white" />
                   )}
                 </div>
-                <p className={`text-sm flex-1 ${
-                  todo.completed || isCompleted('todo', todo.id) ? 'line-through text-muted-foreground' : ''
-                }`}>
+                <p
+                  className={`text-sm flex-1 ${
+                    todo.completed || isCompleted("todo", todo.id)
+                      ? "line-through text-muted-foreground"
+                      : ""
+                  }`}
+                >
                   {todo.title}
                 </p>
               </div>
@@ -194,9 +223,9 @@ export function LiveDashboardDemo({ userData, onInteraction }: LiveDashboardDemo
           placeholder="Add a quick note..."
           className="w-full px-3 py-2 rounded-lg bg-background/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && e.currentTarget.value) {
-              handleComplete('quick-add', 'new');
-              e.currentTarget.value = '';
+            if (e.key === "Enter" && e.currentTarget.value) {
+              handleComplete("quick-add", "new");
+              e.currentTarget.value = "";
             }
           }}
         />

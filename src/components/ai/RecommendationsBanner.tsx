@@ -1,40 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Brain,
   Lightbulb,
   CheckCircle,
   X,
   ChevronRight,
-  Sparkles
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Sparkles,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface SmartRecommendation {
   id: string;
   title: string;
   description: string;
-  type: 'productivity' | 'wellness' | 'learning' | 'optimization';
+  type: "productivity" | "wellness" | "learning" | "optimization";
   confidence: number;
   actionText: string;
   actionUrl?: string;
 }
 
 interface RecommendationsBannerProps {
-  context?: 'tasks' | 'goals' | 'habits' | 'general';
+  context?: "tasks" | "goals" | "habits" | "general";
   className?: string;
 }
 
 export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
-  context = 'general',
-  className = ''
+  context = "general",
+  className = "",
 }) => {
-  const [currentRec, setCurrentRec] = useState<SmartRecommendation | null>(null);
+  const [currentRec, setCurrentRec] = useState<SmartRecommendation | null>(
+    null,
+  );
   const [isVisible, setIsVisible] = useState(true);
-  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>(
+    [],
+  );
 
   useEffect(() => {
     // Context-specific recommendations
@@ -42,57 +46,62 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
       const baseRecommendations: Record<string, SmartRecommendation[]> = {
         tasks: [
           {
-            id: 'task_1',
-            title: 'Break down large tasks',
-            description: 'Tasks over 2 hours should be split into smaller chunks for better estimation',
-            type: 'productivity',
+            id: "task_1",
+            title: "Break down large tasks",
+            description:
+              "Tasks over 2 hours should be split into smaller chunks for better estimation",
+            type: "productivity",
             confidence: 0.85,
-            actionText: 'Learn how',
-            actionUrl: '/ai-insights'
+            actionText: "Learn how",
+            actionUrl: "/ai-insights",
           },
           {
-            id: 'task_2',
-            title: 'Schedule during peak hours',
-            description: 'Your productivity peaks at 9-11 AM. Schedule important tasks then.',
-            type: 'optimization',
+            id: "task_2",
+            title: "Schedule during peak hours",
+            description:
+              "Your productivity peaks at 9-11 AM. Schedule important tasks then.",
+            type: "optimization",
             confidence: 0.91,
-            actionText: 'Time tracking',
-            actionUrl: '/time-tracking'
-          }
+            actionText: "Time tracking",
+            actionUrl: "/time-tracking",
+          },
         ],
         goals: [
           {
-            id: 'goal_1',
-            title: 'Set weekly check-ins',
-            description: 'Weekly goal reviews increase achievement rates by 40%',
-            type: 'productivity',
+            id: "goal_1",
+            title: "Set weekly check-ins",
+            description:
+              "Weekly goal reviews increase achievement rates by 40%",
+            type: "productivity",
             confidence: 0.78,
-            actionText: 'Set reminder',
-            actionUrl: '/automation'
-          }
+            actionText: "Set reminder",
+            actionUrl: "/automation",
+          },
         ],
         habits: [
           {
-            id: 'habit_1',
-            title: 'Stack new habits',
-            description: 'Link new habits to existing routines for better adherence',
-            type: 'learning',
+            id: "habit_1",
+            title: "Stack new habits",
+            description:
+              "Link new habits to existing routines for better adherence",
+            type: "learning",
             confidence: 0.82,
-            actionText: 'Learn more',
-            actionUrl: '/ai-insights'
-          }
+            actionText: "Learn more",
+            actionUrl: "/ai-insights",
+          },
         ],
         general: [
           {
-            id: 'gen_1',
-            title: 'Take a 5-minute break',
-            description: 'You\'ve been focused for 45 minutes. A short break will help maintain productivity.',
-            type: 'wellness',
+            id: "gen_1",
+            title: "Take a 5-minute break",
+            description:
+              "You've been focused for 45 minutes. A short break will help maintain productivity.",
+            type: "wellness",
             confidence: 0.89,
-            actionText: 'Start timer',
-            actionUrl: '/time-tracking'
-          }
-        ]
+            actionText: "Start timer",
+            actionUrl: "/time-tracking",
+          },
+        ],
       };
 
       return baseRecommendations[context] || baseRecommendations.general;
@@ -106,9 +115,10 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
 
     // Rotate recommendations every 15 seconds
     const interval = setInterval(() => {
-      setRecommendations(prev => {
+      setRecommendations((prev) => {
         if (prev.length > 1) {
-          const currentIndex = prev.findIndex(r => r.id === currentRec?.id) || 0;
+          const currentIndex =
+            prev.findIndex((r) => r.id === currentRec?.id) || 0;
           const nextIndex = (currentIndex + 1) % prev.length;
           setCurrentRec(prev[nextIndex]);
         }
@@ -124,17 +134,22 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
   };
 
   const handleAction = () => {
-    console.log('Implementing recommendation:', currentRec?.id);
+    console.log("Implementing recommendation:", currentRec?.id);
     // Here you would implement the recommendation logic
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'productivity': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'wellness': return 'bg-green-100 text-green-800 border-green-200';
-      case 'learning': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'optimization': return 'bg-orange-100 text-orange-800 border-orange-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "productivity":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "wellness":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "learning":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "optimization":
+        return "bg-orange-100 text-orange-800 border-orange-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -160,8 +175,13 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-medium text-sm text-gray-900">{currentRec.title}</h4>
-                    <Badge variant="outline" className={`text-xs ${getTypeColor(currentRec.type)}`}>
+                    <h4 className="font-medium text-sm text-gray-900">
+                      {currentRec.title}
+                    </h4>
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${getTypeColor(currentRec.type)}`}
+                    >
                       {currentRec.type}
                     </Badge>
                     <Badge variant="outline" className="text-xs">
@@ -174,20 +194,32 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
                   <div className="flex items-center space-x-2">
                     {currentRec.actionUrl ? (
                       <Link to={currentRec.actionUrl}>
-                        <Button size="sm" variant="outline" className="text-xs h-7">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-xs h-7"
+                        >
                           {currentRec.actionText}
                           <ChevronRight className="h-3 w-3 ml-1" />
                         </Button>
                       </Link>
                     ) : (
-                      <Button size="sm" variant="outline" className="text-xs h-7" onClick={handleAction}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs h-7"
+                        onClick={handleAction}
+                      >
                         {currentRec.actionText}
                         <CheckCircle className="h-3 w-3 ml-1" />
                       </Button>
                     )}
                     {recommendations.length > 1 && (
                       <span className="text-xs text-gray-500">
-                        {recommendations.findIndex(r => r.id === currentRec.id) + 1}/{recommendations.length}
+                        {recommendations.findIndex(
+                          (r) => r.id === currentRec.id,
+                        ) + 1}
+                        /{recommendations.length}
                       </span>
                     )}
                   </div>
@@ -199,7 +231,12 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
                     <Sparkles className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={handleDismiss}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={handleDismiss}
+                >
                   <X className="h-4 w-4" />
                 </Button>
               </div>

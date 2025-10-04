@@ -9,7 +9,7 @@ interface EmailCaptureModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: (email: string) => void;
-  trigger: 'exit' | 'scroll' | 'time' | 'engagement';
+  trigger: "exit" | "scroll" | "time" | "engagement";
 }
 
 const triggerMessages = {
@@ -35,7 +35,12 @@ const triggerMessages = {
   },
 };
 
-export function EmailCaptureModal({ isOpen, onClose, onSuccess, trigger }: EmailCaptureModalProps) {
+export function EmailCaptureModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  trigger,
+}: EmailCaptureModalProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,8 +48,8 @@ export function EmailCaptureModal({ isOpen, onClose, onSuccess, trigger }: Email
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email || !email.includes('@')) {
+
+    if (!email || !email.includes("@")) {
       toast.error("Please enter a valid email address");
       return;
     }
@@ -52,7 +57,7 @@ export function EmailCaptureModal({ isOpen, onClose, onSuccess, trigger }: Email
     setIsSubmitting(true);
 
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast.success("Welcome! Check your email for your starter guide.");
     onSuccess(email);
@@ -103,7 +108,9 @@ export function EmailCaptureModal({ isOpen, onClose, onSuccess, trigger }: Email
                   </div>
                   <div>
                     <p className="text-sm font-medium mb-1">What you'll get:</p>
-                    <p className="text-sm text-muted-foreground">{message.benefit}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {message.benefit}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -117,7 +124,7 @@ export function EmailCaptureModal({ isOpen, onClose, onSuccess, trigger }: Email
                   className="h-12"
                   disabled={isSubmitting}
                 />
-                
+
                 <Button
                   type="submit"
                   className="w-full apple-button h-12"

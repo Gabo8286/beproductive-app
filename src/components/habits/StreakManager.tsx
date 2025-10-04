@@ -2,7 +2,12 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Flame, Trophy, TrendingUp, Award, Zap } from "lucide-react";
 import { Habit, HabitStreak } from "@/types/habits";
 import { formatDistanceToNow } from "date-fns";
@@ -14,19 +19,49 @@ interface StreakManagerProps {
 
 export function StreakManager({ habit, streaks }: StreakManagerProps) {
   const [showHistory, setShowHistory] = useState(false);
-  
+
   const currentStreak = habit.current_streak;
   const longestStreak = habit.longest_streak;
   const targetStreak = habit.target_streak;
-  
+
   const getMilestones = () => {
     const milestones = [
-      { days: 7, label: "Week Warrior", icon: "🔥", achieved: longestStreak >= 7 },
-      { days: 21, label: "Habit Former", icon: "💪", achieved: longestStreak >= 21 },
-      { days: 30, label: "Month Master", icon: "🌟", achieved: longestStreak >= 30 },
-      { days: 66, label: "Neural Pathway", icon: "🧠", achieved: longestStreak >= 66 },
-      { days: 100, label: "Century Club", icon: "💯", achieved: longestStreak >= 100 },
-      { days: 365, label: "Year Legend", icon: "👑", achieved: longestStreak >= 365 },
+      {
+        days: 7,
+        label: "Week Warrior",
+        icon: "🔥",
+        achieved: longestStreak >= 7,
+      },
+      {
+        days: 21,
+        label: "Habit Former",
+        icon: "💪",
+        achieved: longestStreak >= 21,
+      },
+      {
+        days: 30,
+        label: "Month Master",
+        icon: "🌟",
+        achieved: longestStreak >= 30,
+      },
+      {
+        days: 66,
+        label: "Neural Pathway",
+        icon: "🧠",
+        achieved: longestStreak >= 66,
+      },
+      {
+        days: 100,
+        label: "Century Club",
+        icon: "💯",
+        achieved: longestStreak >= 100,
+      },
+      {
+        days: 365,
+        label: "Year Legend",
+        icon: "👑",
+        achieved: longestStreak >= 365,
+      },
     ];
     return milestones;
   };
@@ -53,10 +88,10 @@ export function StreakManager({ habit, streaks }: StreakManagerProps) {
 
   const streakLevel = getStreakLevel(currentStreak);
   const milestones = getMilestones();
-  const progressToNext = targetStreak 
+  const progressToNext = targetStreak
     ? Math.min(100, (currentStreak / targetStreak) * 100)
-    : milestones.find(m => !m.achieved) 
-      ? (currentStreak / milestones.find(m => !m.achieved)!.days) * 100
+    : milestones.find((m) => !m.achieved)
+      ? (currentStreak / milestones.find((m) => !m.achieved)!.days) * 100
       : 100;
 
   return (
@@ -71,7 +106,9 @@ export function StreakManager({ habit, streaks }: StreakManagerProps) {
         </CardHeader>
         <CardContent>
           <div className="text-center space-y-4">
-            <div className={`${streakLevel.size} font-bold flex items-center justify-center gap-2`}>
+            <div
+              className={`${streakLevel.size} font-bold flex items-center justify-center gap-2`}
+            >
               {currentStreak}
               <span className={streakLevel.color}>🔥</span>
             </div>
@@ -86,7 +123,12 @@ export function StreakManager({ habit, streaks }: StreakManagerProps) {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>{currentStreak} days</span>
-                <span>{targetStreak || milestones.find(m => !m.achieved)?.days || longestStreak} days</span>
+                <span>
+                  {targetStreak ||
+                    milestones.find((m) => !m.achieved)?.days ||
+                    longestStreak}{" "}
+                  days
+                </span>
               </div>
               <div className="w-full bg-secondary rounded-full h-3">
                 <div
@@ -141,7 +183,9 @@ export function StreakManager({ habit, streaks }: StreakManagerProps) {
               >
                 <div className="text-2xl mb-1">{milestone.icon}</div>
                 <div className="font-semibold text-sm">{milestone.label}</div>
-                <div className="text-xs text-muted-foreground">{milestone.days} days</div>
+                <div className="text-xs text-muted-foreground">
+                  {milestone.days} days
+                </div>
                 {milestone.achieved && (
                   <Badge variant="secondary" className="mt-1 text-xs">
                     <Zap className="h-3 w-3 mr-1" />
@@ -172,9 +216,7 @@ export function StreakManager({ habit, streaks }: StreakManagerProps) {
                   className="flex items-center justify-between p-4 border rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="text-2xl">
-                      {index === 0 ? "🏆" : "🔥"}
-                    </div>
+                    <div className="text-2xl">{index === 0 ? "🏆" : "🔥"}</div>
                     <div>
                       <div className="font-semibold">
                         {streak.length} day streak

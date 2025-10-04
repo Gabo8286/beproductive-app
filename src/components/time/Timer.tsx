@@ -1,9 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useActiveTimer, useStopTimer, useTogglePause } from '@/hooks/useTimeTracking';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Clock, Pause, Play, Square } from 'lucide-react';
-import { formatTime } from '@/lib/utils';
+import { useEffect, useState } from "react";
+import {
+  useActiveTimer,
+  useStopTimer,
+  useTogglePause,
+} from "@/hooks/useTimeTracking";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Clock, Pause, Play, Square } from "lucide-react";
+import { formatTime } from "@/lib/utils";
 
 export function Timer() {
   const { data: activeTimer } = useActiveTimer();
@@ -21,11 +25,14 @@ export function Timer() {
     const calculateElapsed = () => {
       const startTime = new Date(activeTimer.started_at).getTime();
       const now = Date.now();
-      let elapsed = Math.floor((now - startTime) / 1000) - activeTimer.paused_duration;
+      let elapsed =
+        Math.floor((now - startTime) / 1000) - activeTimer.paused_duration;
 
       // If currently paused, subtract the current pause duration
       if (activeTimer.is_paused && activeTimer.paused_at) {
-        const pausedTime = Math.floor((now - new Date(activeTimer.paused_at).getTime()) / 1000);
+        const pausedTime = Math.floor(
+          (now - new Date(activeTimer.paused_at).getTime()) / 1000,
+        );
         elapsed -= pausedTime;
       }
 

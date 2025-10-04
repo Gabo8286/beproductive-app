@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 /**
  * Hook to handle async errors in components
@@ -13,6 +13,6 @@ export const useAsyncError = () => {
         throw error;
       });
     },
-    [setError]
+    [setError],
   );
 };

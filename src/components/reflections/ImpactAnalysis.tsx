@@ -14,7 +14,7 @@ export default function ImpactAnalysis({ workspaceId }: ImpactAnalysisProps) {
       score: 89,
       description: "Reflections linked to completed goals",
       color: "text-blue-500",
-      insight: "Your reflections are highly correlated with goal completion"
+      insight: "Your reflections are highly correlated with goal completion",
     },
     {
       icon: TrendingUp,
@@ -22,7 +22,7 @@ export default function ImpactAnalysis({ workspaceId }: ImpactAnalysisProps) {
       score: 76,
       description: "Impact on habit formation and maintenance",
       color: "text-green-500",
-      insight: "Reflecting regularly improves habit streaks by 34%"
+      insight: "Reflecting regularly improves habit streaks by 34%",
     },
     {
       icon: Heart,
@@ -30,7 +30,7 @@ export default function ImpactAnalysis({ workspaceId }: ImpactAnalysisProps) {
       score: 82,
       description: "Positive emotional changes over time",
       color: "text-pink-500",
-      insight: "Average mood increased 15% since starting reflections"
+      insight: "Average mood increased 15% since starting reflections",
     },
     {
       icon: Brain,
@@ -38,7 +38,7 @@ export default function ImpactAnalysis({ workspaceId }: ImpactAnalysisProps) {
       score: 91,
       description: "Better choices through self-awareness",
       color: "text-purple-500",
-      insight: "Reflections lead to more thoughtful decision-making"
+      insight: "Reflections lead to more thoughtful decision-making",
     },
   ];
 
@@ -86,15 +86,21 @@ export default function ImpactAnalysis({ workspaceId }: ImpactAnalysisProps) {
           <h4 className="font-semibold mb-4">Time Investment</h4>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Avg. reflection time</span>
+              <span className="text-sm text-muted-foreground">
+                Avg. reflection time
+              </span>
               <span className="font-medium">12 min</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Total time invested</span>
+              <span className="text-sm text-muted-foreground">
+                Total time invested
+              </span>
               <span className="font-medium">31 hours</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-muted-foreground">Value generated</span>
+              <span className="text-sm text-muted-foreground">
+                Value generated
+              </span>
               <span className="font-medium text-green-600">Priceless</span>
             </div>
           </div>

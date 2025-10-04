@@ -20,15 +20,16 @@ const REFLECTIONS_QUERY_KEY = "reflections";
 export function useReflections(
   workspaceId: string,
   filters?: ReflectionFilters,
-  sortBy: ReflectionSortBy = 'reflection_date',
-  sortOrder: SortOrder = 'desc'
+  sortBy: ReflectionSortBy = "reflection_date",
+  sortOrder: SortOrder = "desc",
 ) {
   return useQuery({
     queryKey: [REFLECTIONS_QUERY_KEY, workspaceId, filters, sortBy, sortOrder],
     queryFn: async () => {
       let query = supabase
-        .from('reflections')
-        .select(`
+        .from("reflections")
+        .select(
+          `
           *,
           goal_links:reflection_goal_links(
             *,
@@ -38,48 +39,53 @@ export function useReflections(
             *,
             habit:habits(*)
           )
-        `)
-        .eq('workspace_id', workspaceId);
+        `,
+        )
+        .eq("workspace_id", workspaceId);
 
       // Apply filters
       if (filters?.reflection_type) {
-        query = query.eq('reflection_type', filters.reflection_type);
+        query = query.eq("reflection_type", filters.reflection_type);
       }
       if (filters?.mood) {
-        query = query.eq('mood', filters.mood);
+        query = query.eq("mood", filters.mood);
       }
       if (filters?.date_from) {
-        query = query.gte('reflection_date', filters.date_from);
+        query = query.gte("reflection_date", filters.date_from);
       }
       if (filters?.date_to) {
-        query = query.lte('reflection_date', filters.date_to);
+        query = query.lte("reflection_date", filters.date_to);
       }
       if (filters?.is_private !== undefined) {
-        query = query.eq('is_private', filters.is_private);
+        query = query.eq("is_private", filters.is_private);
       }
       if (filters?.tags && filters.tags.length > 0) {
-        query = query.contains('tags', filters.tags);
+        query = query.contains("tags", filters.tags);
       }
       if (filters?.search) {
-        query = query.or(`title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`);
+        query = query.or(
+          `title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`,
+        );
       }
 
       // Apply sorting
-      query = query.order(sortBy, { ascending: sortOrder === 'asc' });
+      query = query.order(sortBy, { ascending: sortOrder === "asc" });
 
       const { data, error } = await query;
 
       if (error) throw error;
-      return data.map(r => ({
+      return data.map((r) => ({
         ...r,
         metadata: r.metadata as Record<string, any>,
         habit_links: r.habit_links?.map((link: any) => ({
           ...link,
-          habit: link.habit ? {
-            ...link.habit,
-            custom_frequency: link.habit.custom_frequency as any,
-            metadata: link.habit.metadata as any,
-          } : undefined,
+          habit: link.habit
+            ? {
+                ...link.habit,
+                custom_frequency: link.habit.custom_frequency as any,
+                metadata: link.habit.metadata as any,
+              }
+            : undefined,
         })),
       })) as ReflectionWithRelations[];
     },
@@ -95,8 +101,9 @@ export function useReflection(reflectionId: string) {
     queryKey: [REFLECTIONS_QUERY_KEY, reflectionId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflections')
-        .select(`
+        .from("reflections")
+        .select(
+          `
           *,
           goal_links:reflection_goal_links(
             *,
@@ -106,8 +113,9 @@ export function useReflection(reflectionId: string) {
             *,
             habit:habits(*)
           )
-        `)
-        .eq('id', reflectionId)
+        `,
+        )
+        .eq("id", reflectionId)
         .single();
 
       if (error) throw error;
@@ -116,11 +124,13 @@ export function useReflection(reflectionId: string) {
         metadata: data.metadata as Record<string, any>,
         habit_links: data.habit_links?.map((link: any) => ({
           ...link,
-          habit: link.habit ? {
-            ...link.habit,
-            custom_frequency: link.habit.custom_frequency as any,
-            metadata: link.habit.metadata as any,
-          } : undefined,
+          habit: link.habit
+            ? {
+                ...link.habit,
+                custom_frequency: link.habit.custom_frequency as any,
+                metadata: link.habit.metadata as any,
+              }
+            : undefined,
         })),
       } as ReflectionWithRelations;
     },
@@ -134,40 +144,58 @@ export function useReflection(reflectionId: string) {
 export function useReflectionsByDateRange(
   workspaceId: string,
   startDate: string,
-  endDate: string
+  endDate: string,
 ) {
   return useQuery({
-    queryKey: [REFLECTIONS_QUERY_KEY, 'date-range', workspaceId, startDate, endDate],
+    queryKey: [
+      REFLECTIONS_QUERY_KEY,
+      "date-range",
+      workspaceId,
+      startDate,
+      endDate,
+    ],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflections')
-        .select('*')
-        .eq('workspace_id', workspaceId)
-        .gte('reflection_date', startDate)
-        .lte('reflection_date', endDate)
-        .order('reflection_date', { ascending: true });
+        .from("reflections")
+        .select("*")
+        .eq("workspace_id", workspaceId)
+        .gte("reflection_date", startDate)
+        .lte("reflection_date", endDate)
+        .order("reflection_date", { ascending: true });
 
       if (error) throw error;
 
       // Calculate summary statistics
-      const reflections = data.map(r => ({
+      const reflections = data.map((r) => ({
         ...r,
         metadata: r.metadata as Record<string, any>,
       })) as Reflection[];
       const summary = {
         total: reflections.length,
-        avgMood: reflections.filter(r => r.mood).length > 0
-          ? reflections.reduce((sum, r) => {
-              const moodScores = { amazing: 6, great: 5, good: 4, neutral: 3, bad: 2, terrible: 1 };
-              return sum + (r.mood ? moodScores[r.mood] : 0);
-            }, 0) / reflections.filter(r => r.mood).length
-          : 0,
-        avgEnergy: reflections.filter(r => r.energy_level).length > 0
-          ? reflections.reduce((sum, r) => sum + (r.energy_level || 0), 0) / reflections.filter(r => r.energy_level).length
-          : 0,
-        avgStress: reflections.filter(r => r.stress_level).length > 0
-          ? reflections.reduce((sum, r) => sum + (r.stress_level || 0), 0) / reflections.filter(r => r.stress_level).length
-          : 0,
+        avgMood:
+          reflections.filter((r) => r.mood).length > 0
+            ? reflections.reduce((sum, r) => {
+                const moodScores = {
+                  amazing: 6,
+                  great: 5,
+                  good: 4,
+                  neutral: 3,
+                  bad: 2,
+                  terrible: 1,
+                };
+                return sum + (r.mood ? moodScores[r.mood] : 0);
+              }, 0) / reflections.filter((r) => r.mood).length
+            : 0,
+        avgEnergy:
+          reflections.filter((r) => r.energy_level).length > 0
+            ? reflections.reduce((sum, r) => sum + (r.energy_level || 0), 0) /
+              reflections.filter((r) => r.energy_level).length
+            : 0,
+        avgStress:
+          reflections.filter((r) => r.stress_level).length > 0
+            ? reflections.reduce((sum, r) => sum + (r.stress_level || 0), 0) /
+              reflections.filter((r) => r.stress_level).length
+            : 0,
       };
 
       return { reflections, summary };
@@ -187,11 +215,11 @@ export function useCreateReflection() {
       // Validate input
       const validation = validateReflectionInput(input);
       if (!validation.isValid) {
-        throw new Error(validation.errors.join(', '));
+        throw new Error(validation.errors.join(", "));
       }
 
       const { data, error } = await supabase
-        .from('reflections')
+        .from("reflections")
         .insert({
           workspace_id: input.workspace_id,
           title: input.title,
@@ -222,9 +250,11 @@ export function useCreateReflection() {
       } as Reflection;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [REFLECTIONS_QUERY_KEY, data.workspace_id] });
-      queryClient.invalidateQueries({ queryKey: ['reflection-analytics'] });
-      queryClient.invalidateQueries({ queryKey: ['reflection-streak'] });
+      queryClient.invalidateQueries({
+        queryKey: [REFLECTIONS_QUERY_KEY, data.workspace_id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["reflection-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["reflection-streak"] });
       toast.success("Reflection created successfully");
     },
     onError: (error: Error) => {
@@ -240,17 +270,23 @@ export function useUpdateReflection() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, updates }: { id: string; updates: UpdateReflectionInput }) => {
+    mutationFn: async ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: UpdateReflectionInput;
+    }) => {
       // Validate updates
       const validation = validateReflectionInput(updates);
       if (!validation.isValid) {
-        throw new Error(validation.errors.join(', '));
+        throw new Error(validation.errors.join(", "));
       }
 
       const { data, error } = await supabase
-        .from('reflections')
+        .from("reflections")
         .update(updates)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -261,9 +297,13 @@ export function useUpdateReflection() {
       } as Reflection;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [REFLECTIONS_QUERY_KEY, data.workspace_id] });
-      queryClient.invalidateQueries({ queryKey: [REFLECTIONS_QUERY_KEY, data.id] });
-      queryClient.invalidateQueries({ queryKey: ['reflection-analytics'] });
+      queryClient.invalidateQueries({
+        queryKey: [REFLECTIONS_QUERY_KEY, data.workspace_id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [REFLECTIONS_QUERY_KEY, data.id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["reflection-analytics"] });
       toast.success("Reflection updated successfully");
     },
     onError: (error: Error) => {
@@ -281,17 +321,17 @@ export function useDeleteReflection() {
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('reflections')
+        .from("reflections")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
       return id;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [REFLECTIONS_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: ['reflection-analytics'] });
-      queryClient.invalidateQueries({ queryKey: ['reflection-streak'] });
+      queryClient.invalidateQueries({ queryKey: ["reflection-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["reflection-streak"] });
       toast.success("Reflection deleted successfully");
     },
     onError: (error: Error) => {
@@ -310,20 +350,20 @@ export function useDuplicateReflection() {
     mutationFn: async ({ id, newDate }: { id: string; newDate: string }) => {
       // Fetch original reflection
       const { data: original, error: fetchError } = await supabase
-        .from('reflections')
-        .select('*')
-        .eq('id', id)
+        .from("reflections")
+        .select("*")
+        .eq("id", id)
         .single();
 
       if (fetchError) throw fetchError;
 
       // Create new reflection with same structure but new date
       const { data, error } = await supabase
-        .from('reflections')
+        .from("reflections")
         .insert({
           workspace_id: original.workspace_id,
           title: `${original.title} (Copy)`,
-          content: '', // Reset content for new reflection
+          content: "", // Reset content for new reflection
           reflection_type: original.reflection_type,
           gratitude_items: [],
           challenges: [],
@@ -346,7 +386,9 @@ export function useDuplicateReflection() {
       } as Reflection;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [REFLECTIONS_QUERY_KEY, data.workspace_id] });
+      queryClient.invalidateQueries({
+        queryKey: [REFLECTIONS_QUERY_KEY, data.workspace_id],
+      });
       toast.success("Reflection duplicated successfully");
     },
     onError: (error: Error) => {

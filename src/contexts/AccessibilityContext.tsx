@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface AccessibilityPreferences {
   reduceMotion: boolean;
@@ -23,40 +29,51 @@ const defaultPreferences: AccessibilityPreferences = {
   simplifiedLanguage: false,
 };
 
-const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
+const AccessibilityContext = createContext<
+  AccessibilityContextType | undefined
+>(undefined);
 
-export const AccessibilityProvider = ({ children }: { children: ReactNode }) => {
-  const [preferences, setPreferences] = useState<AccessibilityPreferences>(() => {
-    const stored = localStorage.getItem('accessibility-preferences');
-    if (stored) {
-      try {
-        return { ...defaultPreferences, ...JSON.parse(stored) };
-      } catch {
-        return defaultPreferences;
+export const AccessibilityProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const [preferences, setPreferences] = useState<AccessibilityPreferences>(
+    () => {
+      const stored = localStorage.getItem("accessibility-preferences");
+      if (stored) {
+        try {
+          return { ...defaultPreferences, ...JSON.parse(stored) };
+        } catch {
+          return defaultPreferences;
+        }
       }
-    }
-    return defaultPreferences;
-  });
+      return defaultPreferences;
+    },
+  );
 
   useEffect(() => {
     // Persist to localStorage
-    localStorage.setItem('accessibility-preferences', JSON.stringify(preferences));
+    localStorage.setItem(
+      "accessibility-preferences",
+      JSON.stringify(preferences),
+    );
 
     // Apply preferences to document
     const root = document.documentElement;
 
     // Reduce motion
     if (preferences.reduceMotion) {
-      root.style.setProperty('--transition-duration', '0.01ms');
+      root.style.setProperty("--transition-duration", "0.01ms");
     } else {
-      root.style.removeProperty('--transition-duration');
+      root.style.removeProperty("--transition-duration");
     }
 
     // High contrast
     if (preferences.highContrast) {
-      root.classList.add('high-contrast');
+      root.classList.add("high-contrast");
     } else {
-      root.classList.remove('high-contrast');
+      root.classList.remove("high-contrast");
     }
 
     // Font size
@@ -64,27 +81,27 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
 
     // Screen reader mode
     if (preferences.screenReaderMode) {
-      root.classList.add('screen-reader-mode');
+      root.classList.add("screen-reader-mode");
     } else {
-      root.classList.remove('screen-reader-mode');
+      root.classList.remove("screen-reader-mode");
     }
 
     // Focus mode (distraction-free)
     if (preferences.focusMode) {
-      root.classList.add('focus-mode');
-      root.setAttribute('data-focus-mode', 'true');
+      root.classList.add("focus-mode");
+      root.setAttribute("data-focus-mode", "true");
     } else {
-      root.classList.remove('focus-mode');
-      root.removeAttribute('data-focus-mode');
+      root.classList.remove("focus-mode");
+      root.removeAttribute("data-focus-mode");
     }
 
     // Simplified language mode
     if (preferences.simplifiedLanguage) {
-      root.classList.add('simplified-language');
-      root.setAttribute('data-simplified-language', 'true');
+      root.classList.add("simplified-language");
+      root.setAttribute("data-simplified-language", "true");
     } else {
-      root.classList.remove('simplified-language');
-      root.removeAttribute('data-simplified-language');
+      root.classList.remove("simplified-language");
+      root.removeAttribute("data-simplified-language");
     }
   }, [preferences]);
 
@@ -102,7 +119,9 @@ export const AccessibilityProvider = ({ children }: { children: ReactNode }) => 
 export const useAccessibilityPreferences = () => {
   const context = useContext(AccessibilityContext);
   if (!context) {
-    throw new Error('useAccessibilityPreferences must be used within AccessibilityProvider');
+    throw new Error(
+      "useAccessibilityPreferences must be used within AccessibilityProvider",
+    );
   }
   return context;
 };

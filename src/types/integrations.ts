@@ -1,32 +1,56 @@
 // Enterprise Integration Types
 export type IntegrationType =
-  | 'slack'
-  | 'microsoft_teams'
-  | 'google_workspace'
-  | 'outlook'
-  | 'jira'
-  | 'trello'
-  | 'asana'
-  | 'notion'
-  | 'discord'
-  | 'zoom'
-  | 'calendly'
-  | 'github'
-  | 'gitlab'
-  | 'custom_api'
-  | 'webhook'
-  | 'zapier'
-  | 'power_automate';
+  | "slack"
+  | "microsoft_teams"
+  | "google_workspace"
+  | "outlook"
+  | "jira"
+  | "trello"
+  | "asana"
+  | "notion"
+  | "discord"
+  | "zoom"
+  | "calendly"
+  | "github"
+  | "gitlab"
+  | "custom_api"
+  | "webhook"
+  | "zapier"
+  | "power_automate";
 
-export type IntegrationStatus = 'active' | 'inactive' | 'error' | 'pending' | 'expired';
-export type SyncFrequency = 'real_time' | 'every_minute' | 'every_5_minutes' | 'every_15_minutes' | 'hourly' | 'daily' | 'manual';
-export type AuthType = 'oauth2' | 'api_key' | 'basic_auth' | 'bearer_token' | 'webhook' | 'sso';
+export type IntegrationStatus =
+  | "active"
+  | "inactive"
+  | "error"
+  | "pending"
+  | "expired";
+export type SyncFrequency =
+  | "real_time"
+  | "every_minute"
+  | "every_5_minutes"
+  | "every_15_minutes"
+  | "hourly"
+  | "daily"
+  | "manual";
+export type AuthType =
+  | "oauth2"
+  | "api_key"
+  | "basic_auth"
+  | "bearer_token"
+  | "webhook"
+  | "sso";
 
 export interface IntegrationProvider {
   id: IntegrationType;
   name: string;
   description: string;
-  category: 'communication' | 'productivity' | 'development' | 'calendar' | 'storage' | 'custom';
+  category:
+    | "communication"
+    | "productivity"
+    | "development"
+    | "calendar"
+    | "storage"
+    | "custom";
   icon_url: string;
   documentation_url: string;
   auth_type: AuthType;
@@ -40,7 +64,7 @@ export interface IntegrationProvider {
   real_time_sync: boolean;
   bi_directional: boolean;
   enterprise_features: string[];
-  pricing_tier: 'free' | 'premium' | 'enterprise';
+  pricing_tier: "free" | "premium" | "enterprise";
 }
 
 export interface IntegrationFeature {
@@ -109,14 +133,28 @@ export interface FieldMapping {
 
 export interface IntegrationFilter {
   field: string;
-  operator: 'equals' | 'contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'in' | 'not_in';
+  operator:
+    | "equals"
+    | "contains"
+    | "starts_with"
+    | "ends_with"
+    | "greater_than"
+    | "less_than"
+    | "in"
+    | "not_in";
   value: any;
   case_sensitive?: boolean;
 }
 
 export interface DataTransformation {
   field: string;
-  type: 'format_date' | 'uppercase' | 'lowercase' | 'trim' | 'replace' | 'custom_function';
+  type:
+    | "format_date"
+    | "uppercase"
+    | "lowercase"
+    | "trim"
+    | "replace"
+    | "custom_function";
   parameters: Record<string, any>;
 }
 
@@ -138,7 +176,7 @@ export interface NotificationConfig {
 
 export interface SyncSettings {
   frequency: SyncFrequency;
-  direction: 'inbound' | 'outbound' | 'bi_directional';
+  direction: "inbound" | "outbound" | "bi_directional";
   auto_sync: boolean;
   batch_size: number;
   last_sync_token?: string;
@@ -162,7 +200,7 @@ export interface WebhookEndpoint {
   url: string;
   secret: string;
   events: string[];
-  status: 'active' | 'inactive' | 'failed';
+  status: "active" | "inactive" | "failed";
   last_triggered_at?: string;
   success_count: number;
   failure_count: number;
@@ -173,9 +211,9 @@ export interface WebhookEndpoint {
 export interface SyncLog {
   id: string;
   integration_id: string;
-  sync_type: 'manual' | 'scheduled' | 'webhook' | 'real_time';
-  direction: 'inbound' | 'outbound';
-  status: 'success' | 'partial' | 'failed';
+  sync_type: "manual" | "scheduled" | "webhook" | "real_time";
+  direction: "inbound" | "outbound";
+  status: "success" | "partial" | "failed";
   started_at: string;
   completed_at?: string;
   duration_ms?: number;
@@ -198,7 +236,7 @@ export interface IntegrationTemplate {
   required_features: string[];
   setup_instructions: string[];
   estimated_setup_time_minutes: number;
-  created_by: 'system' | 'community' | 'enterprise';
+  created_by: "system" | "community" | "enterprise";
   is_verified: boolean;
   tags: string[];
 }
@@ -226,10 +264,10 @@ export interface IntegrationMarketplace {
 export interface SSOProvider {
   id: string;
   name: string;
-  type: 'saml' | 'oidc' | 'oauth2' | 'ldap';
+  type: "saml" | "oidc" | "oauth2" | "ldap";
   domain: string;
   configuration: SSOConfig;
-  status: 'active' | 'inactive' | 'testing';
+  status: "active" | "inactive" | "testing";
   user_count: number;
   last_sync_at?: string;
   created_at: string;
@@ -276,7 +314,7 @@ export interface EnterpriseRole {
 
 export interface Permission {
   resource: string;
-  actions: ('create' | 'read' | 'update' | 'delete' | 'manage')[];
+  actions: ("create" | "read" | "update" | "delete" | "manage")[];
   conditions?: Record<string, any>;
 }
 
@@ -324,7 +362,7 @@ export interface CustomIntegration {
   version: string;
   created_by: string;
   is_public: boolean;
-  approval_status: 'pending' | 'approved' | 'rejected';
+  approval_status: "pending" | "approved" | "rejected";
   created_at: string;
   updated_at: string;
 }
@@ -332,7 +370,7 @@ export interface CustomIntegration {
 export interface CustomEndpoint {
   id: string;
   name: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   path: string;
   description: string;
   parameters: EndpointParameter[];
@@ -345,7 +383,7 @@ export interface CustomEndpoint {
 
 export interface EndpointParameter {
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
+  type: "string" | "number" | "boolean" | "date" | "array" | "object";
   required: boolean;
   description: string;
   default_value?: any;

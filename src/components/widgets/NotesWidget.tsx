@@ -23,25 +23,32 @@ export const NotesWidget = ({ className }: NotesWidgetProps) => {
 
   // Filter notes based on search
   const filteredNotes = searchQuery
-    ? notes.filter(note =>
-        note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        note.content.toLowerCase().includes(searchQuery.toLowerCase())
-      ).slice(0, 5)
+    ? notes
+        .filter(
+          (note) =>
+            note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            note.content.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+        .slice(0, 5)
     : recentNotes;
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
     });
   };
 
   const getTypeColor = (type: NoteType) => {
     switch (type) {
-      case "permanent": return "bg-success/10 text-success border-success/20";
-      case "literature": return "bg-primary/10 text-primary border-primary/20";
-      case "fleeting": return "bg-warning/10 text-warning border-warning/20";
-      default: return "bg-muted text-muted-foreground";
+      case "permanent":
+        return "bg-success/10 text-success border-success/20";
+      case "literature":
+        return "bg-primary/10 text-primary border-primary/20";
+      case "fleeting":
+        return "bg-warning/10 text-warning border-warning/20";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -55,11 +62,11 @@ export const NotesWidget = ({ className }: NotesWidgetProps) => {
   };
 
   const handleCreateNote = () => {
-    navigate('/notes?edit=true');
+    navigate("/notes?edit=true");
   };
 
   const handleViewAll = () => {
-    navigate('/notes');
+    navigate("/notes");
   };
 
   return (
@@ -121,13 +128,21 @@ export const NotesWidget = ({ className }: NotesWidgetProps) => {
               <div>
                 <Notebook className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">No notes found</p>
-                <p className="text-xs text-muted-foreground mt-1">Try a different search term</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Try a different search term
+                </p>
               </div>
             ) : (
               <div>
                 <Notebook className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-3">No notes yet</p>
-                <Button size="sm" onClick={handleCreateNote} className="apple-button">
+                <p className="text-sm text-muted-foreground mb-3">
+                  No notes yet
+                </p>
+                <Button
+                  size="sm"
+                  onClick={handleCreateNote}
+                  className="apple-button"
+                >
                   <Plus className="w-4 h-4 mr-1" />
                   Create First Note
                 </Button>
@@ -148,7 +163,10 @@ export const NotesWidget = ({ className }: NotesWidgetProps) => {
                   </h4>
                   <Badge
                     variant="outline"
-                    className={cn("text-xs shrink-0", getTypeColor(note.note_type))}
+                    className={cn(
+                      "text-xs shrink-0",
+                      getTypeColor(note.note_type),
+                    )}
                   >
                     {note.note_type}
                   </Badge>
@@ -165,7 +183,7 @@ export const NotesWidget = ({ className }: NotesWidgetProps) => {
                     <Clock className="w-3 h-3" />
                     <span>{formatDate(note.created_at)}</span>
                   </div>
-                  {note.content.includes('[[') && (
+                  {note.content.includes("[[") && (
                     <span className="text-primary">Linked</span>
                   )}
                 </div>

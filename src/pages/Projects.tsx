@@ -1,17 +1,17 @@
 // Projects Page
 // Main page for project management with list view, filtering, and actions
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,25 +21,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { ProjectCard } from '@/components/projects/ProjectCard';
-import { ProjectForm } from '@/components/projects/ProjectForm';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/alert-dialog";
+import { ProjectCard } from "@/components/projects/ProjectCard";
+import { ProjectForm } from "@/components/projects/ProjectForm";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   useProjects,
   useCreateProject,
   useUpdateProject,
   useDeleteProject,
-  useDuplicateProject
-} from '@/hooks/useProjects';
-import { useProjectAnalytics } from '@/hooks/useProjects';
+  useDuplicateProject,
+} from "@/hooks/useProjects";
+import { useProjectAnalytics } from "@/hooks/useProjects";
 import {
   ProjectWithRelations,
   ProjectFilters,
   ProjectSortOptions,
   PROJECT_STATUS_CONFIG,
-  PROJECT_PRIORITY_CONFIG
-} from '@/types/projects';
+  PROJECT_PRIORITY_CONFIG,
+} from "@/types/projects";
 import {
   Plus,
   Search,
@@ -50,33 +50,37 @@ import {
   List,
   Users,
   Calendar,
-  Target
-} from 'lucide-react';
-import { toast } from 'sonner';
+  Target,
+} from "lucide-react";
+import { toast } from "sonner";
 
-type ViewMode = 'grid' | 'list';
+type ViewMode = "grid" | "list";
 
 function Projects() {
   // State management
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<ProjectFilters>({});
   const [sortOptions, setSortOptions] = useState<ProjectSortOptions>({
-    field: 'updated_at',
-    direction: 'desc'
+    field: "updated_at",
+    direction: "desc",
   });
 
   // Form states
   const [showProjectForm, setShowProjectForm] = useState(false);
-  const [editingProject, setEditingProject] = useState<ProjectWithRelations | undefined>();
+  const [editingProject, setEditingProject] = useState<
+    ProjectWithRelations | undefined
+  >();
 
   // Delete confirmation
-  const [deleteProject, setDeleteProject] = useState<ProjectWithRelations | undefined>();
+  const [deleteProject, setDeleteProject] = useState<
+    ProjectWithRelations | undefined
+  >();
 
   // Hooks
   const { data: projects = [], isLoading } = useProjects(
     { ...filters, search: searchQuery },
-    sortOptions
+    sortOptions,
   );
   const { data: analytics } = useProjectAnalytics();
   const createProjectMutation = useCreateProject();
@@ -89,8 +93,8 @@ function Projects() {
     createProjectMutation.mutate(data, {
       onSuccess: () => {
         setShowProjectForm(false);
-        toast.success('Project created successfully!');
-      }
+        toast.success("Project created successfully!");
+      },
     });
   };
 
@@ -104,8 +108,8 @@ function Projects() {
       onSuccess: () => {
         setShowProjectForm(false);
         setEditingProject(undefined);
-        toast.success('Project updated successfully!');
-      }
+        toast.success("Project updated successfully!");
+      },
     });
   };
 
@@ -118,8 +122,8 @@ function Projects() {
       deleteProjectMutation.mutate(deleteProject.id, {
         onSuccess: () => {
           setDeleteProject(undefined);
-          toast.success('Project deleted successfully!');
-        }
+          toast.success("Project deleted successfully!");
+        },
       });
     }
   };
@@ -127,8 +131,8 @@ function Projects() {
   const handleDuplicateProject = (project: ProjectWithRelations) => {
     duplicateProjectMutation.mutate(project.id, {
       onSuccess: () => {
-        toast.success('Project duplicated successfully!');
-      }
+        toast.success("Project duplicated successfully!");
+      },
     });
   };
 
@@ -139,12 +143,12 @@ function Projects() {
 
   // Filter handlers
   const updateFilters = (key: keyof ProjectFilters, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const clearFilters = () => {
     setFilters({});
-    setSearchQuery('');
+    setSearchQuery("");
   };
 
   const activeFiltersCount = Object.values(filters).filter(Boolean).length;
@@ -155,7 +159,9 @@ function Projects() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-600 mt-1">Organize and manage your projects</p>
+          <p className="text-gray-600 mt-1">
+            Organize and manage your projects
+          </p>
         </div>
         <Button onClick={() => setShowProjectForm(true)}>
           <Plus className="h-4 w-4 mr-2" />
@@ -170,7 +176,9 @@ function Projects() {
             <div className="flex items-center space-x-2">
               <Target className="h-5 w-5 text-blue-600" />
               <div>
-                <div className="text-2xl font-bold">{analytics.total_projects}</div>
+                <div className="text-2xl font-bold">
+                  {analytics.total_projects}
+                </div>
                 <div className="text-sm text-gray-600">Total Projects</div>
               </div>
             </div>
@@ -180,7 +188,9 @@ function Projects() {
             <div className="flex items-center space-x-2">
               <BarChart3 className="h-5 w-5 text-green-600" />
               <div>
-                <div className="text-2xl font-bold">{analytics.projects_by_status.active}</div>
+                <div className="text-2xl font-bold">
+                  {analytics.projects_by_status.active}
+                </div>
                 <div className="text-sm text-gray-600">Active Projects</div>
               </div>
             </div>
@@ -190,7 +200,9 @@ function Projects() {
             <div className="flex items-center space-x-2">
               <Calendar className="h-5 w-5 text-orange-600" />
               <div>
-                <div className="text-2xl font-bold">{analytics.overdue_projects}</div>
+                <div className="text-2xl font-bold">
+                  {analytics.overdue_projects}
+                </div>
                 <div className="text-sm text-gray-600">Overdue</div>
               </div>
             </div>
@@ -200,7 +212,9 @@ function Projects() {
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5 text-purple-600" />
               <div>
-                <div className="text-2xl font-bold">{Math.round(analytics.average_progress)}%</div>
+                <div className="text-2xl font-bold">
+                  {Math.round(analytics.average_progress)}%
+                </div>
                 <div className="text-sm text-gray-600">Avg Progress</div>
               </div>
             </div>
@@ -222,9 +236,9 @@ function Projects() {
 
         <div className="flex space-x-2">
           <Select
-            value={filters.status?.[0] || 'all'}
+            value={filters.status?.[0] || "all"}
             onValueChange={(value) =>
-              updateFilters('status', value === 'all' ? undefined : [value])
+              updateFilters("status", value === "all" ? undefined : [value])
             }
           >
             <SelectTrigger className="w-32">
@@ -241,9 +255,9 @@ function Projects() {
           </Select>
 
           <Select
-            value={filters.priority?.[0] || 'all'}
+            value={filters.priority?.[0] || "all"}
             onValueChange={(value) =>
-              updateFilters('priority', value === 'all' ? undefined : [value])
+              updateFilters("priority", value === "all" ? undefined : [value])
             }
           >
             <SelectTrigger className="w-32">
@@ -262,7 +276,10 @@ function Projects() {
           <Select
             value={`${sortOptions.field}-${sortOptions.direction}`}
             onValueChange={(value) => {
-              const [field, direction] = value.split('-') as [any, 'asc' | 'desc'];
+              const [field, direction] = value.split("-") as [
+                any,
+                "asc" | "desc",
+              ];
               setSortOptions({ field, direction });
             }}
           >
@@ -283,17 +300,17 @@ function Projects() {
           {/* View Mode Toggle */}
           <div className="flex border rounded-md">
             <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
+              variant={viewMode === "grid" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode('grid')}
+              onClick={() => setViewMode("grid")}
               className="rounded-r-none"
             >
               <Grid className="h-4 w-4" />
             </Button>
             <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              variant={viewMode === "list" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode('list')}
+              onClick={() => setViewMode("list")}
               className="rounded-l-none"
             >
               <List className="h-4 w-4" />
@@ -314,7 +331,8 @@ function Projects() {
           )}
           {filters.priority && (
             <Badge variant="secondary">
-              Priority: {PROJECT_PRIORITY_CONFIG[filters.priority[0] as any]?.label}
+              Priority:{" "}
+              {PROJECT_PRIORITY_CONFIG[filters.priority[0] as any]?.label}
             </Badge>
           )}
           <Button variant="ghost" size="sm" onClick={clearFilters}>
@@ -342,12 +360,14 @@ function Projects() {
         <div className="text-center py-12">
           <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {searchQuery || activeFiltersCount > 0 ? 'No projects found' : 'No projects yet'}
+            {searchQuery || activeFiltersCount > 0
+              ? "No projects found"
+              : "No projects yet"}
           </h3>
           <p className="text-gray-600 mb-4">
             {searchQuery || activeFiltersCount > 0
-              ? 'Try adjusting your search or filters'
-              : 'Get started by creating your first project'}
+              ? "Try adjusting your search or filters"
+              : "Get started by creating your first project"}
           </p>
           {!searchQuery && activeFiltersCount === 0 && (
             <Button onClick={() => setShowProjectForm(true)}>
@@ -357,11 +377,13 @@ function Projects() {
           )}
         </div>
       ) : (
-        <div className={
-          viewMode === 'grid'
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-            : 'space-y-4'
-        }>
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              : "space-y-4"
+          }
+        >
           {projects.map((project) => (
             <ProjectCard
               key={project.id}
@@ -380,7 +402,9 @@ function Projects() {
         onOpenChange={handleFormClose}
         project={editingProject}
         onSubmit={editingProject ? handleUpdateProject : handleCreateProject}
-        isLoading={createProjectMutation.isPending || updateProjectMutation.isPending}
+        isLoading={
+          createProjectMutation.isPending || updateProjectMutation.isPending
+        }
       />
 
       {/* Delete Confirmation Dialog */}
@@ -392,8 +416,9 @@ function Projects() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Project</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{deleteProject?.title}"? This action cannot be undone.
-              All tasks and data associated with this project will be permanently removed.
+              Are you sure you want to delete "{deleteProject?.title}"? This
+              action cannot be undone. All tasks and data associated with this
+              project will be permanently removed.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

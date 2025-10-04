@@ -12,22 +12,22 @@ interface SortableWidgetProps {
   isActive: boolean;
 }
 
-export function SortableWidget({ 
-  id, 
-  children, 
+export function SortableWidget({
+  id,
+  children,
   widget,
-  isActive 
+  isActive,
 }: SortableWidgetProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const { announce } = useAriaAnnounce();
-  
+
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging
+    isDragging,
   } = useSortable({ id });
 
   const style = {
@@ -37,14 +37,14 @@ export function SortableWidget({
 
   // Keyboard activation handler
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === ' ' || event.key === 'Enter') {
+    if (event.key === " " || event.key === "Enter") {
       event.preventDefault();
       setIsDragActive(!isDragActive);
       announce(
-        isDragActive 
+        isDragActive
           ? `Widget ${widget.type} activated for reordering. Use arrow keys to move, Space to drop.`
           : `Widget ${widget.type} dropped.`,
-        'assertive'
+        "assertive",
       );
     }
   };
@@ -55,11 +55,11 @@ export function SortableWidget({
       style={style}
       className={cn(
         "relative group transition-all duration-300",
-        widget.size === 'large' && 'md:col-span-2 md:row-span-2',
-        widget.size === 'medium' && 'md:col-span-2',
-        widget.size === 'small' && 'col-span-1',
+        widget.size === "large" && "md:col-span-2 md:row-span-2",
+        widget.size === "medium" && "md:col-span-2",
+        widget.size === "small" && "col-span-1",
         isDragging && "z-50 rotate-3 scale-105",
-        isActive && "ring-2 ring-primary ring-offset-2"
+        isActive && "ring-2 ring-primary ring-offset-2",
       )}
     >
       {/* Drag Handle */}
@@ -72,7 +72,7 @@ export function SortableWidget({
           "w-6 h-6 bg-background/90 backdrop-blur-sm rounded cursor-grab",
           "flex items-center justify-center transition-all duration-200",
           "hover:bg-primary hover:text-primary-foreground active:cursor-grabbing",
-          "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
         )}
         aria-label={`Drag to reorder ${widget.type} widget. Press Space or Enter to activate.`}
         aria-pressed={isDragActive}
@@ -82,10 +82,7 @@ export function SortableWidget({
       </button>
 
       {/* Widget Content */}
-      <div className={cn(
-        "h-full",
-        isDragging && "pointer-events-none"
-      )}>
+      <div className={cn("h-full", isDragging && "pointer-events-none")}>
         {children}
       </div>
 

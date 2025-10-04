@@ -1,8 +1,20 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useGoals } from "@/hooks/useGoals";
 import { GoalCard } from "./GoalCard";
 import { Plus } from "lucide-react";
@@ -16,7 +28,7 @@ export function SubGoalsList({ parentGoalId }: SubGoalsListProps) {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newGoalTitle, setNewGoalTitle] = useState("");
 
-  const subGoals = goals.filter(goal => goal.parent_goal_id === parentGoalId);
+  const subGoals = goals.filter((goal) => goal.parent_goal_id === parentGoalId);
 
   const handleCreateSubGoal = () => {
     if (!newGoalTitle.trim()) return;
@@ -45,8 +57,8 @@ export function SubGoalsList({ parentGoalId }: SubGoalsListProps) {
               {subGoals.map((subGoal) => (
                 <GoalCard key={subGoal.id} goal={subGoal} />
               ))}
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full"
                 onClick={() => setShowCreateDialog(true)}
               >
@@ -77,17 +89,23 @@ export function SubGoalsList({ parentGoalId }: SubGoalsListProps) {
               onChange={(e) => setNewGoalTitle(e.target.value)}
               placeholder="Sub-goal title"
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   handleCreateSubGoal();
                 }
               }}
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowCreateDialog(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleCreateSubGoal} disabled={!newGoalTitle.trim()}>
+            <Button
+              onClick={handleCreateSubGoal}
+              disabled={!newGoalTitle.trim()}
+            >
               Create
             </Button>
           </DialogFooter>

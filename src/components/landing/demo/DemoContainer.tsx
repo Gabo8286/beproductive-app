@@ -23,28 +23,28 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
     skipToStep,
     endDemo,
     resetDemo,
-    getCurrentStep
+    getCurrentStep,
   } = useDemoState();
 
   const currentStep = getCurrentStep();
-  const isFirstStep = demoState.currentStep === 'welcome';
-  const isLastStep = demoState.currentStep === 'completion';
+  const isFirstStep = demoState.currentStep === "welcome";
+  const isLastStep = demoState.currentStep === "completion";
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         if (!isLastStep) {
           nextStep();
         }
-      } else if (e.key === 'Escape') {
+      } else if (e.key === "Escape") {
         endDemo();
       }
     };
 
     if (demoState.isActive) {
-      window.addEventListener('keydown', handleKeyPress);
-      return () => window.removeEventListener('keydown', handleKeyPress);
+      window.addEventListener("keydown", handleKeyPress);
+      return () => window.removeEventListener("keydown", handleKeyPress);
     }
   }, [demoState.isActive, isLastStep, nextStep, endDemo]);
 
@@ -62,13 +62,13 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
           Experience BeProductive Live
         </h2>
         <p className="text-lg text-muted-foreground mb-8">
-          Take an interactive tour and see how BeProductive can transform your productivity journey. 
-          No signup required.
+          Take an interactive tour and see how BeProductive can transform your
+          productivity journey. No signup required.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <Button
             onClick={() => {
-              startDemo('professional');
+              startDemo("professional");
               onDemoStart?.();
             }}
             size="lg"
@@ -79,7 +79,7 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
           </Button>
           <Button
             onClick={() => {
-              startDemo('student');
+              startDemo("student");
               onDemoStart?.();
             }}
             size="lg"
@@ -89,7 +89,7 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
           </Button>
           <Button
             onClick={() => {
-              startDemo('entrepreneur');
+              startDemo("entrepreneur");
               onDemoStart?.();
             }}
             size="lg"
@@ -99,7 +99,8 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
           </Button>
         </div>
         <p className="text-sm text-muted-foreground mt-6">
-          ⌨️ Use keyboard shortcuts: <kbd className="px-2 py-1 rounded bg-muted">Enter</kbd> to continue, 
+          ⌨️ Use keyboard shortcuts:{" "}
+          <kbd className="px-2 py-1 rounded bg-muted">Enter</kbd> to continue,
           <kbd className="px-2 py-1 rounded bg-muted ml-2">Esc</kbd> to exit
         </p>
       </motion.div>
@@ -123,19 +124,11 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
           {currentStep?.description}
         </p>
         <div className="flex gap-4 justify-center">
-          <Button
-            onClick={nextStep}
-            size="lg"
-            className="apple-button"
-          >
+          <Button onClick={nextStep} size="lg" className="apple-button">
             Begin Tour
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-          <Button
-            onClick={endDemo}
-            size="lg"
-            variant="outline"
-          >
+          <Button onClick={endDemo} size="lg" variant="outline">
             Skip for Now
           </Button>
         </div>
@@ -179,11 +172,7 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
             Create Free Account
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
-          <Button
-            onClick={resetDemo}
-            size="lg"
-            variant="outline"
-          >
+          <Button onClick={resetDemo} size="lg" variant="outline">
             Restart Tour
           </Button>
         </div>
@@ -215,7 +204,7 @@ export function DemoContainer({ onComplete, onDemoStart }: DemoContainerProps) {
         <LiveDashboardDemo
           userData={demoState.userData}
           onInteraction={(type, id) => {
-            console.log('Demo interaction:', type, id);
+            console.log("Demo interaction:", type, id);
           }}
         />
       </div>

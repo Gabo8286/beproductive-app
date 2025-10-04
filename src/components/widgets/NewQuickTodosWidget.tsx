@@ -12,7 +12,7 @@ export function NewQuickTodosWidget() {
   const { data: quickTodos = [], isLoading, refetch } = useQuickTodos();
   const createQuickTodo = useCreateQuickTodo();
 
-  const activeNotes = quickTodos.filter(todo => !todo.completed_at);
+  const activeNotes = quickTodos.filter((todo) => !todo.completed_at);
   const recentNotes = activeNotes.slice(0, 4);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,10 +36,7 @@ export function NewQuickTodosWidget() {
       variant="glass"
       isLoading={isLoading}
       actions={
-        <WidgetActions
-          onRefresh={() => refetch()}
-          isRefreshing={isLoading}
-        />
+        <WidgetActions onRefresh={() => refetch()} isRefreshing={isLoading} />
       }
     >
       <div className="space-y-4">
@@ -64,7 +61,9 @@ export function NewQuickTodosWidget() {
 
         {/* Active Notes Count */}
         <div className="text-center">
-          <div className="text-2xl font-bold text-warning">{activeNotes.length}</div>
+          <div className="text-2xl font-bold text-warning">
+            {activeNotes.length}
+          </div>
           <div className="text-xs text-muted-foreground">Active notes</div>
         </div>
 

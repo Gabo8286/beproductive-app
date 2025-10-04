@@ -2,7 +2,14 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday } from "date-fns";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameDay,
+  isToday,
+} from "date-fns";
 import { cn } from "@/lib/utils";
 import type { ReflectionWithRelations } from "@/types/reflections";
 
@@ -24,29 +31,33 @@ export default function ReflectionCalendar({
   const firstDayOfWeek = monthStart.getDay();
 
   const previousMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
+    );
   };
 
   const nextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
+    );
   };
 
   const getReflectionForDate = (date: Date) => {
-    return reflections.find((r) => 
-      isSameDay(new Date(r.reflection_date), date)
+    return reflections.find((r) =>
+      isSameDay(new Date(r.reflection_date), date),
     );
   };
 
   const getMoodColor = (mood?: string) => {
     const colors = {
-      amazing: 'bg-purple-500',
-      great: 'bg-green-500',
-      good: 'bg-blue-500',
-      neutral: 'bg-gray-500',
-      bad: 'bg-orange-500',
-      terrible: 'bg-red-500',
+      amazing: "bg-purple-500",
+      great: "bg-green-500",
+      good: "bg-blue-500",
+      neutral: "bg-gray-500",
+      bad: "bg-orange-500",
+      terrible: "bg-red-500",
     };
-    return mood ? colors[mood as keyof typeof colors] : 'bg-muted';
+    return mood ? colors[mood as keyof typeof colors] : "bg-muted";
   };
 
   return (
@@ -54,7 +65,7 @@ export default function ReflectionCalendar({
       {/* Calendar Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">
-          {format(currentMonth, 'MMMM yyyy')}
+          {format(currentMonth, "MMMM yyyy")}
         </h2>
         <div className="flex gap-2">
           <Button variant="outline" size="icon" onClick={previousMonth}>
@@ -69,8 +80,11 @@ export default function ReflectionCalendar({
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-2">
         {/* Day Labels */}
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div
+            key={day}
+            className="text-center text-sm font-medium text-muted-foreground py-2"
+          >
             {day}
           </div>
         ))}
@@ -91,19 +105,21 @@ export default function ReflectionCalendar({
               className={cn(
                 "aspect-square p-2 rounded-lg relative transition-all hover:scale-105",
                 isCurrentDay && "ring-2 ring-primary",
-                reflection ? "cursor-pointer" : "cursor-default"
+                reflection ? "cursor-pointer" : "cursor-default",
               )}
             >
               <div className="text-sm font-medium mb-1">
-                {format(date, 'd')}
+                {format(date, "d")}
               </div>
-              
+
               {reflection && (
                 <div className="space-y-1">
-                  <div className={cn(
-                    "h-2 w-full rounded-full",
-                    getMoodColor(reflection.mood)
-                  )} />
+                  <div
+                    className={cn(
+                      "h-2 w-full rounded-full",
+                      getMoodColor(reflection.mood),
+                    )}
+                  />
                   <div className="text-[10px] text-muted-foreground line-clamp-2">
                     {reflection.title}
                   </div>

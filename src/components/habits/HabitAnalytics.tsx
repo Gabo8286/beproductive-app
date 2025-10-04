@@ -1,6 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useHabitAnalytics, useHabitTrends } from "@/hooks/useHabitAnalytics";
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { format } from "date-fns";
 
 interface HabitAnalyticsProps {
@@ -8,13 +15,14 @@ interface HabitAnalyticsProps {
 }
 
 export function HabitAnalytics({ habitId }: HabitAnalyticsProps) {
-  const { data: analytics } = useHabitAnalytics(habitId, 'week');
+  const { data: analytics } = useHabitAnalytics(habitId, "week");
   const { data: trends } = useHabitTrends(habitId, 30);
 
-  const chartData = trends?.map(t => ({
-    date: format(new Date(t.date), 'MMM dd'),
-    rate: t.completion_rate,
-  })) || [];
+  const chartData =
+    trends?.map((t) => ({
+      date: format(new Date(t.date), "MMM dd"),
+      rate: t.completion_rate,
+    })) || [];
 
   return (
     <div className="space-y-4">
@@ -42,13 +50,17 @@ export function HabitAnalytics({ habitId }: HabitAnalyticsProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{analytics?.completion_rate.toFixed(0)}%</div>
+            <div className="text-2xl font-bold">
+              {analytics?.completion_rate.toFixed(0)}%
+            </div>
             <p className="text-sm text-muted-foreground">Completion Rate</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">{analytics?.total_completions}</div>
+            <div className="text-2xl font-bold">
+              {analytics?.total_completions}
+            </div>
             <p className="text-sm text-muted-foreground">Total Completions</p>
           </CardContent>
         </Card>

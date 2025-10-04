@@ -10,7 +10,13 @@ interface TagBadgeProps {
   size?: "sm" | "md" | "lg";
 }
 
-export function TagBadge({ name, color = "#6366f1", onRemove, className, size = "sm" }: TagBadgeProps) {
+export function TagBadge({
+  name,
+  color = "#6366f1",
+  onRemove,
+  className,
+  size = "sm",
+}: TagBadgeProps) {
   const sizeClasses = {
     sm: "text-xs px-2 py-0.5",
     md: "text-sm px-3 py-1",
@@ -23,7 +29,7 @@ export function TagBadge({ name, color = "#6366f1", onRemove, className, size = 
       className={cn(
         "gap-1 font-normal transition-colors",
         sizeClasses[size],
-        className
+        className,
       )}
       style={{
         backgroundColor: `${color}20`,

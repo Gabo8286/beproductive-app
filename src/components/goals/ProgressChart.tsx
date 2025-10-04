@@ -1,8 +1,24 @@
 import { useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Goal } from "@/types/goals";
 import { ProgressEntry } from "@/hooks/useGoalProgress";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Area,
+  AreaChart,
+} from "recharts";
 import { format, parseISO, startOfDay, eachDayOfInterval } from "date-fns";
 
 interface ProgressChartProps {
@@ -15,7 +31,7 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
     if (!progressHistory.length) return [];
 
     const dataPoints = progressHistory
-      .map(entry => ({
+      .map((entry) => ({
         date: startOfDay(parseISO(entry.created_at)),
         progress: entry.new_progress,
         change: entry.new_progress - entry.previous_progress,
@@ -29,15 +45,15 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
       const allDays = eachDayOfInterval({ start: startDate, end: endDate });
 
       let lastProgress = 0;
-      const completeData = allDays.map(day => {
-        const dayData = dataPoints.find(point =>
-          point.date.getTime() === startOfDay(day).getTime()
+      const completeData = allDays.map((day) => {
+        const dayData = dataPoints.find(
+          (point) => point.date.getTime() === startOfDay(day).getTime(),
         );
 
         if (dayData) {
           lastProgress = dayData.progress;
           return {
-            date: format(day, 'MMM d'),
+            date: format(day, "MMM d"),
             fullDate: day,
             progress: dayData.progress,
             change: dayData.change,
@@ -46,11 +62,11 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
         }
 
         return {
-          date: format(day, 'MMM d'),
+          date: format(day, "MMM d"),
           fullDate: day,
           progress: lastProgress,
           change: 0,
-          type: 'none',
+          type: "none",
         };
       });
 
@@ -61,9 +77,9 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
   }, [progressHistory]);
 
   const getChangeColor = (change: number) => {
-    if (change > 0) return '#10b981';
-    if (change < 0) return '#ef4444';
-    return '#6b7280';
+    if (change > 0) return "#10b981";
+    if (change < 0) return "#ef4444";
+    return "#6b7280";
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -77,17 +93,19 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
           </p>
           {data.change !== 0 && (
             <p className="text-sm">
-              Change: <span 
-                className="font-medium" 
+              Change:{" "}
+              <span
+                className="font-medium"
                 style={{ color: getChangeColor(data.change) }}
               >
-                {data.change > 0 ? '+' : ''}{data.change.toFixed(1)}%
+                {data.change > 0 ? "+" : ""}
+                {data.change.toFixed(1)}%
               </span>
             </p>
           )}
-          {data.type !== 'none' && (
+          {data.type !== "none" && (
             <p className="text-xs text-muted-foreground capitalize">
-              {data.type.replace('_', ' ')}
+              {data.type.replace("_", " ")}
             </p>
           )}
         </div>
@@ -110,12 +128,12 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-                <XAxis 
-                  dataKey="date" 
+                <XAxis
+                  dataKey="date"
                   tick={{ fontSize: 12 }}
                   interval="preserveStartEnd"
                 />
-                <YAxis 
+                <YAxis
                   domain={[0, 100]}
                   tick={{ fontSize: 12 }}
                   tickFormatter={(value) => `${value}%`}
@@ -134,8 +152,8 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
                   dataKey="progress"
                   stroke="hsl(var(--primary))"
                   strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--primary))', strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, fill: 'hsl(var(--primary))' }}
+                  dot={{ fill: "hsl(var(--primary))", strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, fill: "hsl(var(--primary))" }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -145,7 +163,9 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
             <div className="text-center">
               <div className="text-4xl mb-2">📊</div>
               <p>No progress data available yet</p>
-              <p className="text-sm">Progress will appear here as you update your goal</p>
+              <p className="text-sm">
+                Progress will appear here as you update your goal
+              </p>
             </div>
           </div>
         )}

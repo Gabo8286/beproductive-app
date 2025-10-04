@@ -24,7 +24,7 @@ export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
   };
 
   const leaderboardEntries = habits
-    ?.filter(h => h.current_streak > 0 || h.longest_streak > 0)
+    ?.filter((h) => h.current_streak > 0 || h.longest_streak > 0)
     .map((habit, index) => ({
       habit,
       current_streak: habit.current_streak,
@@ -43,7 +43,9 @@ export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
           <CardTitle>Streak Leaderboard</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground">No habits with streaks yet</p>
+          <p className="text-sm text-muted-foreground">
+            No habits with streaks yet
+          </p>
         </CardContent>
       </Card>
     );
@@ -67,7 +69,9 @@ export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
               <div className="flex items-center gap-3">
                 <div className="w-8 text-center">
                   {getMedalIcon(entry.rank) || (
-                    <span className="text-muted-foreground font-semibold">#{entry.rank}</span>
+                    <span className="text-muted-foreground font-semibold">
+                      #{entry.rank}
+                    </span>
                   )}
                 </div>
                 <div>
@@ -81,7 +85,9 @@ export function StreakLeaderboard({ workspaceId }: StreakLeaderboardProps) {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xl font-bold">{entry.current_streak} 🔥</div>
+                <div className="text-xl font-bold">
+                  {entry.current_streak} 🔥
+                </div>
                 <Badge variant="secondary" className="text-xs">
                   {entry.completion_rate.toFixed(0)}% rate
                 </Badge>

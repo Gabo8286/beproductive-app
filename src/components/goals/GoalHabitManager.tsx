@@ -54,7 +54,7 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
   const availableHabits = activeHabits.filter((h) => !linkedHabitIds.has(h.id));
 
   const filteredHabits = availableHabits.filter((habit) =>
-    habit.title.toLowerCase().includes(searchQuery.toLowerCase())
+    habit.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleCreateLink = () => {
@@ -73,7 +73,7 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
           setContributionWeight([1.0]);
           setSearchQuery("");
         },
-      }
+      },
     );
   };
 
@@ -108,7 +108,10 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
 
                 <div>
                   <Label>Select Habit</Label>
-                  <Select value={selectedHabitId} onValueChange={setSelectedHabitId}>
+                  <Select
+                    value={selectedHabitId}
+                    onValueChange={setSelectedHabitId}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Choose a habit" />
                     </SelectTrigger>
@@ -126,7 +129,9 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
                 </div>
 
                 <div>
-                  <Label>Contribution Weight: {contributionWeight[0].toFixed(1)}</Label>
+                  <Label>
+                    Contribution Weight: {contributionWeight[0].toFixed(1)}
+                  </Label>
                   <p className="text-sm text-muted-foreground mb-2">
                     How much does this habit contribute to the goal?
                   </p>
@@ -186,7 +191,7 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
           <div className="space-y-3">
             {links.map((link) => {
               const contribution = progressData?.habitContributions.find(
-                (c) => c.habitId === link.habit_id
+                (c) => c.habitId === link.habit_id,
               );
 
               return (
@@ -198,14 +203,17 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <Activity className="h-4 w-4 text-primary" />
-                        <span className="font-medium">{link.habits?.title}</span>
+                        <span className="font-medium">
+                          {link.habits?.title}
+                        </span>
                         <Badge variant="outline">{link.habits?.category}</Badge>
                       </div>
                       <div className="flex items-center gap-3 text-sm text-muted-foreground">
                         <span>🔥 {link.habits?.current_streak} day streak</span>
                         {contribution && (
                           <span>
-                            Contribution: {contribution.weightedContribution.toFixed(1)}%
+                            Contribution:{" "}
+                            {contribution.weightedContribution.toFixed(1)}%
                           </span>
                         )}
                       </div>
@@ -225,7 +233,10 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
                         <span>Completion Rate</span>
                         <span>{contribution.completionRate.toFixed(0)}%</span>
                       </div>
-                      <Progress value={contribution.completionRate} className="h-1.5" />
+                      <Progress
+                        value={contribution.completionRate}
+                        className="h-1.5"
+                      />
                     </div>
                   )}
                 </div>
@@ -236,7 +247,9 @@ export function GoalHabitManager({ goalId }: GoalHabitManagerProps) {
           <div className="text-center py-8 text-muted-foreground">
             <Activity className="h-12 w-12 mx-auto mb-2 opacity-50" />
             <p>No linked habits yet</p>
-            <p className="text-sm">Link habits to track their contribution to this goal</p>
+            <p className="text-sm">
+              Link habits to track their contribution to this goal
+            </p>
           </div>
         )}
       </CardContent>

@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useTaskHierarchy } from '@/hooks/useSubtasks';
-import { ChevronDown, ChevronRight, Circle, CheckCircle2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Database } from '@/integrations/supabase/types';
+import { useState } from "react";
+import { useTaskHierarchy } from "@/hooks/useSubtasks";
+import { ChevronDown, ChevronRight, Circle, CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Database } from "@/integrations/supabase/types";
 
-type Task = Database['public']['Tables']['tasks']['Row'] & {
+type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
   subtasks?: Task[];
 };
 
@@ -23,13 +23,13 @@ interface TaskNodeProps {
 function TaskNode({ task, level }: TaskNodeProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const hasSubtasks = task.subtasks && task.subtasks.length > 0;
-  const isCompleted = task.status === 'done';
+  const isCompleted = task.status === "done";
 
   const priorityColors = {
-    low: 'bg-blue-500/10 text-blue-500',
-    medium: 'bg-yellow-500/10 text-yellow-500',
-    high: 'bg-orange-500/10 text-orange-500',
-    urgent: 'bg-red-500/10 text-red-500',
+    low: "bg-blue-500/10 text-blue-500",
+    medium: "bg-yellow-500/10 text-yellow-500",
+    high: "bg-orange-500/10 text-orange-500",
+    urgent: "bg-red-500/10 text-red-500",
   };
 
   return (
@@ -65,7 +65,9 @@ function TaskNode({ task, level }: TaskNodeProps) {
           to={`/tasks/${task.id}`}
           className="flex-1 min-w-0 hover:underline"
         >
-          <span className={isCompleted ? 'line-through text-muted-foreground' : ''}>
+          <span
+            className={isCompleted ? "line-through text-muted-foreground" : ""}
+          >
             {task.title}
           </span>
         </Link>

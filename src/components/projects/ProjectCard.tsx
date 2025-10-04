@@ -1,11 +1,11 @@
 // Project Card Component
 // Display project information in a card format with actions
 
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Folder,
   Calendar,
@@ -14,18 +14,22 @@ import {
   Edit,
   Trash2,
   Copy,
-  ExternalLink
-} from 'lucide-react';
+  ExternalLink,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ProjectWithRelations, PROJECT_STATUS_CONFIG, PROJECT_PRIORITY_CONFIG } from '@/types/projects';
-import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
+} from "@/components/ui/dropdown-menu";
+import {
+  ProjectWithRelations,
+  PROJECT_STATUS_CONFIG,
+  PROJECT_PRIORITY_CONFIG,
+} from "@/types/projects";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 interface ProjectCardProps {
   project: ProjectWithRelations;
@@ -40,14 +44,15 @@ export function ProjectCard({
   onEdit,
   onDelete,
   onDuplicate,
-  showActions = true
+  showActions = true,
 }: ProjectCardProps) {
   const statusConfig = PROJECT_STATUS_CONFIG[project.status];
   const priorityConfig = PROJECT_PRIORITY_CONFIG[project.priority];
 
-  const isOverdue = project.target_date &&
+  const isOverdue =
+    project.target_date &&
     new Date(project.target_date) < new Date() &&
-    project.status !== 'completed';
+    project.status !== "completed";
 
   const getDaysRemaining = () => {
     if (!project.target_date) return null;
@@ -128,13 +133,13 @@ export function ProjectCard({
         {/* Status and Priority Badges */}
         <div className="flex items-center space-x-2 mt-3">
           <Badge
-            variant={statusConfig.color === 'green' ? 'default' : 'secondary'}
+            variant={statusConfig.color === "green" ? "default" : "secondary"}
             className={`
-              ${statusConfig.color === 'blue' && 'bg-blue-100 text-blue-800'}
-              ${statusConfig.color === 'green' && 'bg-green-100 text-green-800'}
-              ${statusConfig.color === 'yellow' && 'bg-yellow-100 text-yellow-800'}
-              ${statusConfig.color === 'red' && 'bg-red-100 text-red-800'}
-              ${statusConfig.color === 'gray' && 'bg-gray-100 text-gray-800'}
+              ${statusConfig.color === "blue" && "bg-blue-100 text-blue-800"}
+              ${statusConfig.color === "green" && "bg-green-100 text-green-800"}
+              ${statusConfig.color === "yellow" && "bg-yellow-100 text-yellow-800"}
+              ${statusConfig.color === "red" && "bg-red-100 text-red-800"}
+              ${statusConfig.color === "gray" && "bg-gray-100 text-gray-800"}
             `}
           >
             {statusConfig.label}
@@ -143,10 +148,10 @@ export function ProjectCard({
           <Badge
             variant="outline"
             className={`
-              ${priorityConfig.color === 'gray' && 'border-gray-300 text-gray-600'}
-              ${priorityConfig.color === 'blue' && 'border-blue-300 text-blue-600'}
-              ${priorityConfig.color === 'orange' && 'border-orange-300 text-orange-600'}
-              ${priorityConfig.color === 'red' && 'border-red-300 text-red-600'}
+              ${priorityConfig.color === "gray" && "border-gray-300 text-gray-600"}
+              ${priorityConfig.color === "blue" && "border-blue-300 text-blue-600"}
+              ${priorityConfig.color === "orange" && "border-orange-300 text-orange-600"}
+              ${priorityConfig.color === "red" && "border-red-300 text-red-600"}
             `}
           >
             {priorityConfig.label}
@@ -182,15 +187,21 @@ export function ProjectCard({
         {/* Project Stats */}
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div className="text-center">
-            <div className="font-medium text-lg">{project.tasks_count || 0}</div>
+            <div className="font-medium text-lg">
+              {project.tasks_count || 0}
+            </div>
             <div className="text-gray-600">Tasks</div>
           </div>
           <div className="text-center">
-            <div className="font-medium text-lg">{project.total_members || 0}</div>
+            <div className="font-medium text-lg">
+              {project.total_members || 0}
+            </div>
             <div className="text-gray-600">Members</div>
           </div>
           <div className="text-center">
-            <div className="font-medium text-lg">{project.goals_count || 0}</div>
+            <div className="font-medium text-lg">
+              {project.goals_count || 0}
+            </div>
             <div className="text-gray-600">Goals</div>
           </div>
         </div>
@@ -200,13 +211,17 @@ export function ProjectCard({
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <Calendar className="h-4 w-4" />
             {project.target_date ? (
-              <span className={isOverdue ? 'text-red-600 font-medium' : ''}>
-                Due {format(new Date(project.target_date), 'MMM d, yyyy')}
+              <span className={isOverdue ? "text-red-600 font-medium" : ""}>
+                Due {format(new Date(project.target_date), "MMM d, yyyy")}
                 {daysRemaining !== null && (
                   <span className="ml-1">
-                    ({daysRemaining > 0 ? `${daysRemaining} days left` :
-                      daysRemaining === 0 ? 'Due today' :
-                      `${Math.abs(daysRemaining)} days overdue`})
+                    (
+                    {daysRemaining > 0
+                      ? `${daysRemaining} days left`
+                      : daysRemaining === 0
+                        ? "Due today"
+                        : `${Math.abs(daysRemaining)} days overdue`}
+                    )
                   </span>
                 )}
               </span>
@@ -221,10 +236,13 @@ export function ProjectCard({
               <Users className="h-4 w-4 text-gray-600" />
               <div className="flex -space-x-2">
                 {project.members.slice(0, 3).map((member) => (
-                  <Avatar key={member.id} className="h-6 w-6 border-2 border-white">
+                  <Avatar
+                    key={member.id}
+                    className="h-6 w-6 border-2 border-white"
+                  >
                     <AvatarImage src={member.user_profile?.avatar_url} />
                     <AvatarFallback className="text-xs">
-                      {member.user_profile?.full_name?.charAt(0) || 'U'}
+                      {member.user_profile?.full_name?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
                 ))}
@@ -247,7 +265,7 @@ export function ProjectCard({
             <Avatar className="h-5 w-5">
               <AvatarImage src={project.project_manager_profile.avatar_url} />
               <AvatarFallback className="text-xs">
-                {project.project_manager_profile.full_name?.charAt(0) || 'M'}
+                {project.project_manager_profile.full_name?.charAt(0) || "M"}
               </AvatarFallback>
             </Avatar>
             <span>{project.project_manager_profile.full_name}</span>

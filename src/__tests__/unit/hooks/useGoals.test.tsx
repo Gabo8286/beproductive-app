@@ -1,13 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useGoals, useGoal, useUpdateGoal, useDeleteGoal } from '@/hooks/useGoals';
-import { supabase } from '@/integrations/supabase/client';
-import { createMockGoal, createMockUser } from '@/test/fixtures/mockData';
-import type { ReactNode } from 'react';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  useGoals,
+  useGoal,
+  useUpdateGoal,
+  useDeleteGoal,
+} from "@/hooks/useGoals";
+import { supabase } from "@/integrations/supabase/client";
+import { createMockGoal, createMockUser } from "@/test/fixtures/mockData";
+import type { ReactNode } from "react";
 
 // Mock Supabase
-vi.mock('@/integrations/supabase/client');
+vi.mock("@/integrations/supabase/client");
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -16,21 +21,21 @@ const createWrapper = () => {
       mutations: { retry: false },
     },
   });
-  
+
   return ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 };
 
-describe('useGoals Hook', () => {
+describe("useGoals Hook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should fetch goals with proper filtering', async () => {
+  it("should fetch goals with proper filtering", async () => {
     const mockGoals = [
-      createMockGoal({ title: 'Goal 1', status: 'active' }),
-      createMockGoal({ title: 'Goal 2', status: 'completed' }),
+      createMockGoal({ title: "Goal 1", status: "active" }),
+      createMockGoal({ title: "Goal 2", status: "completed" }),
     ];
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -43,7 +48,9 @@ describe('useGoals Hook', () => {
       subscribe: vi.fn(),
     } as any);
 
-    vi.mocked(supabase.removeChannel).mockReturnValue(Promise.resolve('ok' as any));
+    vi.mocked(supabase.removeChannel).mockReturnValue(
+      Promise.resolve("ok" as any),
+    );
 
     const { result } = renderHook(() => useGoals(), {
       wrapper: createWrapper(),
@@ -54,10 +61,10 @@ describe('useGoals Hook', () => {
     });
 
     expect(result.current.goals).toHaveLength(2);
-    expect(result.current.goals[0].title).toBe('Goal 1');
+    expect(result.current.goals[0].title).toBe("Goal 1");
   });
 
-  it('should handle goal creation with validation', async () => {
+  it("should handle goal creation with validation", async () => {
     const mockUser = createMockUser();
     const mockGoal = createMockGoal();
 
@@ -70,7 +77,7 @@ describe('useGoals Hook', () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       maybeSingle: vi.fn().mockResolvedValue({
-        data: { id: 'workspace-id' },
+        data: { id: "workspace-id" },
         error: null,
       }),
       insert: vi.fn().mockReturnThis(),
@@ -83,7 +90,9 @@ describe('useGoals Hook', () => {
       subscribe: vi.fn(),
     } as any);
 
-    vi.mocked(supabase.removeChannel).mockReturnValue(Promise.resolve('ok' as any));
+    vi.mocked(supabase.removeChannel).mockReturnValue(
+      Promise.resolve("ok" as any),
+    );
 
     const { result } = renderHook(() => useGoals(), {
       wrapper: createWrapper(),
@@ -95,10 +104,10 @@ describe('useGoals Hook', () => {
 
     // Test create goal
     result.current.createGoal({
-      workspace_id: 'workspace-id',
-      title: 'New Goal',
-      description: 'Test description',
-      category: 'personal',
+      workspace_id: "workspace-id",
+      title: "New Goal",
+      description: "Test description",
+      category: "personal",
     });
 
     await waitFor(() => {
@@ -106,7 +115,7 @@ describe('useGoals Hook', () => {
     });
   });
 
-  it('should update goal progress correctly', async () => {
+  it("should update goal progress correctly", async () => {
     const mockGoal = createMockGoal({ progress: 50 });
 
     vi.mocked(supabase.rpc).mockResolvedValue({
@@ -125,8 +134,8 @@ describe('useGoals Hook', () => {
     });
   });
 
-  it('should handle goal deletion with sub-goal check', async () => {
-    const mockGoalId = 'goal-id';
+  it("should handle goal deletion with sub-goal check", async () => {
+    const mockGoalId = "goal-id";
 
     vi.mocked(supabase.from).mockReturnValue({
       select: vi.fn().mockReturnThis(),
@@ -146,11 +155,11 @@ describe('useGoals Hook', () => {
     });
   });
 
-  it('should calculate statistics accurately', async () => {
+  it("should calculate statistics accurately", async () => {
     const mockGoals = [
-      createMockGoal({ progress: 100, status: 'completed' }),
-      createMockGoal({ progress: 50, status: 'active' }),
-      createMockGoal({ progress: 25, status: 'active' }),
+      createMockGoal({ progress: 100, status: "completed" }),
+      createMockGoal({ progress: 50, status: "active" }),
+      createMockGoal({ progress: 25, status: "active" }),
     ];
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -163,7 +172,9 @@ describe('useGoals Hook', () => {
       subscribe: vi.fn(),
     } as any);
 
-    vi.mocked(supabase.removeChannel).mockReturnValue(Promise.resolve('ok' as any));
+    vi.mocked(supabase.removeChannel).mockReturnValue(
+      Promise.resolve("ok" as any),
+    );
 
     const { result } = renderHook(() => useGoals(), {
       wrapper: createWrapper(),
@@ -173,7 +184,9 @@ describe('useGoals Hook', () => {
       expect(result.current.goals).toHaveLength(3);
     });
 
-    const avgProgress = result.current.goals.reduce((sum, g) => sum + (g.progress || 0), 0) / result.current.goals.length;
+    const avgProgress =
+      result.current.goals.reduce((sum, g) => sum + (g.progress || 0), 0) /
+      result.current.goals.length;
     expect(avgProgress).toBe(58.33);
   });
 });

@@ -1,22 +1,35 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FileText } from 'lucide-react';
-import { useSaveTaskAsTemplate } from '@/hooks/useTaskTemplates';
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { FileText } from "lucide-react";
+import { useSaveTaskAsTemplate } from "@/hooks/useTaskTemplates";
 
 const DEFAULT_CATEGORIES = [
-  'Project Management',
-  'Development',
-  'Marketing',
-  'Sales',
-  'Operations',
-  'Personal',
-  'Meeting Prep',
-  'Review Process'
+  "Project Management",
+  "Development",
+  "Marketing",
+  "Sales",
+  "Operations",
+  "Personal",
+  "Meeting Prep",
+  "Review Process",
 ];
 
 interface SaveAsTemplateDialogProps {
@@ -24,19 +37,22 @@ interface SaveAsTemplateDialogProps {
   trigger?: React.ReactNode;
 }
 
-export function SaveAsTemplateDialog({ taskId, trigger }: SaveAsTemplateDialogProps) {
+export function SaveAsTemplateDialog({
+  taskId,
+  trigger,
+}: SaveAsTemplateDialogProps) {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [customCategory, setCustomCategory] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [customCategory, setCustomCategory] = useState("");
 
   const saveAsTemplate = useSaveTaskAsTemplate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const finalCategory = category === 'custom' ? customCategory : category;
+    const finalCategory = category === "custom" ? customCategory : category;
 
     await saveAsTemplate.mutateAsync({
       taskId,
@@ -46,10 +62,10 @@ export function SaveAsTemplateDialog({ taskId, trigger }: SaveAsTemplateDialogPr
     });
 
     setOpen(false);
-    setName('');
-    setDescription('');
-    setCategory('');
-    setCustomCategory('');
+    setName("");
+    setDescription("");
+    setCategory("");
+    setCustomCategory("");
   };
 
   return (
@@ -110,7 +126,7 @@ export function SaveAsTemplateDialog({ taskId, trigger }: SaveAsTemplateDialogPr
             </Select>
           </div>
 
-          {category === 'custom' && (
+          {category === "custom" && (
             <div className="space-y-2">
               <Label htmlFor="customCategory">Custom Category</Label>
               <Input
@@ -123,7 +139,11 @@ export function SaveAsTemplateDialog({ taskId, trigger }: SaveAsTemplateDialogPr
           )}
 
           <div className="flex gap-2 justify-end pt-4">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={saveAsTemplate.isPending}>

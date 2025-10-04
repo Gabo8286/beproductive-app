@@ -12,7 +12,7 @@ import {
   ProjectFilters,
   ProjectSortOptions,
   ProjectAnalytics,
-  ProjectDashboardData
+  ProjectDashboardData,
 } from "@/types/projects";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -21,15 +21,17 @@ import { useAuth } from "@/contexts/AuthContext";
 // =====================================================
 
 export const projectKeys = {
-  all: ['projects'] as const,
-  lists: () => [...projectKeys.all, 'list'] as const,
+  all: ["projects"] as const,
+  lists: () => [...projectKeys.all, "list"] as const,
   list: (userId: string, filters?: ProjectFilters, sort?: ProjectSortOptions) =>
     [...projectKeys.lists(), userId, filters, sort] as const,
-  details: () => [...projectKeys.all, 'detail'] as const,
+  details: () => [...projectKeys.all, "detail"] as const,
   detail: (id: string) => [...projectKeys.details(), id] as const,
-  analytics: (userId: string) => [...projectKeys.all, 'analytics', userId] as const,
-  dashboard: (userId: string) => [...projectKeys.all, 'dashboard', userId] as const,
-  templates: () => [...projectKeys.all, 'templates'] as const,
+  analytics: (userId: string) =>
+    [...projectKeys.all, "analytics", userId] as const,
+  dashboard: (userId: string) =>
+    [...projectKeys.all, "dashboard", userId] as const,
+  templates: () => [...projectKeys.all, "templates"] as const,
 };
 
 // =====================================================
@@ -41,12 +43,12 @@ export const projectKeys = {
  */
 export function useProjects(
   filters?: ProjectFilters,
-  sort?: ProjectSortOptions
+  sort?: ProjectSortOptions,
 ) {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: projectKeys.list(user?.id || '', filters, sort),
+    queryKey: projectKeys.list(user?.id || "", filters, sort),
     queryFn: async () => {
       // Return empty array for now - will implement once workspace system is available
       return [] as ProjectWithRelations[];
@@ -76,7 +78,7 @@ export function useProjectAnalytics() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: projectKeys.analytics(user?.id || ''),
+    queryKey: projectKeys.analytics(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) return null;
 
@@ -118,7 +120,7 @@ export function useProjectDashboard() {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: projectKeys.dashboard(user?.id || ''),
+    queryKey: projectKeys.dashboard(user?.id || ""),
     queryFn: async () => {
       if (!user?.id) return null;
 
@@ -153,8 +155,10 @@ export function useCreateProject() {
   return useMutation({
     mutationFn: async (input: CreateProjectInput) => {
       // For now, just simulate success
-      toast.success("Project creation will be implemented once workspace system is available");
-      return { id: 'temp-id' } as Project;
+      toast.success(
+        "Project creation will be implemented once workspace system is available",
+      );
+      return { id: "temp-id" } as Project;
     },
     onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: projectKeys.lists() });
@@ -173,14 +177,21 @@ export function useUpdateProject() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...input }: UpdateProjectInput & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...input
+    }: UpdateProjectInput & { id: string }) => {
       // For now, just simulate success
-      toast.success("Project updates will be implemented once workspace system is available");
+      toast.success(
+        "Project updates will be implemented once workspace system is available",
+      );
       return { id } as Project;
     },
     onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: projectKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: projectKeys.detail(project.id) });
+      queryClient.invalidateQueries({
+        queryKey: projectKeys.detail(project.id),
+      });
       toast.success("Project updated successfully!");
     },
     onError: (error: any) => {
@@ -198,8 +209,10 @@ export function useDeleteProject() {
   return useMutation({
     mutationFn: async (projectId: string) => {
       // For now, just simulate success
-      toast.success("Project deletion will be implemented once workspace system is available");
-      return { projectId, workspaceId: 'temp' };
+      toast.success(
+        "Project deletion will be implemented once workspace system is available",
+      );
+      return { projectId, workspaceId: "temp" };
     },
     onSuccess: ({ projectId }) => {
       queryClient.invalidateQueries({ queryKey: projectKeys.lists() });
@@ -221,8 +234,10 @@ export function useDuplicateProject() {
   return useMutation({
     mutationFn: async (projectId: string) => {
       // For now, just simulate success
-      toast.success("Project duplication will be implemented once workspace system is available");
-      return { id: 'temp-duplicate-id' } as Project;
+      toast.success(
+        "Project duplication will be implemented once workspace system is available",
+      );
+      return { id: "temp-duplicate-id" } as Project;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectKeys.lists() });

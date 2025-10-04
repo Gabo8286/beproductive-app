@@ -1,32 +1,55 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Plus, FileText } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
-import { useCreateTask, useUpdateTask } from '@/hooks/useTasks';
-import { Database } from '@/integrations/supabase/types';
-import { TagSelector } from '@/components/tags/TagSelector';
-import { TemplateSelector } from '@/components/templates/TemplateSelector';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon, Plus, FileText } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { useCreateTask, useUpdateTask } from "@/hooks/useTasks";
+import { Database } from "@/integrations/supabase/types";
+import { TagSelector } from "@/components/tags/TagSelector";
+import { TemplateSelector } from "@/components/templates/TemplateSelector";
 
-type Task = Database['public']['Tables']['tasks']['Row'];
-type TaskStatus = Database['public']['Enums']['task_status'];
-type TaskPriority = Database['public']['Enums']['task_priority'];
+type Task = Database["public"]["Tables"]["tasks"]["Row"];
+type TaskStatus = Database["public"]["Enums"]["task_status"];
+type TaskPriority = Database["public"]["Enums"]["task_priority"];
 
 const taskSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(255, 'Title too long'),
+  title: z.string().min(1, "Title is required").max(255, "Title too long"),
   description: z.string().optional(),
-  priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
-  status: z.enum(['todo', 'in_progress', 'blocked', 'done']).default('todo'),
+  priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
+  status: z.enum(["todo", "in_progress", "blocked", "done"]).default("todo"),
   due_date: z.date().optional(),
   estimated_duration: z.number().min(1).optional(),
   tags: z.array(z.string()).default([]),
@@ -49,10 +72,10 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
   const form = useForm<TaskFormData>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
-      title: task?.title || '',
-      description: task?.description || '',
-      priority: (task?.priority as TaskPriority) || 'medium',
-      status: (task?.status as TaskStatus) || 'todo',
+      title: task?.title || "",
+      description: task?.description || "",
+      priority: (task?.priority as TaskPriority) || "medium",
+      status: (task?.status as TaskStatus) || "todo",
       due_date: task?.due_date ? new Date(task.due_date) : undefined,
       estimated_duration: task?.estimated_duration || undefined,
       tags: task?.tags || [],
@@ -81,7 +104,7 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
       form.reset();
       onSuccess?.();
     } catch (error) {
-      console.error('Failed to save task:', error);
+      console.error("Failed to save task:", error);
     }
   };
 
@@ -97,7 +120,7 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>{task ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+          <DialogTitle>{task ? "Edit Task" : "Create New Task"}</DialogTitle>
         </DialogHeader>
 
         {!task && (
@@ -140,10 +163,10 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="Enter task description..." 
+                    <Textarea
+                      placeholder="Enter task description..."
                       rows={3}
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -158,7 +181,10 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Priority</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select priority" />
@@ -182,7 +208,10 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select status" />
@@ -190,7 +219,9 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="todo">📋 To Do</SelectItem>
-                        <SelectItem value="in_progress">⚡ In Progress</SelectItem>
+                        <SelectItem value="in_progress">
+                          ⚡ In Progress
+                        </SelectItem>
                         <SelectItem value="blocked">🚫 Blocked</SelectItem>
                         <SelectItem value="done">✅ Done</SelectItem>
                       </SelectContent>
@@ -215,7 +246,7 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                             variant="outline"
                             className={cn(
                               "pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              !field.value && "text-muted-foreground",
                             )}
                           >
                             {field.value ? (
@@ -252,11 +283,15 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                   <FormItem>
                     <FormLabel>Estimated Duration (minutes)</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="e.g. 120" 
+                      <Input
+                        type="number"
+                        placeholder="e.g. 120"
                         {...field}
-                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : undefined)}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value ? Number(e.target.value) : undefined,
+                          )
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -272,7 +307,7 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
                 <FormItem>
                   <FormLabel>Tags</FormLabel>
                   <FormControl>
-                    <TagSelector 
+                    <TagSelector
                       value={field.value}
                       onChange={field.onChange}
                     />
@@ -283,18 +318,18 @@ export function TaskForm({ task, onSuccess, trigger }: TaskFormProps) {
             />
 
             <div className="flex justify-end space-x-2 pt-4">
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 onClick={() => setOpen(false)}
               >
                 Cancel
               </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={createTask.isPending || updateTask.isPending}
               >
-                {task ? 'Update Task' : 'Create Task'}
+                {task ? "Update Task" : "Create Task"}
               </Button>
             </div>
           </form>

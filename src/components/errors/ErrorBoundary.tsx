@@ -1,9 +1,9 @@
-import { Component, ErrorInfo, ReactNode, ComponentType } from 'react';
+import { Component, ErrorInfo, ReactNode, ComponentType } from "react";
 
 interface Props {
   children: ReactNode;
   fallback?: ComponentType<{ error: Error; resetError: () => void }>;
-  level?: 'page' | 'section' | 'component';
+  level?: "page" | "section" | "component";
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
@@ -25,10 +25,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error details
-    console.error('[ErrorBoundary] Caught error:', {
+    console.error("[ErrorBoundary] Caught error:", {
       error,
       errorInfo,
-      level: this.props.level || 'component',
+      level: this.props.level || "component",
       componentStack: errorInfo.componentStack,
       timestamp: new Date().toISOString(),
       url: window.location.href,
@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({ errorInfo });
 
     // Send to error tracking service in production
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       this.reportError(error, errorInfo);
     }
   }
@@ -48,9 +48,9 @@ export class ErrorBoundary extends Component<Props, State> {
   reportError = async (error: Error, errorInfo: ErrorInfo) => {
     try {
       // Send error report to backend
-      await fetch('/api/errors/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/errors/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: error.message,
           stack: error.stack,
@@ -62,7 +62,7 @@ export class ErrorBoundary extends Component<Props, State> {
         }),
       });
     } catch (reportError) {
-      console.error('Failed to report error:', reportError);
+      console.error("Failed to report error:", reportError);
     }
   };
 
@@ -87,7 +87,9 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="p-4 border border-destructive/50 rounded-lg bg-destructive/10">
           <div className="flex items-start gap-2">
             <div className="flex-1">
-              <p className="font-medium text-destructive">Something went wrong</p>
+              <p className="font-medium text-destructive">
+                Something went wrong
+              </p>
               <p className="text-sm text-muted-foreground mt-1">
                 {this.state.error.message}
               </p>

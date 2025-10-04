@@ -1,7 +1,14 @@
 import { Card } from "@/components/ui/card";
 import { useReflectionInsights } from "@/hooks/useReflectionAnalytics";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Brain, Heart, Target, Lightbulb, TrendingUp, Smile } from "lucide-react";
+import {
+  Brain,
+  Heart,
+  Target,
+  Lightbulb,
+  TrendingUp,
+  Smile,
+} from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 interface PersonalGrowthMetricsProps {
@@ -10,10 +17,10 @@ interface PersonalGrowthMetricsProps {
   detailed?: boolean;
 }
 
-export default function PersonalGrowthMetrics({ 
-  workspaceId, 
-  compact = false, 
-  detailed = false 
+export default function PersonalGrowthMetrics({
+  workspaceId,
+  compact = false,
+  detailed = false,
 }: PersonalGrowthMetricsProps) {
   const { data: insights, isLoading } = useReflectionInsights(workspaceId, 30);
 
@@ -26,47 +33,47 @@ export default function PersonalGrowthMetrics({
   }
 
   const growthMetrics = [
-    { 
-      icon: Brain, 
-      label: "Self-Awareness", 
-      score: 85, 
+    {
+      icon: Brain,
+      label: "Self-Awareness",
+      score: 85,
       color: "text-purple-500",
-      description: "Understanding your thoughts and emotions"
+      description: "Understanding your thoughts and emotions",
     },
-    { 
-      icon: Heart, 
-      label: "Emotional Intelligence", 
-      score: 78, 
+    {
+      icon: Heart,
+      label: "Emotional Intelligence",
+      score: 78,
       color: "text-pink-500",
-      description: "Managing emotions effectively"
+      description: "Managing emotions effectively",
     },
-    { 
-      icon: Target, 
-      label: "Goal Alignment", 
-      score: 92, 
+    {
+      icon: Target,
+      label: "Goal Alignment",
+      score: 92,
       color: "text-blue-500",
-      description: "Reflections supporting goals"
+      description: "Reflections supporting goals",
     },
-    { 
-      icon: Lightbulb, 
-      label: "Insight Generation", 
-      score: 88, 
+    {
+      icon: Lightbulb,
+      label: "Insight Generation",
+      score: 88,
       color: "text-yellow-500",
-      description: "Quality of learnings and discoveries"
+      description: "Quality of learnings and discoveries",
     },
-    { 
-      icon: TrendingUp, 
-      label: "Growth Velocity", 
-      score: 82, 
+    {
+      icon: TrendingUp,
+      label: "Growth Velocity",
+      score: 82,
       color: "text-green-500",
-      description: "Rate of personal development"
+      description: "Rate of personal development",
     },
-    { 
-      icon: Smile, 
-      label: "Life Satisfaction", 
-      score: 86, 
+    {
+      icon: Smile,
+      label: "Life Satisfaction",
+      score: 86,
       color: "text-orange-500",
-      description: "Overall happiness and fulfillment"
+      description: "Overall happiness and fulfillment",
     },
   ];
 
@@ -76,7 +83,9 @@ export default function PersonalGrowthMetrics({
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-green-500" />
-            <p className="text-sm font-medium text-muted-foreground">Personal Growth</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              Personal Growth
+            </p>
           </div>
           <div>
             <p className="text-3xl font-bold">85%</p>
@@ -102,7 +111,9 @@ export default function PersonalGrowthMetrics({
     <Card className="p-6">
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-semibold mb-2">Personal Growth Metrics</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Personal Growth Metrics
+          </h3>
           <p className="text-sm text-muted-foreground">
             Track your personal development across key dimensions
           </p>

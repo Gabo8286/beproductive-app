@@ -4,19 +4,43 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useUpdateHabit } from "@/hooks/useHabits";
 import { Habit, UpdateHabitInput } from "@/types/habits";
 
 const habitSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
   description: z.string().max(500).optional(),
-  category: z.enum(['health', 'productivity', 'learning', 'mindfulness', 'social', 'financial', 'creative', 'other']),
-  type: z.enum(['build', 'break', 'maintain']),
-  frequency: z.enum(['daily', 'weekly', 'monthly', 'custom']),
-  difficulty: z.enum(['easy', 'medium', 'hard', 'extreme']),
-  time_of_day: z.enum(['morning', 'afternoon', 'evening', 'anytime']).optional(),
+  category: z.enum([
+    "health",
+    "productivity",
+    "learning",
+    "mindfulness",
+    "social",
+    "financial",
+    "creative",
+    "other",
+  ]),
+  type: z.enum(["build", "break", "maintain"]),
+  frequency: z.enum(["daily", "weekly", "monthly", "custom"]),
+  difficulty: z.enum(["easy", "medium", "hard", "extreme"]),
+  time_of_day: z
+    .enum(["morning", "afternoon", "evening", "anytime"])
+    .optional(),
   duration_minutes: z.coerce.number().min(1).optional(),
   target_streak: z.coerce.number().min(1).optional(),
 });
@@ -29,7 +53,11 @@ interface HabitEditFormProps {
   onCancel: () => void;
 }
 
-export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps) {
+export function HabitEditForm({
+  habit,
+  onSuccess,
+  onCancel,
+}: HabitEditFormProps) {
   const updateHabit = useUpdateHabit();
 
   const form = useForm<HabitFormData>({
@@ -54,7 +82,7 @@ export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps
       { id: habit.id, ...input },
       {
         onSuccess,
-      }
+      },
     );
   };
 
@@ -96,7 +124,10 @@ export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />
@@ -124,7 +155,10 @@ export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Type *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />
@@ -149,7 +183,10 @@ export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Frequency *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />
@@ -173,7 +210,10 @@ export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Difficulty *</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />
@@ -199,7 +239,10 @@ export function HabitEditForm({ habit, onSuccess, onCancel }: HabitEditFormProps
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Time of Day</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue />

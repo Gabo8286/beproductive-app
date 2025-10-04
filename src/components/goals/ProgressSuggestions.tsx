@@ -1,52 +1,70 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Goal } from "@/types/goals";
 import { ProgressSuggestion } from "@/hooks/useGoalProgress";
-import { AlertTriangle, Lightbulb, TrendingUp, Clock, Target } from "lucide-react";
+import {
+  AlertTriangle,
+  Lightbulb,
+  TrendingUp,
+  Clock,
+  Target,
+} from "lucide-react";
 
 interface ProgressSuggestionsProps {
   suggestions: ProgressSuggestion[];
   goal: Goal;
 }
 
-export function ProgressSuggestions({ suggestions, goal }: ProgressSuggestionsProps) {
-  const getSuggestionIcon = (type: ProgressSuggestion['type']) => {
+export function ProgressSuggestions({
+  suggestions,
+  goal,
+}: ProgressSuggestionsProps) {
+  const getSuggestionIcon = (type: ProgressSuggestion["type"]) => {
     switch (type) {
-      case 'milestone_due':
+      case "milestone_due":
         return <Clock className="h-4 w-4" />;
-      case 'behind_schedule':
+      case "behind_schedule":
         return <AlertTriangle className="h-4 w-4" />;
-      case 'ahead_schedule':
+      case "ahead_schedule":
         return <TrendingUp className="h-4 w-4" />;
-      case 'stagnant':
+      case "stagnant":
         return <Target className="h-4 w-4" />;
-      case 'target_adjustment':
+      case "target_adjustment":
         return <Lightbulb className="h-4 w-4" />;
       default:
         return <Lightbulb className="h-4 w-4" />;
     }
   };
 
-  const getSuggestionColor = (priority: ProgressSuggestion['priority']) => {
+  const getSuggestionColor = (priority: ProgressSuggestion["priority"]) => {
     switch (priority) {
-      case 'high': return 'destructive';
-      case 'medium': return 'default';
-      case 'low': return 'secondary';
+      case "high":
+        return "destructive";
+      case "medium":
+        return "default";
+      case "low":
+        return "secondary";
     }
   };
 
-  const getSuggestionVariant = (type: ProgressSuggestion['type']) => {
+  const getSuggestionVariant = (type: ProgressSuggestion["type"]) => {
     switch (type) {
-      case 'behind_schedule':
-        return 'destructive';
-      case 'ahead_schedule':
-        return 'default';
-      case 'stagnant':
-        return 'destructive';
+      case "behind_schedule":
+        return "destructive";
+      case "ahead_schedule":
+        return "default";
+      case "stagnant":
+        return "destructive";
       default:
-        return 'default';
+        return "default";
     }
   };
 
@@ -62,7 +80,10 @@ export function ProgressSuggestions({ suggestions, goal }: ProgressSuggestionsPr
         {suggestions.length > 0 ? (
           <div className="space-y-4">
             {suggestions.map((suggestion, index) => (
-              <Alert key={index} variant={getSuggestionVariant(suggestion.type)}>
+              <Alert
+                key={index}
+                variant={getSuggestionVariant(suggestion.type)}
+              >
                 <div className="flex items-start space-x-3">
                   <div className="mt-0.5">
                     {getSuggestionIcon(suggestion.type)}
@@ -73,12 +94,10 @@ export function ProgressSuggestions({ suggestions, goal }: ProgressSuggestionsPr
                         {suggestion.priority}
                       </Badge>
                       <span className="text-sm font-medium capitalize">
-                        {suggestion.type.replace('_', ' ')}
+                        {suggestion.type.replace("_", " ")}
                       </span>
                     </div>
-                    <AlertDescription>
-                      {suggestion.message}
-                    </AlertDescription>
+                    <AlertDescription>{suggestion.message}</AlertDescription>
                     {suggestion.action && (
                       <Button variant="outline" size="sm">
                         {suggestion.action}

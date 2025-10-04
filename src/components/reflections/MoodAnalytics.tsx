@@ -1,7 +1,18 @@
 import { useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { useReflectionTrends } from "@/hooks/useReflectionAnalytics";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format, subDays } from "date-fns";
 
@@ -19,16 +30,26 @@ const MOOD_COLORS = {
   terrible: "hsl(0, 84%, 60%)",
 };
 
-export default function MoodAnalytics({ workspaceId, detailed = false }: MoodAnalyticsProps) {
-  const endDate = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
-  const startDate = useMemo(() => format(subDays(new Date(), 30), 'yyyy-MM-dd'), []);
-  
-  const { data: trends, isLoading } = useReflectionTrends(workspaceId, startDate, endDate);
+export default function MoodAnalytics({
+  workspaceId,
+  detailed = false,
+}: MoodAnalyticsProps) {
+  const endDate = useMemo(() => format(new Date(), "yyyy-MM-dd"), []);
+  const startDate = useMemo(
+    () => format(subDays(new Date(), 30), "yyyy-MM-dd"),
+    [],
+  );
+
+  const { data: trends, isLoading } = useReflectionTrends(
+    workspaceId,
+    startDate,
+    endDate,
+  );
 
   const moodData = useMemo(() => {
     if (!trends) return [];
-    return trends.map(trend => ({
-      date: format(new Date(trend.date), 'MMM dd'),
+    return trends.map((trend) => ({
+      date: format(new Date(trend.date), "MMM dd"),
       mood: trend.mood || 0,
       energy: trend.energy || 0,
       stress: trend.stress || 0,
@@ -55,7 +76,9 @@ export default function MoodAnalytics({ workspaceId, detailed = false }: MoodAna
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold">Mood Trends</h3>
-            <p className="text-sm text-muted-foreground">Your emotional patterns over time</p>
+            <p className="text-sm text-muted-foreground">
+              Your emotional patterns over time
+            </p>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold">{averageMood}</p>
@@ -67,45 +90,45 @@ export default function MoodAnalytics({ workspaceId, detailed = false }: MoodAna
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={moodData}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis 
-                dataKey="date" 
+              <XAxis
+                dataKey="date"
                 className="text-xs"
-                tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fill: "hsl(var(--muted-foreground))" }}
               />
-              <YAxis 
-                domain={[0, 6]} 
+              <YAxis
+                domain={[0, 6]}
                 className="text-xs"
-                tick={{ fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fill: "hsl(var(--muted-foreground))" }}
               />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'hsl(var(--background))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px'
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--background))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "8px",
                 }}
               />
-              <Line 
-                type="monotone" 
-                dataKey="mood" 
-                stroke="hsl(var(--primary))" 
+              <Line
+                type="monotone"
+                dataKey="mood"
+                stroke="hsl(var(--primary))"
                 strokeWidth={2}
-                dot={{ fill: 'hsl(var(--primary))' }}
+                dot={{ fill: "hsl(var(--primary))" }}
               />
               {detailed && (
                 <>
-                  <Line 
-                    type="monotone" 
-                    dataKey="energy" 
-                    stroke="hsl(142, 76%, 36%)" 
+                  <Line
+                    type="monotone"
+                    dataKey="energy"
+                    stroke="hsl(142, 76%, 36%)"
                     strokeWidth={2}
-                    dot={{ fill: 'hsl(142, 76%, 36%)' }}
+                    dot={{ fill: "hsl(142, 76%, 36%)" }}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="stress" 
-                    stroke="hsl(0, 84%, 60%)" 
+                  <Line
+                    type="monotone"
+                    dataKey="stress"
+                    stroke="hsl(0, 84%, 60%)"
                     strokeWidth={2}
-                    dot={{ fill: 'hsl(0, 84%, 60%)' }}
+                    dot={{ fill: "hsl(0, 84%, 60%)" }}
                   />
                 </>
               )}

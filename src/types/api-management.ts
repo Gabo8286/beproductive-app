@@ -1,8 +1,8 @@
 import { Database } from "@/integrations/supabase/types";
 
 // Extract enums from database types
-export type APIProviderType = Database['public']['Enums']['api_provider_type'];
-export type APIKeyStatus = Database['public']['Enums']['api_key_status'];
+export type APIProviderType = Database["public"]["Enums"]["api_provider_type"];
+export type APIKeyStatus = Database["public"]["Enums"]["api_key_status"];
 
 // Main API Key interface
 export interface APIKey {
@@ -126,7 +126,15 @@ export interface APIUsageAnalytics {
 export interface APIKeyAuditLog {
   id: string;
   api_key_id?: string;
-  action: 'created' | 'updated' | 'activated' | 'deactivated' | 'rotated' | 'revoked' | 'expired' | 'limit_exceeded';
+  action:
+    | "created"
+    | "updated"
+    | "activated"
+    | "deactivated"
+    | "rotated"
+    | "revoked"
+    | "expired"
+    | "limit_exceeded";
 
   // Audit details
   performed_by?: string;
@@ -151,7 +159,7 @@ export interface APISystemConfig {
   is_encrypted: boolean;
 
   // Access control
-  access_level: 'super_admin' | 'admin';
+  access_level: "super_admin" | "admin";
 
   // Metadata
   created_by?: string;
@@ -219,17 +227,23 @@ export interface UsageStats {
   unique_users: number;
   success_rate: number;
   avg_response_time?: number;
-  by_provider: Record<APIProviderType, {
-    cost: number;
-    tokens: number;
-    requests: number;
-    users: number;
-  }>;
-  by_model?: Record<string, {
-    cost: number;
-    tokens: number;
-    requests: number;
-  }>;
+  by_provider: Record<
+    APIProviderType,
+    {
+      cost: number;
+      tokens: number;
+      requests: number;
+      users: number;
+    }
+  >;
+  by_model?: Record<
+    string,
+    {
+      cost: number;
+      tokens: number;
+      requests: number;
+    }
+  >;
 }
 
 export interface APIKeyUsageStats {
@@ -257,7 +271,7 @@ export interface CostAlert {
   current_cost: number;
   limit: number;
   percentage_used: number;
-  alert_type: 'warning' | 'critical' | 'exceeded';
+  alert_type: "warning" | "critical" | "exceeded";
 }
 
 export interface SystemHealthMetrics {
@@ -266,13 +280,16 @@ export interface SystemHealthMetrics {
   total_monthly_cost: number;
   total_monthly_requests: number;
   total_monthly_tokens: number;
-  provider_health: Record<APIProviderType, {
-    status: 'healthy' | 'warning' | 'critical';
-    cost_usage_percentage: number;
-    request_usage_percentage: number;
-    token_usage_percentage: number;
-    error_rate: number;
-  }>;
+  provider_health: Record<
+    APIProviderType,
+    {
+      status: "healthy" | "warning" | "critical";
+      cost_usage_percentage: number;
+      request_usage_percentage: number;
+      token_usage_percentage: number;
+      error_rate: number;
+    }
+  >;
   cost_alerts: CostAlert[];
   recent_errors: Array<{
     provider: APIProviderType;
@@ -324,12 +341,12 @@ export interface APIDashboardData {
 // Provider configuration constants
 export const PROVIDER_CONFIGS: Record<APIProviderType, ProviderConfig> = {
   openai: {
-    provider: 'openai',
-    display_name: 'OpenAI',
-    default_model: 'gpt-4',
-    available_models: ['gpt-4', 'gpt-4-turbo', 'gpt-3.5-turbo'],
-    base_url: 'https://api.openai.com/v1',
-    required_headers: ['Authorization'],
+    provider: "openai",
+    display_name: "OpenAI",
+    default_model: "gpt-4",
+    available_models: ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"],
+    base_url: "https://api.openai.com/v1",
+    required_headers: ["Authorization"],
     cost_per_1k_tokens: 0.03,
     supports_streaming: true,
     max_tokens_per_request: 4096,
@@ -340,13 +357,13 @@ export const PROVIDER_CONFIGS: Record<APIProviderType, ProviderConfig> = {
     },
   },
   claude: {
-    provider: 'claude',
-    display_name: 'Anthropic Claude',
-    default_model: 'claude-3-sonnet',
-    available_models: ['claude-3-opus', 'claude-3-sonnet', 'claude-3-haiku'],
-    base_url: 'https://api.anthropic.com/v1',
-    api_version: '2023-06-01',
-    required_headers: ['Authorization', 'anthropic-version'],
+    provider: "claude",
+    display_name: "Anthropic Claude",
+    default_model: "claude-3-sonnet",
+    available_models: ["claude-3-opus", "claude-3-sonnet", "claude-3-haiku"],
+    base_url: "https://api.anthropic.com/v1",
+    api_version: "2023-06-01",
+    required_headers: ["Authorization", "anthropic-version"],
     cost_per_1k_tokens: 0.015,
     supports_streaming: true,
     max_tokens_per_request: 4096,
@@ -357,12 +374,12 @@ export const PROVIDER_CONFIGS: Record<APIProviderType, ProviderConfig> = {
     },
   },
   gemini: {
-    provider: 'gemini',
-    display_name: 'Google Gemini',
-    default_model: 'gemini-pro',
-    available_models: ['gemini-pro', 'gemini-pro-vision'],
-    base_url: 'https://generativelanguage.googleapis.com/v1',
-    required_headers: ['Authorization'],
+    provider: "gemini",
+    display_name: "Google Gemini",
+    default_model: "gemini-pro",
+    available_models: ["gemini-pro", "gemini-pro-vision"],
+    base_url: "https://generativelanguage.googleapis.com/v1",
+    required_headers: ["Authorization"],
     cost_per_1k_tokens: 0.001,
     supports_streaming: true,
     max_tokens_per_request: 4096,
@@ -373,11 +390,11 @@ export const PROVIDER_CONFIGS: Record<APIProviderType, ProviderConfig> = {
     },
   },
   lovable: {
-    provider: 'lovable',
-    display_name: 'Lovable AI',
-    default_model: 'lovable-v1',
-    available_models: ['lovable-v1'],
-    required_headers: ['Authorization'],
+    provider: "lovable",
+    display_name: "Lovable AI",
+    default_model: "lovable-v1",
+    available_models: ["lovable-v1"],
+    required_headers: ["Authorization"],
     cost_per_1k_tokens: 0.002,
     supports_streaming: false,
     max_tokens_per_request: 2048,
@@ -388,10 +405,10 @@ export const PROVIDER_CONFIGS: Record<APIProviderType, ProviderConfig> = {
     },
   },
   custom: {
-    provider: 'custom',
-    display_name: 'Custom Provider',
+    provider: "custom",
+    display_name: "Custom Provider",
     available_models: [],
-    required_headers: ['Authorization'],
+    required_headers: ["Authorization"],
     cost_per_1k_tokens: 0.01,
     supports_streaming: false,
     max_tokens_per_request: 4096,
@@ -404,16 +421,16 @@ export const PROVIDER_CONFIGS: Record<APIProviderType, ProviderConfig> = {
 };
 
 export const API_KEY_STATUS_LABELS: Record<APIKeyStatus, string> = {
-  active: 'Active',
-  inactive: 'Inactive',
-  revoked: 'Revoked',
-  expired: 'Expired',
+  active: "Active",
+  inactive: "Inactive",
+  revoked: "Revoked",
+  expired: "Expired",
 };
 
 export const PROVIDER_LABELS: Record<APIProviderType, string> = {
-  openai: 'OpenAI',
-  claude: 'Anthropic Claude',
-  gemini: 'Google Gemini',
-  lovable: 'Lovable AI',
-  custom: 'Custom Provider',
+  openai: "OpenAI",
+  claude: "Anthropic Claude",
+  gemini: "Google Gemini",
+  lovable: "Lovable AI",
+  custom: "Custom Provider",
 };

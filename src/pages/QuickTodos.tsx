@@ -11,26 +11,27 @@ export default function QuickTodos() {
   const [showCompleted, setShowCompleted] = useState(false);
   const { profile } = useAuth();
   const { data: quickTodos = [], isLoading } = useQuickTodos({
-    includeCompleted: showCompleted
+    includeCompleted: showCompleted,
   });
   const clearCompleted = useClearCompletedQuickTodos();
 
-  const activeCount = quickTodos.filter(todo => !todo.completed_at).length;
-  const completedCount = quickTodos.filter(todo => todo.completed_at).length;
+  const activeCount = quickTodos.filter((todo) => !todo.completed_at).length;
+  const completedCount = quickTodos.filter((todo) => todo.completed_at).length;
 
   // Get workspace ID for clearing completed
   const getWorkspaceId = async () => {
     if (!profile?.id) return null;
-    
+
     const { data } = await import("@/integrations/supabase/client").then(
-      mod => mod.supabase
-        .from("workspaces")
-        .select("id")
-        .eq("owner_id", profile.id)
-        .eq("type", "personal")
-        .limit(1)
+      (mod) =>
+        mod.supabase
+          .from("workspaces")
+          .select("id")
+          .eq("owner_id", profile.id)
+          .eq("type", "personal")
+          .limit(1),
     );
-    
+
     return data?.[0]?.id || null;
   };
 
@@ -46,7 +47,7 @@ export default function QuickTodos() {
       <div className="space-y-6 animate-pulse">
         <div className="h-8 bg-muted rounded w-1/3" />
         <div className="space-y-3">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <div key={i} className="h-12 bg-muted rounded" />
           ))}
         </div>

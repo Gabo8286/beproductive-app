@@ -4,7 +4,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -26,14 +32,14 @@ export default function Login() {
     setLoading(true);
 
     const { error } = await signIn(email, password);
-    
+
     if (error) {
       toast.error(error.message || "Failed to sign in");
     } else {
       toast.success("Signed in successfully");
       navigate("/dashboard");
     }
-    
+
     setLoading(false);
   };
 
@@ -48,7 +54,9 @@ export default function Login() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-          <CardDescription>Sign in to your BeProductive account</CardDescription>
+          <CardDescription>
+            Sign in to your BeProductive account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -95,7 +103,9 @@ export default function Login() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+              <span className="bg-card px-2 text-muted-foreground">
+                Or continue with
+              </span>
             </div>
           </div>
 

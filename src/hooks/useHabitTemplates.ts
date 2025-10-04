@@ -1,7 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { HabitTemplate, HabitCategory, Habit, CreateHabitInput } from "@/types/habits";
+import {
+  HabitTemplate,
+  HabitCategory,
+  Habit,
+  CreateHabitInput,
+} from "@/types/habits";
 import { habitKeys, useCreateHabit } from "./useHabits";
 import { getHabitColor, getHabitIcon } from "@/utils/habits";
 
@@ -10,10 +15,11 @@ import { getHabitColor, getHabitIcon } from "@/utils/habits";
 // =====================================================
 
 export const habitTemplateKeys = {
-  all: ['habit-templates'] as const,
-  lists: () => [...habitTemplateKeys.all, 'list'] as const,
-  list: (category?: HabitCategory) => [...habitTemplateKeys.lists(), category] as const,
-  popular: () => [...habitTemplateKeys.all, 'popular'] as const,
+  all: ["habit-templates"] as const,
+  lists: () => [...habitTemplateKeys.all, "list"] as const,
+  list: (category?: HabitCategory) =>
+    [...habitTemplateKeys.lists(), category] as const,
+  popular: () => [...habitTemplateKeys.all, "popular"] as const,
 };
 
 // =====================================================
@@ -28,12 +34,12 @@ export function useHabitTemplates(category?: HabitCategory) {
     queryKey: habitTemplateKeys.list(category),
     queryFn: async () => {
       let query = supabase
-        .from('habit_templates')
-        .select('*')
-        .order('usage_count', { ascending: false });
+        .from("habit_templates")
+        .select("*")
+        .order("usage_count", { ascending: false });
 
       if (category) {
-        query = query.eq('category', category);
+        query = query.eq("category", category);
       }
 
       const { data, error } = await query;
@@ -51,9 +57,9 @@ export function usePopularTemplates(limit: number = 10) {
     queryKey: habitTemplateKeys.popular(),
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('habit_templates')
-        .select('*')
-        .order('usage_count', { ascending: false })
+        .from("habit_templates")
+        .select("*")
+        .order("usage_count", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
@@ -74,20 +80,20 @@ export function useCreateFromTemplate() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ 
-      templateId, 
+    mutationFn: async ({
+      templateId,
       workspaceId,
-      customizations 
-    }: { 
-      templateId: string; 
+      customizations,
+    }: {
+      templateId: string;
       workspaceId: string;
       customizations?: Partial<CreateHabitInput>;
     }) => {
       // Get template
       const { data: template, error: templateError } = await supabase
-        .from('habit_templates')
-        .select('*')
-        .eq('id', templateId)
+        .from("habit_templates")
+        .select("*")
+        .eq("id", templateId)
         .single();
 
       if (templateError) throw templateError;
@@ -98,7 +104,7 @@ export function useCreateFromTemplate() {
         title: template.title,
         description: template.description || undefined,
         category: template.category,
-        type: 'build', // Default type
+        type: "build", // Default type
         frequency: template.frequency,
         difficulty: template.difficulty,
         time_of_day: template.time_of_day || undefined,
@@ -113,9 +119,9 @@ export function useCreateFromTemplate() {
 
       // Increment usage count
       await supabase
-        .from('habit_templates')
+        .from("habit_templates")
         .update({ usage_count: template.usage_count + 1 })
-        .eq('id', templateId);
+        .eq("id", templateId);
 
       return habit;
     },
@@ -126,7 +132,7 @@ export function useCreateFromTemplate() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to create habit from template");
-      console.error('Create from template error:', error);
+      console.error("Create from template error:", error);
     },
   });
 }
@@ -138,17 +144,19 @@ export function useCreateTemplate() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ 
-      habit, 
-      templateName, 
-      templateDescription 
-    }: { 
-      habit: Habit; 
+    mutationFn: async ({
+      habit,
+      templateName,
+      templateDescription,
+    }: {
+      habit: Habit;
       templateName?: string;
       templateDescription?: string;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
 
       const templateData = {
         category: habit.category,
@@ -166,7 +174,7 @@ export function useCreateTemplate() {
       };
 
       const { data, error } = await supabase
-        .from('habit_templates')
+        .from("habit_templates")
         .insert(templateData)
         .select()
         .single();
@@ -180,7 +188,7 @@ export function useCreateTemplate() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to create template");
-      console.error('Create template error:', error);
+      console.error("Create template error:", error);
     },
   });
 }
@@ -192,22 +200,22 @@ export function useRateTemplate() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ 
-      templateId, 
-      rating 
-    }: { 
-      templateId: string; 
+    mutationFn: async ({
+      templateId,
+      rating,
+    }: {
+      templateId: string;
       rating: number;
     }) => {
       if (rating < 1 || rating > 5) {
-        throw new Error('Rating must be between 1 and 5');
+        throw new Error("Rating must be between 1 and 5");
       }
 
       // Get current rating
       const { data: template, error: fetchError } = await supabase
-        .from('habit_templates')
-        .select('rating, usage_count')
-        .eq('id', templateId)
+        .from("habit_templates")
+        .select("rating, usage_count")
+        .eq("id", templateId)
         .single();
 
       if (fetchError) throw fetchError;
@@ -215,12 +223,13 @@ export function useRateTemplate() {
       // Calculate new average rating
       const currentRating = template.rating || 0;
       const usageCount = template.usage_count;
-      const newRating = ((currentRating * usageCount) + rating) / (usageCount + 1);
+      const newRating =
+        (currentRating * usageCount + rating) / (usageCount + 1);
 
       const { error } = await supabase
-        .from('habit_templates')
+        .from("habit_templates")
         .update({ rating: newRating })
-        .eq('id', templateId);
+        .eq("id", templateId);
 
       if (error) throw error;
     },
@@ -230,7 +239,7 @@ export function useRateTemplate() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to rate template");
-      console.error('Rate template error:', error);
+      console.error("Rate template error:", error);
     },
   });
 }

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { QuickTaskModal } from './QuickTaskModal';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { QuickTaskModal } from "./QuickTaskModal";
+import { cn } from "@/lib/utils";
 
 interface FloatingTaskButtonProps {
   className?: string;
@@ -20,7 +20,7 @@ export function FloatingTaskButton({ className }: FloatingTaskButtonProps) {
           "hover:scale-110 active:scale-95",
           "transition-all duration-200",
           "md:hidden", // Only show on mobile/tablet
-          className
+          className,
         )}
         onClick={() => setIsModalOpen(true)}
         aria-label="Quick create task"
@@ -28,10 +28,7 @@ export function FloatingTaskButton({ className }: FloatingTaskButtonProps) {
         <Plus className="h-6 w-6" />
       </Button>
 
-      <QuickTaskModal 
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-      />
+      <QuickTaskModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   );
 }

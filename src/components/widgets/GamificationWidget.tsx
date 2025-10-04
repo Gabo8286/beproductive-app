@@ -1,11 +1,24 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Trophy, Star, TrendingUp, Zap, ArrowRight, Repeat } from 'lucide-react';
-import { useGamification } from '@/hooks/useGamification';
-import { Link } from 'react-router-dom';
-import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  Trophy,
+  Star,
+  TrendingUp,
+  Zap,
+  ArrowRight,
+  Repeat,
+} from "lucide-react";
+import { useGamification } from "@/hooks/useGamification";
+import { Link } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function GamificationWidget() {
   const { profile, stats, achievements, isLoading } = useGamification();
@@ -18,7 +31,9 @@ export function GamificationWidget() {
             <Trophy className="h-5 w-5 text-yellow-600" />
             <CardTitle>Journey Progress</CardTitle>
           </div>
-          <CardDescription>Track your productivity achievements</CardDescription>
+          <CardDescription>
+            Track your productivity achievements
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Skeleton className="h-4 w-full" />
@@ -37,7 +52,9 @@ export function GamificationWidget() {
       <Card>
         <CardContent className="p-6 text-center">
           <Trophy className="h-12 w-12 text-gray-300 mx-auto mb-2" />
-          <p className="text-gray-500">Complete your first task to start your productivity journey!</p>
+          <p className="text-gray-500">
+            Complete your first task to start your productivity journey!
+          </p>
         </CardContent>
       </Card>
     );
@@ -47,13 +64,18 @@ export function GamificationWidget() {
     level: profile.level,
     current_xp: profile.total_xp,
     xp_to_next_level: stats.xp_to_next_level,
-    progress_percentage: profile.level >= 50 ? 100 :
-      ((profile.total_xp - Math.floor(100 * Math.pow(profile.level - 1, 1.5) * 10)) /
-       (Math.floor(100 * Math.pow(profile.level, 1.5) * 10) - Math.floor(100 * Math.pow(profile.level - 1, 1.5) * 10))) * 100
+    progress_percentage:
+      profile.level >= 50
+        ? 100
+        : ((profile.total_xp -
+            Math.floor(100 * Math.pow(profile.level - 1, 1.5) * 10)) /
+            (Math.floor(100 * Math.pow(profile.level, 1.5) * 10) -
+              Math.floor(100 * Math.pow(profile.level - 1, 1.5) * 10))) *
+          100,
   };
 
   const recentAchievements = achievements
-    .filter(a => a.is_unlocked)
+    .filter((a) => a.is_unlocked)
     .slice(0, 2);
 
   return (
@@ -70,7 +92,9 @@ export function GamificationWidget() {
             </Button>
           </Link>
         </div>
-        <CardDescription>Your productivity achievements and level</CardDescription>
+        <CardDescription>
+          Your productivity achievements and level
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Level Progress */}
@@ -90,11 +114,16 @@ export function GamificationWidget() {
           {levelInfo.xp_to_next_level > 0 && (
             <div className="space-y-1">
               <Progress
-                value={Math.max(0, Math.min(100, levelInfo.progress_percentage))}
+                value={Math.max(
+                  0,
+                  Math.min(100, levelInfo.progress_percentage),
+                )}
                 className="h-2"
               />
               <div className="flex justify-between text-xs text-gray-500">
-                <span>{levelInfo.xp_to_next_level.toLocaleString()} XP to next level</span>
+                <span>
+                  {levelInfo.xp_to_next_level.toLocaleString()} XP to next level
+                </span>
                 <span>{Math.round(levelInfo.progress_percentage)}%</span>
               </div>
             </div>
@@ -106,7 +135,9 @@ export function GamificationWidget() {
           <div className="text-center p-3 bg-blue-50 rounded-lg">
             <div className="flex items-center justify-center space-x-1 text-blue-600 mb-1">
               <Zap className="h-4 w-4" />
-              <span className="text-lg font-semibold">{stats.points_this_week.toLocaleString()}</span>
+              <span className="text-lg font-semibold">
+                {stats.points_this_week.toLocaleString()}
+              </span>
             </div>
             <p className="text-xs text-blue-700">This Week</p>
           </div>
@@ -114,7 +145,9 @@ export function GamificationWidget() {
           <div className="text-center p-3 bg-green-50 rounded-lg">
             <div className="flex items-center justify-center space-x-1 text-green-600 mb-1">
               <Repeat className="h-4 w-4" />
-              <span className="text-lg font-semibold">{stats.longest_streak}</span>
+              <span className="text-lg font-semibold">
+                {stats.longest_streak}
+              </span>
             </div>
             <p className="text-xs text-green-700">Best Streak</p>
           </div>
@@ -125,7 +158,9 @@ export function GamificationWidget() {
           <div className="text-center p-3 bg-yellow-50 rounded-lg">
             <div className="flex items-center justify-center space-x-1 text-yellow-600 mb-1">
               <Trophy className="h-4 w-4" />
-              <span className="text-lg font-semibold">{stats.achievements_unlocked}</span>
+              <span className="text-lg font-semibold">
+                {stats.achievements_unlocked}
+              </span>
             </div>
             <p className="text-xs text-yellow-700">Achievements</p>
           </div>

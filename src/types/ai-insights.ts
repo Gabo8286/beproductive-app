@@ -1,8 +1,9 @@
 import { Database } from "@/integrations/supabase/types";
 
-export type AIProvider = Database['public']['Enums']['ai_provider'];
-export type AIInsightType = Database['public']['Enums']['ai_insight_type'];
-export type AIRecommendationStatus = Database['public']['Enums']['ai_recommendation_status'];
+export type AIProvider = Database["public"]["Enums"]["ai_provider"];
+export type AIInsightType = Database["public"]["Enums"]["ai_insight_type"];
+export type AIRecommendationStatus =
+  Database["public"]["Enums"]["ai_recommendation_status"];
 
 export interface AIInsight {
   id: string;
@@ -29,7 +30,7 @@ export interface AIRecommendation {
   description: string;
   implementation_steps: string[];
   expected_impact?: string;
-  effort_level?: 'low' | 'medium' | 'high';
+  effort_level?: "low" | "medium" | "high";
   status: AIRecommendationStatus;
   priority: number;
   metadata: Record<string, any>;
@@ -58,7 +59,7 @@ export interface AIUserPreferences {
   user_id: string;
   preferred_provider: AIProvider;
   auto_generate_insights: boolean;
-  insight_frequency: 'daily' | 'weekly' | 'monthly' | 'manual';
+  insight_frequency: "daily" | "weekly" | "monthly" | "manual";
   enabled_insight_types: AIInsightType[];
   notification_preferences: Record<string, any>;
   privacy_settings: {
@@ -72,11 +73,14 @@ export interface AIUsageStats {
   total_cost: number;
   total_tokens: number;
   request_count: number;
-  by_provider: Record<AIProvider, {
-    cost: number;
-    tokens: number;
-    requests: number;
-  }>;
+  by_provider: Record<
+    AIProvider,
+    {
+      cost: number;
+      tokens: number;
+      requests: number;
+    }
+  >;
 }
 
 export interface GenerateInsightsRequest {
@@ -96,20 +100,20 @@ export interface InsightFilter {
 }
 
 export const INSIGHT_TYPE_LABELS: Record<AIInsightType, string> = {
-  productivity_pattern: 'Productivity Pattern',
-  goal_progress: 'Goal Progress',
-  habit_analysis: 'Habit Analysis',
-  time_optimization: 'Time Optimization',
-  task_prioritization: 'Task Prioritization',
-  reflection_sentiment: 'Reflection Sentiment',
-  project_health: 'Project Health',
-  burnout_risk: 'Burnout Risk',
-  achievement_opportunity: 'Achievement Opportunity',
+  productivity_pattern: "Productivity Pattern",
+  goal_progress: "Goal Progress",
+  habit_analysis: "Habit Analysis",
+  time_optimization: "Time Optimization",
+  task_prioritization: "Task Prioritization",
+  reflection_sentiment: "Reflection Sentiment",
+  project_health: "Project Health",
+  burnout_risk: "Burnout Risk",
+  achievement_opportunity: "Achievement Opportunity",
 };
 
 export const PROVIDER_LABELS: Record<AIProvider, string> = {
-  openai: 'OpenAI',
-  claude: 'Claude',
-  gemini: 'Gemini',
-  lovable: 'Lovable AI',
+  openai: "OpenAI",
+  claude: "Claude",
+  gemini: "Gemini",
+  lovable: "Lovable AI",
 };

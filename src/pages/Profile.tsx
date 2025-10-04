@@ -3,7 +3,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { Loader2, Upload } from "lucide-react";
@@ -20,13 +26,13 @@ export default function Profile() {
     setLoading(true);
 
     const { error } = await updateProfile({ full_name: fullName });
-    
+
     if (error) {
       toast.error(error.message || "Failed to update profile");
     } else {
       toast.success("Profile updated successfully");
     }
-    
+
     setLoading(false);
   };
 
@@ -48,7 +54,9 @@ export default function Profile() {
 
       const { data } = supabase.storage.from("avatars").getPublicUrl(fileName);
 
-      const { error: updateError } = await updateProfile({ avatar_url: data.publicUrl });
+      const { error: updateError } = await updateProfile({
+        avatar_url: data.publicUrl,
+      });
 
       if (updateError) throw updateError;
 
@@ -61,11 +69,12 @@ export default function Profile() {
     }
   };
 
-  const initials = profile?.full_name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase() || "U";
+  const initials =
+    profile?.full_name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase() || "U";
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -81,7 +90,10 @@ export default function Profile() {
         </CardHeader>
         <CardContent className="flex items-center gap-4">
           <Avatar className="h-20 w-20">
-            <AvatarImage src={profile?.avatar_url || ""} alt={profile?.full_name || ""} />
+            <AvatarImage
+              src={profile?.avatar_url || ""}
+              alt={profile?.full_name || ""}
+            />
             <AvatarFallback className="text-lg">{initials}</AvatarFallback>
           </Avatar>
           <div>

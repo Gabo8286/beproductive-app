@@ -1,0 +1,145 @@
+{
+  "user": {
+    "id": "james-001",
+    "name": "James Thompson",
+    "email": "james.thompson@freelancer.com",
+    "role": "Freelancer",
+    "preferences": {
+      "theme": "auto",
+      "language": "en",
+      "timezone": "America/Chicago"
+    },
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=James Thompson",
+    "joinDate": "2024-01-01T08:00:00.000Z",
+    "lastActive": "2025-10-04T18:58:00.432Z"
+  },
+  "activityData": {
+    "tasks": [
+      {
+        "id": "james-task-1",
+        "title": "Client A - Website redesign",
+        "description": "Complete homepage and product pages redesign",
+        "completed": false,
+        "createdAt": "2025-09-27T18:58:00.432Z",
+        "dueDate": "2025-10-09T18:58:00.432Z",
+        "priority": "high",
+        "category": "client_work",
+        "estimatedTime": 480,
+        "tags": [
+          "client-a",
+          "redesign",
+          "website"
+        ]
+      },
+      {
+        "id": "james-task-2",
+        "title": "Invoice Client B for December",
+        "description": "Generate and send invoice for completed work",
+        "completed": true,
+        "createdAt": "2025-10-03T18:58:00.432Z",
+        "completedAt": "2025-10-04T18:58:00.432Z",
+        "priority": "high",
+        "category": "administrative",
+        "estimatedTime": 30,
+        "actualTime": 25,
+        "tags": [
+          "invoice",
+          "client-b",
+          "billing"
+        ]
+      },
+      {
+        "id": "james-task-3",
+        "title": "Update portfolio website",
+        "description": "Add recent projects and client testimonials",
+        "completed": false,
+        "createdAt": "2025-10-04T18:58:00.432Z",
+        "priority": "medium",
+        "category": "personal",
+        "estimatedTime": 120,
+        "tags": [
+          "portfolio",
+          "marketing",
+          "website"
+        ]
+      }
+    ],
+    "goals": [
+      {
+        "id": "james-goal-1",
+        "title": "Increase monthly income by 30%",
+        "description": "Grow freelance business through better rates and more clients",
+        "progress": 45,
+        "deadline": "2025-12-31T08:00:00.000Z",
+        "category": "financial",
+        "milestones": [
+          {
+            "title": "Raise rates by 20%",
+            "completed": true
+          },
+          {
+            "title": "Get 2 new premium clients",
+            "completed": false
+          },
+          {
+            "title": "Launch premium service package",
+            "completed": false
+          }
+        ]
+      }
+    ],
+    "habits": [
+      {
+        "id": "james-habit-1",
+        "title": "Track time for all projects",
+        "description": "Record time spent on each client project",
+        "completions": [
+          "2025-10-04T18:58:00.432Z",
+          "2025-10-03T18:58:00.432Z",
+          "2025-10-02T18:58:00.432Z",
+          "2025-10-01T18:58:00.432Z",
+          "2025-09-30T18:58:00.432Z",
+          "2025-09-29T18:58:00.432Z",
+          "2025-09-28T18:58:00.432Z"
+        ],
+        "target": 7,
+        "frequency": "daily",
+        "streak": 7
+      }
+    ],
+    "timeEntries": [
+      {
+        "id": "time-james-task-2",
+        "taskId": "james-task-2",
+        "startTime": "2025-10-04T18:58:00.432Z",
+        "endTime": "2025-10-04T19:23:00.432Z",
+        "duration": 25,
+        "category": "administrative",
+        "description": "Invoice Client B for December"
+      }
+    ],
+    "notes": [
+      {
+        "id": "james-note-1",
+        "title": "Client Feedback - Website Project",
+        "content": "Client A feedback on homepage:\n- Love the modern design\n- Request mobile optimization\n- Add contact form\n- Consider adding testimonials section",
+        "tags": [
+          "client-feedback",
+          "website",
+          "design"
+        ],
+        "createdAt": "2025-10-04T18:58:00.432Z",
+        "updatedAt": "2025-10-04T18:58:00.432Z"
+      }
+    ]
+  },
+  "statistics": {
+    "totalTasks": 3,
+    "completedTasks": 1,
+    "totalGoals": 1,
+    "avgGoalProgress": 45,
+    "totalHabits": 1,
+    "habitStreak": 7,
+    "totalTimeTracked": 25
+  }
+}

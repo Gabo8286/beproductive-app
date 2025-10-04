@@ -1,20 +1,57 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Edit3, Save, X, Plus, Calendar, Target, Tag } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ArrowLeft,
+  Edit3,
+  Save,
+  X,
+  Plus,
+  Calendar,
+  Target,
+  Tag,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useGoal, useUpdateGoal, useDeleteGoal, useUpdateGoalProgress } from "@/hooks/useGoals";
+import {
+  useGoal,
+  useUpdateGoal,
+  useDeleteGoal,
+  useUpdateGoalProgress,
+} from "@/hooks/useGoals";
 import { useGoalMilestones } from "@/hooks/useGoalMilestones";
 import { Goal } from "@/types/goals";
-import { getStatusColor, getStatusLabel, getAvailableStatusTransitions } from "@/utils/goalStatus";
+import {
+  getStatusColor,
+  getStatusLabel,
+  getAvailableStatusTransitions,
+} from "@/utils/goalStatus";
 import { MilestoneCard } from "@/components/goals/MilestoneCard";
 import { SubGoalsList } from "@/components/goals/SubGoalsList";
 import { GoalTimeline } from "@/components/goals/GoalTimeline";
@@ -27,7 +64,9 @@ export default function GoalDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: goal, isLoading, error } = useGoal(id!);
-  const { data: milestones, isLoading: milestonesLoading } = useGoalMilestones(id!);
+  const { data: milestones, isLoading: milestonesLoading } = useGoalMilestones(
+    id!,
+  );
   const updateGoalMutation = useUpdateGoal(id!);
   const deleteGoalMutation = useDeleteGoal();
   const updateProgressMutation = useUpdateGoalProgress();
@@ -58,17 +97,26 @@ export default function GoalDetail() {
     try {
       const updateData: any = {};
       if (editedGoal.title !== undefined) updateData.title = editedGoal.title;
-      if (editedGoal.description !== undefined) updateData.description = editedGoal.description;
-      if (editedGoal.category !== undefined) updateData.category = editedGoal.category;
-      if (editedGoal.priority !== undefined) updateData.priority = editedGoal.priority;
-      if (editedGoal.target_value !== undefined) updateData.target_value = editedGoal.target_value;
-      if (editedGoal.current_value !== undefined) updateData.current_value = editedGoal.current_value;
+      if (editedGoal.description !== undefined)
+        updateData.description = editedGoal.description;
+      if (editedGoal.category !== undefined)
+        updateData.category = editedGoal.category;
+      if (editedGoal.priority !== undefined)
+        updateData.priority = editedGoal.priority;
+      if (editedGoal.target_value !== undefined)
+        updateData.target_value = editedGoal.target_value;
+      if (editedGoal.current_value !== undefined)
+        updateData.current_value = editedGoal.current_value;
       if (editedGoal.unit !== undefined) updateData.unit = editedGoal.unit;
       if (editedGoal.start_date !== undefined) {
-        updateData.start_date = editedGoal.start_date ? new Date(editedGoal.start_date) : undefined;
+        updateData.start_date = editedGoal.start_date
+          ? new Date(editedGoal.start_date)
+          : undefined;
       }
       if (editedGoal.target_date !== undefined) {
-        updateData.target_date = editedGoal.target_date ? new Date(editedGoal.target_date) : undefined;
+        updateData.target_date = editedGoal.target_date
+          ? new Date(editedGoal.target_date)
+          : undefined;
       }
       if (editedGoal.tags !== undefined) updateData.tags = editedGoal.tags;
 
@@ -98,10 +146,12 @@ export default function GoalDetail() {
     setIsEditing(false);
   };
 
-  const handleStatusChange = async (newStatus: Goal['status']) => {
+  const handleStatusChange = async (newStatus: Goal["status"]) => {
     try {
       await updateGoalMutation.mutateAsync({ status: newStatus });
-      toast.success(`Goal ${newStatus === 'completed' ? 'completed' : 'updated'}!`);
+      toast.success(
+        `Goal ${newStatus === "completed" ? "completed" : "updated"}!`,
+      );
     } catch (error) {
       console.error("Failed to update status:", error);
     }
@@ -118,7 +168,7 @@ export default function GoalDetail() {
   const handleDelete = async () => {
     try {
       await deleteGoalMutation.mutateAsync(id!);
-      navigate('/goals');
+      navigate("/goals");
       toast.success("Goal deleted successfully");
     } catch (error) {
       console.error("Failed to delete goal:", error);
@@ -126,10 +176,14 @@ export default function GoalDetail() {
   };
 
   const addTag = () => {
-    if (newTag.trim() && editedGoal.tags && !editedGoal.tags.includes(newTag.trim())) {
+    if (
+      newTag.trim() &&
+      editedGoal.tags &&
+      !editedGoal.tags.includes(newTag.trim())
+    ) {
       setEditedGoal({
         ...editedGoal,
-        tags: [...editedGoal.tags, newTag.trim()]
+        tags: [...editedGoal.tags, newTag.trim()],
       });
       setNewTag("");
     }
@@ -138,7 +192,7 @@ export default function GoalDetail() {
   const removeTag = (tagToRemove: string) => {
     setEditedGoal({
       ...editedGoal,
-      tags: editedGoal.tags?.filter(tag => tag !== tagToRemove) || []
+      tags: editedGoal.tags?.filter((tag) => tag !== tagToRemove) || [],
     });
   };
 
@@ -172,7 +226,7 @@ export default function GoalDetail() {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
         <h2 className="text-xl font-semibold">Goal not found</h2>
-        <Button onClick={() => navigate('/goals')}>
+        <Button onClick={() => navigate("/goals")}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Goals
         </Button>
@@ -187,14 +241,14 @@ export default function GoalDetail() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" onClick={() => navigate('/goals')}>
+          <Button variant="ghost" onClick={() => navigate("/goals")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Goals
           </Button>
           <div>
             <h1 className="text-2xl font-bold">{goal.title}</h1>
             <p className="text-muted-foreground">
-              Created {format(new Date(goal.created_at), 'MMMM d, yyyy')}
+              Created {format(new Date(goal.created_at), "MMMM d, yyyy")}
             </p>
           </div>
         </div>
@@ -205,7 +259,10 @@ export default function GoalDetail() {
                 <Edit3 className="h-4 w-4 mr-2" />
                 Edit
               </Button>
-              <Button variant="destructive" onClick={() => setShowDeleteDialog(true)}>
+              <Button
+                variant="destructive"
+                onClick={() => setShowDeleteDialog(true)}
+              >
                 Delete
               </Button>
             </>
@@ -215,7 +272,10 @@ export default function GoalDetail() {
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
-              <Button onClick={handleSave} disabled={updateGoalMutation.isPending}>
+              <Button
+                onClick={handleSave}
+                disabled={updateGoalMutation.isPending}
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Save
               </Button>
@@ -239,7 +299,9 @@ export default function GoalDetail() {
                 {isEditing ? (
                   <Input
                     value={editedGoal.title || ""}
-                    onChange={(e) => setEditedGoal({ ...editedGoal, title: e.target.value })}
+                    onChange={(e) =>
+                      setEditedGoal({ ...editedGoal, title: e.target.value })
+                    }
                     placeholder="Goal title"
                   />
                 ) : (
@@ -253,7 +315,12 @@ export default function GoalDetail() {
                 {isEditing ? (
                   <Textarea
                     value={editedGoal.description || ""}
-                    onChange={(e) => setEditedGoal({ ...editedGoal, description: e.target.value })}
+                    onChange={(e) =>
+                      setEditedGoal({
+                        ...editedGoal,
+                        description: e.target.value,
+                      })
+                    }
                     placeholder="Goal description"
                     rows={3}
                   />
@@ -269,20 +336,29 @@ export default function GoalDetail() {
                 <div className="space-y-2">
                   <Label>Category</Label>
                   {isEditing ? (
-                    <Select 
-                      value={editedGoal.category} 
-                      onValueChange={(value) => setEditedGoal({ ...editedGoal, category: value as Goal['category'] })}
+                    <Select
+                      value={editedGoal.category}
+                      onValueChange={(value) =>
+                        setEditedGoal({
+                          ...editedGoal,
+                          category: value as Goal["category"],
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="personal">Personal</SelectItem>
-                        <SelectItem value="professional">Professional</SelectItem>
+                        <SelectItem value="professional">
+                          Professional
+                        </SelectItem>
                         <SelectItem value="health">Health</SelectItem>
                         <SelectItem value="financial">Financial</SelectItem>
                         <SelectItem value="learning">Learning</SelectItem>
-                        <SelectItem value="relationship">Relationship</SelectItem>
+                        <SelectItem value="relationship">
+                          Relationship
+                        </SelectItem>
                         <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
@@ -293,9 +369,14 @@ export default function GoalDetail() {
                 <div className="space-y-2">
                   <Label>Priority</Label>
                   {isEditing ? (
-                    <Select 
-                      value={editedGoal.priority?.toString()} 
-                      onValueChange={(value) => setEditedGoal({ ...editedGoal, priority: parseInt(value) })}
+                    <Select
+                      value={editedGoal.priority?.toString()}
+                      onValueChange={(value) =>
+                        setEditedGoal({
+                          ...editedGoal,
+                          priority: parseInt(value),
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -325,10 +406,14 @@ export default function GoalDetail() {
                       <Input
                         type="number"
                         value={editedGoal.target_value || ""}
-                        onChange={(e) => setEditedGoal({
-                          ...editedGoal,
-                          target_value: e.target.value ? parseFloat(e.target.value) : undefined
-                        })}
+                        onChange={(e) =>
+                          setEditedGoal({
+                            ...editedGoal,
+                            target_value: e.target.value
+                              ? parseFloat(e.target.value)
+                              : undefined,
+                          })
+                        }
                         placeholder="Target"
                       />
                     ) : (
@@ -341,10 +426,14 @@ export default function GoalDetail() {
                       <Input
                         type="number"
                         value={editedGoal.current_value || ""}
-                        onChange={(e) => setEditedGoal({
-                          ...editedGoal,
-                          current_value: e.target.value ? parseFloat(e.target.value) : undefined
-                        })}
+                        onChange={(e) =>
+                          setEditedGoal({
+                            ...editedGoal,
+                            current_value: e.target.value
+                              ? parseFloat(e.target.value)
+                              : undefined,
+                          })
+                        }
                         placeholder="Current"
                       />
                     ) : (
@@ -356,7 +445,9 @@ export default function GoalDetail() {
                     {isEditing ? (
                       <Input
                         value={editedGoal.unit || ""}
-                        onChange={(e) => setEditedGoal({ ...editedGoal, unit: e.target.value })}
+                        onChange={(e) =>
+                          setEditedGoal({ ...editedGoal, unit: e.target.value })
+                        }
                         placeholder="Unit"
                       />
                     ) : (
@@ -373,14 +464,26 @@ export default function GoalDetail() {
                   {isEditing ? (
                     <Input
                       type="date"
-                      value={editedGoal.start_date ? new Date(editedGoal.start_date).toISOString().split('T')[0] : ""}
-                      onChange={(e) => setEditedGoal({
-                        ...editedGoal,
-                        start_date: e.target.value || undefined
-                      })}
+                      value={
+                        editedGoal.start_date
+                          ? new Date(editedGoal.start_date)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setEditedGoal({
+                          ...editedGoal,
+                          start_date: e.target.value || undefined,
+                        })
+                      }
                     />
                   ) : (
-                    <p>{goal.start_date ? format(new Date(goal.start_date), 'MMMM d, yyyy') : "Not set"}</p>
+                    <p>
+                      {goal.start_date
+                        ? format(new Date(goal.start_date), "MMMM d, yyyy")
+                        : "Not set"}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -388,17 +491,31 @@ export default function GoalDetail() {
                   {isEditing ? (
                     <Input
                       type="date"
-                      value={editedGoal.target_date ? new Date(editedGoal.target_date).toISOString().split('T')[0] : ""}
-                      onChange={(e) => setEditedGoal({
-                        ...editedGoal,
-                        target_date: e.target.value || undefined
-                      })}
+                      value={
+                        editedGoal.target_date
+                          ? new Date(editedGoal.target_date)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setEditedGoal({
+                          ...editedGoal,
+                          target_date: e.target.value || undefined,
+                        })
+                      }
                     />
                   ) : (
                     <div className="space-y-1">
-                      <p>{goal.target_date ? format(new Date(goal.target_date), 'MMMM d, yyyy') : "Not set"}</p>
+                      <p>
+                        {goal.target_date
+                          ? format(new Date(goal.target_date), "MMMM d, yyyy")
+                          : "Not set"}
+                      </p>
                       {goal.target_date && (
-                        <p className="text-sm text-muted-foreground">{getTimeRemaining()}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {getTimeRemaining()}
+                        </p>
                       )}
                     </div>
                   )}
@@ -410,11 +527,15 @@ export default function GoalDetail() {
                 <Label>Tags</Label>
                 <div className="flex flex-wrap gap-2">
                   {(editedGoal.tags || []).map((tag, index) => (
-                    <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="flex items-center gap-1"
+                    >
                       <Tag className="h-3 w-3" />
                       {tag}
                       {isEditing && (
-                        <button 
+                        <button
                           onClick={() => removeTag(tag)}
                           className="ml-1 hover:text-destructive"
                         >
@@ -431,7 +552,7 @@ export default function GoalDetail() {
                         placeholder="Add tag"
                         className="w-24"
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
+                          if (e.key === "Enter") {
                             e.preventDefault();
                             addTag();
                           }
@@ -473,12 +594,17 @@ export default function GoalDetail() {
                   ) : milestones && milestones.length > 0 ? (
                     <div className="space-y-3">
                       {milestones.map((milestone) => (
-                        <MilestoneCard key={milestone.id} milestone={milestone} />
+                        <MilestoneCard
+                          key={milestone.id}
+                          milestone={milestone}
+                        />
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <p className="text-muted-foreground mb-4">No milestones yet</p>
+                      <p className="text-muted-foreground mb-4">
+                        No milestones yet
+                      </p>
                       <Button>
                         <Plus className="h-4 w-4 mr-2" />
                         Add First Milestone
@@ -552,8 +678,8 @@ export default function GoalDetail() {
                 <p className="text-sm text-muted-foreground">Complete</p>
               </div>
 
-              <Progress 
-                value={goal.progress || 0} 
+              <Progress
+                value={goal.progress || 0}
                 className="h-3 cursor-pointer"
                 onClick={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
@@ -579,7 +705,8 @@ export default function GoalDetail() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Milestones</span>
                 <span className="font-medium">
-                  {milestones?.filter(m => m.completed_at).length || 0}/{milestones?.length || 0}
+                  {milestones?.filter((m) => m.completed_at).length || 0}/
+                  {milestones?.length || 0}
                 </span>
               </div>
 
@@ -609,11 +736,16 @@ export default function GoalDetail() {
           <DialogHeader>
             <DialogTitle>Delete Goal</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{goal.title}"? This action cannot be undone and will also delete all associated milestones and sub-goals.
+              Are you sure you want to delete "{goal.title}"? This action cannot
+              be undone and will also delete all associated milestones and
+              sub-goals.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteDialog(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete}>

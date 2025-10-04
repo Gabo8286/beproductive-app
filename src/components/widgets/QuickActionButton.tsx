@@ -18,12 +18,12 @@ export function QuickActionButton({
   onClick,
   variant = "primary",
   size = "md",
-  className
+  className,
 }: QuickActionButtonProps) {
   const { triggerHaptic } = useHapticFeedback();
 
   const handleClick = () => {
-    triggerHaptic('medium');
+    triggerHaptic("medium");
     onClick();
   };
 
@@ -31,13 +31,13 @@ export function QuickActionButton({
     primary: "bg-primary hover:bg-primary/90 text-primary-foreground",
     secondary: "bg-secondary hover:bg-secondary/90 text-secondary-foreground",
     success: "bg-success hover:bg-success/90 text-success-foreground",
-    warning: "bg-warning hover:bg-warning/90 text-warning-foreground"
+    warning: "bg-warning hover:bg-warning/90 text-warning-foreground",
   };
 
   const sizeClasses = {
     sm: "w-8 h-8",
     md: "w-10 h-10",
-    lg: "w-12 h-12"
+    lg: "w-12 h-12",
   };
 
   return (
@@ -48,7 +48,7 @@ export function QuickActionButton({
         "transition-all duration-200 backdrop-blur-sm",
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
       )}
       size="icon"
       aria-label={label}

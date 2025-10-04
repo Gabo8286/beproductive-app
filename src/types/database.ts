@@ -4,7 +4,11 @@ export type MemberRole = "member" | "admin" | "owner";
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "done";
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
 export type SubscriptionTier = "free" | "pro" | "team" | "enterprise";
-export type SubscriptionStatus = "active" | "canceled" | "past_due" | "trialing";
+export type SubscriptionStatus =
+  | "active"
+  | "canceled"
+  | "past_due"
+  | "trialing";
 
 export interface Profile {
   id: string;

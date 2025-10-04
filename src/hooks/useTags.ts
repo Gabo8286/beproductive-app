@@ -12,7 +12,9 @@ const useDefaultWorkspace = () => {
   return useQuery({
     queryKey: ["defaultWorkspace"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
       const { data, error } = await supabase
@@ -82,7 +84,9 @@ export const useCreateTag = () => {
 
   return useMutation({
     mutationFn: async (tag: Omit<TagInsert, "workspace_id" | "created_by">) => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
       if (!workspace) throw new Error("No workspace found");
 
@@ -157,10 +161,7 @@ export const useDeleteTag = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("tags")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("tags").delete().eq("id", id);
 
       if (error) throw error;
     },

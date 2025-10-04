@@ -4,17 +4,31 @@ import { useReflections } from "@/hooks/useReflections";
 import { Skeleton } from "@/components/ui/skeleton";
 import { calculateMoodScore } from "@/utils/reflections";
 import { format, eachDayOfInterval, startOfYear, endOfYear } from "date-fns";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MoodHeatmapProps {
   workspaceId: string;
   year?: number;
 }
 
-export default function MoodHeatmap({ workspaceId, year = new Date().getFullYear() }: MoodHeatmapProps) {
-  const startDate = useMemo(() => format(startOfYear(new Date(year, 0, 1)), 'yyyy-MM-dd'), [year]);
-  const endDate = useMemo(() => format(endOfYear(new Date(year, 0, 1)), 'yyyy-MM-dd'), [year]);
-  
+export default function MoodHeatmap({
+  workspaceId,
+  year = new Date().getFullYear(),
+}: MoodHeatmapProps) {
+  const startDate = useMemo(
+    () => format(startOfYear(new Date(year, 0, 1)), "yyyy-MM-dd"),
+    [year],
+  );
+  const endDate = useMemo(
+    () => format(endOfYear(new Date(year, 0, 1)), "yyyy-MM-dd"),
+    [year],
+  );
+
   const { data: reflections, isLoading } = useReflections(workspaceId, {
     date_from: startDate,
     date_to: endDate,
@@ -24,7 +38,7 @@ export default function MoodHeatmap({ workspaceId, year = new Date().getFullYear
     if (!reflections) return [];
 
     const reflectionMap = new Map(
-      reflections.map(r => [r.reflection_date, r])
+      reflections.map((r) => [r.reflection_date, r]),
     );
 
     const days = eachDayOfInterval({
@@ -32,10 +46,10 @@ export default function MoodHeatmap({ workspaceId, year = new Date().getFullYear
       end: new Date(year, 11, 31),
     });
 
-    return days.map(day => {
-      const dateStr = format(day, 'yyyy-MM-dd');
+    return days.map((day) => {
+      const dateStr = format(day, "yyyy-MM-dd");
       const reflection = reflectionMap.get(dateStr);
-      
+
       return {
         date: dateStr,
         mood: reflection?.mood ? calculateMoodScore(reflection.mood) : null,
@@ -45,13 +59,13 @@ export default function MoodHeatmap({ workspaceId, year = new Date().getFullYear
   }, [reflections, year]);
 
   const getMoodColor = (mood: number | null) => {
-    if (mood === null) return 'bg-muted';
-    if (mood >= 5.5) return 'bg-green-600';
-    if (mood >= 4.5) return 'bg-green-400';
-    if (mood >= 3.5) return 'bg-yellow-400';
-    if (mood >= 2.5) return 'bg-orange-400';
-    if (mood >= 1.5) return 'bg-red-400';
-    return 'bg-red-600';
+    if (mood === null) return "bg-muted";
+    if (mood >= 5.5) return "bg-green-600";
+    if (mood >= 4.5) return "bg-green-400";
+    if (mood >= 3.5) return "bg-yellow-400";
+    if (mood >= 2.5) return "bg-orange-400";
+    if (mood >= 1.5) return "bg-red-400";
+    return "bg-red-600";
   };
 
   if (isLoading) {
@@ -63,7 +77,7 @@ export default function MoodHeatmap({ workspaceId, year = new Date().getFullYear
   }
 
   // Group by weeks
-  const weeks: typeof heatmapData[] = [];
+  const weeks: (typeof heatmapData)[] = [];
   for (let i = 0; i < heatmapData.length; i += 7) {
     weeks.push(heatmapData.slice(i, i + 7));
   }
@@ -88,13 +102,15 @@ export default function MoodHeatmap({ workspaceId, year = new Date().getFullYear
                       <TooltipTrigger asChild>
                         <div
                           className={`w-3 h-3 rounded-sm ${getMoodColor(day.mood)} ${
-                            !day.hasReflection && 'opacity-30'
+                            !day.hasReflection && "opacity-30"
                           }`}
                         />
                       </TooltipTrigger>
                       <TooltipContent>
                         <div className="text-xs">
-                          <p className="font-medium">{format(new Date(day.date), 'MMM dd, yyyy')}</p>
+                          <p className="font-medium">
+                            {format(new Date(day.date), "MMM dd, yyyy")}
+                          </p>
                           {day.hasReflection ? (
                             <p>Mood: {day.mood?.toFixed(1)}/6</p>
                           ) : (

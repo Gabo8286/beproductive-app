@@ -4,7 +4,13 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Note, NoteType } from "@/types/notes";
 import { cn } from "@/lib/utils";
 
@@ -15,13 +21,19 @@ interface NotesGridProps {
   isLoading?: boolean;
 }
 
-export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: NotesGridProps) => {
+export const NotesGrid = ({
+  notes,
+  onNoteClick,
+  onNewNote,
+  isLoading = false,
+}: NotesGridProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<NoteType | "all">("all");
 
   const filteredNotes = useMemo(() => {
-    return notes.filter(note => {
-      const matchesSearch = searchQuery === "" ||
+    return notes.filter((note) => {
+      const matchesSearch =
+        searchQuery === "" ||
         note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         note.content.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -32,29 +44,37 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
   }, [notes, searchQuery, filterType]);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getTypeColor = (type: NoteType) => {
     switch (type) {
-      case "permanent": return "bg-success/10 text-success border-success/20";
-      case "literature": return "bg-primary/10 text-primary border-primary/20";
-      case "fleeting": return "bg-warning/10 text-warning border-warning/20";
-      default: return "bg-muted text-muted-foreground";
+      case "permanent":
+        return "bg-success/10 text-success border-success/20";
+      case "literature":
+        return "bg-primary/10 text-primary border-primary/20";
+      case "fleeting":
+        return "bg-warning/10 text-warning border-warning/20";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getTypeDescription = (type: NoteType) => {
     switch (type) {
-      case "permanent": return "Permanent knowledge";
-      case "literature": return "Literature notes";
-      case "fleeting": return "Fleeting thoughts";
-      default: return "";
+      case "permanent":
+        return "Permanent knowledge";
+      case "literature":
+        return "Literature notes";
+      case "fleeting":
+        return "Fleeting thoughts";
+      default:
+        return "";
     }
   };
 
@@ -71,9 +91,12 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-subtle flex items-center justify-center">
               <FileText className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Start Your Knowledge Journey</h3>
+            <h3 className="text-xl font-semibold mb-2">
+              Start Your Knowledge Journey
+            </h3>
             <p className="text-muted-foreground mb-6">
-              Create your first note and begin building your personal knowledge base using the Zettelkasten method.
+              Create your first note and begin building your personal knowledge
+              base using the Zettelkasten method.
             </p>
             <Button onClick={onNewNote} className="apple-button">
               <Plus className="w-4 h-4 mr-2" />
@@ -90,7 +113,9 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gradient-brand">Knowledge Notes</h1>
+          <h1 className="text-3xl font-bold text-gradient-brand">
+            Knowledge Notes
+          </h1>
           <p className="text-muted-foreground">
             Organize your thoughts with the Zettelkasten method
           </p>
@@ -112,7 +137,10 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
             className="pl-10"
           />
         </div>
-        <Select value={filterType} onValueChange={(value) => setFilterType(value as NoteType | "all")}>
+        <Select
+          value={filterType}
+          onValueChange={(value) => setFilterType(value as NoteType | "all")}
+        >
           <SelectTrigger className="w-48">
             <Filter className="w-4 h-4 mr-2" />
             <SelectValue placeholder="Filter by type" />
@@ -148,7 +176,7 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
               key={note.id}
               className={cn(
                 "cursor-pointer transition-all duration-200 hover:shadow-md apple-button",
-                "journey-card group"
+                "journey-card group",
               )}
               onClick={() => onNoteClick(note)}
             >
@@ -159,7 +187,10 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
                   </h3>
                   <Badge
                     variant="outline"
-                    className={cn("text-xs shrink-0", getTypeColor(note.note_type))}
+                    className={cn(
+                      "text-xs shrink-0",
+                      getTypeColor(note.note_type),
+                    )}
                     title={getTypeDescription(note.note_type)}
                   >
                     {note.note_type}
@@ -176,8 +207,11 @@ export const NotesGrid = ({ notes, onNoteClick, onNewNote, isLoading = false }: 
                     <Clock className="w-3 h-3" />
                     <span>{formatDate(note.created_at)}</span>
                   </div>
-                  {note.content.includes('[[') && (
-                    <div className="flex items-center gap-1" title="Contains links">
+                  {note.content.includes("[[") && (
+                    <div
+                      className="flex items-center gap-1"
+                      title="Contains links"
+                    >
                       <Link2 className="w-3 h-3" />
                       <span>Linked</span>
                     </div>

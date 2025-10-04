@@ -5,11 +5,35 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useGoals } from "@/hooks/useGoals";
-import { useCreateReflectionGoalLink, useDeleteReflectionGoalLink, useReflectionGoalLinks } from "@/hooks/useReflectionLinks";
+import {
+  useCreateReflectionGoalLink,
+  useDeleteReflectionGoalLink,
+  useReflectionGoalLinks,
+} from "@/hooks/useReflectionLinks";
 import type { GoalReflectionType } from "@/types/reflections";
 import { toast } from "sonner";
 
@@ -18,28 +42,35 @@ interface GoalReflectionLinkerProps {
   reflectionContent?: string;
 }
 
-export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: GoalReflectionLinkerProps) {
+export function GoalReflectionLinker({
+  reflectionId,
+  reflectionContent = "",
+}: GoalReflectionLinkerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [selectedGoalId, setSelectedGoalId] = useState<string>("");
-  const [reflectionType, setReflectionType] = useState<GoalReflectionType>("progress_review");
+  const [reflectionType, setReflectionType] =
+    useState<GoalReflectionType>("progress_review");
   const [insights, setInsights] = useState("");
   const [actionItems, setActionItems] = useState<string[]>([]);
   const [newActionItem, setNewActionItem] = useState("");
 
   const { goals, isLoading: goalsLoading } = useGoals();
-  const { data: linkedGoals, isLoading: linksLoading } = useReflectionGoalLinks(reflectionId);
+  const { data: linkedGoals, isLoading: linksLoading } =
+    useReflectionGoalLinks(reflectionId);
   const createLinkMutation = useCreateReflectionGoalLink();
   const deleteLinkMutation = useDeleteReflectionGoalLink();
 
-  const linkedGoalIds = linkedGoals?.map(link => link.goal_id) || [];
-  const availableGoals = goals?.filter(goal =>
-    !linkedGoalIds.includes(goal.id) &&
-    (goal.status === 'active' || goal.status === 'draft') &&
-    (searchQuery === "" || 
-     goal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-     goal.category.toLowerCase().includes(searchQuery.toLowerCase()))
-  ) || [];
+  const linkedGoalIds = linkedGoals?.map((link) => link.goal_id) || [];
+  const availableGoals =
+    goals?.filter(
+      (goal) =>
+        !linkedGoalIds.includes(goal.id) &&
+        (goal.status === "active" || goal.status === "draft") &&
+        (searchQuery === "" ||
+          goal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          goal.category.toLowerCase().includes(searchQuery.toLowerCase())),
+    ) || [];
 
   const handleAddLink = async () => {
     if (!selectedGoalId) {
@@ -101,14 +132,19 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
       progress_review: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
       milestone_achieved: "bg-green-500/10 text-green-700 dark:text-green-400",
       challenge_faced: "bg-orange-500/10 text-orange-700 dark:text-orange-400",
-      strategy_adjustment: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+      strategy_adjustment:
+        "bg-purple-500/10 text-purple-700 dark:text-purple-400",
       completion_celebration: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
     };
     return colors[type];
   };
 
   if (linksLoading) {
-    return <div className="text-sm text-muted-foreground">Loading linked goals...</div>;
+    return (
+      <div className="text-sm text-muted-foreground">
+        Loading linked goals...
+      </div>
+    );
   }
 
   return (
@@ -126,7 +162,8 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
             <DialogHeader>
               <DialogTitle>Link Goal to Reflection</DialogTitle>
               <DialogDescription>
-                Connect this reflection to a goal to track insights and progress.
+                Connect this reflection to a goal to track insights and
+                progress.
               </DialogDescription>
             </DialogHeader>
 
@@ -148,24 +185,32 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
               {/* Available Goals */}
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {goalsLoading ? (
-                  <div className="text-sm text-muted-foreground">Loading goals...</div>
+                  <div className="text-sm text-muted-foreground">
+                    Loading goals...
+                  </div>
                 ) : availableGoals.length === 0 ? (
                   <div className="text-sm text-muted-foreground">
-                    {searchQuery ? "No matching goals found" : "No available goals to link"}
+                    {searchQuery
+                      ? "No matching goals found"
+                      : "No available goals to link"}
                   </div>
                 ) : (
                   availableGoals.map((goal) => (
                     <Card
                       key={goal.id}
                       className={`cursor-pointer transition-colors hover:bg-accent ${
-                        selectedGoalId === goal.id ? "border-primary bg-accent" : ""
+                        selectedGoalId === goal.id
+                          ? "border-primary bg-accent"
+                          : ""
                       }`}
                       onClick={() => setSelectedGoalId(goal.id)}
                     >
                       <CardHeader className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <CardTitle className="text-sm">{goal.title}</CardTitle>
+                            <CardTitle className="text-sm">
+                              {goal.title}
+                            </CardTitle>
                             {goal.description && (
                               <CardDescription className="text-xs mt-1">
                                 {goal.description.slice(0, 100)}
@@ -188,16 +233,31 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
                 <>
                   <div className="space-y-2">
                     <Label>Reflection Type</Label>
-                    <Select value={reflectionType} onValueChange={(value) => setReflectionType(value as GoalReflectionType)}>
+                    <Select
+                      value={reflectionType}
+                      onValueChange={(value) =>
+                        setReflectionType(value as GoalReflectionType)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="progress_review">Progress Review</SelectItem>
-                        <SelectItem value="milestone_achieved">Milestone Achieved</SelectItem>
-                        <SelectItem value="challenge_faced">Challenge Faced</SelectItem>
-                        <SelectItem value="strategy_adjustment">Strategy Adjustment</SelectItem>
-                        <SelectItem value="completion_celebration">Completion Celebration</SelectItem>
+                        <SelectItem value="progress_review">
+                          Progress Review
+                        </SelectItem>
+                        <SelectItem value="milestone_achieved">
+                          Milestone Achieved
+                        </SelectItem>
+                        <SelectItem value="challenge_faced">
+                          Challenge Faced
+                        </SelectItem>
+                        <SelectItem value="strategy_adjustment">
+                          Strategy Adjustment
+                        </SelectItem>
+                        <SelectItem value="completion_celebration">
+                          Completion Celebration
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -222,7 +282,7 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
                         value={newActionItem}
                         onChange={(e) => setNewActionItem(e.target.value)}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
+                          if (e.key === "Enter") {
                             e.preventDefault();
                             addActionItem();
                           }
@@ -235,7 +295,10 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
                     {actionItems.length > 0 && (
                       <div className="space-y-1">
                         {actionItems.map((item, index) => (
-                          <div key={index} className="flex items-center gap-2 text-sm">
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 text-sm"
+                          >
                             <Lightbulb className="h-3 w-3 text-muted-foreground" />
                             <span className="flex-1">{item}</span>
                             <Button
@@ -255,10 +318,16 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowLinkDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowLinkDialog(false)}
+              >
                 Cancel
               </Button>
-              <Button onClick={handleAddLink} disabled={!selectedGoalId || createLinkMutation.isPending}>
+              <Button
+                onClick={handleAddLink}
+                disabled={!selectedGoalId || createLinkMutation.isPending}
+              >
                 Link Goal
               </Button>
             </DialogFooter>
@@ -276,8 +345,12 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2">
                       <Target className="h-4 w-4 text-muted-foreground" />
-                      <CardTitle className="text-sm">{link.goal?.title}</CardTitle>
-                      <Badge className={getReflectionTypeColor(link.reflection_type)}>
+                      <CardTitle className="text-sm">
+                        {link.goal?.title}
+                      </CardTitle>
+                      <Badge
+                        className={getReflectionTypeColor(link.reflection_type)}
+                      >
                         {getReflectionTypeLabel(link.reflection_type)}
                       </Badge>
                     </div>
@@ -290,7 +363,10 @@ export function GoalReflectionLinker({ reflectionId, reflectionContent = "" }: G
                       <div className="space-y-1">
                         <p className="text-xs font-medium">Action Items:</p>
                         {link.action_items.map((item, index) => (
-                          <div key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <div
+                            key={index}
+                            className="flex items-center gap-2 text-xs text-muted-foreground"
+                          >
                             <Lightbulb className="h-3 w-3" />
                             <span>{item}</span>
                           </div>

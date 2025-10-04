@@ -13,9 +13,9 @@ export function useReflectionShares(reflectionId: string) {
     queryKey: [SHARES_QUERY_KEY, reflectionId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflection_shares')
-        .select('*')
-        .eq('reflection_id', reflectionId);
+        .from("reflection_shares")
+        .select("*")
+        .eq("reflection_id", reflectionId);
 
       if (error) throw error;
       return data as ReflectionShare[];
@@ -29,19 +29,23 @@ export function useReflectionShares(reflectionId: string) {
  */
 export function useSharedReflections(workspaceId?: string) {
   return useQuery({
-    queryKey: ['shared-reflections', workspaceId],
+    queryKey: ["shared-reflections", workspaceId],
     queryFn: async () => {
       const { data: user } = await supabase.auth.getUser();
-      if (!user.user) throw new Error('Not authenticated');
+      if (!user.user) throw new Error("Not authenticated");
 
       const query = supabase
-        .from('reflection_shares')
-        .select(`
+        .from("reflection_shares")
+        .select(
+          `
           *,
           reflection:reflections(*)
-        `)
-        .or(`shared_with_user_id.eq.${user.user.id},shared_with_workspace.eq.true`)
-        .or('expires_at.is.null,expires_at.gt.now()');
+        `,
+        )
+        .or(
+          `shared_with_user_id.eq.${user.user.id},shared_with_workspace.eq.true`,
+        )
+        .or("expires_at.is.null,expires_at.gt.now()");
 
       const { data, error } = await query;
 
@@ -49,8 +53,8 @@ export function useSharedReflections(workspaceId?: string) {
 
       // Filter by workspace if provided
       if (workspaceId) {
-        return data.filter((share: any) => 
-          share.reflection?.workspace_id === workspaceId
+        return data.filter(
+          (share: any) => share.reflection?.workspace_id === workspaceId,
         );
       }
 
@@ -74,27 +78,27 @@ export function useCreateReflectionShare() {
       expires_at?: string;
     }) => {
       const { data: user } = await supabase.auth.getUser();
-      if (!user.user) throw new Error('Not authenticated');
+      if (!user.user) throw new Error("Not authenticated");
 
       // Verify user owns the reflection
       const { data: reflection, error: reflectionError } = await supabase
-        .from('reflections')
-        .select('created_by, is_private')
-        .eq('id', input.reflection_id)
+        .from("reflections")
+        .select("created_by, is_private")
+        .eq("id", input.reflection_id)
         .single();
 
       if (reflectionError) throw reflectionError;
 
       if (reflection.created_by !== user.user.id) {
-        throw new Error('You can only share your own reflections');
+        throw new Error("You can only share your own reflections");
       }
 
       if (reflection.is_private && input.shared_with_workspace) {
-        throw new Error('Cannot share private reflection with workspace');
+        throw new Error("Cannot share private reflection with workspace");
       }
 
       const { data, error } = await supabase
-        .from('reflection_shares')
+        .from("reflection_shares")
         .insert({
           reflection_id: input.reflection_id,
           shared_with_user_id: input.shared_with_user_id,
@@ -110,8 +114,10 @@ export function useCreateReflectionShare() {
       return data as ReflectionShare;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [SHARES_QUERY_KEY, data.reflection_id] });
-      queryClient.invalidateQueries({ queryKey: ['shared-reflections'] });
+      queryClient.invalidateQueries({
+        queryKey: [SHARES_QUERY_KEY, data.reflection_id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["shared-reflections"] });
       toast.success("Reflection shared successfully");
     },
     onError: (error: Error) => {
@@ -129,16 +135,16 @@ export function useDeleteReflectionShare() {
   return useMutation({
     mutationFn: async (shareId: string) => {
       const { error } = await supabase
-        .from('reflection_shares')
+        .from("reflection_shares")
         .delete()
-        .eq('id', shareId);
+        .eq("id", shareId);
 
       if (error) throw error;
       return shareId;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SHARES_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: ['shared-reflections'] });
+      queryClient.invalidateQueries({ queryKey: ["shared-reflections"] });
       toast.success("Share removed successfully");
     },
     onError: (error: Error) => {
@@ -152,16 +158,16 @@ export function useDeleteReflectionShare() {
  */
 export function useCanViewReflection(reflectionId: string) {
   return useQuery({
-    queryKey: ['can-view-reflection', reflectionId],
+    queryKey: ["can-view-reflection", reflectionId],
     queryFn: async () => {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) return false;
 
       // Check if user owns the reflection
       const { data: reflection, error: reflectionError } = await supabase
-        .from('reflections')
-        .select('created_by, is_private, workspace_id')
-        .eq('id', reflectionId)
+        .from("reflections")
+        .select("created_by, is_private, workspace_id")
+        .eq("id", reflectionId)
         .single();
 
       if (reflectionError) throw reflectionError;
@@ -172,10 +178,10 @@ export function useCanViewReflection(reflectionId: string) {
       // If not private, workspace members can view
       if (!reflection.is_private) {
         const { data: membership } = await supabase
-          .from('workspace_members')
-          .select('id')
-          .eq('workspace_id', reflection.workspace_id)
-          .eq('user_id', user.user.id)
+          .from("workspace_members")
+          .select("id")
+          .eq("workspace_id", reflection.workspace_id)
+          .eq("user_id", user.user.id)
           .single();
 
         if (membership) return true;
@@ -183,11 +189,13 @@ export function useCanViewReflection(reflectionId: string) {
 
       // Check if shared with user
       const { data: share } = await supabase
-        .from('reflection_shares')
-        .select('id')
-        .eq('reflection_id', reflectionId)
-        .or(`shared_with_user_id.eq.${user.user.id},shared_with_workspace.eq.true`)
-        .or('expires_at.is.null,expires_at.gt.now()')
+        .from("reflection_shares")
+        .select("id")
+        .eq("reflection_id", reflectionId)
+        .or(
+          `shared_with_user_id.eq.${user.user.id},shared_with_workspace.eq.true`,
+        )
+        .or("expires_at.is.null,expires_at.gt.now()")
         .maybeSingle();
 
       return !!share;

@@ -1,13 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { Database } from '@/integrations/supabase/types';
-import { useAuth } from '@/contexts/AuthContext';
-import { useDefaultWorkspace } from '@/hooks/useTasks';
-import { toast } from 'sonner';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Database } from "@/integrations/supabase/types";
+import { useAuth } from "@/contexts/AuthContext";
+import { useDefaultWorkspace } from "@/hooks/useTasks";
+import { toast } from "sonner";
 
-type TaskInsert = Database['public']['Tables']['tasks']['Insert'];
-type TaskStatus = Database['public']['Enums']['task_status'];
-type TaskPriority = Database['public']['Enums']['task_priority'];
+type TaskInsert = Database["public"]["Tables"]["tasks"]["Insert"];
+type TaskStatus = Database["public"]["Enums"]["task_status"];
+type TaskPriority = Database["public"]["Enums"]["task_priority"];
 
 export interface QuickTaskDefaults {
   status?: TaskStatus;
@@ -31,8 +31,8 @@ export const useTaskCreationContext = (overrides?: QuickTaskDefaults) => {
 
   const getDefaults = (): QuickTaskDefaults => {
     return {
-      status: overrides?.status || 'todo',
-      priority: overrides?.priority || 'medium',
+      status: overrides?.status || "todo",
+      priority: overrides?.priority || "medium",
       tags: overrides?.tags || [],
       workspace_id: overrides?.workspace_id || workspace?.id,
     };
@@ -52,27 +52,27 @@ export const useQuickCreateTask = () => {
   const { data: workspace } = useDefaultWorkspace();
 
   return useMutation({
-    mutationFn: async ({ 
-      title, 
-      defaults 
-    }: { 
-      title: string; 
+    mutationFn: async ({
+      title,
+      defaults,
+    }: {
+      title: string;
       defaults?: QuickTaskDefaults;
     }) => {
-      if (!user || !workspace) throw new Error('User or workspace not found');
+      if (!user || !workspace) throw new Error("User or workspace not found");
 
       const taskData: TaskInsert = {
         title: title.trim(),
         workspace_id: defaults?.workspace_id || workspace.id,
         created_by: user.id,
-        status: defaults?.status || 'todo',
-        priority: defaults?.priority || 'medium',
+        status: defaults?.status || "todo",
+        priority: defaults?.priority || "medium",
         tags: defaults?.tags || [],
         position: 0, // Will be recalculated by backend
       };
 
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .insert(taskData)
         .select()
         .single();
@@ -81,12 +81,12 @@ export const useQuickCreateTask = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      toast.success('Task created');
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      toast.success("Task created");
     },
     onError: (error) => {
-      console.error('Error creating task:', error);
-      toast.error('Failed to create task');
+      console.error("Error creating task:", error);
+      toast.error("Failed to create task");
     },
   });
 };
@@ -98,27 +98,27 @@ export const useBatchCreateTasks = () => {
   const { data: workspace } = useDefaultWorkspace();
 
   return useMutation({
-    mutationFn: async ({ 
-      titles, 
-      defaults 
-    }: { 
-      titles: string[]; 
+    mutationFn: async ({
+      titles,
+      defaults,
+    }: {
+      titles: string[];
       defaults?: QuickTaskDefaults;
     }) => {
-      if (!user || !workspace) throw new Error('User or workspace not found');
+      if (!user || !workspace) throw new Error("User or workspace not found");
 
       const tasks: TaskInsert[] = titles.map((title, index) => ({
         title: title.trim(),
         workspace_id: defaults?.workspace_id || workspace.id,
         created_by: user.id,
-        status: defaults?.status || 'todo',
-        priority: defaults?.priority || 'medium',
+        status: defaults?.status || "todo",
+        priority: defaults?.priority || "medium",
         tags: defaults?.tags || [],
         position: index,
       }));
 
       const { data, error } = await supabase
-        .from('tasks')
+        .from("tasks")
         .insert(tasks)
         .select();
 
@@ -126,12 +126,12 @@ export const useBatchCreateTasks = () => {
       return data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
       toast.success(`${data.length} tasks created`);
     },
     onError: (error) => {
-      console.error('Error creating tasks:', error);
-      toast.error('Failed to create tasks');
+      console.error("Error creating tasks:", error);
+      toast.error("Failed to create tasks");
     },
   });
 };
@@ -139,42 +139,42 @@ export const useBatchCreateTasks = () => {
 // Parse multiline input for batch creation
 export const parseMultilineInput = (input: string): string[] => {
   return input
-    .split('\n')
-    .map(line => line.trim())
+    .split("\n")
+    .map((line) => line.trim())
     .filter(Boolean);
 };
 
 // Common task templates
 export const commonTemplates: TaskTemplate[] = [
-  { 
-    name: 'Meeting', 
-    title: 'Meeting: ',
-    priority: 'medium',
-    tags: ['work', 'meeting'] 
+  {
+    name: "Meeting",
+    title: "Meeting: ",
+    priority: "medium",
+    tags: ["work", "meeting"],
   },
-  { 
-    name: 'Bug Fix', 
-    title: 'Fix: ',
-    priority: 'high',
-    tags: ['bug'] 
+  {
+    name: "Bug Fix",
+    title: "Fix: ",
+    priority: "high",
+    tags: ["bug"],
   },
-  { 
-    name: 'Research', 
-    title: 'Research: ',
-    priority: 'low',
-    tags: ['learning'] 
+  {
+    name: "Research",
+    title: "Research: ",
+    priority: "low",
+    tags: ["learning"],
   },
-  { 
-    name: 'Review', 
-    title: 'Review: ',
-    priority: 'medium',
-    tags: ['review'] 
+  {
+    name: "Review",
+    title: "Review: ",
+    priority: "medium",
+    tags: ["review"],
   },
-  { 
-    name: 'Planning', 
-    title: 'Plan: ',
-    priority: 'medium',
-    tags: ['planning'] 
+  {
+    name: "Planning",
+    title: "Plan: ",
+    priority: "medium",
+    tags: ["planning"],
   },
 ];
 

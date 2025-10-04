@@ -1,12 +1,20 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Cog, Database } from 'lucide-react';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Cog, Database } from "lucide-react";
 
 export const SystemConfig: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">System Configuration</h2>
+        <h2 className="text-2xl font-bold text-gray-900">
+          System Configuration
+        </h2>
         <p className="text-gray-600 mt-1">
           Advanced system settings and configuration options
         </p>

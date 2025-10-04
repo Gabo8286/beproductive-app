@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { Goal } from "@/types/goals";
-import { useAdvancedProgressUpdate, useCalculateAutoProgress } from "@/hooks/useGoalProgress";
+import {
+  useAdvancedProgressUpdate,
+  useCalculateAutoProgress,
+} from "@/hooks/useGoalProgress";
 import { Zap } from "lucide-react";
 
 interface ProgressEditorProps {
@@ -15,7 +25,11 @@ interface ProgressEditorProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function ProgressEditor({ goal, open, onOpenChange }: ProgressEditorProps) {
+export function ProgressEditor({
+  goal,
+  open,
+  onOpenChange,
+}: ProgressEditorProps) {
   const [progress, setProgress] = useState(goal.progress || 0);
   const [notes, setNotes] = useState("");
   const updateProgressMutation = useAdvancedProgressUpdate();
@@ -26,7 +40,7 @@ export function ProgressEditor({ goal, open, onOpenChange }: ProgressEditorProps
       goalId: goal.id,
       progress,
       notes: notes.trim() || undefined,
-      changeType: 'manual'
+      changeType: "manual",
     });
     onOpenChange(false);
   };
@@ -142,7 +156,7 @@ export function ProgressEditor({ goal, open, onOpenChange }: ProgressEditorProps
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={handleSave}
             disabled={updateProgressMutation.isPending}
           >

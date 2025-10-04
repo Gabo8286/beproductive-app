@@ -1,10 +1,18 @@
 import { Json } from "@/integrations/supabase/types";
 
-export type AchievementRarity = 'common' | 'rare' | 'epic' | 'legendary';
-export type AchievementCategory = 'tasks' | 'goals' | 'habits' | 'notes' | 'reflections' | 'levels' | 'streaks' | 'social';
-export type RequirementType = 'count' | 'streak' | 'total' | 'specific';
-export type ChallengeType = 'daily' | 'weekly' | 'monthly' | 'custom';
-export type ChallengeStatus = 'active' | 'completed' | 'failed' | 'skipped';
+export type AchievementRarity = "common" | "rare" | "epic" | "legendary";
+export type AchievementCategory =
+  | "tasks"
+  | "goals"
+  | "habits"
+  | "notes"
+  | "reflections"
+  | "levels"
+  | "streaks"
+  | "social";
+export type RequirementType = "count" | "streak" | "total" | "specific";
+export type ChallengeType = "daily" | "weekly" | "monthly" | "custom";
+export type ChallengeStatus = "active" | "completed" | "failed" | "skipped";
 
 export interface UserGamificationProfile {
   id: string;
@@ -101,7 +109,7 @@ export interface PointsAction {
 }
 
 export interface PointsMultiplierCondition {
-  condition_type: 'streak' | 'time_of_day' | 'consecutive' | 'difficulty';
+  condition_type: "streak" | "time_of_day" | "consecutive" | "difficulty";
   condition_value: any;
   multiplier: number;
   description: string;
@@ -139,93 +147,93 @@ export interface AchievementProgress {
 // Predefined points actions
 export const POINTS_ACTIONS: Record<string, PointsAction> = {
   TASK_COMPLETED: {
-    action_type: 'task_completed',
+    action_type: "task_completed",
     base_points: 10,
-    source_module: 'tasks',
-    description: 'Completed a task',
+    source_module: "tasks",
+    description: "Completed a task",
     max_daily: 20,
     multiplier_conditions: [
       {
-        condition_type: 'difficulty',
-        condition_value: 'high',
+        condition_type: "difficulty",
+        condition_value: "high",
         multiplier: 2.0,
-        description: 'High priority task'
+        description: "High priority task",
       },
       {
-        condition_type: 'streak',
+        condition_type: "streak",
         condition_value: 7,
         multiplier: 1.5,
-        description: '7+ day completion streak'
-      }
-    ]
+        description: "7+ day completion streak",
+      },
+    ],
   },
   GOAL_COMPLETED: {
-    action_type: 'goal_completed',
+    action_type: "goal_completed",
     base_points: 200,
-    source_module: 'goals',
-    description: 'Completed a goal',
+    source_module: "goals",
+    description: "Completed a goal",
     multiplier_conditions: [
       {
-        condition_type: 'difficulty',
-        condition_value: 'high',
+        condition_type: "difficulty",
+        condition_value: "high",
         multiplier: 1.5,
-        description: 'High impact goal'
-      }
-    ]
+        description: "High impact goal",
+      },
+    ],
   },
   HABIT_CHECKED: {
-    action_type: 'habit_checked',
+    action_type: "habit_checked",
     base_points: 5,
-    source_module: 'habits',
-    description: 'Checked off a habit',
+    source_module: "habits",
+    description: "Checked off a habit",
     max_daily: 50,
     multiplier_conditions: [
       {
-        condition_type: 'streak',
+        condition_type: "streak",
         condition_value: 7,
         multiplier: 1.2,
-        description: '7+ day habit streak'
+        description: "7+ day habit streak",
       },
       {
-        condition_type: 'streak',
+        condition_type: "streak",
         condition_value: 30,
         multiplier: 1.5,
-        description: '30+ day habit streak'
-      }
-    ]
+        description: "30+ day habit streak",
+      },
+    ],
   },
   NOTE_CREATED: {
-    action_type: 'note_created',
+    action_type: "note_created",
     base_points: 25,
-    source_module: 'notes',
-    description: 'Created a note',
-    max_daily: 10
+    source_module: "notes",
+    description: "Created a note",
+    max_daily: 10,
   },
   NOTE_LINKED: {
-    action_type: 'note_linked',
+    action_type: "note_linked",
     base_points: 15,
-    source_module: 'notes',
-    description: 'Linked notes together'
+    source_module: "notes",
+    description: "Linked notes together",
   },
   REFLECTION_CREATED: {
-    action_type: 'reflection_created',
+    action_type: "reflection_created",
     base_points: 50,
-    source_module: 'reflections',
-    description: 'Wrote a reflection',
-    max_daily: 2
+    source_module: "reflections",
+    description: "Wrote a reflection",
+    max_daily: 2,
   },
   PROFILE_ASSESSMENT_COMPLETED: {
-    action_type: 'profile_assessment_completed',
+    action_type: "profile_assessment_completed",
     base_points: 500,
-    source_module: 'productivity-profile',
-    description: 'Completed productivity profile assessment'
+    source_module: "productivity-profile",
+    description: "Completed productivity profile assessment",
   },
   CHALLENGE_COMPLETED: {
-    action_type: 'challenge_completed',
+    action_type: "challenge_completed",
     base_points: 100,
-    source_module: 'gamification',
-    description: 'Completed a challenge'
-  }
+    source_module: "gamification",
+    description: "Completed a challenge",
+  },
 };
 
 // Level progression formula
@@ -244,17 +252,19 @@ export const calculateLevelFromXp = (totalXp: number): number => {
 export const getLevelInfo = (totalXp: number): LevelInfo => {
   const level = calculateLevelFromXp(totalXp);
   const currentLevelXp = level > 1 ? calculateXpForLevel(level) : 0;
-  const nextLevelXp = level < 50 ? calculateXpForLevel(level + 1) : calculateXpForLevel(50);
+  const nextLevelXp =
+    level < 50 ? calculateXpForLevel(level + 1) : calculateXpForLevel(50);
   const xpInCurrentLevel = totalXp - currentLevelXp;
   const xpRequiredForNextLevel = nextLevelXp - currentLevelXp;
   const xpToNextLevel = nextLevelXp - totalXp;
-  const progressPercentage = level >= 50 ? 100 : (xpInCurrentLevel / xpRequiredForNextLevel) * 100;
+  const progressPercentage =
+    level >= 50 ? 100 : (xpInCurrentLevel / xpRequiredForNextLevel) * 100;
 
   return {
     level,
     current_xp: totalXp,
     xp_required: xpRequiredForNextLevel,
     xp_to_next_level: Math.max(0, xpToNextLevel),
-    progress_percentage: Math.min(100, Math.max(0, progressPercentage))
+    progress_percentage: Math.min(100, Math.max(0, progressPercentage)),
   };
 };

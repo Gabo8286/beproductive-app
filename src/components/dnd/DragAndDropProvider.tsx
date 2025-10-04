@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -11,13 +11,11 @@ import {
   useSensor,
   useSensors,
   DragOverEvent,
-} from '@dnd-kit/core';
-import {
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
-import { Database } from '@/integrations/supabase/types';
+} from "@dnd-kit/core";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { Database } from "@/integrations/supabase/types";
 
-type Task = Database['public']['Tables']['tasks']['Row'] & {
+type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
   created_by_profile?: { full_name: string | null; avatar_url: string | null };
 };
@@ -27,12 +25,14 @@ interface DragAndDropContextType {
   isDragging: boolean;
 }
 
-const DragAndDropContext = createContext<DragAndDropContextType | undefined>(undefined);
+const DragAndDropContext = createContext<DragAndDropContextType | undefined>(
+  undefined,
+);
 
 export function useDragAndDrop() {
   const context = useContext(DragAndDropContext);
   if (!context) {
-    throw new Error('useDragAndDrop must be used within DragAndDropProvider');
+    throw new Error("useDragAndDrop must be used within DragAndDropProvider");
   }
   return context;
 }
@@ -68,11 +68,11 @@ export function DragAndDropProvider({
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveTask(event.active.data.current?.task as Task || null);
+    setActiveTask((event.active.data.current?.task as Task) || null);
     onDragStart?.(event);
   };
 
@@ -86,7 +86,9 @@ export function DragAndDropProvider({
   };
 
   return (
-    <DragAndDropContext.Provider value={{ activeTask, isDragging: !!activeTask }}>
+    <DragAndDropContext.Provider
+      value={{ activeTask, isDragging: !!activeTask }}
+    >
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -95,9 +97,7 @@ export function DragAndDropProvider({
         onDragOver={handleDragOver}
       >
         {children}
-        <DragOverlay>
-          {activeTask && overlay}
-        </DragOverlay>
+        <DragOverlay>{activeTask && overlay}</DragOverlay>
       </DndContext>
     </DragAndDropContext.Provider>
   );

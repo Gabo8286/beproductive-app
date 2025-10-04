@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { createMockUser, createMockSession } from '@/test/fixtures/mockData';
-import { ReactNode } from 'react';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderHook, waitFor, act } from "@testing-library/react";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { createMockUser, createMockSession } from "@/test/fixtures/mockData";
+import { ReactNode } from "react";
 
 // Mock Supabase client
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     auth: {
       getSession: vi.fn(),
@@ -38,7 +38,7 @@ vi.mock('@/integrations/supabase/client', () => ({
   },
 }));
 
-describe('AuthContext', () => {
+describe("AuthContext", () => {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <AuthProvider>{children}</AuthProvider>
   );
@@ -47,7 +47,7 @@ describe('AuthContext', () => {
     vi.clearAllMocks();
   });
 
-  it('should initialize with loading state', () => {
+  it("should initialize with loading state", () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     expect(result.current.loading).toBe(true);
@@ -55,7 +55,7 @@ describe('AuthContext', () => {
     expect(result.current.session).toBeNull();
   });
 
-  it('should handle login flow correctly', async () => {
+  it("should handle login flow correctly", async () => {
     const mockUser = createMockUser();
     const mockSession = createMockSession({ user: mockUser });
 
@@ -67,18 +67,26 @@ describe('AuthContext', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await act(async () => {
-      const response = await result.current.signIn('test@example.com', 'password123');
+      const response = await result.current.signIn(
+        "test@example.com",
+        "password123",
+      );
       expect(response.error).toBeNull();
     });
 
     expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
-      email: 'test@example.com',
-      password: 'password123',
+      email: "test@example.com",
+      password: "password123",
     });
   });
 
-  it('should handle authentication errors', async () => {
-    const mockError = { message: 'Invalid credentials', code: 'invalid_credentials', status: 401, __isAuthError: true };
+  it("should handle authentication errors", async () => {
+    const mockError = {
+      message: "Invalid credentials",
+      code: "invalid_credentials",
+      status: 401,
+      __isAuthError: true,
+    };
 
     vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
       data: { user: null, session: null },
@@ -88,13 +96,16 @@ describe('AuthContext', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await act(async () => {
-      const response = await result.current.signIn('wrong@example.com', 'wrongpass');
+      const response = await result.current.signIn(
+        "wrong@example.com",
+        "wrongpass",
+      );
       expect(response.error).toBeDefined();
-      expect(response.error?.message).toBe('Invalid credentials');
+      expect(response.error?.message).toBe("Invalid credentials");
     });
   });
 
-  it('should handle logout and cleanup', async () => {
+  it("should handle logout and cleanup", async () => {
     vi.mocked(supabase.auth.signOut).mockResolvedValue({ error: null });
 
     const { result } = renderHook(() => useAuth(), { wrapper });
@@ -106,7 +117,7 @@ describe('AuthContext', () => {
     expect(supabase.auth.signOut).toHaveBeenCalled();
   });
 
-  it('should handle signup with full name', async () => {
+  it("should handle signup with full name", async () => {
     const mockUser = createMockUser();
     const mockSession = createMockSession({ user: mockUser });
 
@@ -119,23 +130,23 @@ describe('AuthContext', () => {
 
     await act(async () => {
       const response = await result.current.signUp(
-        'newuser@example.com',
-        'password123',
-        'New User'
+        "newuser@example.com",
+        "password123",
+        "New User",
       );
       expect(response.error).toBeNull();
     });
 
     expect(supabase.auth.signUp).toHaveBeenCalledWith({
-      email: 'newuser@example.com',
-      password: 'password123',
+      email: "newuser@example.com",
+      password: "password123",
       options: expect.objectContaining({
-        data: { full_name: 'New User' },
+        data: { full_name: "New User" },
       }),
     });
   });
 
-  it('should handle password reset flow', async () => {
+  it("should handle password reset flow", async () => {
     vi.mocked(supabase.auth.resetPasswordForEmail).mockResolvedValue({
       data: {},
       error: null,
@@ -144,21 +155,21 @@ describe('AuthContext', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await act(async () => {
-      const response = await result.current.resetPassword('user@example.com');
+      const response = await result.current.resetPassword("user@example.com");
       expect(response.error).toBeNull();
     });
 
     expect(supabase.auth.resetPasswordForEmail).toHaveBeenCalledWith(
-      'user@example.com',
+      "user@example.com",
       expect.objectContaining({
-        redirectTo: expect.stringContaining('/'),
-      })
+        redirectTo: expect.stringContaining("/"),
+      }),
     );
   });
 
-  it('should throw error when used outside provider', () => {
+  it("should throw error when used outside provider", () => {
     expect(() => {
       renderHook(() => useAuth());
-    }).toThrow('useAuth must be used within AuthProvider');
+    }).toThrow("useAuth must be used within AuthProvider");
   });
 });

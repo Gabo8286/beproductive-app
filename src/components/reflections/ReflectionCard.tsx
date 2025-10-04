@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { MoreVertical, Heart, Lightbulb, TrendingUp, Target, Zap } from "lucide-react";
+import {
+  MoreVertical,
+  Heart,
+  Lightbulb,
+  TrendingUp,
+  Target,
+  Zap,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,30 +37,35 @@ export default function ReflectionCard({
   const navigate = useNavigate();
 
   const moodEmojis = {
-    amazing: '🤩',
-    great: '😊',
-    good: '🙂',
-    neutral: '😐',
-    bad: '😔',
-    terrible: '😢',
+    amazing: "🤩",
+    great: "😊",
+    good: "🙂",
+    neutral: "😐",
+    bad: "😔",
+    terrible: "😢",
   };
 
   const typeColors = {
-    daily: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-    weekly: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-    monthly: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-    project: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-    goal: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200',
-    habit: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
-    custom: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+    daily: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    weekly:
+      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    monthly:
+      "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    project:
+      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    goal: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
+    habit:
+      "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
+    custom: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
   };
 
-  const contentPreview = reflection.content.length > 150
-    ? reflection.content.substring(0, 150) + '...'
-    : reflection.content;
+  const contentPreview =
+    reflection.content.length > 150
+      ? reflection.content.substring(0, 150) + "..."
+      : reflection.content;
 
   return (
-    <Card 
+    <Card
       className="p-6 hover-scale cursor-pointer transition-all"
       onClick={() => !isExpanded && setIsExpanded(true)}
     >
@@ -67,9 +79,14 @@ export default function ReflectionCard({
             )}
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <time>{format(new Date(reflection.reflection_date), 'MMM d, yyyy')}</time>
+            <time>
+              {format(new Date(reflection.reflection_date), "MMM d, yyyy")}
+            </time>
             <span>•</span>
-            <Badge variant="secondary" className={typeColors[reflection.reflection_type]}>
+            <Badge
+              variant="secondary"
+              className={typeColors[reflection.reflection_type]}
+            >
               {reflection.reflection_type}
             </Badge>
             {!reflection.is_private && (
@@ -88,30 +105,36 @@ export default function ReflectionCard({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/reflections/${reflection.id}`);
-            }}>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/reflections/${reflection.id}`);
+              }}
+            >
               View Details
             </DropdownMenuItem>
             {onEdit && (
-              <DropdownMenuItem onClick={(e) => {
-                e.stopPropagation();
-                onEdit();
-              }}>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit();
+                }}
+              >
                 Edit
               </DropdownMenuItem>
             )}
             {onDuplicate && (
-              <DropdownMenuItem onClick={(e) => {
-                e.stopPropagation();
-                onDuplicate();
-              }}>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDuplicate();
+                }}
+              >
                 Duplicate
               </DropdownMenuItem>
             )}
             {onDelete && (
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete();
@@ -126,7 +149,9 @@ export default function ReflectionCard({
       </div>
 
       {/* Mood & Energy Indicators */}
-      {(reflection.energy_level || reflection.stress_level || reflection.satisfaction_level) && (
+      {(reflection.energy_level ||
+        reflection.stress_level ||
+        reflection.satisfaction_level) && (
         <div className="grid grid-cols-3 gap-4 mb-4">
           {reflection.energy_level && (
             <div className="space-y-1">
@@ -135,7 +160,7 @@ export default function ReflectionCard({
                 <span>Energy</span>
               </div>
               <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-green-500 transition-all"
                   style={{ width: `${(reflection.energy_level / 10) * 100}%` }}
                 />
@@ -149,7 +174,7 @@ export default function ReflectionCard({
                 <span>Stress</span>
               </div>
               <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-orange-500 transition-all"
                   style={{ width: `${(reflection.stress_level / 10) * 100}%` }}
                 />
@@ -163,9 +188,11 @@ export default function ReflectionCard({
                 <span>Satisfaction</span>
               </div>
               <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                <div 
+                <div
                   className="h-full bg-blue-500 transition-all"
-                  style={{ width: `${(reflection.satisfaction_level / 10) * 100}%` }}
+                  style={{
+                    width: `${(reflection.satisfaction_level / 10) * 100}%`,
+                  }}
                 />
               </div>
             </div>
@@ -179,8 +206,8 @@ export default function ReflectionCard({
           {isExpanded ? reflection.content : contentPreview}
         </p>
         {reflection.content.length > 150 && !isExpanded && (
-          <Button 
-            variant="link" 
+          <Button
+            variant="link"
             className="p-0 h-auto mt-2"
             onClick={(e) => {
               e.stopPropagation();
@@ -226,7 +253,8 @@ export default function ReflectionCard({
       )}
 
       {/* Linked Goals/Habits */}
-      {(reflection.goal_links?.length > 0 || reflection.habit_links?.length > 0) && (
+      {(reflection.goal_links?.length > 0 ||
+        reflection.habit_links?.length > 0) && (
         <div className="flex flex-wrap gap-2 pt-4 border-t">
           {reflection.goal_links?.map((link) => (
             <Badge key={link.id} variant="secondary" className="text-xs">

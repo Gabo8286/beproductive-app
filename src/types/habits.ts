@@ -4,21 +4,29 @@
 // =====================================================
 
 // Enums matching database types
-export type HabitCategory = 'health' | 'productivity' | 'learning' | 'mindfulness' | 'social' | 'financial' | 'creative' | 'other';
-export type HabitType = 'build' | 'break' | 'maintain';
-export type HabitFrequency = 'daily' | 'weekly' | 'monthly' | 'custom';
-export type HabitDifficulty = 'easy' | 'medium' | 'hard' | 'extreme';
-export type HabitTime = 'morning' | 'afternoon' | 'evening' | 'anytime';
-export type EntryStatus = 'completed' | 'skipped' | 'missed' | 'partial';
-export type MoodLevel = 'amazing' | 'good' | 'neutral' | 'bad' | 'terrible';
-export type ReminderType = 'time_based' | 'location_based' | 'trigger_based';
-export type PeriodType = 'day' | 'week' | 'month' | 'year' | 'all_time';
+export type HabitCategory =
+  | "health"
+  | "productivity"
+  | "learning"
+  | "mindfulness"
+  | "social"
+  | "financial"
+  | "creative"
+  | "other";
+export type HabitType = "build" | "break" | "maintain";
+export type HabitFrequency = "daily" | "weekly" | "monthly" | "custom";
+export type HabitDifficulty = "easy" | "medium" | "hard" | "extreme";
+export type HabitTime = "morning" | "afternoon" | "evening" | "anytime";
+export type EntryStatus = "completed" | "skipped" | "missed" | "partial";
+export type MoodLevel = "amazing" | "good" | "neutral" | "bad" | "terrible";
+export type ReminderType = "time_based" | "location_based" | "trigger_based";
+export type PeriodType = "day" | "week" | "month" | "year" | "all_time";
 
 // Custom frequency configuration
 export interface CustomFrequency {
-  type: 'times_per_period' | 'specific_days' | 'interval';
+  type: "times_per_period" | "specific_days" | "interval";
   times?: number; // How many times per period
-  period?: 'week' | 'month'; // What period
+  period?: "week" | "month"; // What period
   days?: number[]; // 0-6 for specific days of week
   interval?: number; // Every N days
 }
@@ -203,7 +211,8 @@ export interface CreateHabitEntryInput {
   difficulty_felt?: number;
 }
 
-export interface UpdateHabitEntryInput extends Partial<Omit<CreateHabitEntryInput, 'habit_id' | 'date'>> {}
+export interface UpdateHabitEntryInput
+  extends Partial<Omit<CreateHabitEntryInput, "habit_id" | "date">> {}
 
 export interface CreateHabitReminderInput {
   habit_id: string;
@@ -216,7 +225,8 @@ export interface CreateHabitReminderInput {
   is_active?: boolean;
 }
 
-export interface UpdateHabitReminderInput extends Partial<Omit<CreateHabitReminderInput, 'habit_id'>> {}
+export interface UpdateHabitReminderInput
+  extends Partial<Omit<CreateHabitReminderInput, "habit_id">> {}
 
 // Filter and sort options
 export interface HabitFilters {
@@ -230,8 +240,13 @@ export interface HabitFilters {
   tags?: string[];
 }
 
-export type HabitSortBy = 'position' | 'streak' | 'completion_rate' | 'created_at' | 'title';
-export type SortOrder = 'asc' | 'desc';
+export type HabitSortBy =
+  | "position"
+  | "streak"
+  | "completion_rate"
+  | "created_at"
+  | "title";
+export type SortOrder = "asc" | "desc";
 
 // Analytics and insights
 export interface HabitTrend {
@@ -250,11 +265,16 @@ export interface HabitHeatmapData {
 }
 
 export interface HabitInsight {
-  type: 'streak_milestone' | 'consistency_drop' | 'best_time' | 'correlation' | 'suggestion';
+  type:
+    | "streak_milestone"
+    | "consistency_drop"
+    | "best_time"
+    | "correlation"
+    | "suggestion";
   title: string;
   description: string;
   action?: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
   habit_id?: string;
   metadata?: Record<string, any>;
 }

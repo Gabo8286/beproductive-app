@@ -46,27 +46,30 @@ export class AIServiceManager {
 
     try {
       const { data: apiKeys, error } = await supabase
-        .from('api_keys')
-        .select('*')
-        .eq('status', 'active')
-        .order('last_used_at', { ascending: false });
+        .from("api_keys")
+        .select("*")
+        .eq("status", "active")
+        .order("last_used_at", { ascending: false });
 
       if (error) throw error;
 
       this.activeApiKeys.clear();
-      apiKeys?.forEach(key => {
+      apiKeys?.forEach((key) => {
         if (!this.activeApiKeys.has(key.provider)) {
           this.activeApiKeys.set(key.provider, {
             ...key,
-            additional_headers: (key.additional_headers || {}) as Record<string, any>,
+            additional_headers: (key.additional_headers || {}) as Record<
+              string,
+              any
+            >,
           } as APIKey);
         }
       });
 
       this.lastKeyUpdate = now;
     } catch (error) {
-      console.error('Failed to refresh API keys:', error);
-      throw new Error('API keys unavailable');
+      console.error("Failed to refresh API keys:", error);
+      throw new Error("API keys unavailable");
     }
   }
 
@@ -90,23 +93,29 @@ export class AIServiceManager {
     return key;
   }
 
-  private async callOpenAI(request: AIServiceRequest, apiKey: APIKey): Promise<AIServiceResponse> {
+  private async callOpenAI(
+    request: AIServiceRequest,
+    apiKey: APIKey,
+  ): Promise<AIServiceResponse> {
     const startTime = Date.now();
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey.encrypted_key}`, // In real implementation, decrypt first
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey.encrypted_key}`, // In real implementation, decrypt first
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: request.model || apiKey.model_name || "gpt-3.5-turbo",
+            messages: [{ role: "user", content: request.prompt }],
+            max_tokens: request.maxTokens || 1000,
+            temperature: request.temperature || 0.7,
+          }),
         },
-        body: JSON.stringify({
-          model: request.model || apiKey.model_name || 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: request.prompt }],
-          max_tokens: request.maxTokens || 1000,
-          temperature: request.temperature || 0.7,
-        }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`OpenAI API error: ${response.statusText}`);
@@ -125,7 +134,7 @@ export class AIServiceManager {
       const cost = (tokensUsed.total / 1000) * 0.002; // $0.002 per 1K tokens
 
       return {
-        content: data.choices[0]?.message?.content || '',
+        content: data.choices[0]?.message?.content || "",
         tokensUsed,
         cost,
         responseTime,
@@ -133,31 +142,35 @@ export class AIServiceManager {
       };
     } catch (error) {
       return {
-        content: '',
+        content: "",
         tokensUsed: { prompt: 0, completion: 0, total: 0 },
         cost: 0,
         responseTime: Date.now() - startTime,
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
-  private async callClaude(request: AIServiceRequest, apiKey: APIKey): Promise<AIServiceResponse> {
+  private async callClaude(
+    request: AIServiceRequest,
+    apiKey: APIKey,
+  ): Promise<AIServiceResponse> {
     const startTime = Date.now();
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${apiKey.encrypted_key}`, // In real implementation, decrypt first
-          'Content-Type': 'application/json',
-          'anthropic-version': '2023-06-01',
+          Authorization: `Bearer ${apiKey.encrypted_key}`, // In real implementation, decrypt first
+          "Content-Type": "application/json",
+          "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: request.model || apiKey.model_name || 'claude-3-sonnet-20240229',
+          model:
+            request.model || apiKey.model_name || "claude-3-sonnet-20240229",
           max_tokens: request.maxTokens || 1000,
-          messages: [{ role: 'user', content: request.prompt }],
+          messages: [{ role: "user", content: request.prompt }],
         }),
       });
 
@@ -171,14 +184,15 @@ export class AIServiceManager {
       const tokensUsed = {
         prompt: data.usage?.input_tokens || 0,
         completion: data.usage?.output_tokens || 0,
-        total: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
+        total:
+          (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
       };
 
       // Calculate cost (approximate)
       const cost = (tokensUsed.total / 1000) * 0.015; // $0.015 per 1K tokens
 
       return {
-        content: data.content[0]?.text || '',
+        content: data.content[0]?.text || "",
         tokensUsed,
         cost,
         responseTime,
@@ -186,37 +200,47 @@ export class AIServiceManager {
       };
     } catch (error) {
       return {
-        content: '',
+        content: "",
         tokensUsed: { prompt: 0, completion: 0, total: 0 },
         cost: 0,
         responseTime: Date.now() - startTime,
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
-  private async callGemini(request: AIServiceRequest, apiKey: APIKey): Promise<AIServiceResponse> {
+  private async callGemini(
+    request: AIServiceRequest,
+    apiKey: APIKey,
+  ): Promise<AIServiceResponse> {
     const startTime = Date.now();
 
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${request.model || 'gemini-1.5-flash'}:generateContent?key=${apiKey.encrypted_key}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: request.prompt
-            }]
-          }],
-          generationConfig: {
-            temperature: request.temperature || 0.7,
-            maxOutputTokens: request.maxTokens || 1000,
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${request.model || "gemini-1.5-flash"}:generateContent?key=${apiKey.encrypted_key}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: request.prompt,
+                  },
+                ],
+              },
+            ],
+            generationConfig: {
+              temperature: request.temperature || 0.7,
+              maxOutputTokens: request.maxTokens || 1000,
+            },
+          }),
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`Gemini API error: ${response.statusText}`);
@@ -235,7 +259,7 @@ export class AIServiceManager {
       const cost = (tokensUsed.total / 1000) * 0.001; // $0.001 per 1K tokens for flash model
 
       return {
-        content: data.candidates?.[0]?.content?.parts?.[0]?.text || '',
+        content: data.candidates?.[0]?.content?.parts?.[0]?.text || "",
         tokensUsed,
         cost,
         responseTime,
@@ -243,21 +267,26 @@ export class AIServiceManager {
       };
     } catch (error) {
       return {
-        content: '',
+        content: "",
         tokensUsed: { prompt: 0, completion: 0, total: 0 },
         cost: 0,
         responseTime: Date.now() - startTime,
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
-  private async callLovable(request: AIServiceRequest, apiKey: APIKey): Promise<AIServiceResponse> {
+  private async callLovable(
+    request: AIServiceRequest,
+    apiKey: APIKey,
+  ): Promise<AIServiceResponse> {
     const startTime = Date.now();
 
     // For now, simulate Lovable AI response since it's not a real API
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+    await new Promise((resolve) =>
+      setTimeout(resolve, 1000 + Math.random() * 2000),
+    );
 
     const responseTime = Date.now() - startTime;
     const tokensUsed = {
@@ -278,23 +307,25 @@ export class AIServiceManager {
     };
   }
 
-  public async makeRequest(request: AIServiceRequest): Promise<AIServiceResponse> {
+  public async makeRequest(
+    request: AIServiceRequest,
+  ): Promise<AIServiceResponse> {
     const apiKey = await this.getApiKey(request.provider);
 
     let response: AIServiceResponse;
 
     // Route to appropriate provider
     switch (request.provider) {
-      case 'openai':
+      case "openai":
         response = await this.callOpenAI(request, apiKey);
         break;
-      case 'claude':
+      case "claude":
         response = await this.callClaude(request, apiKey);
         break;
-      case 'gemini':
+      case "gemini":
         response = await this.callGemini(request, apiKey);
         break;
-      case 'lovable':
+      case "lovable":
         response = await this.callLovable(request, apiKey);
         break;
       default:
@@ -313,10 +344,10 @@ export class AIServiceManager {
   private async logUsage(
     request: AIServiceRequest,
     response: AIServiceResponse,
-    apiKeyId: string
+    apiKeyId: string,
   ): Promise<void> {
     try {
-      await supabase.from('api_usage_analytics').insert({
+      await supabase.from("api_usage_analytics").insert({
         api_key_id: apiKeyId,
         user_id: request.userId,
         provider: request.provider,
@@ -336,24 +367,27 @@ export class AIServiceManager {
         },
       });
     } catch (error) {
-      console.error('Failed to log usage:', error);
+      console.error("Failed to log usage:", error);
       // Don't throw - usage logging shouldn't break the main flow
     }
   }
 
-  private async updateUsageCounters(apiKeyId: string, response: AIServiceResponse): Promise<void> {
+  private async updateUsageCounters(
+    apiKeyId: string,
+    response: AIServiceResponse,
+  ): Promise<void> {
     try {
-      const { error } = await supabase.rpc('increment_api_key_usage', {
+      const { error } = await supabase.rpc("increment_api_key_usage", {
         key_id: apiKeyId,
         cost_amount: response.cost || 0,
         token_amount: response.tokensUsed.total || 0,
       });
 
       if (error) {
-        console.error('Error updating usage counters:', error);
+        console.error("Error updating usage counters:", error);
       }
     } catch (error) {
-      console.error('Failed to update usage counters:', error);
+      console.error("Failed to update usage counters:", error);
     }
   }
 
@@ -366,14 +400,19 @@ export class AIServiceManager {
   }> {
     const apiKey = await this.getApiKey(provider);
 
-    const costUsage = (apiKey.current_month_cost / apiKey.monthly_limit_usd) * 100;
-    const requestUsage = (apiKey.current_day_requests / apiKey.daily_request_limit) * 100;
-    const tokenUsage = (apiKey.current_month_tokens / apiKey.monthly_token_limit) * 100;
+    const costUsage =
+      (apiKey.current_month_cost / apiKey.monthly_limit_usd) * 100;
+    const requestUsage =
+      (apiKey.current_day_requests / apiKey.daily_request_limit) * 100;
+    const tokenUsage =
+      (apiKey.current_month_tokens / apiKey.monthly_token_limit) * 100;
 
     const warnings: string[] = [];
     if (costUsage > 80) warnings.push(`Cost usage at ${costUsage.toFixed(1)}%`);
-    if (requestUsage > 80) warnings.push(`Request usage at ${requestUsage.toFixed(1)}%`);
-    if (tokenUsage > 80) warnings.push(`Token usage at ${tokenUsage.toFixed(1)}%`);
+    if (requestUsage > 80)
+      warnings.push(`Request usage at ${requestUsage.toFixed(1)}%`);
+    if (tokenUsage > 80)
+      warnings.push(`Token usage at ${tokenUsage.toFixed(1)}%`);
 
     return {
       withinLimits: costUsage < 100 && requestUsage < 100 && tokenUsage < 100,

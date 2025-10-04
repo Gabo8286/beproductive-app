@@ -18,28 +18,28 @@ export const useGenerateAIInsights = () => {
       const results = await analyzer.generateInsights(user.id, types);
 
       // Save insights to database
-      const insightsToInsert = results.map(result => ({
+      const insightsToInsert = results.map((result) => ({
         user_id: user.id,
         type: result.type,
         title: result.title,
         content: result.content,
         summary: result.summary,
-        provider: 'lovable' as const,
+        provider: "lovable" as const,
         confidence_score: result.confidence_score,
         data_sources: result.data_sources,
         metadata: {},
       }));
 
       const { data: insertedInsights, error: insightsError } = await supabase
-        .from('ai_insights')
+        .from("ai_insights")
         .insert(insightsToInsert)
         .select();
 
       if (insightsError) throw insightsError;
 
       // Save recommendations
-      const recommendationsToInsert = results.flatMap((result, idx) => 
-        result.recommendations.map(rec => ({
+      const recommendationsToInsert = results.flatMap((result, idx) =>
+        result.recommendations.map((rec) => ({
           insight_id: insertedInsights[idx]?.id,
           user_id: user.id,
           title: rec.title,
@@ -49,12 +49,12 @@ export const useGenerateAIInsights = () => {
           effort_level: rec.effort_level,
           priority: rec.priority,
           metadata: {},
-        }))
+        })),
       );
 
       if (recommendationsToInsert.length > 0) {
         const { error: recsError } = await supabase
-          .from('ai_recommendations')
+          .from("ai_recommendations")
           .insert(recommendationsToInsert);
 
         if (recsError) throw recsError;
@@ -63,8 +63,8 @@ export const useGenerateAIInsights = () => {
       return insertedInsights;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ai-insights'] });
-      queryClient.invalidateQueries({ queryKey: ['ai-recommendations'] });
+      queryClient.invalidateQueries({ queryKey: ["ai-insights"] });
+      queryClient.invalidateQueries({ queryKey: ["ai-recommendations"] });
       toast({
         title: "Success",
         description: "AI insights generated successfully",
@@ -73,7 +73,10 @@ export const useGenerateAIInsights = () => {
     onError: (error) => {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to generate insights",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to generate insights",
         variant: "destructive",
       });
     },

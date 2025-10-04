@@ -20,7 +20,7 @@ export function InteractiveOverlay({
   onNext,
   onPrevious,
   onSkip,
-  showPrevious
+  showPrevious,
 }: InteractiveOverlayProps) {
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
 
@@ -60,7 +60,8 @@ export function InteractiveOverlay({
               top: targetRect.top - 8,
               width: targetRect.width + 16,
               height: targetRect.height + 16,
-              boxShadow: '0 0 0 4px hsl(var(--primary) / 0.3), 0 0 0 9999px rgba(0, 0, 0, 0.5)'
+              boxShadow:
+                "0 0 0 4px hsl(var(--primary) / 0.3), 0 0 0 9999px rgba(0, 0, 0, 0.5)",
             }}
           >
             <div className="absolute inset-0 border-2 border-primary rounded-lg animate-pulse" />
@@ -84,25 +85,16 @@ export function InteractiveOverlay({
           <h3 className="text-xl font-heading font-bold text-foreground mb-2">
             {title}
           </h3>
-          <p className="text-muted-foreground mb-4">
-            {description}
-          </p>
+          <p className="text-muted-foreground mb-4">{description}</p>
 
           <div className="flex gap-2">
             {showPrevious && onPrevious && (
-              <Button
-                variant="outline"
-                onClick={onPrevious}
-                className="flex-1"
-              >
+              <Button variant="outline" onClick={onPrevious} className="flex-1">
                 Previous
               </Button>
             )}
-            <Button
-              onClick={onNext}
-              className="flex-1 apple-button"
-            >
-              {highlightTarget ? 'Got it' : 'Next'}
+            <Button onClick={onNext} className="flex-1 apple-button">
+              {highlightTarget ? "Got it" : "Next"}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>

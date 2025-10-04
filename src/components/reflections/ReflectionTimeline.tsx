@@ -37,41 +37,46 @@ export default function ReflectionTimeline({
   }
 
   // Group reflections by date category
-  const groupedReflections = reflections.reduce((acc, reflection) => {
-    const date = new Date(reflection.reflection_date);
-    let category: string;
+  const groupedReflections = reflections.reduce(
+    (acc, reflection) => {
+      const date = new Date(reflection.reflection_date);
+      let category: string;
 
-    if (isToday(date)) {
-      category = "Today";
-    } else if (isYesterday(date)) {
-      category = "Yesterday";
-    } else if (isThisWeek(date)) {
-      category = "This Week";
-    } else {
-      category = format(date, "MMMM yyyy");
-    }
+      if (isToday(date)) {
+        category = "Today";
+      } else if (isYesterday(date)) {
+        category = "Yesterday";
+      } else if (isThisWeek(date)) {
+        category = "This Week";
+      } else {
+        category = format(date, "MMMM yyyy");
+      }
 
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(reflection);
-    return acc;
-  }, {} as Record<string, ReflectionWithRelations[]>);
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(reflection);
+      return acc;
+    },
+    {} as Record<string, ReflectionWithRelations[]>,
+  );
 
   return (
     <div className="space-y-8">
-      {Object.entries(groupedReflections).map(([category, categoryReflections]) => (
-        <div key={category} className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground sticky top-0 bg-background/95 backdrop-blur py-2">
-            {category}
-          </h2>
-          <div className="space-y-4">
-            {categoryReflections.map((reflection) => (
-              <ReflectionCard key={reflection.id} reflection={reflection} />
-            ))}
+      {Object.entries(groupedReflections).map(
+        ([category, categoryReflections]) => (
+          <div key={category} className="space-y-4">
+            <h2 className="text-xl font-semibold text-foreground sticky top-0 bg-background/95 backdrop-blur py-2">
+              {category}
+            </h2>
+            <div className="space-y-4">
+              {categoryReflections.map((reflection) => (
+                <ReflectionCard key={reflection.id} reflection={reflection} />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ),
+      )}
     </div>
   );
 }

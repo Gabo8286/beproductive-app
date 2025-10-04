@@ -1,37 +1,74 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { GoalMilestone } from "@/types/goals";
-import { useCompleteMilestone, useDeleteMilestone } from "@/hooks/useGoalMilestones";
+import {
+  useCompleteMilestone,
+  useDeleteMilestone,
+} from "@/hooks/useGoalMilestones";
 import { format, differenceInDays, isPast } from "date-fns";
-import { Calendar, CheckCircle, Clock, MoreVertical, Edit, Trash, AlertTriangle } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle,
+  Clock,
+  MoreVertical,
+  Edit,
+  Trash,
+  AlertTriangle,
+} from "lucide-react";
 import { MilestoneEditor } from "./MilestoneEditor";
 import { MilestoneCompletion } from "./MilestoneCompletion";
 
 interface MilestoneCardProps {
   milestone: GoalMilestone & {
-    dependencies?: { depends_on_milestone: { id: string; title: string; completed_at: string | null } }[];
+    dependencies?: {
+      depends_on_milestone: {
+        id: string;
+        title: string;
+        completed_at: string | null;
+      };
+    }[];
   };
   showDependencies?: boolean;
 }
 
-export function MilestoneCard({ milestone, showDependencies = true }: MilestoneCardProps) {
+export function MilestoneCard({
+  milestone,
+  showDependencies = true,
+}: MilestoneCardProps) {
   const [showEditor, setShowEditor] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
   const completeMilestone = useCompleteMilestone();
   const deleteMilestone = useDeleteMilestone();
 
   const isCompleted = !!milestone.completed_at;
-  const isOverdue = milestone.target_date && isPast(new Date(milestone.target_date)) && !isCompleted;
-  const daysUntilDue = milestone.target_date ? differenceInDays(new Date(milestone.target_date), new Date()) : null;
+  const isOverdue =
+    milestone.target_date &&
+    isPast(new Date(milestone.target_date)) &&
+    !isCompleted;
+  const daysUntilDue = milestone.target_date
+    ? differenceInDays(new Date(milestone.target_date), new Date())
+    : null;
 
-  const blockedByDependencies = milestone.dependencies?.some(
-    dep => !dep.depends_on_milestone.completed_at
-  ) || false;
+  const blockedByDependencies =
+    milestone.dependencies?.some(
+      (dep) => !dep.depends_on_milestone.completed_at,
+    ) || false;
 
   const handleQuickComplete = async () => {
     if (isCompleted || blockedByDependencies) return;
@@ -51,34 +88,51 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
 
   const getPriorityColor = () => {
     switch (milestone.priority) {
-      case 5: return 'bg-red-500 text-white';
-      case 4: return 'bg-orange-500 text-white';
-      case 3: return 'bg-yellow-500 text-white';
-      case 2: return 'bg-blue-500 text-white';
-      case 1: return 'bg-green-500 text-white';
-      default: return 'bg-muted text-muted-foreground';
+      case 5:
+        return "bg-red-500 text-white";
+      case 4:
+        return "bg-orange-500 text-white";
+      case 3:
+        return "bg-yellow-500 text-white";
+      case 2:
+        return "bg-blue-500 text-white";
+      case 1:
+        return "bg-green-500 text-white";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getPriorityLabel = () => {
     switch (milestone.priority) {
-      case 5: return 'Critical';
-      case 4: return 'High';
-      case 3: return 'Medium';
-      case 2: return 'Low';
-      case 1: return 'Lowest';
-      default: return 'Normal';
+      case 5:
+        return "Critical";
+      case 4:
+        return "High";
+      case 3:
+        return "Medium";
+      case 2:
+        return "Low";
+      case 1:
+        return "Lowest";
+      default:
+        return "Normal";
     }
   };
 
   return (
     <>
-      <Card className={`transition-all group hover:shadow-sm ${
-        isCompleted ? 'bg-muted/50' : 
-        isOverdue ? 'border-red-500/50 bg-red-50/50 dark:bg-red-900/10' :
-        blockedByDependencies ? 'border-yellow-500/50 bg-yellow-50/50 dark:bg-yellow-900/10' :
-        'hover:shadow-md'
-      }`}>
+      <Card
+        className={`transition-all group hover:shadow-sm ${
+          isCompleted
+            ? "bg-muted/50"
+            : isOverdue
+              ? "border-red-500/50 bg-red-50/50 dark:bg-red-900/10"
+              : blockedByDependencies
+                ? "border-yellow-500/50 bg-yellow-50/50 dark:bg-yellow-900/10"
+                : "hover:shadow-md"
+        }`}
+      >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-3 flex-1">
@@ -89,9 +143,11 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
                 className="mt-1"
               />
               <div className="flex-1 min-w-0">
-                <CardTitle className={`text-base leading-tight ${
-                  isCompleted ? 'line-through text-muted-foreground' : ''
-                }`}>
+                <CardTitle
+                  className={`text-base leading-tight ${
+                    isCompleted ? "line-through text-muted-foreground" : ""
+                  }`}
+                >
                   {milestone.title}
                 </CardTitle>
                 {milestone.description && (
@@ -111,7 +167,11 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100"
+                  >
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -126,7 +186,10 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
                       Complete
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+                  <DropdownMenuItem
+                    onClick={handleDelete}
+                    className="text-destructive"
+                  >
                     <Trash className="h-4 w-4 mr-2" />
                     Delete
                   </DropdownMenuItem>
@@ -142,7 +205,7 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
             {isCompleted && (
               <Badge variant="secondary" className="text-xs">
                 <CheckCircle className="h-3 w-3 mr-1" />
-                Completed {format(new Date(milestone.completed_at!), 'MMM d')}
+                Completed {format(new Date(milestone.completed_at!), "MMM d")}
               </Badge>
             )}
 
@@ -154,7 +217,10 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
             )}
 
             {blockedByDependencies && (
-              <Badge variant="outline" className="text-xs border-yellow-500 text-yellow-700">
+              <Badge
+                variant="outline"
+                className="text-xs border-yellow-500 text-yellow-700"
+              >
                 <Clock className="h-3 w-3 mr-1" />
                 Waiting for dependencies
               </Badge>
@@ -172,7 +238,9 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
           {milestone.target_date && (
             <div className="flex items-center text-sm text-muted-foreground">
               <Calendar className="h-3 w-3 mr-1" />
-              <span>Due {format(new Date(milestone.target_date), 'MMM d, yyyy')}</span>
+              <span>
+                Due {format(new Date(milestone.target_date), "MMM d, yyyy")}
+              </span>
             </div>
           )}
 
@@ -181,9 +249,14 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
             <div className="space-y-1">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Progress</span>
-                <span className="font-medium">{milestone.progress_percentage}%</span>
+                <span className="font-medium">
+                  {milestone.progress_percentage}%
+                </span>
               </div>
-              <Progress value={milestone.progress_percentage || 0} className="h-2" />
+              <Progress
+                value={milestone.progress_percentage || 0}
+                className="h-2"
+              />
             </div>
           )}
 
@@ -193,29 +266,44 @@ export function MilestoneCard({ milestone, showDependencies = true }: MilestoneC
               <Clock className="h-3 w-3 mr-1" />
               <span>
                 {milestone.estimated_hours}h estimated
-                {milestone.actual_hours && ` (${milestone.actual_hours}h actual)`}
+                {milestone.actual_hours &&
+                  ` (${milestone.actual_hours}h actual)`}
               </span>
             </div>
           )}
 
           {/* Dependencies */}
-          {showDependencies && milestone.dependencies && milestone.dependencies.length > 0 && (
-            <div className="space-y-2">
-              <div className="text-xs font-medium text-muted-foreground">Dependencies:</div>
-              <div className="space-y-1">
-                {milestone.dependencies.map((dep, index) => (
-                  <div key={index} className="flex items-center text-xs">
-                    <CheckCircle className={`h-3 w-3 mr-2 ${
-                      dep.depends_on_milestone.completed_at ? 'text-green-500' : 'text-muted-foreground'
-                    }`} />
-                    <span className={dep.depends_on_milestone.completed_at ? 'line-through text-muted-foreground' : ''}>
-                      {dep.depends_on_milestone.title}
-                    </span>
-                  </div>
-                ))}
+          {showDependencies &&
+            milestone.dependencies &&
+            milestone.dependencies.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-muted-foreground">
+                  Dependencies:
+                </div>
+                <div className="space-y-1">
+                  {milestone.dependencies.map((dep, index) => (
+                    <div key={index} className="flex items-center text-xs">
+                      <CheckCircle
+                        className={`h-3 w-3 mr-2 ${
+                          dep.depends_on_milestone.completed_at
+                            ? "text-green-500"
+                            : "text-muted-foreground"
+                        }`}
+                      />
+                      <span
+                        className={
+                          dep.depends_on_milestone.completed_at
+                            ? "line-through text-muted-foreground"
+                            : ""
+                        }
+                      >
+                        {dep.depends_on_milestone.title}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Tags */}
           {milestone.tags && milestone.tags.length > 0 && (

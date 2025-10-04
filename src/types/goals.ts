@@ -1,5 +1,17 @@
-export type GoalStatus = 'draft' | 'active' | 'paused' | 'completed' | 'archived';
-export type GoalCategory = 'personal' | 'professional' | 'health' | 'financial' | 'learning' | 'relationship' | 'other';
+export type GoalStatus =
+  | "draft"
+  | "active"
+  | "paused"
+  | "completed"
+  | "archived";
+export type GoalCategory =
+  | "personal"
+  | "professional"
+  | "health"
+  | "financial"
+  | "learning"
+  | "relationship"
+  | "other";
 
 export interface Goal {
   id: string;
@@ -105,7 +117,7 @@ export interface SharedGoalMember {
   id: string;
   shared_goal_id: string;
   user_id: string;
-  role: 'owner' | 'contributor' | 'viewer';
+  role: "owner" | "contributor" | "viewer";
   assigned_at: string;
 }
 

@@ -1,5 +1,10 @@
-export type DemoInteractionType = 'click' | 'input' | 'drag' | 'wait';
-export type PersonaType = 'professional' | 'student' | 'entrepreneur' | 'personal' | 'custom';
+export type DemoInteractionType = "click" | "input" | "drag" | "wait";
+export type PersonaType =
+  | "professional"
+  | "student"
+  | "entrepreneur"
+  | "personal"
+  | "custom";
 
 export interface DemoInteraction {
   type: DemoInteractionType;
@@ -46,8 +51,8 @@ export interface DemoHabit {
 export interface DemoTask {
   id: string;
   title: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'todo' | 'in_progress' | 'completed';
+  priority: "low" | "medium" | "high";
+  status: "todo" | "in_progress" | "completed";
   dueDate?: string;
 }
 

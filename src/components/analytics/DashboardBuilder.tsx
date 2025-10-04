@@ -1,5 +1,11 @@
 import { useState, useCallback } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -12,12 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +31,7 @@ import {
   DragDropContext,
   Droppable,
   Draggable,
-  DropResult
+  DropResult,
 } from "@hello-pangea/dnd";
 import {
   LayoutDashboard,
@@ -55,7 +56,7 @@ import {
   Filter,
   Palette,
   Grid,
-  Monitor
+  Monitor,
 } from "lucide-react";
 import {
   CustomDashboard,
@@ -63,9 +64,13 @@ import {
   WidgetPosition,
   VisualizationType,
   AnalyticsTimeframe,
-  DataSource
+  DataSource,
 } from "@/types/analytics";
-import { useAnalyticsMetrics, useCreateDashboard, useUpdateDashboard } from "@/hooks/useAnalytics";
+import {
+  useAnalyticsMetrics,
+  useCreateDashboard,
+  useUpdateDashboard,
+} from "@/hooks/useAnalytics";
 
 interface DashboardBuilderProps {
   dashboard?: CustomDashboard;
@@ -73,14 +78,54 @@ interface DashboardBuilderProps {
   onCancel?: () => void;
 }
 
-const widgetTypes: Array<{ type: VisualizationType; icon: any; label: string; description: string }> = [
-  { type: "metric_card", icon: Target, label: "Metric Card", description: "Display a single key metric" },
-  { type: "line", icon: LineChart, label: "Line Chart", description: "Show trends over time" },
-  { type: "bar", icon: BarChart3, label: "Bar Chart", description: "Compare values across categories" },
-  { type: "pie", icon: PieChart, label: "Pie Chart", description: "Show proportional data" },
-  { type: "area", icon: TrendingUp, label: "Area Chart", description: "Visualize cumulative data" },
-  { type: "gauge", icon: Target, label: "Gauge", description: "Display progress towards goals" },
-  { type: "table", icon: Grid, label: "Data Table", description: "Show detailed tabular data" }
+const widgetTypes: Array<{
+  type: VisualizationType;
+  icon: any;
+  label: string;
+  description: string;
+}> = [
+  {
+    type: "metric_card",
+    icon: Target,
+    label: "Metric Card",
+    description: "Display a single key metric",
+  },
+  {
+    type: "line",
+    icon: LineChart,
+    label: "Line Chart",
+    description: "Show trends over time",
+  },
+  {
+    type: "bar",
+    icon: BarChart3,
+    label: "Bar Chart",
+    description: "Compare values across categories",
+  },
+  {
+    type: "pie",
+    icon: PieChart,
+    label: "Pie Chart",
+    description: "Show proportional data",
+  },
+  {
+    type: "area",
+    icon: TrendingUp,
+    label: "Area Chart",
+    description: "Visualize cumulative data",
+  },
+  {
+    type: "gauge",
+    icon: Target,
+    label: "Gauge",
+    description: "Display progress towards goals",
+  },
+  {
+    type: "table",
+    icon: Grid,
+    label: "Data Table",
+    description: "Show detailed tabular data",
+  },
 ];
 
 const timeframeOptions: Array<{ value: AnalyticsTimeframe; label: string }> = [
@@ -89,31 +134,50 @@ const timeframeOptions: Array<{ value: AnalyticsTimeframe; label: string }> = [
   { value: "30d", label: "Last 30 Days" },
   { value: "90d", label: "Last 90 Days" },
   { value: "1y", label: "Last Year" },
-  { value: "custom", label: "Custom Range" }
+  { value: "custom", label: "Custom Range" },
 ];
 
 const colorSchemes = [
-  { name: "Default", colors: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"] },
-  { name: "Ocean", colors: ["#0EA5E9", "#06B6D4", "#10B981", "#34D399", "#60A5FA"] },
-  { name: "Sunset", colors: ["#F97316", "#EF4444", "#F59E0B", "#FBBF24", "#FCD34D"] },
-  { name: "Purple", colors: ["#8B5CF6", "#A855F7", "#C084FC", "#DDD6FE", "#EDE9FE"] },
-  { name: "Monochrome", colors: ["#374151", "#6B7280", "#9CA3AF", "#D1D5DB", "#F3F4F6"] }
+  {
+    name: "Default",
+    colors: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"],
+  },
+  {
+    name: "Ocean",
+    colors: ["#0EA5E9", "#06B6D4", "#10B981", "#34D399", "#60A5FA"],
+  },
+  {
+    name: "Sunset",
+    colors: ["#F97316", "#EF4444", "#F59E0B", "#FBBF24", "#FCD34D"],
+  },
+  {
+    name: "Purple",
+    colors: ["#8B5CF6", "#A855F7", "#C084FC", "#DDD6FE", "#EDE9FE"],
+  },
+  {
+    name: "Monochrome",
+    colors: ["#374151", "#6B7280", "#9CA3AF", "#D1D5DB", "#F3F4F6"],
+  },
 ];
 
-export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuilderProps) {
+export function DashboardBuilder({
+  dashboard,
+  onSave,
+  onCancel,
+}: DashboardBuilderProps) {
   const [editingDashboard, setEditingDashboard] = useState<CustomDashboard>(
     dashboard || {
-      id: '',
-      name: 'New Dashboard',
-      description: '',
-      user_id: 'current_user',
+      id: "",
+      name: "New Dashboard",
+      description: "",
+      user_id: "current_user",
       is_public: false,
       is_template: false,
       layout: {
         columns: 12,
         rows: 8,
         gap: 16,
-        responsive_breakpoints: { mobile: 768, tablet: 1024, desktop: 1440 }
+        responsive_breakpoints: { mobile: 768, tablet: 1024, desktop: 1440 },
       },
       widgets: [],
       filters: [],
@@ -121,11 +185,13 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       shared_with: [],
-      tags: []
-    }
+      tags: [],
+    },
   );
 
-  const [selectedWidget, setSelectedWidget] = useState<DashboardWidget | null>(null);
+  const [selectedWidget, setSelectedWidget] = useState<DashboardWidget | null>(
+    null,
+  );
   const [widgetConfigOpen, setWidgetConfigOpen] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const [activeTab, setActiveTab] = useState("layout");
@@ -144,13 +210,13 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
       position: {
         x: 0,
         y: 0,
-        width: type === 'metric_card' ? 3 : 6,
-        height: type === 'metric_card' ? 2 : 4
+        width: type === "metric_card" ? 3 : 6,
+        height: type === "metric_card" ? 2 : 4,
       },
       data_config: {
         metric_ids: [],
-        timeframe: '30d',
-        aggregation: 'avg'
+        timeframe: "30d",
+        aggregation: "avg",
       },
       display_config: {
         colors: colorSchemes[0].colors,
@@ -160,26 +226,41 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
         show_values: true,
         show_trend: false,
         decimal_places: 2,
-        theme: 'light',
-        font_size: 'medium'
+        theme: "light",
+        font_size: "medium",
       },
       filters: [],
-      is_real_time: false
+      is_real_time: false,
     };
 
     // Find available position
-    const usedPositions = editingDashboard.widgets.map(w => w.position);
-    let x = 0, y = 0;
+    const usedPositions = editingDashboard.widgets.map((w) => w.position);
+    let x = 0,
+      y = 0;
     let positionFound = false;
 
-    for (let row = 0; row < editingDashboard.layout.rows && !positionFound; row++) {
-      for (let col = 0; col <= editingDashboard.layout.columns - newWidget.position.width; col++) {
-        const position = { x: col, y: row, width: newWidget.position.width, height: newWidget.position.height };
-        const overlaps = usedPositions.some(pos =>
-          position.x < pos.x + pos.width &&
-          position.x + position.width > pos.x &&
-          position.y < pos.y + pos.height &&
-          position.y + position.height > pos.y
+    for (
+      let row = 0;
+      row < editingDashboard.layout.rows && !positionFound;
+      row++
+    ) {
+      for (
+        let col = 0;
+        col <= editingDashboard.layout.columns - newWidget.position.width;
+        col++
+      ) {
+        const position = {
+          x: col,
+          y: row,
+          width: newWidget.position.width,
+          height: newWidget.position.height,
+        };
+        const overlaps = usedPositions.some(
+          (pos) =>
+            position.x < pos.x + pos.width &&
+            position.x + position.width > pos.x &&
+            position.y < pos.y + pos.height &&
+            position.y + position.height > pos.y,
         );
 
         if (!overlaps) {
@@ -194,9 +275,9 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
     newWidget.position.x = x;
     newWidget.position.y = y;
 
-    setEditingDashboard(prev => ({
+    setEditingDashboard((prev) => ({
       ...prev,
-      widgets: [...prev.widgets, newWidget]
+      widgets: [...prev.widgets, newWidget],
     }));
 
     setSelectedWidget(newWidget);
@@ -204,17 +285,19 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
   };
 
   const handleWidgetUpdate = (updatedWidget: DashboardWidget) => {
-    setEditingDashboard(prev => ({
+    setEditingDashboard((prev) => ({
       ...prev,
-      widgets: prev.widgets.map(w => w.id === updatedWidget.id ? updatedWidget : w)
+      widgets: prev.widgets.map((w) =>
+        w.id === updatedWidget.id ? updatedWidget : w,
+      ),
     }));
     setSelectedWidget(updatedWidget);
   };
 
   const handleWidgetDelete = (widgetId: string) => {
-    setEditingDashboard(prev => ({
+    setEditingDashboard((prev) => ({
       ...prev,
-      widgets: prev.widgets.filter(w => w.id !== widgetId)
+      widgets: prev.widgets.filter((w) => w.id !== widgetId),
     }));
     setSelectedWidget(null);
     setWidgetConfigOpen(false);
@@ -227,7 +310,7 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
     const [reorderedWidget] = widgets.splice(result.source.index, 1);
     widgets.splice(result.destination.index, 0, reorderedWidget);
 
-    setEditingDashboard(prev => ({ ...prev, widgets }));
+    setEditingDashboard((prev) => ({ ...prev, widgets }));
   };
 
   const handleSave = async () => {
@@ -237,16 +320,17 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
           id: dashboard.id,
           updates: {
             ...editingDashboard,
-            updated_at: new Date().toISOString()
-          }
+            updated_at: new Date().toISOString(),
+          },
         });
       } else {
-        const { id, created_at, updated_at, ...dashboardData } = editingDashboard;
+        const { id, created_at, updated_at, ...dashboardData } =
+          editingDashboard;
         await createDashboard.mutateAsync(dashboardData);
       }
       onSave?.(editingDashboard);
     } catch (error) {
-      console.error('Failed to save dashboard:', error);
+      console.error("Failed to save dashboard:", error);
     }
   };
 
@@ -256,7 +340,7 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
         className="grid gap-4"
         style={{
           gridTemplateColumns: `repeat(${editingDashboard.layout.columns}, 1fr)`,
-          gridTemplateRows: `repeat(${editingDashboard.layout.rows}, minmax(60px, 1fr))`
+          gridTemplateRows: `repeat(${editingDashboard.layout.rows}, minmax(60px, 1fr))`,
         }}
       >
         {editingDashboard.widgets.map((widget) => (
@@ -264,14 +348,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
             key={widget.id}
             className={`
               border-2 rounded-lg p-3 cursor-pointer transition-all duration-200
-              ${selectedWidget?.id === widget.id
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
+              ${
+                selectedWidget?.id === widget.id
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-gray-200 bg-white hover:border-gray-300"
               }
             `}
             style={{
               gridColumn: `${widget.position.x + 1} / span ${widget.position.width}`,
-              gridRow: `${widget.position.y + 1} / span ${widget.position.height}`
+              gridRow: `${widget.position.y + 1} / span ${widget.position.height}`,
             }}
             onClick={() => {
               setSelectedWidget(widget);
@@ -301,17 +386,20 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
             <div className="text-xs text-muted-foreground">
               {widget.data_config.metric_ids.length > 0
                 ? `${widget.data_config.metric_ids.length} metrics`
-                : 'No metrics configured'
-              }
+                : "No metrics configured"}
             </div>
 
             {/* Widget Type Icon */}
             <div className="flex items-center justify-center h-16 text-gray-400">
-              {widgetTypes.find(wt => wt.type === widget.type)?.icon && (
+              {widgetTypes.find((wt) => wt.type === widget.type)?.icon && (
                 <div className="text-2xl">
                   {(() => {
-                    const IconComponent = widgetTypes.find(wt => wt.type === widget.type)?.icon;
-                    return IconComponent ? <IconComponent className="h-8 w-8" /> : null;
+                    const IconComponent = widgetTypes.find(
+                      (wt) => wt.type === widget.type,
+                    )?.icon;
+                    return IconComponent ? (
+                      <IconComponent className="h-8 w-8" />
+                    ) : null;
                   })()}
                 </div>
               )}
@@ -323,7 +411,9 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
           <div className="col-span-full row-span-full flex items-center justify-center text-gray-500">
             <div className="text-center">
               <LayoutDashboard className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Add widgets to start building your dashboard</p>
+              <p className="text-sm">
+                Add widgets to start building your dashboard
+              </p>
             </div>
           </div>
         )}
@@ -350,20 +440,29 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
             onClick={() => setPreviewMode(!previewMode)}
           >
             <Eye className="h-4 w-4 mr-2" />
-            {previewMode ? 'Edit' : 'Preview'}
+            {previewMode ? "Edit" : "Preview"}
           </Button>
           <Button variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={createDashboard.isPending || updateDashboard.isPending}>
+          <Button
+            onClick={handleSave}
+            disabled={createDashboard.isPending || updateDashboard.isPending}
+          >
             <Save className="h-4 w-4 mr-2" />
-            {createDashboard.isPending || updateDashboard.isPending ? 'Saving...' : 'Save Dashboard'}
+            {createDashboard.isPending || updateDashboard.isPending
+              ? "Saving..."
+              : "Save Dashboard"}
           </Button>
         </div>
       </div>
 
       {!previewMode ? (
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList>
             <TabsTrigger value="layout">Layout & Widgets</TabsTrigger>
             <TabsTrigger value="settings">Dashboard Settings</TabsTrigger>
@@ -393,7 +492,9 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                           <div className="flex items-center gap-3">
                             <widgetType.icon className="h-5 w-5" />
                             <div className="text-left">
-                              <div className="font-medium">{widgetType.label}</div>
+                              <div className="font-medium">
+                                {widgetType.label}
+                              </div>
                               <div className="text-xs text-muted-foreground">
                                 {widgetType.description}
                               </div>
@@ -414,7 +515,8 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                       Dashboard Layout
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Grid className="h-4 w-4" />
-                        {editingDashboard.layout.columns} × {editingDashboard.layout.rows}
+                        {editingDashboard.layout.columns} ×{" "}
+                        {editingDashboard.layout.rows}
                       </div>
                     </CardTitle>
                   </CardHeader>
@@ -441,20 +543,26 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                     <Input
                       id="dashboard-name"
                       value={editingDashboard.name}
-                      onChange={(e) => setEditingDashboard(prev => ({
-                        ...prev,
-                        name: e.target.value
-                      }))}
+                      onChange={(e) =>
+                        setEditingDashboard((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                   <div>
-                    <Label htmlFor="refresh-interval">Refresh Interval (seconds)</Label>
+                    <Label htmlFor="refresh-interval">
+                      Refresh Interval (seconds)
+                    </Label>
                     <Select
                       value={editingDashboard.refresh_interval.toString()}
-                      onValueChange={(value) => setEditingDashboard(prev => ({
-                        ...prev,
-                        refresh_interval: parseInt(value)
-                      }))}
+                      onValueChange={(value) =>
+                        setEditingDashboard((prev) => ({
+                          ...prev,
+                          refresh_interval: parseInt(value),
+                        }))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -475,10 +583,12 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                   <Textarea
                     id="dashboard-description"
                     value={editingDashboard.description}
-                    onChange={(e) => setEditingDashboard(prev => ({
-                      ...prev,
-                      description: e.target.value
-                    }))}
+                    onChange={(e) =>
+                      setEditingDashboard((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                     rows={3}
                   />
                 </div>
@@ -494,13 +604,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                         min="6"
                         max="24"
                         value={editingDashboard.layout.columns}
-                        onChange={(e) => setEditingDashboard(prev => ({
-                          ...prev,
-                          layout: {
-                            ...prev.layout,
-                            columns: parseInt(e.target.value) || 12
-                          }
-                        }))}
+                        onChange={(e) =>
+                          setEditingDashboard((prev) => ({
+                            ...prev,
+                            layout: {
+                              ...prev.layout,
+                              columns: parseInt(e.target.value) || 12,
+                            },
+                          }))
+                        }
                       />
                     </div>
                     <div>
@@ -511,13 +623,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                         min="4"
                         max="20"
                         value={editingDashboard.layout.rows}
-                        onChange={(e) => setEditingDashboard(prev => ({
-                          ...prev,
-                          layout: {
-                            ...prev.layout,
-                            rows: parseInt(e.target.value) || 8
-                          }
-                        }))}
+                        onChange={(e) =>
+                          setEditingDashboard((prev) => ({
+                            ...prev,
+                            layout: {
+                              ...prev.layout,
+                              rows: parseInt(e.target.value) || 8,
+                            },
+                          }))
+                        }
                       />
                     </div>
                     <div>
@@ -528,13 +642,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                         min="8"
                         max="32"
                         value={editingDashboard.layout.gap}
-                        onChange={(e) => setEditingDashboard(prev => ({
-                          ...prev,
-                          layout: {
-                            ...prev.layout,
-                            gap: parseInt(e.target.value) || 16
-                          }
-                        }))}
+                        onChange={(e) =>
+                          setEditingDashboard((prev) => ({
+                            ...prev,
+                            layout: {
+                              ...prev.layout,
+                              gap: parseInt(e.target.value) || 16,
+                            },
+                          }))
+                        }
                       />
                     </div>
                   </div>
@@ -554,9 +670,12 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
               <CardContent>
                 <div className="text-center py-8">
                   <Share className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Sharing Configuration</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    Sharing Configuration
+                  </h3>
                   <p className="text-muted-foreground mb-4">
-                    Dashboard sharing and access control features will be implemented here
+                    Dashboard sharing and access control features will be
+                    implemented here
                   </p>
                   <Button variant="outline">
                     <Users className="h-4 w-4 mr-2" />
@@ -612,10 +731,12 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                     <Label>Widget Title</Label>
                     <Input
                       value={selectedWidget.title}
-                      onChange={(e) => handleWidgetUpdate({
-                        ...selectedWidget,
-                        title: e.target.value
-                      })}
+                      onChange={(e) =>
+                        handleWidgetUpdate({
+                          ...selectedWidget,
+                          title: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -623,13 +744,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                     <Label>Metrics</Label>
                     <Select
                       value={selectedWidget.data_config.metric_ids[0] || ""}
-                      onValueChange={(value) => handleWidgetUpdate({
-                        ...selectedWidget,
-                        data_config: {
-                          ...selectedWidget.data_config,
-                          metric_ids: [value]
-                        }
-                      })}
+                      onValueChange={(value) =>
+                        handleWidgetUpdate({
+                          ...selectedWidget,
+                          data_config: {
+                            ...selectedWidget.data_config,
+                            metric_ids: [value],
+                          },
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a metric" />
@@ -648,13 +771,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                     <Label>Timeframe</Label>
                     <Select
                       value={selectedWidget.data_config.timeframe}
-                      onValueChange={(value: AnalyticsTimeframe) => handleWidgetUpdate({
-                        ...selectedWidget,
-                        data_config: {
-                          ...selectedWidget.data_config,
-                          timeframe: value
-                        }
-                      })}
+                      onValueChange={(value: AnalyticsTimeframe) =>
+                        handleWidgetUpdate({
+                          ...selectedWidget,
+                          data_config: {
+                            ...selectedWidget.data_config,
+                            timeframe: value,
+                          },
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -679,13 +804,15 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                           key={scheme.name}
                           variant="outline"
                           className="justify-start h-auto p-3"
-                          onClick={() => handleWidgetUpdate({
-                            ...selectedWidget,
-                            display_config: {
-                              ...selectedWidget.display_config,
-                              colors: scheme.colors
-                            }
-                          })}
+                          onClick={() =>
+                            handleWidgetUpdate({
+                              ...selectedWidget,
+                              display_config: {
+                                ...selectedWidget.display_config,
+                                colors: scheme.colors,
+                              },
+                            })
+                          }
                         >
                           <div className="flex items-center gap-3">
                             <div className="flex gap-1">
@@ -712,26 +839,30 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                         min="0"
                         max="5"
                         value={selectedWidget.display_config.decimal_places}
-                        onChange={(e) => handleWidgetUpdate({
-                          ...selectedWidget,
-                          display_config: {
-                            ...selectedWidget.display_config,
-                            decimal_places: parseInt(e.target.value) || 0
-                          }
-                        })}
+                        onChange={(e) =>
+                          handleWidgetUpdate({
+                            ...selectedWidget,
+                            display_config: {
+                              ...selectedWidget.display_config,
+                              decimal_places: parseInt(e.target.value) || 0,
+                            },
+                          })
+                        }
                       />
                     </div>
                     <div>
                       <Label>Font Size</Label>
                       <Select
                         value={selectedWidget.display_config.font_size}
-                        onValueChange={(value: 'small' | 'medium' | 'large') => handleWidgetUpdate({
-                          ...selectedWidget,
-                          display_config: {
-                            ...selectedWidget.display_config,
-                            font_size: value
-                          }
-                        })}
+                        onValueChange={(value: "small" | "medium" | "large") =>
+                          handleWidgetUpdate({
+                            ...selectedWidget,
+                            display_config: {
+                              ...selectedWidget.display_config,
+                              font_size: value,
+                            },
+                          })
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -755,13 +886,18 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                         min="1"
                         max={editingDashboard.layout.columns}
                         value={selectedWidget.position.width}
-                        onChange={(e) => handleWidgetUpdate({
-                          ...selectedWidget,
-                          position: {
-                            ...selectedWidget.position,
-                            width: Math.min(parseInt(e.target.value) || 1, editingDashboard.layout.columns)
-                          }
-                        })}
+                        onChange={(e) =>
+                          handleWidgetUpdate({
+                            ...selectedWidget,
+                            position: {
+                              ...selectedWidget.position,
+                              width: Math.min(
+                                parseInt(e.target.value) || 1,
+                                editingDashboard.layout.columns,
+                              ),
+                            },
+                          })
+                        }
                       />
                     </div>
                     <div>
@@ -771,13 +907,18 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
                         min="1"
                         max={editingDashboard.layout.rows}
                         value={selectedWidget.position.height}
-                        onChange={(e) => handleWidgetUpdate({
-                          ...selectedWidget,
-                          position: {
-                            ...selectedWidget.position,
-                            height: Math.min(parseInt(e.target.value) || 1, editingDashboard.layout.rows)
-                          }
-                        })}
+                        onChange={(e) =>
+                          handleWidgetUpdate({
+                            ...selectedWidget,
+                            position: {
+                              ...selectedWidget.position,
+                              height: Math.min(
+                                parseInt(e.target.value) || 1,
+                                editingDashboard.layout.rows,
+                              ),
+                            },
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -785,7 +926,10 @@ export function DashboardBuilder({ dashboard, onSave, onCancel }: DashboardBuild
               </Tabs>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setWidgetConfigOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setWidgetConfigOpen(false)}
+                >
                   Close
                 </Button>
                 <Button

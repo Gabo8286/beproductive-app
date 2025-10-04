@@ -1,10 +1,10 @@
-import React from 'react';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { GoalCard } from '@/components/goals/GoalCard';
-import { createMockGoal, createMockGoals } from '@/test/mock-data';
+import React from "react";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoalCard } from "@/components/goals/GoalCard";
+import { createMockGoal, createMockGoals } from "@/test/mock-data";
 
 // Performance testing utilities
 class PerformanceTracker {
@@ -54,7 +54,7 @@ class PerformanceTracker {
 }
 
 // Mock hooks for performance testing
-vi.mock('@/hooks/useGoals', () => ({
+vi.mock("@/hooks/useGoals", () => ({
   useUpdateGoal: () => ({
     mutateAsync: vi.fn().mockResolvedValue({}),
     isLoading: false,
@@ -69,29 +69,29 @@ vi.mock('@/hooks/useGoals', () => ({
   }),
 }));
 
-vi.mock('@/contexts/AuthContext', () => ({
+vi.mock("@/contexts/AuthContext", () => ({
   useAuth: () => ({
-    user: { id: 'test-user' },
+    user: { id: "test-user" },
     loading: false,
   }),
 }));
 
-vi.mock('@/utils/goalStatus', () => ({
-  getStatusColor: vi.fn(() => 'blue'),
+vi.mock("@/utils/goalStatus", () => ({
+  getStatusColor: vi.fn(() => "blue"),
   getStatusLabel: vi.fn((status) => status),
-  getAvailableStatusTransitions: vi.fn(() => ['active', 'completed']),
+  getAvailableStatusTransitions: vi.fn(() => ["active", "completed"]),
 }));
 
-vi.mock('sonner', () => ({
+vi.mock("sonner", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => ({
+vi.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-describe('Performance Testing Suite', () => {
+describe("Performance Testing Suite", () => {
   let tracker: PerformanceTracker;
 
   beforeEach(() => {
@@ -103,9 +103,9 @@ describe('Performance Testing Suite', () => {
     tracker.clear();
   });
 
-  describe('Component Render Performance', () => {
-    it('should render Button component within performance budget', () => {
-      const endMeasurement = tracker.startMeasurement('button-render');
+  describe("Component Render Performance", () => {
+    it("should render Button component within performance budget", () => {
+      const endMeasurement = tracker.startMeasurement("button-render");
 
       render(<Button>Test Button</Button>);
 
@@ -115,18 +115,16 @@ describe('Performance Testing Suite', () => {
       expect(renderTime).toBeLessThan(16.7);
     });
 
-    it('should render Card component efficiently', () => {
-      const endMeasurement = tracker.startMeasurement('card-render');
+    it("should render Card component efficiently", () => {
+      const endMeasurement = tracker.startMeasurement("card-render");
 
       render(
         <Card>
           <CardHeader>
             <CardTitle>Performance Test Card</CardTitle>
           </CardHeader>
-          <CardContent>
-            Card content for performance testing
-          </CardContent>
-        </Card>
+          <CardContent>Card content for performance testing</CardContent>
+        </Card>,
       );
 
       const renderTime = endMeasurement();
@@ -135,13 +133,13 @@ describe('Performance Testing Suite', () => {
       expect(renderTime).toBeLessThan(25);
     });
 
-    it('should render complex GoalCard component within budget', () => {
+    it("should render complex GoalCard component within budget", () => {
       const mockGoal = createMockGoal({
-        title: 'Performance Test Goal',
-        description: 'Testing goal card render performance',
+        title: "Performance Test Goal",
+        description: "Testing goal card render performance",
       });
 
-      const endMeasurement = tracker.startMeasurement('goalcard-render');
+      const endMeasurement = tracker.startMeasurement("goalcard-render");
 
       render(<GoalCard goal={mockGoal} />);
 
@@ -151,19 +149,19 @@ describe('Performance Testing Suite', () => {
       expect(renderTime).toBeLessThan(50);
     });
 
-    it('should handle multiple component renders efficiently', () => {
+    it("should handle multiple component renders efficiently", () => {
       const renderCount = 10;
 
       for (let i = 0; i < renderCount; i++) {
-        const endMeasurement = tracker.startMeasurement('multiple-renders');
+        const endMeasurement = tracker.startMeasurement("multiple-renders");
 
         render(<Button key={i}>Button {i}</Button>);
 
         endMeasurement();
       }
 
-      const averageTime = tracker.getAverageTime('multiple-renders');
-      const maxTime = tracker.getMaxTime('multiple-renders');
+      const averageTime = tracker.getAverageTime("multiple-renders");
+      const maxTime = tracker.getMaxTime("multiple-renders");
 
       // Average render time should be consistent
       expect(averageTime).toBeLessThan(20);
@@ -171,18 +169,18 @@ describe('Performance Testing Suite', () => {
     });
   });
 
-  describe('List Rendering Performance', () => {
-    it('should render small lists efficiently', () => {
+  describe("List Rendering Performance", () => {
+    it("should render small lists efficiently", () => {
       const goals = createMockGoals(5);
 
-      const endMeasurement = tracker.startMeasurement('small-list-render');
+      const endMeasurement = tracker.startMeasurement("small-list-render");
 
       render(
         <div>
-          {goals.map(goal => (
+          {goals.map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
           ))}
-        </div>
+        </div>,
       );
 
       const renderTime = endMeasurement();
@@ -191,17 +189,17 @@ describe('Performance Testing Suite', () => {
       expect(renderTime).toBeLessThan(100);
     });
 
-    it('should render medium lists within reasonable time', () => {
+    it("should render medium lists within reasonable time", () => {
       const goals = createMockGoals(25);
 
-      const endMeasurement = tracker.startMeasurement('medium-list-render');
+      const endMeasurement = tracker.startMeasurement("medium-list-render");
 
       render(
         <div>
-          {goals.map(goal => (
+          {goals.map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
           ))}
-        </div>
+        </div>,
       );
 
       const renderTime = endMeasurement();
@@ -210,21 +208,21 @@ describe('Performance Testing Suite', () => {
       expect(renderTime).toBeLessThan(300);
     });
 
-    it('should handle large lists with reasonable performance', () => {
+    it("should handle large lists with reasonable performance", () => {
       const goals = createMockGoals(100);
 
-      const endMeasurement = tracker.startMeasurement('large-list-render');
+      const endMeasurement = tracker.startMeasurement("large-list-render");
 
       render(
         <div>
-          {goals.map(goal => (
+          {goals.map((goal) => (
             <div key={goal.id}>
               <h3>{goal.title}</h3>
               <p>{goal.description}</p>
               <span>Progress: {goal.progress}%</span>
             </div>
           ))}
-        </div>
+        </div>,
       );
 
       const renderTime = endMeasurement();
@@ -234,10 +232,10 @@ describe('Performance Testing Suite', () => {
     });
   });
 
-  describe('Re-render Performance', () => {
-    it('should minimize unnecessary re-renders', () => {
+  describe("Re-render Performance", () => {
+    it("should minimize unnecessary re-renders", () => {
       const TestComponent = ({ count }: { count: number }) => {
-        const endMeasurement = tracker.startMeasurement('rerender-test');
+        const endMeasurement = tracker.startMeasurement("rerender-test");
 
         React.useEffect(() => {
           endMeasurement();
@@ -257,18 +255,18 @@ describe('Performance Testing Suite', () => {
       rerender(<TestComponent count={2} />);
 
       const measurements = tracker.getAllMeasurements();
-      const rerenderTest = measurements.find(m => m.name === 'rerender-test');
+      const rerenderTest = measurements.find((m) => m.name === "rerender-test");
 
       expect(rerenderTest?.count).toBeGreaterThan(0);
       expect(rerenderTest?.average).toBeLessThan(10); // Re-renders should be fast
     });
 
-    it('should handle prop changes efficiently', () => {
+    it("should handle prop changes efficiently", () => {
       let renderCount = 0;
 
       const TestButton = ({ variant, children }: any) => {
         renderCount++;
-        const endMeasurement = tracker.startMeasurement('prop-change-render');
+        const endMeasurement = tracker.startMeasurement("prop-change-render");
 
         React.useEffect(() => {
           endMeasurement();
@@ -278,7 +276,7 @@ describe('Performance Testing Suite', () => {
       };
 
       const { rerender } = render(
-        <TestButton variant="default">Initial</TestButton>
+        <TestButton variant="default">Initial</TestButton>,
       );
 
       // Change props that should trigger re-render
@@ -287,13 +285,13 @@ describe('Performance Testing Suite', () => {
 
       expect(renderCount).toBe(3); // Initial + 2 changes
 
-      const averageTime = tracker.getAverageTime('prop-change-render');
+      const averageTime = tracker.getAverageTime("prop-change-render");
       expect(averageTime).toBeLessThan(15);
     });
   });
 
-  describe('Memory Usage Performance', () => {
-    it('should not leak memory with repeated renders', () => {
+  describe("Memory Usage Performance", () => {
+    it("should not leak memory with repeated renders", () => {
       const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
 
       // Render and unmount components repeatedly
@@ -319,18 +317,18 @@ describe('Performance Testing Suite', () => {
       }
     });
 
-    it('should clean up event listeners properly', () => {
+    it("should clean up event listeners properly", () => {
       let listenerCount = 0;
 
       const TestComponent = () => {
         React.useEffect(() => {
           const handler = () => {};
           listenerCount++;
-          window.addEventListener('resize', handler);
+          window.addEventListener("resize", handler);
 
           return () => {
             listenerCount--;
-            window.removeEventListener('resize', handler);
+            window.removeEventListener("resize", handler);
           };
         }, []);
 
@@ -345,13 +343,13 @@ describe('Performance Testing Suite', () => {
     });
   });
 
-  describe('Bundle Size Impact', () => {
-    it('should not increase bundle size significantly', () => {
+  describe("Bundle Size Impact", () => {
+    it("should not increase bundle size significantly", () => {
       // This is more of a documentation test for bundle analysis
       const componentSizes = {
-        Button: { estimated: '2KB', actual: 'TBD' },
-        Card: { estimated: '3KB', actual: 'TBD' },
-        GoalCard: { estimated: '8KB', actual: 'TBD' },
+        Button: { estimated: "2KB", actual: "TBD" },
+        Card: { estimated: "3KB", actual: "TBD" },
+        GoalCard: { estimated: "8KB", actual: "TBD" },
       };
 
       // These would be populated by actual bundle analysis tools
@@ -359,15 +357,15 @@ describe('Performance Testing Suite', () => {
     });
   });
 
-  describe('Interaction Performance', () => {
-    it('should respond to clicks quickly', async () => {
+  describe("Interaction Performance", () => {
+    it("should respond to clicks quickly", async () => {
       const clickHandler = vi.fn();
 
       render(<Button onClick={clickHandler}>Click Me</Button>);
 
-      const button = screen.getByRole('button');
+      const button = screen.getByRole("button");
 
-      const endMeasurement = tracker.startMeasurement('click-response');
+      const endMeasurement = tracker.startMeasurement("click-response");
 
       // Simulate click
       button.click();
@@ -379,33 +377,33 @@ describe('Performance Testing Suite', () => {
       expect(clickHandler).toHaveBeenCalled();
     });
 
-    it('should handle rapid interactions gracefully', async () => {
+    it("should handle rapid interactions gracefully", async () => {
       const clickHandler = vi.fn();
 
       render(<Button onClick={clickHandler}>Rapid Click</Button>);
 
-      const button = screen.getByRole('button');
+      const button = screen.getByRole("button");
 
       // Simulate rapid clicks
       for (let i = 0; i < 10; i++) {
-        const endMeasurement = tracker.startMeasurement('rapid-clicks');
+        const endMeasurement = tracker.startMeasurement("rapid-clicks");
         button.click();
         endMeasurement();
       }
 
-      const averageResponseTime = tracker.getAverageTime('rapid-clicks');
+      const averageResponseTime = tracker.getAverageTime("rapid-clicks");
       expect(averageResponseTime).toBeLessThan(10);
       expect(clickHandler).toHaveBeenCalledTimes(10);
     });
   });
 
-  describe('Performance Regression Detection', () => {
-    it('should maintain consistent performance across test runs', () => {
+  describe("Performance Regression Detection", () => {
+    it("should maintain consistent performance across test runs", () => {
       const runs = 5;
       const renderTimes: number[] = [];
 
       for (let i = 0; i < runs; i++) {
-        const endMeasurement = tracker.startMeasurement('consistency-test');
+        const endMeasurement = tracker.startMeasurement("consistency-test");
 
         render(
           <Card>
@@ -415,7 +413,7 @@ describe('Performance Testing Suite', () => {
             <CardContent>
               Testing performance consistency across multiple runs
             </CardContent>
-          </Card>
+          </Card>,
         );
 
         renderTimes.push(endMeasurement());
@@ -423,18 +421,25 @@ describe('Performance Testing Suite', () => {
 
       // Calculate variance
       const average = renderTimes.reduce((a, b) => a + b) / renderTimes.length;
-      const variance = renderTimes.reduce((acc, time) =>
-        acc + Math.pow(time - average, 2), 0) / renderTimes.length;
+      const variance =
+        renderTimes.reduce(
+          (acc, time) => acc + Math.pow(time - average, 2),
+          0,
+        ) / renderTimes.length;
       const standardDeviation = Math.sqrt(variance);
 
       // Performance should be consistent (low standard deviation)
       expect(standardDeviation).toBeLessThan(average * 0.5); // Within 50% of average
     });
 
-    it('should provide performance metrics summary', () => {
+    it("should provide performance metrics summary", () => {
       // Run various performance tests
       render(<Button>Summary Test</Button>);
-      render(<Card><CardContent>Test</CardContent></Card>);
+      render(
+        <Card>
+          <CardContent>Test</CardContent>
+        </Card>,
+      );
 
       const allMeasurements = tracker.getAllMeasurements();
 
@@ -445,23 +450,23 @@ describe('Performance Testing Suite', () => {
       console.table(allMeasurements);
 
       // All measurements should be within acceptable ranges
-      allMeasurements.forEach(measurement => {
+      allMeasurements.forEach((measurement) => {
         expect(measurement.average).toBeGreaterThan(0);
         expect(measurement.average).toBeLessThan(1000); // No operation should take > 1s
       });
     });
   });
 
-  describe('Core Web Vitals Simulation', () => {
-    it('should simulate good Core Web Vitals scores', () => {
+  describe("Core Web Vitals Simulation", () => {
+    it("should simulate good Core Web Vitals scores", () => {
       // Simulate Largest Contentful Paint (LCP)
-      const endLCP = tracker.startMeasurement('simulated-lcp');
+      const endLCP = tracker.startMeasurement("simulated-lcp");
 
       render(
         <div>
           <h1>Main Content</h1>
           <img alt="Large content" width={800} height={600} />
-        </div>
+        </div>,
       );
 
       const lcpTime = endLCP();
@@ -470,9 +475,9 @@ describe('Performance Testing Suite', () => {
       expect(lcpTime).toBeLessThan(100); // In our test environment
 
       // Simulate First Input Delay (FID)
-      const endFID = tracker.startMeasurement('simulated-fid');
+      const endFID = tracker.startMeasurement("simulated-fid");
 
-      const button = document.createElement('button');
+      const button = document.createElement("button");
       document.body.appendChild(button);
       button.click();
 

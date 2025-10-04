@@ -41,7 +41,9 @@ export function PersonalizationPanel() {
             <Label className="text-sm font-medium">Theme Preference</Label>
             <RadioGroup
               value={userPreferences.theme}
-              onValueChange={(value) => updatePreferences({ theme: value as any })}
+              onValueChange={(value) =>
+                updatePreferences({ theme: value as any })
+              }
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="light" id="light" />
@@ -69,7 +71,9 @@ export function PersonalizationPanel() {
               <Switch
                 id="drag-drop"
                 checked={userPreferences.enableDragDrop}
-                onCheckedChange={(checked) => updatePreferences({ enableDragDrop: checked })}
+                onCheckedChange={(checked) =>
+                  updatePreferences({ enableDragDrop: checked })
+                }
               />
             </div>
 
@@ -80,7 +84,9 @@ export function PersonalizationPanel() {
               <Switch
                 id="motivational"
                 checked={userPreferences.showMotivationalMessages}
-                onCheckedChange={(checked) => updatePreferences({ showMotivationalMessages: checked })}
+                onCheckedChange={(checked) =>
+                  updatePreferences({ showMotivationalMessages: checked })
+                }
               />
             </div>
 
@@ -91,7 +97,9 @@ export function PersonalizationPanel() {
               <Switch
                 id="compact"
                 checked={userPreferences.compactMode}
-                onCheckedChange={(checked) => updatePreferences({ compactMode: checked })}
+                onCheckedChange={(checked) =>
+                  updatePreferences({ compactMode: checked })
+                }
               />
             </div>
 
@@ -102,7 +110,9 @@ export function PersonalizationPanel() {
               <Switch
                 id="celebrations"
                 checked={userPreferences.celebrateMilestones}
-                onCheckedChange={(checked) => updatePreferences({ celebrateMilestones: checked })}
+                onCheckedChange={(checked) =>
+                  updatePreferences({ celebrateMilestones: checked })
+                }
               />
             </div>
           </div>
@@ -110,14 +120,17 @@ export function PersonalizationPanel() {
           {/* Refresh Interval */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">
-              Refresh Interval: {Math.floor(userPreferences.refreshInterval / 60000)} minutes
+              Refresh Interval:{" "}
+              {Math.floor(userPreferences.refreshInterval / 60000)} minutes
             </Label>
             <Slider
               value={[userPreferences.refreshInterval]}
-              onValueChange={([value]) => updatePreferences({ refreshInterval: value })}
-              min={60000}  // 1 minute
-              max={1800000}  // 30 minutes
-              step={60000}  // 1 minute steps
+              onValueChange={([value]) =>
+                updatePreferences({ refreshInterval: value })
+              }
+              min={60000} // 1 minute
+              max={1800000} // 30 minutes
+              step={60000} // 1 minute steps
               className="w-full"
             />
           </div>

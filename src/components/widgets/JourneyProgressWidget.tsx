@@ -12,7 +12,7 @@ export function JourneyProgressWidget() {
   const activeModules = [
     personalizedContent.priorityTasks.length > 0,
     personalizedContent.todayHabits.length > 0,
-    personalizedContent.insights.length > 0
+    personalizedContent.insights.length > 0,
   ].filter(Boolean).length;
 
   const journeyProgress = Math.min((activeModules / totalModules) * 100, 100);
@@ -30,7 +30,9 @@ export function JourneyProgressWidget() {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Overall Journey</span>
-            <span className="font-bold text-primary">{Math.round(journeyProgress)}%</span>
+            <span className="font-bold text-primary">
+              {Math.round(journeyProgress)}%
+            </span>
           </div>
           <Progress value={journeyProgress} className="h-3" />
         </div>
@@ -42,12 +44,18 @@ export function JourneyProgressWidget() {
               Celebrations
             </h4>
             <div className="flex flex-wrap gap-2">
-              {personalizedContent.streakCelebrations.slice(0, 2).map((celebration, index) => (
-                <Badge key={index} variant="default" className="text-xs bg-gradient-primary">
-                  <Award className="h-3 w-3 mr-1" />
-                  {celebration}
-                </Badge>
-              ))}
+              {personalizedContent.streakCelebrations
+                .slice(0, 2)
+                .map((celebration, index) => (
+                  <Badge
+                    key={index}
+                    variant="default"
+                    className="text-xs bg-gradient-primary"
+                  >
+                    <Award className="h-3 w-3 mr-1" />
+                    {celebration}
+                  </Badge>
+                ))}
             </div>
           </div>
         )}
@@ -59,11 +67,16 @@ export function JourneyProgressWidget() {
               Suggestions
             </h4>
             <div className="space-y-1">
-              {personalizedContent.recommendations.slice(0, 2).map((rec, index) => (
-                <div key={index} className="text-xs p-2 rounded bg-primary/5 text-primary">
-                  💡 {rec}
-                </div>
-              ))}
+              {personalizedContent.recommendations
+                .slice(0, 2)
+                .map((rec, index) => (
+                  <div
+                    key={index}
+                    className="text-xs p-2 rounded bg-primary/5 text-primary"
+                  >
+                    💡 {rec}
+                  </div>
+                ))}
             </div>
           </div>
         )}

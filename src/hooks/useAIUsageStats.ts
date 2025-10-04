@@ -9,12 +9,15 @@ export interface AIUsageStats {
   total_requests: number;
   success_rate: number;
   avg_response_time: number;
-  by_provider: Record<APIProviderType, {
-    cost: number;
-    tokens: number;
-    requests: number;
-    avg_response_time: number;
-  }>;
+  by_provider: Record<
+    APIProviderType,
+    {
+      cost: number;
+      tokens: number;
+      requests: number;
+      avg_response_time: number;
+    }
+  >;
   daily_breakdown: Array<{
     date: string;
     cost: number;
@@ -27,26 +30,31 @@ export const useAIUsageStats = (days: number = 30) => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['ai-usage-stats', user?.id, days],
+    queryKey: ["ai-usage-stats", user?.id, days],
     queryFn: async (): Promise<AIUsageStats> => {
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
-      const { data, error } = await supabase.rpc('get_user_ai_usage_stats' as any, {
-        p_user_id: user.id,
-        p_days: days,
-      });
+      const { data, error } = await supabase.rpc(
+        "get_user_ai_usage_stats" as any,
+        {
+          p_user_id: user.id,
+          p_days: days,
+        },
+      );
 
       if (error) throw error;
 
-      return (data as AIUsageStats) || {
-        total_cost: 0,
-        total_tokens: 0,
-        total_requests: 0,
-        success_rate: 0,
-        avg_response_time: 0,
-        by_provider: {} as any,
-        daily_breakdown: [],
-      };
+      return (
+        (data as AIUsageStats) || {
+          total_cost: 0,
+          total_tokens: 0,
+          total_requests: 0,
+          success_rate: 0,
+          avg_response_time: 0,
+          by_provider: {} as any,
+          daily_breakdown: [],
+        }
+      );
     },
     enabled: !!user,
     refetchInterval: 30000,
@@ -57,16 +65,19 @@ export const useSystemAIUsageStats = (days: number = 30) => {
   const { profile } = useAuth();
 
   return useQuery({
-    queryKey: ['system-ai-usage-stats', days],
+    queryKey: ["system-ai-usage-stats", days],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_system_api_usage_stats' as any, {
-        days_back: days,
-      });
+      const { data, error } = await supabase.rpc(
+        "get_system_api_usage_stats" as any,
+        {
+          days_back: days,
+        },
+      );
 
       if (error) throw error;
       return data as any;
     },
-    enabled: profile?.role === 'super_admin',
+    enabled: profile?.role === "super_admin",
     refetchInterval: 60000,
   });
 };
@@ -75,13 +86,16 @@ export const useCostProjections = () => {
   const { user } = useAuth();
 
   return useQuery({
-    queryKey: ['cost-projections', user?.id],
+    queryKey: ["cost-projections", user?.id],
     queryFn: async () => {
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
-      const { data, error } = await supabase.rpc('get_cost_projections' as any, {
-        p_user_id: user.id,
-      });
+      const { data, error } = await supabase.rpc(
+        "get_cost_projections" as any,
+        {
+          p_user_id: user.id,
+        },
+      );
 
       if (error) throw error;
       return data as any;
@@ -95,25 +109,28 @@ export const useAIUsageLimits = () => {
   const { user, profile } = useAuth();
 
   return useQuery({
-    queryKey: ['ai-usage-limits'],
+    queryKey: ["ai-usage-limits"],
     queryFn: async () => {
-      if (!user || profile?.role !== 'super_admin') {
-        throw new Error('Super admin access required');
+      if (!user || profile?.role !== "super_admin") {
+        throw new Error("Super admin access required");
       }
 
       // Get all active API keys and their limit status
       const { data: apiKeys, error } = await supabase
-        .from('api_keys')
-        .select('*')
-        .eq('status', 'active');
+        .from("api_keys")
+        .select("*")
+        .eq("status", "active");
 
       if (error) throw error;
 
       const limitChecks = await Promise.all(
         apiKeys.map(async (key) => {
-          const { data, error } = await supabase.rpc('check_api_key_limits' as any, {
-            key_id: key.id,
-          });
+          const { data, error } = await supabase.rpc(
+            "check_api_key_limits" as any,
+            {
+              key_id: key.id,
+            },
+          );
 
           if (error) {
             console.error(`Error checking limits for key ${key.id}:`, error);
@@ -125,12 +142,12 @@ export const useAIUsageLimits = () => {
             key_name: key.key_name,
             provider: key.provider,
           };
-        })
+        }),
       );
 
       return limitChecks.filter(Boolean);
     },
-    enabled: !!user && profile?.role === 'super_admin',
+    enabled: !!user && profile?.role === "super_admin",
     refetchInterval: 2 * 60 * 1000, // Refresh every 2 minutes
   });
 };
@@ -139,28 +156,30 @@ export const useRecentAIActivity = (limit: number = 10) => {
   const { user, profile } = useAuth();
 
   return useQuery({
-    queryKey: ['recent-ai-activity', limit],
+    queryKey: ["recent-ai-activity", limit],
     queryFn: async () => {
-      if (!user || profile?.role !== 'super_admin') {
-        throw new Error('Super admin access required');
+      if (!user || profile?.role !== "super_admin") {
+        throw new Error("Super admin access required");
       }
 
       const { data, error } = await supabase
-        .from('api_usage_analytics')
-        .select(`
+        .from("api_usage_analytics")
+        .select(
+          `
           *,
           profiles:user_id (
             full_name,
             email
           )
-        `)
-        .order('requested_at', { ascending: false })
+        `,
+        )
+        .order("requested_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
       return data;
     },
-    enabled: !!user && profile?.role === 'super_admin',
+    enabled: !!user && profile?.role === "super_admin",
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 };

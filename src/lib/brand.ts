@@ -102,6 +102,8 @@ export const getEmptyStateMessage = (module: JourneyModule): string => {
 /**
  * Get success message for an action
  */
-export const getSuccessMessage = (action: keyof typeof brandConfig.successMessages): string => {
+export const getSuccessMessage = (
+  action: keyof typeof brandConfig.successMessages,
+): string => {
   return brandConfig.successMessages[action];
 };

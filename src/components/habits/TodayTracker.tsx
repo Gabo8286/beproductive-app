@@ -17,15 +17,20 @@ export function TodayTracker({ workspaceId }: TodayTrackerProps) {
   const { data: todayEntries } = useTodayEntries(workspaceId);
   const createEntry = useCreateEntry();
 
-  const dailyHabits = habits?.filter(h => h.frequency === 'daily' && !h.archived_at) || [];
-  const completedCount = todayEntries?.filter(e => e.status === 'completed').length || 0;
+  const dailyHabits =
+    habits?.filter((h) => h.frequency === "daily" && !h.archived_at) || [];
+  const completedCount =
+    todayEntries?.filter((e) => e.status === "completed").length || 0;
   const totalCount = dailyHabits.length;
   const progress = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
-  const handleQuickComplete = (habitId: string, status: 'completed' | 'skipped') => {
+  const handleQuickComplete = (
+    habitId: string,
+    status: "completed" | "skipped",
+  ) => {
     const input: CreateHabitEntryInput = {
       habit_id: habitId,
-      date: format(new Date(), 'yyyy-MM-dd'),
+      date: format(new Date(), "yyyy-MM-dd"),
       status,
     };
 
@@ -33,7 +38,7 @@ export function TodayTracker({ workspaceId }: TodayTrackerProps) {
   };
 
   const getHabitEntry = (habitId: string) => {
-    return todayEntries?.find(e => e.habit?.id === habitId);
+    return todayEntries?.find((e) => e.habit?.id === habitId);
   };
 
   if (dailyHabits.length === 0) {
@@ -58,10 +63,10 @@ export function TodayTracker({ workspaceId }: TodayTrackerProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {dailyHabits.map(habit => {
+          {dailyHabits.map((habit) => {
             const entry = getHabitEntry(habit.id);
-            const isCompleted = entry?.status === 'completed';
-            const isSkipped = entry?.status === 'skipped';
+            const isCompleted = entry?.status === "completed";
+            const isSkipped = entry?.status === "skipped";
 
             return (
               <div
@@ -79,7 +84,13 @@ export function TodayTracker({ workspaceId }: TodayTrackerProps) {
                   <div>
                     <div className="flex items-center gap-2">
                       {habit.icon && <span>{habit.icon}</span>}
-                      <span className={isCompleted ? "line-through text-muted-foreground" : ""}>
+                      <span
+                        className={
+                          isCompleted
+                            ? "line-through text-muted-foreground"
+                            : ""
+                        }
+                      >
                         {habit.title}
                       </span>
                     </div>
@@ -95,14 +106,14 @@ export function TodayTracker({ workspaceId }: TodayTrackerProps) {
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      onClick={() => handleQuickComplete(habit.id, 'completed')}
+                      onClick={() => handleQuickComplete(habit.id, "completed")}
                     >
                       ✓ Done
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleQuickComplete(habit.id, 'skipped')}
+                      onClick={() => handleQuickComplete(habit.id, "skipped")}
                     >
                       Skip
                     </Button>

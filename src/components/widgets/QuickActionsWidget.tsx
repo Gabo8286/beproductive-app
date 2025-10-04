@@ -11,26 +11,26 @@ export function QuickActionsWidget() {
       icon: Target,
       label: "New Goal",
       path: "/goals/new",
-      color: "text-primary"
+      color: "text-primary",
     },
     {
       icon: CheckSquare,
       label: "Add Task",
       path: "/tasks",
-      color: "text-warning"
+      color: "text-warning",
     },
     {
       icon: Repeat,
       label: "Track Habit",
       path: "/habits",
-      color: "text-secondary"
+      color: "text-secondary",
     },
     {
       icon: BookOpen,
       label: "Write Reflection",
       path: "/reflections",
-      color: "text-success"
-    }
+      color: "text-success",
+    },
   ];
 
   return (

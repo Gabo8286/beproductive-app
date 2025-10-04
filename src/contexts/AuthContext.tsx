@@ -11,11 +11,17 @@ interface AuthContextType {
   loading: boolean;
   authError: string | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+  ) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
-  updateProfile: (updates: Partial<Profile>) => Promise<{ error: Error | null }>;
+  updateProfile: (
+    updates: Partial<Profile>,
+  ) => Promise<{ error: Error | null }>;
   clearAuthError: () => void;
 }
 
@@ -31,15 +37,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('[AuthContext] Initializing auth state...');
+    console.log("[AuthContext] Initializing auth state...");
     let isComponentMounted = true;
     let authSubscription: any = null;
 
     // Add timeout to prevent infinite loading (critical for Safari/Brave)
     const loadingTimeout = setTimeout(() => {
       if (isComponentMounted && loading) {
-        console.warn('[AuthContext] Auth initialization timed out after 10 seconds');
-        setAuthError('Authentication initialization timed out. Please refresh the page.');
+        console.warn(
+          "[AuthContext] Auth initialization timed out after 10 seconds",
+        );
+        setAuthError(
+          "Authentication initialization timed out. Please refresh the page.",
+        );
         setLoading(false);
       }
     }, 10000); // 10 seconds timeout
@@ -47,68 +57,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Add additional fallback timeout
     const emergencyTimeout = setTimeout(() => {
       if (isComponentMounted && loading) {
-        console.error('[AuthContext] Emergency timeout - forcing auth to complete');
+        console.error(
+          "[AuthContext] Emergency timeout - forcing auth to complete",
+        );
         setLoading(false);
       }
     }, 15000); // 15 seconds emergency timeout
 
     const initializeAuth = async () => {
       try {
-        console.log('[AuthContext] Setting up auth state listener...');
+        console.log("[AuthContext] Setting up auth state listener...");
 
         // Set up auth state listener with error handling
-        const { data, error: subscriptionError } = supabase.auth.onAuthStateChange(
-          (event, session) => {
-            if (!isComponentMounted) return;
+        const { data } = supabase.auth.onAuthStateChange((event, session) => {
+          if (!isComponentMounted) return;
 
-            console.log('[AuthContext] Auth state changed:', event, session ? 'has session' : 'no session');
-            setSession(session);
-            setUser(session?.user ?? null);
+          console.log(
+            "[AuthContext] Auth state changed:",
+            event,
+            session ? "has session" : "no session",
+          );
+          setSession(session);
+          setUser(session?.user ?? null);
 
-            // Fetch profile when user logs in
-            if (session?.user) {
-              fetchProfile(session.user.id);
-            } else {
-              setProfile(null);
-              setLoading(false);
-            }
+          // Fetch profile when user logs in
+          if (session?.user) {
+            fetchProfile(session.user.id);
+          } else {
+            setProfile(null);
+            setLoading(false);
           }
-        );
-
-        if (subscriptionError) {
-          console.error('[AuthContext] Failed to set up auth listener:', subscriptionError);
-          setAuthError(`Failed to initialize authentication: ${subscriptionError.message}`);
-          setLoading(false);
-          return;
-        }
+        });
 
         authSubscription = data.subscription;
 
-        console.log('[AuthContext] Checking for existing session...');
+        console.log("[AuthContext] Checking for existing session...");
 
         // Check for existing session with timeout
         const sessionPromise = supabase.auth.getSession();
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('Session check timeout')), 8000);
+          setTimeout(() => reject(new Error("Session check timeout")), 8000);
         });
 
         try {
-          const { data: sessionData, error: sessionError } = await Promise.race([
-            sessionPromise,
-            timeoutPromise
-          ]) as any;
+          const { data: sessionData, error: sessionError } =
+            (await Promise.race([sessionPromise, timeoutPromise])) as any;
 
           if (!isComponentMounted) return;
 
           if (sessionError) {
-            console.error('[AuthContext] Session check error:', sessionError);
+            console.error("[AuthContext] Session check error:", sessionError);
             setAuthError(`Failed to check session: ${sessionError.message}`);
             setLoading(false);
             return;
           }
 
           const { session } = sessionData;
-          console.log('[AuthContext] Initial session check:', session ? 'found session' : 'no session');
+          console.log(
+            "[AuthContext] Initial session check:",
+            session ? "found session" : "no session",
+          );
 
           setSession(session);
           setUser(session?.user ?? null);
@@ -118,20 +126,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           } else {
             setLoading(false);
           }
-
         } catch (error) {
           if (!isComponentMounted) return;
 
-          console.error('[AuthContext] Session check failed:', error);
-          setAuthError('Failed to check authentication status. Please refresh the page.');
+          console.error("[AuthContext] Session check failed:", error);
+          setAuthError(
+            "Failed to check authentication status. Please refresh the page.",
+          );
           setLoading(false);
         }
-
       } catch (error) {
         if (!isComponentMounted) return;
 
-        console.error('[AuthContext] Auth initialization failed:', error);
-        setAuthError(`Authentication initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        console.error("[AuthContext] Auth initialization failed:", error);
+        setAuthError(
+          `Authentication initialization failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        );
         setLoading(false);
       }
     };
@@ -141,7 +151,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Cleanup function
     return () => {
-      console.log('[AuthContext] Cleaning up auth context...');
+      console.log("[AuthContext] Cleaning up auth context...");
       isComponentMounted = false;
       clearTimeout(loadingTimeout);
       clearTimeout(emergencyTimeout);
@@ -154,7 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     try {
-      console.log('[AuthContext] Fetching profile for user:', userId);
+      console.log("[AuthContext] Fetching profile for user:", userId);
 
       // Add timeout for profile fetch
       const profilePromise = supabase
@@ -164,36 +174,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 5000);
+        setTimeout(() => reject(new Error("Profile fetch timeout")), 5000);
       });
 
-      const { data, error } = await Promise.race([
+      const { data, error } = (await Promise.race([
         profilePromise,
-        timeoutPromise
-      ]) as any;
+        timeoutPromise,
+      ])) as any;
 
       if (error) {
-        console.error('[AuthContext] Profile fetch error:', error);
+        console.error("[AuthContext] Profile fetch error:", error);
         setAuthError(`Failed to load profile: ${error.message}`);
         // Don't show toast for network errors during initialization
-        if (error.message && !error.message.includes('timeout')) {
+        if (error.message && !error.message.includes("timeout")) {
           toast.error("Failed to load profile");
         }
         setLoading(false);
         return;
       }
 
-      console.log('[AuthContext] Profile loaded successfully');
+      console.log("[AuthContext] Profile loaded successfully");
       setProfile(data as Profile);
       setLoading(false);
-
     } catch (error) {
       console.error("[AuthContext] Profile fetch failed:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       setAuthError(`Failed to load profile: ${errorMessage}`);
 
       // Only show toast for unexpected errors, not timeouts during init
-      if (!errorMessage.includes('timeout')) {
+      if (!errorMessage.includes("timeout")) {
         toast.error("Failed to load profile");
       }
 
@@ -282,9 +292,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const updateData: Record<string, unknown> = {};
-      if (updates.full_name !== undefined) updateData.full_name = updates.full_name;
-      if (updates.avatar_url !== undefined) updateData.avatar_url = updates.avatar_url;
-      if (updates.onboarding_completed !== undefined) updateData.onboarding_completed = updates.onboarding_completed;
+      if (updates.full_name !== undefined)
+        updateData.full_name = updates.full_name;
+      if (updates.avatar_url !== undefined)
+        updateData.avatar_url = updates.avatar_url;
+      if (updates.onboarding_completed !== undefined)
+        updateData.onboarding_completed = updates.onboarding_completed;
 
       const { error } = await supabase
         .from("profiles")

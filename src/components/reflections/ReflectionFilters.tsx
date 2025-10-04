@@ -17,7 +17,11 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import type { ReflectionFilters as Filters, ReflectionType, MoodLevel } from "@/types/reflections";
+import type {
+  ReflectionFilters as Filters,
+  ReflectionType,
+  MoodLevel,
+} from "@/types/reflections";
 import { cn } from "@/lib/utils";
 
 interface ReflectionFiltersProps {
@@ -31,10 +35,10 @@ export default function ReflectionFilters({
 }: ReflectionFiltersProps) {
   const [searchQuery, setSearchQuery] = useState(filters.search || "");
   const [dateFrom, setDateFrom] = useState<Date | undefined>(
-    filters.date_from ? new Date(filters.date_from) : undefined
+    filters.date_from ? new Date(filters.date_from) : undefined,
   );
   const [dateTo, setDateTo] = useState<Date | undefined>(
-    filters.date_to ? new Date(filters.date_to) : undefined
+    filters.date_to ? new Date(filters.date_to) : undefined,
   );
 
   const handleSearchChange = (value: string) => {
@@ -79,11 +83,11 @@ export default function ReflectionFilters({
     onFiltersChange({});
   };
 
-  const hasActiveFilters = 
-    filters.reflection_type || 
-    filters.mood || 
-    filters.date_from || 
-    filters.date_to || 
+  const hasActiveFilters =
+    filters.reflection_type ||
+    filters.mood ||
+    filters.date_from ||
+    filters.date_to ||
     filters.search;
 
   return (
@@ -121,10 +125,7 @@ export default function ReflectionFilters({
         </Select>
 
         {/* Mood Filter */}
-        <Select
-          value={filters.mood || "all"}
-          onValueChange={handleMoodChange}
-        >
+        <Select value={filters.mood || "all"} onValueChange={handleMoodChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="All Moods" />
           </SelectTrigger>
@@ -186,10 +187,7 @@ export default function ReflectionFilters({
           {filters.reflection_type && (
             <Badge variant="secondary">
               Type: {filters.reflection_type}
-              <button
-                className="ml-2"
-                onClick={() => handleTypeChange("all")}
-              >
+              <button className="ml-2" onClick={() => handleTypeChange("all")}>
                 <X className="h-3 w-3" />
               </button>
             </Badge>
@@ -197,10 +195,7 @@ export default function ReflectionFilters({
           {filters.mood && (
             <Badge variant="secondary">
               Mood: {filters.mood}
-              <button
-                className="ml-2"
-                onClick={() => handleMoodChange("all")}
-              >
+              <button className="ml-2" onClick={() => handleMoodChange("all")}>
                 <X className="h-3 w-3" />
               </button>
             </Badge>

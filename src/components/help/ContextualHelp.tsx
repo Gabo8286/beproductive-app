@@ -1,10 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -13,12 +19,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from "@/components/ui/popover";
 import {
   HelpCircle,
   Search,
@@ -39,8 +45,8 @@ import {
   BarChart3,
   Calendar,
   Check,
-  Send
-} from 'lucide-react';
+  Send,
+} from "lucide-react";
 
 export interface HelpArticle {
   id: string;
@@ -48,7 +54,7 @@ export interface HelpArticle {
   content: string;
   category: string;
   tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: "beginner" | "intermediate" | "advanced";
   readTime: number;
   helpful: number;
   notHelpful: number;
@@ -62,8 +68,8 @@ export interface ContextualTip {
   element: string;
   title: string;
   content: string;
-  position: 'top' | 'bottom' | 'left' | 'right';
-  trigger: 'hover' | 'click' | 'focus' | 'auto';
+  position: "top" | "bottom" | "left" | "right";
+  trigger: "hover" | "click" | "focus" | "auto";
   delay?: number;
   showOnce?: boolean;
   category: string;
@@ -74,8 +80,8 @@ export interface SupportTicket {
   subject: string;
   message: string;
   category: string;
-  priority: 'low' | 'medium' | 'high';
-  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  priority: "low" | "medium" | "high";
+  status: "open" | "in_progress" | "resolved" | "closed";
   createdAt: Date;
   userId: string;
 }
@@ -89,153 +95,170 @@ interface ContextualHelpProps {
 
 const HELP_ARTICLES: HelpArticle[] = [
   {
-    id: '1',
-    title: 'Getting Started with Task Management',
-    content: 'Learn how to create, organize, and manage your tasks effectively using our task management system.',
-    category: 'Getting Started',
-    tags: ['tasks', 'beginner', 'basics'],
-    difficulty: 'beginner',
+    id: "1",
+    title: "Getting Started with Task Management",
+    content:
+      "Learn how to create, organize, and manage your tasks effectively using our task management system.",
+    category: "Getting Started",
+    tags: ["tasks", "beginner", "basics"],
+    difficulty: "beginner",
     readTime: 5,
     helpful: 45,
     notHelpful: 2,
-    lastUpdated: new Date('2024-01-10'),
-    videoUrl: 'https://example.com/video/task-management',
-    relatedArticles: ['2', '3']
+    lastUpdated: new Date("2024-01-10"),
+    videoUrl: "https://example.com/video/task-management",
+    relatedArticles: ["2", "3"],
   },
   {
-    id: '2',
-    title: 'Setting Up Habit Tracking',
-    content: 'Discover how to create and track habits to build positive routines and achieve your goals.',
-    category: 'Habits',
-    tags: ['habits', 'tracking', 'goals'],
-    difficulty: 'beginner',
+    id: "2",
+    title: "Setting Up Habit Tracking",
+    content:
+      "Discover how to create and track habits to build positive routines and achieve your goals.",
+    category: "Habits",
+    tags: ["habits", "tracking", "goals"],
+    difficulty: "beginner",
     readTime: 7,
     helpful: 38,
     notHelpful: 1,
-    lastUpdated: new Date('2024-01-12'),
-    relatedArticles: ['1', '4']
+    lastUpdated: new Date("2024-01-12"),
+    relatedArticles: ["1", "4"],
   },
   {
-    id: '3',
-    title: 'Advanced Task Prioritization',
-    content: 'Master advanced techniques for prioritizing tasks using the Eisenhower Matrix and other frameworks.',
-    category: 'Productivity',
-    tags: ['tasks', 'prioritization', 'advanced'],
-    difficulty: 'advanced',
+    id: "3",
+    title: "Advanced Task Prioritization",
+    content:
+      "Master advanced techniques for prioritizing tasks using the Eisenhower Matrix and other frameworks.",
+    category: "Productivity",
+    tags: ["tasks", "prioritization", "advanced"],
+    difficulty: "advanced",
     readTime: 12,
     helpful: 28,
     notHelpful: 3,
-    lastUpdated: new Date('2024-01-08'),
-    relatedArticles: ['1', '5']
+    lastUpdated: new Date("2024-01-08"),
+    relatedArticles: ["1", "5"],
   },
   {
-    id: '4',
-    title: 'Understanding Analytics Dashboard',
-    content: 'Learn how to interpret your productivity analytics and use insights to improve your performance.',
-    category: 'Analytics',
-    tags: ['analytics', 'dashboard', 'insights'],
-    difficulty: 'intermediate',
+    id: "4",
+    title: "Understanding Analytics Dashboard",
+    content:
+      "Learn how to interpret your productivity analytics and use insights to improve your performance.",
+    category: "Analytics",
+    tags: ["analytics", "dashboard", "insights"],
+    difficulty: "intermediate",
     readTime: 10,
     helpful: 32,
     notHelpful: 2,
-    lastUpdated: new Date('2024-01-15'),
-    videoUrl: 'https://example.com/video/analytics',
-    relatedArticles: ['2', '6']
+    lastUpdated: new Date("2024-01-15"),
+    videoUrl: "https://example.com/video/analytics",
+    relatedArticles: ["2", "6"],
   },
   {
-    id: '5',
-    title: 'Team Collaboration Features',
-    content: 'Explore how to collaborate with your team, share goals, and track collective progress.',
-    category: 'Collaboration',
-    tags: ['team', 'collaboration', 'sharing'],
-    difficulty: 'intermediate',
+    id: "5",
+    title: "Team Collaboration Features",
+    content:
+      "Explore how to collaborate with your team, share goals, and track collective progress.",
+    category: "Collaboration",
+    tags: ["team", "collaboration", "sharing"],
+    difficulty: "intermediate",
     readTime: 8,
     helpful: 25,
     notHelpful: 1,
-    lastUpdated: new Date('2024-01-14'),
-    relatedArticles: ['3', '6']
-  }
+    lastUpdated: new Date("2024-01-14"),
+    relatedArticles: ["3", "6"],
+  },
 ];
 
 const CONTEXTUAL_TIPS: ContextualTip[] = [
   {
-    id: 'task-list-tip',
+    id: "task-list-tip",
     element: '[data-help="task-list"]',
-    title: 'Task List Management',
-    content: 'You can drag and drop tasks to reorder them by priority. Use the filters to focus on specific categories.',
-    position: 'right',
-    trigger: 'hover',
+    title: "Task List Management",
+    content:
+      "You can drag and drop tasks to reorder them by priority. Use the filters to focus on specific categories.",
+    position: "right",
+    trigger: "hover",
     delay: 1000,
-    category: 'tasks'
+    category: "tasks",
   },
   {
-    id: 'habit-tracking-tip',
+    id: "habit-tracking-tip",
     element: '[data-help="habit-tracker"]',
-    title: 'Habit Tracking',
-    content: 'Click the checkmark to mark a habit as completed for today. Streaks help maintain consistency!',
-    position: 'top',
-    trigger: 'focus',
-    category: 'habits'
+    title: "Habit Tracking",
+    content:
+      "Click the checkmark to mark a habit as completed for today. Streaks help maintain consistency!",
+    position: "top",
+    trigger: "focus",
+    category: "habits",
   },
   {
-    id: 'analytics-insight',
+    id: "analytics-insight",
     element: '[data-help="analytics-chart"]',
-    title: 'Analytics Insights',
-    content: 'This chart shows your productivity trends over time. Look for patterns to optimize your schedule.',
-    position: 'bottom',
-    trigger: 'auto',
+    title: "Analytics Insights",
+    content:
+      "This chart shows your productivity trends over time. Look for patterns to optimize your schedule.",
+    position: "bottom",
+    trigger: "auto",
     delay: 3000,
     showOnce: true,
-    category: 'analytics'
-  }
+    category: "analytics",
+  },
 ];
 
 export const ContextualHelp: React.FC<ContextualHelpProps> = ({
-  currentPage = 'dashboard',
-  userId = 'user-123',
+  currentPage = "dashboard",
+  userId = "user-123",
   showTips = true,
-  enableSupportTickets = true
+  enableSupportTickets = true,
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(
+    null,
+  );
   const [activeTips, setActiveTips] = useState<string[]>([]);
   const [dismissedTips, setDismissedTips] = useState<string[]>([]);
   const [supportTicket, setSupportTicket] = useState({
-    subject: '',
-    message: '',
-    category: 'general',
-    priority: 'medium' as const
+    subject: "",
+    message: "",
+    category: "general",
+    priority: "medium" as const,
   });
   const [isTicketDialogOpen, setIsTicketDialogOpen] = useState(false);
 
   const helpRef = useRef<HTMLDivElement>(null);
 
   // Filter articles based on search and category
-  const filteredArticles = HELP_ARTICLES.filter(article => {
-    const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
+  const filteredArticles = HELP_ARTICLES.filter((article) => {
+    const matchesSearch =
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    const matchesCategory =
+      selectedCategory === "all" || article.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   // Get contextual tips for current page
-  const contextualTips = CONTEXTUAL_TIPS.filter(tip =>
-    tip.category === currentPage && !dismissedTips.includes(tip.id)
+  const contextualTips = CONTEXTUAL_TIPS.filter(
+    (tip) => tip.category === currentPage && !dismissedTips.includes(tip.id),
   );
 
   // Categories for filtering
-  const categories = ['all', ...Array.from(new Set(HELP_ARTICLES.map(article => article.category)))];
+  const categories = [
+    "all",
+    ...Array.from(new Set(HELP_ARTICLES.map((article) => article.category))),
+  ];
 
   // Initialize contextual tips
   useEffect(() => {
     if (showTips && contextualTips.length > 0) {
-      contextualTips.forEach(tip => {
-        if (tip.trigger === 'auto' && tip.delay) {
+      contextualTips.forEach((tip) => {
+        if (tip.trigger === "auto" && tip.delay) {
           setTimeout(() => {
-            setActiveTips(prev => [...prev, tip.id]);
+            setActiveTips((prev) => [...prev, tip.id]);
           }, tip.delay);
         }
       });
@@ -244,47 +267,60 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
 
   const handleArticleRate = (articleId: string, helpful: boolean) => {
     // Handle article rating
-    console.log(`Rated article ${articleId} as ${helpful ? 'helpful' : 'not helpful'}`);
+    console.log(
+      `Rated article ${articleId} as ${helpful ? "helpful" : "not helpful"}`,
+    );
   };
 
   const dismissTip = (tipId: string) => {
-    setActiveTips(prev => prev.filter(id => id !== tipId));
-    setDismissedTips(prev => [...prev, tipId]);
+    setActiveTips((prev) => prev.filter((id) => id !== tipId));
+    setDismissedTips((prev) => [...prev, tipId]);
   };
 
   const submitSupportTicket = async () => {
     if (!supportTicket.subject || !supportTicket.message) return;
 
     // Submit support ticket
-    console.log('Submitting support ticket:', supportTicket);
+    console.log("Submitting support ticket:", supportTicket);
 
     // Reset form
     setSupportTicket({
-      subject: '',
-      message: '',
-      category: 'general',
-      priority: 'medium'
+      subject: "",
+      message: "",
+      category: "general",
+      priority: "medium",
     });
     setIsTicketDialogOpen(false);
   };
 
-  const getDifficultyColor = (difficulty: HelpArticle['difficulty']) => {
+  const getDifficultyColor = (difficulty: HelpArticle["difficulty"]) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
+      case "beginner":
+        return "bg-green-100 text-green-800";
+      case "intermediate":
+        return "bg-yellow-100 text-yellow-800";
+      case "advanced":
+        return "bg-red-100 text-red-800";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
-      case 'getting started': return <Target className="h-4 w-4" />;
-      case 'tasks': case 'productivity': return <Zap className="h-4 w-4" />;
-      case 'habits': return <Calendar className="h-4 w-4" />;
-      case 'analytics': return <BarChart3 className="h-4 w-4" />;
-      case 'collaboration': return <Users className="h-4 w-4" />;
-      case 'settings': return <Settings className="h-4 w-4" />;
-      default: return <BookOpen className="h-4 w-4" />;
+      case "getting started":
+        return <Target className="h-4 w-4" />;
+      case "tasks":
+      case "productivity":
+        return <Zap className="h-4 w-4" />;
+      case "habits":
+        return <Calendar className="h-4 w-4" />;
+      case "analytics":
+        return <BarChart3 className="h-4 w-4" />;
+      case "collaboration":
+        return <Users className="h-4 w-4" />;
+      case "settings":
+        return <Settings className="h-4 w-4" />;
+      default:
+        return <BookOpen className="h-4 w-4" />;
     }
   };
 
@@ -294,10 +330,7 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
       <div className="fixed bottom-6 left-6 z-50">
         <Popover open={isHelpOpen} onOpenChange={setIsHelpOpen}>
           <PopoverTrigger asChild>
-            <Button
-              className="rounded-full w-14 h-14 shadow-lg"
-              size="lg"
-            >
+            <Button className="rounded-full w-14 h-14 shadow-lg" size="lg">
               <HelpCircle className="h-6 w-6" />
             </Button>
           </PopoverTrigger>
@@ -311,7 +344,9 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
               {/* Header */}
               <div className="p-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-gray-900">Help & Support</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    Help & Support
+                  </h3>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -349,38 +384,55 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-2">{selectedArticle.title}</h4>
+                      <h4 className="font-semibold text-lg mb-2">
+                        {selectedArticle.title}
+                      </h4>
                       <div className="flex items-center gap-2 mb-3">
-                        <Badge className={getDifficultyColor(selectedArticle.difficulty)}>
+                        <Badge
+                          className={getDifficultyColor(
+                            selectedArticle.difficulty,
+                          )}
+                        >
                           {selectedArticle.difficulty}
                         </Badge>
                         <span className="text-sm text-gray-500">
                           {selectedArticle.readTime} min read
                         </span>
                         {selectedArticle.videoUrl && (
-                          <Badge variant="outline" className="flex items-center gap-1">
+                          <Badge
+                            variant="outline"
+                            className="flex items-center gap-1"
+                          >
                             <Video className="h-3 w-3" />
                             Video
                           </Badge>
                         )}
                       </div>
-                      <p className="text-gray-700 mb-4">{selectedArticle.content}</p>
+                      <p className="text-gray-700 mb-4">
+                        {selectedArticle.content}
+                      </p>
 
                       {/* Rating */}
                       <div className="flex items-center justify-between pt-3 border-t">
-                        <span className="text-sm text-gray-600">Was this helpful?</span>
+                        <span className="text-sm text-gray-600">
+                          Was this helpful?
+                        </span>
                         <div className="flex gap-2">
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleArticleRate(selectedArticle.id, true)}
+                            onClick={() =>
+                              handleArticleRate(selectedArticle.id, true)
+                            }
                           >
                             <ThumbsUp className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleArticleRate(selectedArticle.id, false)}
+                            onClick={() =>
+                              handleArticleRate(selectedArticle.id, false)
+                            }
                           >
                             <ThumbsDown className="h-4 w-4" />
                           </Button>
@@ -402,7 +454,10 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
                         <Lightbulb className="h-4 w-4 mr-2" />
                         Quick Start
                       </Button>
-                      <Dialog open={isTicketDialogOpen} onOpenChange={setIsTicketDialogOpen}>
+                      <Dialog
+                        open={isTicketDialogOpen}
+                        onOpenChange={setIsTicketDialogOpen}
+                      >
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
@@ -423,41 +478,73 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
                           </DialogHeader>
                           <div className="space-y-4">
                             <div className="space-y-2">
-                              <label className="text-sm font-medium">Subject</label>
+                              <label className="text-sm font-medium">
+                                Subject
+                              </label>
                               <Input
                                 value={supportTicket.subject}
-                                onChange={(e) => setSupportTicket(prev => ({ ...prev, subject: e.target.value }))}
+                                onChange={(e) =>
+                                  setSupportTicket((prev) => ({
+                                    ...prev,
+                                    subject: e.target.value,
+                                  }))
+                                }
                                 placeholder="Brief description of your issue"
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="text-sm font-medium">Message</label>
+                              <label className="text-sm font-medium">
+                                Message
+                              </label>
                               <Textarea
                                 value={supportTicket.message}
-                                onChange={(e) => setSupportTicket(prev => ({ ...prev, message: e.target.value }))}
+                                onChange={(e) =>
+                                  setSupportTicket((prev) => ({
+                                    ...prev,
+                                    message: e.target.value,
+                                  }))
+                                }
                                 placeholder="Detailed description of your issue"
                                 rows={4}
                               />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                               <div className="space-y-2">
-                                <label className="text-sm font-medium">Category</label>
+                                <label className="text-sm font-medium">
+                                  Category
+                                </label>
                                 <select
                                   value={supportTicket.category}
-                                  onChange={(e) => setSupportTicket(prev => ({ ...prev, category: e.target.value }))}
+                                  onChange={(e) =>
+                                    setSupportTicket((prev) => ({
+                                      ...prev,
+                                      category: e.target.value,
+                                    }))
+                                  }
                                   className="w-full p-2 border rounded"
                                 >
                                   <option value="general">General</option>
-                                  <option value="technical">Technical Issue</option>
+                                  <option value="technical">
+                                    Technical Issue
+                                  </option>
                                   <option value="billing">Billing</option>
-                                  <option value="feature">Feature Request</option>
+                                  <option value="feature">
+                                    Feature Request
+                                  </option>
                                 </select>
                               </div>
                               <div className="space-y-2">
-                                <label className="text-sm font-medium">Priority</label>
+                                <label className="text-sm font-medium">
+                                  Priority
+                                </label>
                                 <select
                                   value={supportTicket.priority}
-                                  onChange={(e) => setSupportTicket(prev => ({ ...prev, priority: e.target.value as any }))}
+                                  onChange={(e) =>
+                                    setSupportTicket((prev) => ({
+                                      ...prev,
+                                      priority: e.target.value as any,
+                                    }))
+                                  }
                                   className="w-full p-2 border rounded"
                                 >
                                   <option value="low">Low</option>
@@ -468,7 +555,10 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
                             </div>
                           </div>
                           <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsTicketDialogOpen(false)}>
+                            <Button
+                              variant="outline"
+                              onClick={() => setIsTicketDialogOpen(false)}
+                            >
                               Cancel
                             </Button>
                             <Button onClick={submitSupportTicket}>
@@ -482,22 +572,26 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
 
                     {/* Categories */}
                     <div className="flex flex-wrap gap-1">
-                      {categories.map(category => (
+                      {categories.map((category) => (
                         <Button
                           key={category}
-                          variant={selectedCategory === category ? "default" : "outline"}
+                          variant={
+                            selectedCategory === category
+                              ? "default"
+                              : "outline"
+                          }
                           size="sm"
                           onClick={() => setSelectedCategory(category)}
                           className="text-xs"
                         >
-                          {category === 'all' ? 'All' : category}
+                          {category === "all" ? "All" : category}
                         </Button>
                       ))}
                     </div>
 
                     {/* Articles */}
                     <div className="space-y-2">
-                      {filteredArticles.slice(0, 5).map(article => (
+                      {filteredArticles.slice(0, 5).map((article) => (
                         <motion.div
                           key={article.id}
                           initial={{ opacity: 0, y: 10 }}
@@ -509,12 +603,19 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
                             <div className="flex items-start gap-2 flex-1">
                               {getCategoryIcon(article.category)}
                               <div className="flex-1 min-w-0">
-                                <h5 className="font-medium text-sm truncate">{article.title}</h5>
+                                <h5 className="font-medium text-sm truncate">
+                                  {article.title}
+                                </h5>
                                 <p className="text-xs text-gray-600 line-clamp-2">
                                   {article.content.substring(0, 80)}...
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <Badge className={getDifficultyColor(article.difficulty)} variant="secondary">
+                                  <Badge
+                                    className={getDifficultyColor(
+                                      article.difficulty,
+                                    )}
+                                    variant="secondary"
+                                  >
                                     {article.difficulty}
                                   </Badge>
                                   <span className="text-xs text-gray-500">
@@ -545,8 +646,8 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
 
       {/* Contextual Tips */}
       <AnimatePresence>
-        {activeTips.map(tipId => {
-          const tip = CONTEXTUAL_TIPS.find(t => t.id === tipId);
+        {activeTips.map((tipId) => {
+          const tip = CONTEXTUAL_TIPS.find((t) => t.id === tipId);
           if (!tip) return null;
 
           return (
@@ -558,9 +659,9 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
               className="fixed z-50 pointer-events-none"
               style={{
                 // Position would be calculated based on target element
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)'
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
               }}
             >
               <Card className="max-w-xs shadow-lg border-blue-200 bg-blue-50 pointer-events-auto">

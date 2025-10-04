@@ -1,10 +1,16 @@
 // Projects Module TypeScript Types
 // Complete type definitions for project management system
 
-export type ProjectStatus = 'planning' | 'active' | 'on_hold' | 'completed' | 'cancelled' | 'archived';
-export type ProjectPriority = 'low' | 'medium' | 'high' | 'urgent';
-export type ProjectVisibility = 'private' | 'workspace' | 'public';
-export type ProjectMemberRole = 'owner' | 'manager' | 'member' | 'viewer';
+export type ProjectStatus =
+  | "planning"
+  | "active"
+  | "on_hold"
+  | "completed"
+  | "cancelled"
+  | "archived";
+export type ProjectPriority = "low" | "medium" | "high" | "urgent";
+export type ProjectVisibility = "private" | "workspace" | "public";
+export type ProjectMemberRole = "owner" | "manager" | "member" | "viewer";
 
 export interface ProjectMemberPermissions {
   can_edit: boolean;
@@ -225,9 +231,9 @@ export interface CreateTemplateInput {
   title: string;
   description?: string;
   category: string;
-  template_data: ProjectTemplate['template_data'];
-  default_milestones?: ProjectTemplate['default_milestones'];
-  default_tasks?: ProjectTemplate['default_tasks'];
+  template_data: ProjectTemplate["template_data"];
+  default_milestones?: ProjectTemplate["default_milestones"];
+  default_tasks?: ProjectTemplate["default_tasks"];
   is_public?: boolean;
 }
 
@@ -235,9 +241,9 @@ export interface UpdateTemplateInput {
   title?: string;
   description?: string;
   category?: string;
-  template_data?: Partial<ProjectTemplate['template_data']>;
-  default_milestones?: ProjectTemplate['default_milestones'];
-  default_tasks?: ProjectTemplate['default_tasks'];
+  template_data?: Partial<ProjectTemplate["template_data"]>;
+  default_milestones?: ProjectTemplate["default_milestones"];
+  default_tasks?: ProjectTemplate["default_tasks"];
   is_public?: boolean;
 }
 
@@ -256,8 +262,16 @@ export interface ProjectFilters {
 }
 
 export interface ProjectSortOptions {
-  field: 'title' | 'status' | 'priority' | 'start_date' | 'target_date' | 'progress_percentage' | 'created_at' | 'updated_at';
-  direction: 'asc' | 'desc';
+  field:
+    | "title"
+    | "status"
+    | "priority"
+    | "start_date"
+    | "target_date"
+    | "progress_percentage"
+    | "created_at"
+    | "updated_at";
+  direction: "asc" | "desc";
 }
 
 // Analytics and insights types
@@ -296,7 +310,11 @@ export interface ProjectDashboardData {
   upcoming_milestones: Array<ProjectMilestone & { project_title: string }>;
   recent_activity: Array<{
     id: string;
-    type: 'project_created' | 'project_completed' | 'milestone_completed' | 'member_added';
+    type:
+      | "project_created"
+      | "project_completed"
+      | "milestone_completed"
+      | "member_added";
     project_id: string;
     project_title: string;
     description: string;
@@ -332,11 +350,11 @@ export interface ProjectValidation {
 
 // Default values
 export const PROJECT_DEFAULTS = {
-  status: 'planning' as ProjectStatus,
-  priority: 'medium' as ProjectPriority,
-  visibility: 'workspace' as ProjectVisibility,
-  color: '#3b82f6',
-  icon: 'folder',
+  status: "planning" as ProjectStatus,
+  priority: "medium" as ProjectPriority,
+  visibility: "workspace" as ProjectVisibility,
+  color: "#3b82f6",
+  icon: "folder",
   progress_percentage: 0,
   actual_hours: 0,
   position: 0,
@@ -345,7 +363,7 @@ export const PROJECT_DEFAULTS = {
 } as const;
 
 export const PROJECT_MEMBER_DEFAULTS = {
-  role: 'member' as ProjectMemberRole,
+  role: "member" as ProjectMemberRole,
   permissions: {
     can_edit: false,
     can_delete: false,
@@ -356,66 +374,66 @@ export const PROJECT_MEMBER_DEFAULTS = {
 // Status and priority display configurations
 export const PROJECT_STATUS_CONFIG = {
   planning: {
-    label: 'Planning',
-    color: 'blue',
-    icon: 'calendar',
-    description: 'Project is in planning phase',
+    label: "Planning",
+    color: "blue",
+    icon: "calendar",
+    description: "Project is in planning phase",
   },
   active: {
-    label: 'Active',
-    color: 'green',
-    icon: 'play',
-    description: 'Project is actively being worked on',
+    label: "Active",
+    color: "green",
+    icon: "play",
+    description: "Project is actively being worked on",
   },
   on_hold: {
-    label: 'On Hold',
-    color: 'yellow',
-    icon: 'pause',
-    description: 'Project is temporarily paused',
+    label: "On Hold",
+    color: "yellow",
+    icon: "pause",
+    description: "Project is temporarily paused",
   },
   completed: {
-    label: 'Completed',
-    color: 'green',
-    icon: 'check',
-    description: 'Project has been completed',
+    label: "Completed",
+    color: "green",
+    icon: "check",
+    description: "Project has been completed",
   },
   cancelled: {
-    label: 'Cancelled',
-    color: 'red',
-    icon: 'x',
-    description: 'Project has been cancelled',
+    label: "Cancelled",
+    color: "red",
+    icon: "x",
+    description: "Project has been cancelled",
   },
   archived: {
-    label: 'Archived',
-    color: 'gray',
-    icon: 'archive',
-    description: 'Project has been archived',
+    label: "Archived",
+    color: "gray",
+    icon: "archive",
+    description: "Project has been archived",
   },
 } as const;
 
 export const PROJECT_PRIORITY_CONFIG = {
   low: {
-    label: 'Low',
-    color: 'gray',
-    icon: 'arrow-down',
+    label: "Low",
+    color: "gray",
+    icon: "arrow-down",
     score: 1,
   },
   medium: {
-    label: 'Medium',
-    color: 'blue',
-    icon: 'minus',
+    label: "Medium",
+    color: "blue",
+    icon: "minus",
     score: 2,
   },
   high: {
-    label: 'High',
-    color: 'orange',
-    icon: 'arrow-up',
+    label: "High",
+    color: "orange",
+    icon: "arrow-up",
     score: 3,
   },
   urgent: {
-    label: 'Urgent',
-    color: 'red',
-    icon: 'alert-triangle',
+    label: "Urgent",
+    color: "red",
+    icon: "alert-triangle",
     score: 4,
   },
 } as const;

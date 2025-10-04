@@ -1,10 +1,10 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVertical } from 'lucide-react';
-import { Database } from '@/integrations/supabase/types';
-import { useAriaAnnounce } from '@/hooks/useAriaAnnounce';
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVertical } from "lucide-react";
+import { Database } from "@/integrations/supabase/types";
+import { useAriaAnnounce } from "@/hooks/useAriaAnnounce";
 
-type Task = Database['public']['Tables']['tasks']['Row'] & {
+type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
   created_by_profile?: { full_name: string | null; avatar_url: string | null };
 };
@@ -15,9 +15,13 @@ interface DraggableTaskProps {
   disabled?: boolean;
 }
 
-export function DraggableTask({ task, children, disabled = false }: DraggableTaskProps) {
+export function DraggableTask({
+  task,
+  children,
+  disabled = false,
+}: DraggableTaskProps) {
   const { announce } = useAriaAnnounce();
-  
+
   const {
     attributes,
     listeners,
@@ -38,9 +42,12 @@ export function DraggableTask({ task, children, disabled = false }: DraggableTas
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === ' ' || event.key === 'Enter') {
+    if (event.key === " " || event.key === "Enter") {
       event.preventDefault();
-      announce(`Task ${task.title} ready to move. Use arrow keys to reorder.`, 'assertive');
+      announce(
+        `Task ${task.title} ready to move. Use arrow keys to reorder.`,
+        "assertive",
+      );
     }
   };
 
@@ -48,7 +55,7 @@ export function DraggableTask({ task, children, disabled = false }: DraggableTas
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group ${isDragging ? 'z-50' : ''}`}
+      className={`relative group ${isDragging ? "z-50" : ""}`}
     >
       <div className="absolute left-2 top-1/2 -translate-y-1/2 z-10 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
         <button
@@ -62,9 +69,7 @@ export function DraggableTask({ task, children, disabled = false }: DraggableTas
           <GripVertical className="h-4 w-4 text-muted-foreground" />
         </button>
       </div>
-      <div className={isDragging ? 'opacity-50' : ''}>
-        {children}
-      </div>
+      <div className={isDragging ? "opacity-50" : ""}>{children}</div>
     </div>
   );
 }

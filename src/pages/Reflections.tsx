@@ -14,25 +14,34 @@ import ReflectionTimeline from "@/components/reflections/ReflectionTimeline";
 import DailyReflectionForm from "@/components/reflections/DailyReflectionForm";
 import ReflectionAnalyticsDashboard from "@/components/reflections/ReflectionAnalyticsDashboard";
 import MoodHeatmap from "@/components/reflections/MoodHeatmap";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import type { ReflectionFilters as Filters } from "@/types/reflections";
 
 export default function Reflections() {
   const [showNewReflection, setShowNewReflection] = useState(false);
   const [filters, setFilters] = useState<Filters>({});
-  const [viewMode, setViewMode] = useState<'timeline' | 'calendar' | 'analytics'>('timeline');
+  const [viewMode, setViewMode] = useState<
+    "timeline" | "calendar" | "analytics"
+  >("timeline");
 
   // Get current workspace
   const { data: workspaceData } = useQuery({
-    queryKey: ['current-workspace'],
+    queryKey: ["current-workspace"],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('workspace_members')
-        .select('workspace_id')
-        .eq('user_id', user.id)
+        .from("workspace_members")
+        .select("workspace_id")
+        .eq("user_id", user.id)
         .limit(1)
         .single();
 
@@ -41,33 +50,51 @@ export default function Reflections() {
     },
   });
 
-  const workspaceId = workspaceData?.workspace_id || '';
-  
+  const workspaceId = workspaceData?.workspace_id || "";
+
   const { data: reflections, isLoading } = useReflections(workspaceId, filters);
   const { data: streakData } = useReflectionStreak(workspaceId);
 
   // Calculate this week's count
-  const thisWeekCount = reflections?.filter(r => {
-    const reflectionDate = new Date(r.reflection_date);
-    const weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    return reflectionDate >= weekAgo;
-  }).length || 0;
+  const thisWeekCount =
+    reflections?.filter((r) => {
+      const reflectionDate = new Date(r.reflection_date);
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      return reflectionDate >= weekAgo;
+    }).length || 0;
 
   // Calculate average mood this month
-  const avgMood = reflections
-    ?.filter(r => {
-      const reflectionDate = new Date(r.reflection_date);
-      const monthAgo = new Date();
-      monthAgo.setMonth(monthAgo.getMonth() - 1);
-      return reflectionDate >= monthAgo && r.mood;
-    })
-    .reduce((sum, r) => {
-      const moodScores = { amazing: 6, great: 5, good: 4, neutral: 3, bad: 2, terrible: 1 };
-      return sum + (r.mood ? moodScores[r.mood] : 0);
-    }, 0) / (reflections?.filter(r => r.mood).length || 1) || 0;
+  const avgMood =
+    reflections
+      ?.filter((r) => {
+        const reflectionDate = new Date(r.reflection_date);
+        const monthAgo = new Date();
+        monthAgo.setMonth(monthAgo.getMonth() - 1);
+        return reflectionDate >= monthAgo && r.mood;
+      })
+      .reduce((sum, r) => {
+        const moodScores = {
+          amazing: 6,
+          great: 5,
+          good: 4,
+          neutral: 3,
+          bad: 2,
+          terrible: 1,
+        };
+        return sum + (r.mood ? moodScores[r.mood] : 0);
+      }, 0) / (reflections?.filter((r) => r.mood).length || 1) || 0;
 
-  const moodEmoji = avgMood >= 5 ? '😊' : avgMood >= 4 ? '🙂' : avgMood >= 3 ? '😐' : avgMood >= 2 ? '😔' : '😢';
+  const moodEmoji =
+    avgMood >= 5
+      ? "😊"
+      : avgMood >= 4
+        ? "🙂"
+        : avgMood >= 3
+          ? "😐"
+          : avgMood >= 2
+            ? "😔"
+            : "😢";
 
   if (!workspaceId) {
     return (
@@ -102,7 +129,9 @@ export default function Reflections() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Current Streak</p>
-              <p className="text-2xl font-bold">{streakData?.current_streak || 0} days</p>
+              <p className="text-2xl font-bold">
+                {streakData?.current_streak || 0} days
+              </p>
             </div>
           </div>
         </Card>
@@ -138,7 +167,9 @@ export default function Reflections() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Longest Streak</p>
-              <p className="text-2xl font-bold">{streakData?.longest_streak || 0} days</p>
+              <p className="text-2xl font-bold">
+                {streakData?.longest_streak || 0} days
+              </p>
             </div>
           </div>
         </Card>

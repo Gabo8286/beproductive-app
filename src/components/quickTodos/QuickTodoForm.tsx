@@ -10,10 +10,10 @@ interface QuickTodoFormProps {
   onSuccess?: () => void;
 }
 
-export function QuickTodoForm({ 
-  autoFocus = false, 
+export function QuickTodoForm({
+  autoFocus = false,
   placeholder = "What's on your mind?",
-  onSuccess 
+  onSuccess,
 }: QuickTodoFormProps) {
   const [content, setContent] = useState("");
   const [isAdding, setIsAdding] = useState(false);
@@ -32,7 +32,7 @@ export function QuickTodoForm({
 
     try {
       await createQuickTodo.mutateAsync({
-        content: content.trim()
+        content: content.trim(),
       });
       setContent("");
       setIsAdding(false);
@@ -83,4 +83,3 @@ export function QuickTodoForm({
     </form>
   );
 }
-

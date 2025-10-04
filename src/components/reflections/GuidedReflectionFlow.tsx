@@ -13,14 +13,14 @@ interface GuidedReflectionFlowProps {
   onCancel: () => void;
 }
 
-export default function GuidedReflectionFlow({ 
-  template, 
-  onComplete, 
-  onCancel 
+export default function GuidedReflectionFlow({
+  template,
+  onComplete,
+  onCancel,
 }: GuidedReflectionFlowProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
-  
+
   const prompts = template.prompts;
   const currentPrompt = prompts[currentStep];
   const progress = ((currentStep + 1) / prompts.length) * 100;
@@ -71,11 +71,13 @@ export default function GuidedReflectionFlow({
       {/* Current Section */}
       {template.structure.sections.map((section) => {
         const sectionPrompts = section.prompts
-          .map(pid => prompts.find(p => p.id === pid))
+          .map((pid) => prompts.find((p) => p.id === pid))
           .filter(Boolean);
-        
-        const currentPromptInSection = sectionPrompts.find(p => p?.id === currentPrompt?.id);
-        
+
+        const currentPromptInSection = sectionPrompts.find(
+          (p) => p?.id === currentPrompt?.id,
+        );
+
         if (!currentPromptInSection) return null;
 
         return (
@@ -97,10 +99,12 @@ export default function GuidedReflectionFlow({
 
             <Textarea
               value={responses[currentPrompt?.id || ""] || ""}
-              onChange={(e) => setResponses({
-                ...responses,
-                [currentPrompt?.id || ""]: e.target.value
-              })}
+              onChange={(e) =>
+                setResponses({
+                  ...responses,
+                  [currentPrompt?.id || ""]: e.target.value,
+                })
+              }
               placeholder="Share your thoughts..."
               className="min-h-[200px] resize-none"
               autoFocus
@@ -122,10 +126,7 @@ export default function GuidedReflectionFlow({
                     Skip
                   </Button>
                 )}
-                <Button
-                  onClick={handleNext}
-                  disabled={!canProceed()}
-                >
+                <Button onClick={handleNext} disabled={!canProceed()}>
                   {isLastStep ? (
                     <>
                       <Check className="h-4 w-4 mr-2" />

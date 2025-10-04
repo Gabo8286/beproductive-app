@@ -23,9 +23,28 @@ import { HabitEditForm } from "@/components/habits/HabitEditForm";
 import { ReminderManager } from "@/components/habits/ReminderManager";
 import { NotificationPermission } from "@/components/habits/NotificationPermission";
 import { HabitGoalLinker } from "@/components/habits/HabitGoalLinker";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
@@ -47,7 +66,9 @@ export default function HabitDetail() {
   const archiveHabit = useArchiveHabit();
   const createEntry = useCreateEntry();
 
-  const todayEntry = entries?.find(e => e.date === format(new Date(), 'yyyy-MM-dd'));
+  const todayEntry = entries?.find(
+    (e) => e.date === format(new Date(), "yyyy-MM-dd"),
+  );
 
   const handleDelete = () => {
     deleteHabit.mutate(id!, {
@@ -63,19 +84,21 @@ export default function HabitDetail() {
       { habitId: id!, archive: !habit?.archived_at },
       {
         onSuccess: () => {
-          toast.success(habit?.archived_at ? "Habit restored" : "Habit archived");
+          toast.success(
+            habit?.archived_at ? "Habit restored" : "Habit archived",
+          );
           navigate("/habits");
         },
-      }
+      },
     );
   };
 
-  const handleStatusChange = (status: 'completed' | 'skipped' | 'missed') => {
+  const handleStatusChange = (status: "completed" | "skipped" | "missed") => {
     if (!id) return;
-    
+
     const input: CreateHabitEntryInput = {
       habit_id: id,
-      date: format(new Date(), 'yyyy-MM-dd'),
+      date: format(new Date(), "yyyy-MM-dd"),
       status,
     };
 
@@ -105,7 +128,11 @@ export default function HabitDetail() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/habits")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/habits")}
+          >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
@@ -132,7 +159,10 @@ export default function HabitDetail() {
                 <Archive className="h-4 w-4 mr-2" />
                 {habit.archived_at ? "Restore" : "Archive"}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setShowDeleteDialog(true)} className="text-destructive">
+              <DropdownMenuItem
+                onClick={() => setShowDeleteDialog(true)}
+                className="text-destructive"
+              >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
               </DropdownMenuItem>
@@ -147,7 +177,9 @@ export default function HabitDetail() {
         <Badge variant="outline">{habit.type}</Badge>
         <Badge variant="outline">{habit.frequency}</Badge>
         <Badge variant="outline">{habit.difficulty}</Badge>
-        {habit.time_of_day && <Badge variant="outline">{habit.time_of_day}</Badge>}
+        {habit.time_of_day && (
+          <Badge variant="outline">{habit.time_of_day}</Badge>
+        )}
       </div>
 
       {/* Today's Status */}
@@ -158,22 +190,24 @@ export default function HabitDetail() {
         <CardContent>
           <div className="flex gap-2">
             <Button
-              variant={todayEntry?.status === 'completed' ? 'default' : 'outline'}
-              onClick={() => handleStatusChange('completed')}
+              variant={
+                todayEntry?.status === "completed" ? "default" : "outline"
+              }
+              onClick={() => handleStatusChange("completed")}
               disabled={!!todayEntry}
             >
               ✓ Complete
             </Button>
             <Button
-              variant={todayEntry?.status === 'skipped' ? 'default' : 'outline'}
-              onClick={() => handleStatusChange('skipped')}
+              variant={todayEntry?.status === "skipped" ? "default" : "outline"}
+              onClick={() => handleStatusChange("skipped")}
               disabled={!!todayEntry}
             >
               Skip
             </Button>
             <Button
-              variant={todayEntry?.status === 'missed' ? 'default' : 'outline'}
-              onClick={() => handleStatusChange('missed')}
+              variant={todayEntry?.status === "missed" ? "default" : "outline"}
+              onClick={() => handleStatusChange("missed")}
               disabled={!!todayEntry}
             >
               Missed
@@ -181,7 +215,9 @@ export default function HabitDetail() {
           </div>
           {todayEntry && (
             <p className="text-sm text-muted-foreground mt-2">
-              Marked as {todayEntry.status} {todayEntry.completed_at && `at ${format(new Date(todayEntry.completed_at), 'h:mm a')}`}
+              Marked as {todayEntry.status}{" "}
+              {todayEntry.completed_at &&
+                `at ${format(new Date(todayEntry.completed_at), "h:mm a")}`}
             </p>
           )}
         </CardContent>
@@ -223,8 +259,8 @@ export default function HabitDetail() {
         </TabsContent>
 
         <TabsContent value="calendar" className="space-y-4">
-          <HabitCalendar 
-            habitId={id!} 
+          <HabitCalendar
+            habitId={id!}
             month={selectedMonth}
             onMonthChange={setSelectedMonth}
           />
@@ -268,12 +304,16 @@ export default function HabitDetail() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Habit?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this habit and all its tracking data. This action cannot be undone.
+              This will permanently delete this habit and all its tracking data.
+              This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

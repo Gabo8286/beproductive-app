@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   useAutomationRules,
   useUpdateAutomationRule,
   useDeleteAutomationRule,
-} from '@/hooks/useAutomation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { RuleEditor } from './RuleEditor';
-import { Plus, Trash2, Edit, Zap } from 'lucide-react';
-import { format } from 'date-fns';
+} from "@/hooks/useAutomation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { RuleEditor } from "./RuleEditor";
+import { Plus, Trash2, Edit, Zap } from "lucide-react";
+import { format } from "date-fns";
 
 export function AutomationRules() {
   const { data: rules = [] } = useAutomationRules();
@@ -20,16 +26,16 @@ export function AutomationRules() {
 
   const getRuleTypeLabel = (type: string) => {
     switch (type) {
-      case 'auto_assign':
-        return 'Auto Assign';
-      case 'auto_tag':
-        return 'Auto Tag';
-      case 'auto_status':
-        return 'Auto Status';
-      case 'auto_archive':
-        return 'Auto Archive';
-      case 'dependency':
-        return 'Dependency';
+      case "auto_assign":
+        return "Auto Assign";
+      case "auto_tag":
+        return "Auto Tag";
+      case "auto_status":
+        return "Auto Status";
+      case "auto_archive":
+        return "Auto Archive";
+      case "dependency":
+        return "Dependency";
       default:
         return type;
     }
@@ -40,7 +46,7 @@ export function AutomationRules() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this automation rule?')) {
+    if (confirm("Are you sure you want to delete this automation rule?")) {
       deleteRule.mutate(id);
     }
   };
@@ -68,7 +74,9 @@ export function AutomationRules() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Zap className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-            <h3 className="text-lg font-semibold mb-2">No automation rules yet</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              No automation rules yet
+            </h3>
             <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
               Create your first automation rule to save time on repetitive tasks
             </p>
@@ -106,7 +114,9 @@ export function AutomationRules() {
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={rule.is_enabled}
-                      onCheckedChange={(checked) => handleToggle(rule.id, checked)}
+                      onCheckedChange={(checked) =>
+                        handleToggle(rule.id, checked)
+                      }
                     />
                     <RuleEditor
                       rule={rule}
@@ -150,8 +160,8 @@ export function AutomationRules() {
                     </span>
                     {rule.last_executed_at && (
                       <span className="text-muted-foreground ml-2">
-                        • Last run{' '}
-                        {format(new Date(rule.last_executed_at), 'PPp')}
+                        • Last run{" "}
+                        {format(new Date(rule.last_executed_at), "PPp")}
                       </span>
                     )}
                   </div>

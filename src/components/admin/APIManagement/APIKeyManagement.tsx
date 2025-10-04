@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -10,7 +16,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +24,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -26,7 +32,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Plus,
   Search,
@@ -41,15 +47,23 @@ import {
   Activity,
   AlertTriangle,
   Copy,
-  CheckCircle2
-} from 'lucide-react';
-import { APIKey, APIKeyStatus, APIProviderType, PROVIDER_LABELS, API_KEY_STATUS_LABELS } from '@/types/api-management';
-import { CreateAPIKeyDialog } from './CreateAPIKeyDialog';
-import { EditAPIKeyDialog } from './EditAPIKeyDialog';
+  CheckCircle2,
+} from "lucide-react";
+import {
+  APIKey,
+  APIKeyStatus,
+  APIProviderType,
+  PROVIDER_LABELS,
+  API_KEY_STATUS_LABELS,
+} from "@/types/api-management";
+import { CreateAPIKeyDialog } from "./CreateAPIKeyDialog";
+import { EditAPIKeyDialog } from "./EditAPIKeyDialog";
 
 export const APIKeyManagement: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProvider, setSelectedProvider] = useState<APIProviderType | 'all'>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState<
+    APIProviderType | "all"
+  >("all");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingKey, setEditingKey] = useState<APIKey | null>(null);
   const [copiedKeyId, setCopiedKeyId] = useState<string | null>(null);
@@ -57,12 +71,12 @@ export const APIKeyManagement: React.FC = () => {
   // Mock data - will be replaced with real API calls
   const apiKeys: APIKey[] = [
     {
-      id: '1',
-      provider: 'openai',
-      key_name: 'Production OpenAI',
-      encrypted_key: 'encrypted_key_data_1',
-      key_hash: 'hash_1',
-      status: 'active',
+      id: "1",
+      provider: "openai",
+      key_name: "Production OpenAI",
+      encrypted_key: "encrypted_key_data_1",
+      key_hash: "hash_1",
+      status: "active",
       monthly_limit_usd: 500,
       current_month_cost: 247.32,
       total_lifetime_cost: 1247.89,
@@ -70,23 +84,23 @@ export const APIKeyManagement: React.FC = () => {
       current_day_requests: 456,
       monthly_token_limit: 1000000,
       current_month_tokens: 567890,
-      model_name: 'gpt-4',
-      description: 'Primary OpenAI key for production workloads',
-      tags: ['production', 'critical'],
+      model_name: "gpt-4",
+      description: "Primary OpenAI key for production workloads",
+      tags: ["production", "critical"],
       additional_headers: {},
       provider_config: {},
       metadata: {},
-      created_at: '2024-01-15T10:30:00Z',
-      updated_at: '2024-01-15T10:30:00Z',
-      last_used_at: '2024-01-20T14:22:00Z',
+      created_at: "2024-01-15T10:30:00Z",
+      updated_at: "2024-01-15T10:30:00Z",
+      last_used_at: "2024-01-20T14:22:00Z",
     },
     {
-      id: '2',
-      provider: 'claude',
-      key_name: 'Development Claude',
-      encrypted_key: 'encrypted_key_data_2',
-      key_hash: 'hash_2',
-      status: 'active',
+      id: "2",
+      provider: "claude",
+      key_name: "Development Claude",
+      encrypted_key: "encrypted_key_data_2",
+      key_hash: "hash_2",
+      status: "active",
       monthly_limit_usd: 200,
       current_month_cost: 89.45,
       total_lifetime_cost: 345.67,
@@ -94,37 +108,37 @@ export const APIKeyManagement: React.FC = () => {
       current_day_requests: 123,
       monthly_token_limit: 500000,
       current_month_tokens: 234567,
-      model_name: 'claude-3-sonnet',
-      description: 'Development and testing key',
-      tags: ['development', 'testing'],
+      model_name: "claude-3-sonnet",
+      description: "Development and testing key",
+      tags: ["development", "testing"],
       additional_headers: {},
       provider_config: {},
       metadata: {},
-      created_at: '2024-01-10T09:15:00Z',
-      updated_at: '2024-01-10T09:15:00Z',
-      last_used_at: '2024-01-20T11:45:00Z',
+      created_at: "2024-01-10T09:15:00Z",
+      updated_at: "2024-01-10T09:15:00Z",
+      last_used_at: "2024-01-20T11:45:00Z",
     },
   ];
 
-  const filteredKeys = apiKeys.filter(key => {
-    const matchesSearch = key.key_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         key.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesProvider = selectedProvider === 'all' || key.provider === selectedProvider;
+  const filteredKeys = apiKeys.filter((key) => {
+    const matchesSearch =
+      key.key_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      key.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesProvider =
+      selectedProvider === "all" || key.provider === selectedProvider;
     return matchesSearch && matchesProvider;
   });
 
   const getStatusBadge = (status: APIKeyStatus) => {
     const colors = {
-      active: 'bg-green-100 text-green-800',
-      inactive: 'bg-gray-100 text-gray-800',
-      revoked: 'bg-red-100 text-red-800',
-      expired: 'bg-orange-100 text-orange-800',
+      active: "bg-green-100 text-green-800",
+      inactive: "bg-gray-100 text-gray-800",
+      revoked: "bg-red-100 text-red-800",
+      expired: "bg-orange-100 text-orange-800",
     };
 
     return (
-      <Badge className={colors[status]}>
-        {API_KEY_STATUS_LABELS[status]}
-      </Badge>
+      <Badge className={colors[status]}>{API_KEY_STATUS_LABELS[status]}</Badge>
     );
   };
 
@@ -133,9 +147,9 @@ export const APIKeyManagement: React.FC = () => {
   };
 
   const getUsageBadge = (percentage: number) => {
-    if (percentage >= 90) return 'text-red-600';
-    if (percentage >= 75) return 'text-amber-600';
-    return 'text-green-600';
+    if (percentage >= 90) return "text-red-600";
+    if (percentage >= 75) return "text-amber-600";
+    return "text-green-600";
   };
 
   const handleCopyKey = async (keyId: string) => {
@@ -147,12 +161,12 @@ export const APIKeyManagement: React.FC = () => {
 
   const handleRotateKey = (key: APIKey) => {
     // TODO: Implement key rotation
-    console.log('Rotating key:', key.id);
+    console.log("Rotating key:", key.id);
   };
 
   const handleDeleteKey = (key: APIKey) => {
     // TODO: Implement key deletion with confirmation
-    console.log('Deleting key:', key.id);
+    console.log("Deleting key:", key.id);
   };
 
   return (
@@ -184,7 +198,9 @@ export const APIKeyManagement: React.FC = () => {
         </div>
         <select
           value={selectedProvider}
-          onChange={(e) => setSelectedProvider(e.target.value as APIProviderType | 'all')}
+          onChange={(e) =>
+            setSelectedProvider(e.target.value as APIProviderType | "all")
+          }
           className="px-3 py-2 border border-gray-300 rounded-md text-sm"
         >
           <option value="all">All Providers</option>
@@ -221,9 +237,18 @@ export const APIKeyManagement: React.FC = () => {
             </TableHeader>
             <TableBody>
               {filteredKeys.map((key) => {
-                const costPercentage = getUsagePercentage(key.current_month_cost, key.monthly_limit_usd);
-                const requestPercentage = getUsagePercentage(key.current_day_requests, key.daily_request_limit);
-                const tokenPercentage = getUsagePercentage(key.current_month_tokens, key.monthly_token_limit);
+                const costPercentage = getUsagePercentage(
+                  key.current_month_cost,
+                  key.monthly_limit_usd,
+                );
+                const requestPercentage = getUsagePercentage(
+                  key.current_day_requests,
+                  key.daily_request_limit,
+                );
+                const tokenPercentage = getUsagePercentage(
+                  key.current_month_tokens,
+                  key.monthly_token_limit,
+                );
 
                 return (
                   <TableRow key={key.id}>
@@ -231,8 +256,10 @@ export const APIKeyManagement: React.FC = () => {
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{key.key_name}</span>
-                          {key.tags.includes('production') && (
-                            <Badge variant="secondary" className="text-xs">PROD</Badge>
+                          {key.tags.includes("production") && (
+                            <Badge variant="secondary" className="text-xs">
+                              PROD
+                            </Badge>
                           )}
                         </div>
                         <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -246,9 +273,7 @@ export const APIKeyManagement: React.FC = () => {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      {getStatusBadge(key.status)}
-                    </TableCell>
+                    <TableCell>{getStatusBadge(key.status)}</TableCell>
                     <TableCell>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2 text-sm">
@@ -280,10 +305,9 @@ export const APIKeyManagement: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <div className="text-sm text-gray-500">
-                        {key.last_used_at ?
-                          new Date(key.last_used_at).toLocaleDateString() :
-                          'Never'
-                        }
+                        {key.last_used_at
+                          ? new Date(key.last_used_at).toLocaleDateString()
+                          : "Never"}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -295,7 +319,9 @@ export const APIKeyManagement: React.FC = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem onClick={() => handleCopyKey(key.id)}>
+                          <DropdownMenuItem
+                            onClick={() => handleCopyKey(key.id)}
+                          >
                             {copiedKeyId === key.id ? (
                               <>
                                 <CheckCircle2 className="mr-2 h-4 w-4" />
@@ -312,7 +338,9 @@ export const APIKeyManagement: React.FC = () => {
                             <Edit className="mr-2 h-4 w-4" />
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleRotateKey(key)}>
+                          <DropdownMenuItem
+                            onClick={() => handleRotateKey(key)}
+                          >
                             <RotateCw className="mr-2 h-4 w-4" />
                             Rotate Key
                           </DropdownMenuItem>
@@ -336,12 +364,13 @@ export const APIKeyManagement: React.FC = () => {
           {filteredKeys.length === 0 && (
             <div className="text-center py-12">
               <Key className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No API keys found</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No API keys found
+              </h3>
               <p className="text-gray-500 mb-4">
-                {searchTerm || selectedProvider !== 'all'
-                  ? 'Try adjusting your search or filter criteria.'
-                  : 'Get started by adding your first API key.'
-                }
+                {searchTerm || selectedProvider !== "all"
+                  ? "Try adjusting your search or filter criteria."
+                  : "Get started by adding your first API key."}
               </p>
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />

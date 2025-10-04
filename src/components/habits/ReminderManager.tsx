@@ -1,12 +1,39 @@
 import { useState } from "react";
-import { Plus, Bell, BellOff, Trash2, Edit, Clock, MapPin, Link2 } from "lucide-react";
+import {
+  Plus,
+  Bell,
+  BellOff,
+  Trash2,
+  Edit,
+  Clock,
+  MapPin,
+  Link2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { useHabitReminders, useDeleteReminder, useToggleReminder } from "@/hooks/useHabitReminders";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  useHabitReminders,
+  useDeleteReminder,
+  useToggleReminder,
+} from "@/hooks/useHabitReminders";
 import { ReminderForm } from "./ReminderForm";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -19,7 +46,9 @@ interface ReminderManagerProps {
 
 export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [editingReminder, setEditingReminder] = useState<HabitReminder | null>(null);
+  const [editingReminder, setEditingReminder] = useState<HabitReminder | null>(
+    null,
+  );
   const [deleteReminderId, setDeleteReminderId] = useState<string | null>(null);
 
   const { data: reminders, isLoading } = useHabitReminders(habitId);
@@ -42,11 +71,11 @@ export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
 
   const getReminderIcon = (type: string) => {
     switch (type) {
-      case 'time_based':
+      case "time_based":
         return <Clock className="h-4 w-4" />;
-      case 'location_based':
+      case "location_based":
         return <MapPin className="h-4 w-4" />;
-      case 'trigger_based':
+      case "trigger_based":
         return <Link2 className="h-4 w-4" />;
       default:
         return <Bell className="h-4 w-4" />;
@@ -54,22 +83,26 @@ export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
   };
 
   const formatReminderDetails = (reminder: HabitReminder) => {
-    if (reminder.reminder_type === 'time_based' && reminder.time) {
+    if (reminder.reminder_type === "time_based" && reminder.time) {
       const days = reminder.days_of_week;
-      const daysText = days && days.length > 0
-        ? ` on ${days.map(d => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d]).join(', ')}`
-        : ' daily';
+      const daysText =
+        days && days.length > 0
+          ? ` on ${days.map((d) => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d]).join(", ")}`
+          : " daily";
       return `${reminder.time}${daysText}`;
     }
-    
-    if (reminder.reminder_type === 'location_based' && reminder.location) {
-      return reminder.location.name || 'Location-based';
+
+    if (reminder.reminder_type === "location_based" && reminder.location) {
+      return reminder.location.name || "Location-based";
     }
-    
-    if (reminder.reminder_type === 'trigger_based' && reminder.trigger_habit_id) {
-      return 'After another habit';
+
+    if (
+      reminder.reminder_type === "trigger_based" &&
+      reminder.trigger_habit_id
+    ) {
+      return "After another habit";
     }
-    
+
     return reminder.reminder_type;
   };
 
@@ -102,7 +135,7 @@ export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="capitalize">
-                          {reminder.reminder_type.replace('_', ' ')}
+                          {reminder.reminder_type.replace("_", " ")}
                         </Badge>
                         {!reminder.is_active && (
                           <Badge variant="secondary">Paused</Badge>
@@ -118,16 +151,22 @@ export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
                       )}
                       {reminder.last_sent_at && (
                         <p className="text-xs text-muted-foreground">
-                          Last sent: {format(new Date(reminder.last_sent_at), 'MMM d, h:mm a')}
+                          Last sent:{" "}
+                          {format(
+                            new Date(reminder.last_sent_at),
+                            "MMM d, h:mm a",
+                          )}
                         </p>
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={reminder.is_active}
-                      onCheckedChange={(checked) => handleToggle(reminder.id, checked)}
+                      onCheckedChange={(checked) =>
+                        handleToggle(reminder.id, checked)
+                      }
                     />
                     <Button
                       variant="ghost"
@@ -180,7 +219,10 @@ export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
       </Dialog>
 
       {/* Edit Dialog */}
-      <Dialog open={!!editingReminder} onOpenChange={() => setEditingReminder(null)}>
+      <Dialog
+        open={!!editingReminder}
+        onOpenChange={() => setEditingReminder(null)}
+      >
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Reminder</DialogTitle>
@@ -198,17 +240,24 @@ export function ReminderManager({ habitId, habitTitle }: ReminderManagerProps) {
       </Dialog>
 
       {/* Delete Confirmation */}
-      <AlertDialog open={!!deleteReminderId} onOpenChange={() => setDeleteReminderId(null)}>
+      <AlertDialog
+        open={!!deleteReminderId}
+        onOpenChange={() => setDeleteReminderId(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Reminder?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this reminder. You can always create a new one later.
+              This will permanently delete this reminder. You can always create
+              a new one later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

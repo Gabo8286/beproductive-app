@@ -1,8 +1,20 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ExternalLink, Mail, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  ExternalLink,
+  Mail,
+  FileText,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 
 /**
  * Accessibility Statement Page
@@ -15,7 +27,9 @@ export default function AccessibilityStatement() {
       <div className="space-y-6">
         {/* Header */}
         <div className="space-y-2">
-          <h1 className="text-4xl font-heading font-bold">Accessibility Statement</h1>
+          <h1 className="text-4xl font-heading font-bold">
+            Accessibility Statement
+          </h1>
           <p className="text-lg text-muted-foreground">
             Our commitment to making BeProductive accessible to everyone
           </p>
@@ -33,14 +47,16 @@ export default function AccessibilityStatement() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              BeProductive is committed to ensuring digital accessibility for people with disabilities.
-              We are continually improving the user experience for everyone and applying the relevant
-              accessibility standards to ensure our platform is accessible to all users.
+              BeProductive is committed to ensuring digital accessibility for
+              people with disabilities. We are continually improving the user
+              experience for everyone and applying the relevant accessibility
+              standards to ensure our platform is accessible to all users.
             </p>
             <p>
-              We believe that everyone should have the same opportunities to manage their productivity,
-              achieve their goals, and track their progress, regardless of their abilities or the
-              technologies they use.
+              We believe that everyone should have the same opportunities to
+              manage their productivity, achieve their goals, and track their
+              progress, regardless of their abilities or the technologies they
+              use.
             </p>
           </CardContent>
         </Card>
@@ -55,13 +71,18 @@ export default function AccessibilityStatement() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-start gap-3">
-              <Badge variant="secondary" className="mt-1">WCAG 2.1</Badge>
+              <Badge variant="secondary" className="mt-1">
+                WCAG 2.1
+              </Badge>
               <div className="flex-1">
-                <p className="font-semibold">Web Content Accessibility Guidelines 2.1</p>
+                <p className="font-semibold">
+                  Web Content Accessibility Guidelines 2.1
+                </p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  BeProductive is <strong>partially conformant</strong> with WCAG 2.1 Level AA.
-                  "Partially conformant" means that some parts of the content do not fully conform
-                  to the accessibility standard.
+                  BeProductive is <strong>partially conformant</strong> with
+                  WCAG 2.1 Level AA. "Partially conformant" means that some
+                  parts of the content do not fully conform to the accessibility
+                  standard.
                 </p>
               </div>
             </div>
@@ -77,15 +98,23 @@ export default function AccessibilityStatement() {
                 </li>
                 <li className="flex gap-2">
                   <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                  <span>Core functionality is fully accessible via keyboard and screen readers</span>
+                  <span>
+                    Core functionality is fully accessible via keyboard and
+                    screen readers
+                  </span>
                 </li>
                 <li className="flex gap-2">
                   <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                  <span>Color contrast meets or exceeds minimum requirements</span>
+                  <span>
+                    Color contrast meets or exceeds minimum requirements
+                  </span>
                 </li>
                 <li className="flex gap-2">
                   <AlertCircle className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
-                  <span>Some advanced features are still being improved for full compliance</span>
+                  <span>
+                    Some advanced features are still being improved for full
+                    compliance
+                  </span>
                 </li>
               </ul>
             </div>
@@ -108,7 +137,8 @@ export default function AccessibilityStatement() {
                   Keyboard Navigation
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  All features accessible via keyboard shortcuts and tab navigation
+                  All features accessible via keyboard shortcuts and tab
+                  navigation
                 </p>
               </div>
 
@@ -219,7 +249,9 @@ export default function AccessibilityStatement() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Accessibility Standards:</span>
+              <span className="text-muted-foreground">
+                Accessibility Standards:
+              </span>
               <span className="font-medium">WCAG 2.1 Level AA</span>
             </div>
             <Separator />
@@ -230,7 +262,9 @@ export default function AccessibilityStatement() {
             <Separator />
             <div className="flex justify-between">
               <span className="text-muted-foreground">Testing Tools:</span>
-              <span className="font-medium">axe DevTools, WAVE, Lighthouse</span>
+              <span className="font-medium">
+                axe DevTools, WAVE, Lighthouse
+              </span>
             </div>
             <Separator />
             <div className="flex justify-between">
@@ -250,8 +284,9 @@ export default function AccessibilityStatement() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              We welcome your feedback on the accessibility of BeProductive. If you encounter any
-              accessibility barriers or have suggestions for improvement, please let us know:
+              We welcome your feedback on the accessibility of BeProductive. If
+              you encounter any accessibility barriers or have suggestions for
+              improvement, please let us know:
             </p>
 
             <div className="space-y-3">
@@ -259,8 +294,8 @@ export default function AccessibilityStatement() {
                 <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <p className="font-semibold">Email Us</p>
-                  <a 
-                    href="mailto:accessibility@beproductive.com" 
+                  <a
+                    href="mailto:accessibility@beproductive.com"
                     className="text-sm text-primary hover:underline"
                   >
                     accessibility@beproductive.com
@@ -273,15 +308,17 @@ export default function AccessibilityStatement() {
                 <div className="flex-1">
                   <p className="font-semibold">Response Time</p>
                   <p className="text-sm text-muted-foreground">
-                    We aim to respond to accessibility inquiries within 2 business days
+                    We aim to respond to accessibility inquiries within 2
+                    business days
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Your feedback helps us improve accessibility for all users. We take all reports
-              seriously and will work to address any issues as quickly as possible.
+              Your feedback helps us improve accessibility for all users. We
+              take all reports seriously and will work to address any issues as
+              quickly as possible.
             </p>
           </CardContent>
         </Card>
@@ -290,9 +327,11 @@ export default function AccessibilityStatement() {
         <Card className="bg-muted/30">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground">
-              This accessibility statement was last updated on <strong>January 2025</strong> and
-              will be reviewed quarterly. We are committed to continuous improvement and will update
-              this statement as we make progress toward full WCAG 2.1 Level AAA compliance.
+              This accessibility statement was last updated on{" "}
+              <strong>January 2025</strong> and will be reviewed quarterly. We
+              are committed to continuous improvement and will update this
+              statement as we make progress toward full WCAG 2.1 Level AAA
+              compliance.
             </p>
           </CardContent>
         </Card>

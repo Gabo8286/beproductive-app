@@ -45,19 +45,19 @@ export function InteractiveWidget({
       const timer = setTimeout(() => {
         onQuickAction();
         // Haptic feedback simulation
-        if ('vibrate' in navigator) {
+        if ("vibrate" in navigator) {
           navigator.vibrate(50);
         }
       }, 500);
 
       const cleanup = () => {
         clearTimeout(timer);
-        document.removeEventListener('touchend', cleanup);
-        document.removeEventListener('touchcancel', cleanup);
+        document.removeEventListener("touchend", cleanup);
+        document.removeEventListener("touchcancel", cleanup);
       };
 
-      document.addEventListener('touchend', cleanup);
-      document.addEventListener('touchcancel', cleanup);
+      document.addEventListener("touchend", cleanup);
+      document.addEventListener("touchcancel", cleanup);
     }
   };
 
@@ -76,22 +76,24 @@ export function InteractiveWidget({
         isPressed && "scale-[0.98]",
         isHovered && "shadow-xl shadow-primary/5",
         expandable && "cursor-pointer",
-        className
+        className,
       )}
       style={{
-        transform: `translateZ(${isHovered ? '8px' : '0px'}) scale(${isPressed ? '0.98' : '1'})`,
-        transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+        transform: `translateZ(${isHovered ? "8px" : "0px"}) scale(${isPressed ? "0.98" : "1"})`,
+        transition: "all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
       }}
     >
       <BaseWidget {...props} className="relative overflow-hidden">
         {children}
 
         {/* Hover Glow Effect */}
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5",
-          "opacity-0 transition-opacity duration-300 pointer-events-none",
-          isHovered && "opacity-100"
-        )} />
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5",
+            "opacity-0 transition-opacity duration-300 pointer-events-none",
+            isHovered && "opacity-100",
+          )}
+        />
 
         {/* Expandable Indicator */}
         {expandable && isHovered && (

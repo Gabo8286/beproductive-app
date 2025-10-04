@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Database } from '@/integrations/supabase/types';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Database } from "@/integrations/supabase/types";
 
-type Task = Database['public']['Tables']['tasks']['Row'];
-type TaskStatus = Database['public']['Enums']['task_status'];
+type Task = Database["public"]["Tables"]["tasks"]["Row"];
+type TaskStatus = Database["public"]["Enums"]["task_status"];
 
 interface TaskUpdate {
   id: string;
@@ -30,24 +30,24 @@ export function useUpdateTaskPositions() {
 
   return useMutation({
     mutationFn: async (updates: TaskUpdate[]) => {
-      const { error } = await supabase.rpc('update_task_positions', {
-        task_updates: updates.map(u => ({
+      const { error } = await supabase.rpc("update_task_positions", {
+        task_updates: updates.map((u) => ({
           id: u.id,
           position: u.position,
-          ...(u.status && { status: u.status })
-        }))
+          ...(u.status && { status: u.status }),
+        })),
       });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
       toast({
-        title: 'Failed to update positions',
+        title: "Failed to update positions",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     },
   });
@@ -59,22 +59,22 @@ export function useReorderTasksInStatus() {
 
   return useMutation({
     mutationFn: async ({ workspaceId, status, taskIds }: ReorderParams) => {
-      const { error } = await supabase.rpc('reorder_tasks_in_status', {
+      const { error } = await supabase.rpc("reorder_tasks_in_status", {
         workspace_id_param: workspaceId,
         status_param: status,
-        task_ids: taskIds
+        task_ids: taskIds,
       });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
     onError: (error) => {
       toast({
-        title: 'Failed to reorder tasks',
+        title: "Failed to reorder tasks",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     },
   });
@@ -86,26 +86,26 @@ export function useMoveTaskToStatus() {
 
   return useMutation({
     mutationFn: async ({ taskId, newStatus, newPosition }: MoveTaskParams) => {
-      const { error } = await supabase.rpc('move_task_to_status', {
+      const { error } = await supabase.rpc("move_task_to_status", {
         task_id_param: taskId,
         new_status: newStatus,
-        new_position: newPosition
+        new_position: newPosition,
       });
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
       toast({
-        title: 'Task moved',
-        description: 'Task status and position updated successfully.',
+        title: "Task moved",
+        description: "Task status and position updated successfully.",
       });
     },
     onError: (error) => {
       toast({
-        title: 'Failed to move task',
+        title: "Failed to move task",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     },
   });
@@ -115,20 +115,20 @@ export function useMoveTaskToStatus() {
 export function calculateNewPosition(
   activeIndex: number,
   overIndex: number,
-  tasks: Task[]
+  tasks: Task[],
 ): number {
   if (overIndex >= tasks.length) {
     return tasks[tasks.length - 1]?.position + 1 || 0;
   }
-  
+
   if (overIndex === 0) {
     return tasks[0]?.position - 1 || 0;
   }
-  
+
   // Insert between tasks
   const prevPosition = tasks[overIndex - 1]?.position || 0;
   const nextPosition = tasks[overIndex]?.position || prevPosition + 2;
-  
+
   return Math.floor((prevPosition + nextPosition) / 2);
 }
 

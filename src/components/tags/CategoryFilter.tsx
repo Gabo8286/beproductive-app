@@ -19,19 +19,22 @@ interface CategoryFilterProps {
   onCategoryChange: (category: string | null) => void;
 }
 
-export function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryFilterProps) {
+export function CategoryFilter({
+  selectedCategory,
+  onCategoryChange,
+}: CategoryFilterProps) {
   const { data: tags = [] } = useTags();
 
   // Get unique categories from tags, including defaults
   const categories = Array.from(
     new Set([
       ...DEFAULT_CATEGORIES,
-      ...tags.map(tag => tag.category).filter(Boolean) as string[],
-    ])
+      ...(tags.map((tag) => tag.category).filter(Boolean) as string[]),
+    ]),
   );
 
   const getCategoryCount = (category: string) => {
-    return tags.filter(tag => tag.category === category).length;
+    return tags.filter((tag) => tag.category === category).length;
   };
 
   return (

@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import {
   Clock,
   Play,
@@ -13,10 +19,10 @@ import {
   TrendingUp,
   Target,
   BarChart3,
-  ExternalLink
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { LoadingSkeleton } from '@/components/ai/LoadingSkeleton';
+  ExternalLink,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
 
 interface TimeSession {
   id: string;
@@ -29,12 +35,14 @@ interface TimeSession {
 }
 
 export const TimeTrackingWidget: React.FC = () => {
-  const [currentSession, setCurrentSession] = useState<TimeSession | null>(null);
+  const [currentSession, setCurrentSession] = useState<TimeSession | null>(
+    null,
+  );
   const [todayStats, setTodayStats] = useState({
     totalTime: 25200000, // 7 hours in ms
     productivity: 8.2,
     sessionsCount: 5,
-    focusTime: 18000000 // 5 hours in ms
+    focusTime: 18000000, // 5 hours in ms
   });
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,22 +56,22 @@ export const TimeTrackingWidget: React.FC = () => {
         setError(null);
 
         // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Simulate an active session
         const mockSession: TimeSession = {
-          id: 'session_1',
-          description: 'Frontend development',
+          id: "session_1",
+          description: "Frontend development",
           startTime: new Date(Date.now() - 3600000), // 1 hour ago
           duration: 3600000,
           isActive: true,
-          category: 'deep_work',
-          productivity_score: 8.5
+          category: "deep_work",
+          productivity_score: 8.5,
         };
         setCurrentSession(mockSession);
       } catch (err) {
-        setError('Failed to load time tracking data');
-        console.error('Error loading time tracking data:', err);
+        setError("Failed to load time tracking data");
+        console.error("Error loading time tracking data:", err);
       } finally {
         setIsLoading(false);
       }
@@ -101,7 +109,7 @@ export const TimeTrackingWidget: React.FC = () => {
     if (currentSession) {
       setCurrentSession({
         ...currentSession,
-        isActive: !currentSession.isActive
+        isActive: !currentSession.isActive,
       });
     }
   };
@@ -112,7 +120,8 @@ export const TimeTrackingWidget: React.FC = () => {
   };
 
   const productivityPercentage = (todayStats.productivity / 10) * 100;
-  const focusTimePercentage = (todayStats.focusTime / todayStats.totalTime) * 100;
+  const focusTimePercentage =
+    (todayStats.focusTime / todayStats.totalTime) * 100;
 
   // Loading state
   if (isLoading) {
@@ -127,7 +136,12 @@ export const TimeTrackingWidget: React.FC = () => {
           <div className="text-center">
             <div className="text-destructive mb-2">⚠️</div>
             <p className="text-sm text-muted-foreground">{error}</p>
-            <Button size="sm" variant="outline" className="mt-2" onClick={() => window.location.reload()}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2"
+              onClick={() => window.location.reload()}
+            >
               Retry
             </Button>
           </div>
@@ -155,9 +169,11 @@ export const TimeTrackingWidget: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-medium text-sm">{currentSession.description}</div>
+                <div className="font-medium text-sm">
+                  {currentSession.description}
+                </div>
                 <div className="text-xs text-muted-foreground capitalize">
-                  {currentSession.category.replace('_', ' ')}
+                  {currentSession.category.replace("_", " ")}
                 </div>
               </div>
               {currentSession.isActive && (
@@ -207,7 +223,9 @@ export const TimeTrackingWidget: React.FC = () => {
         <div className="space-y-3 pt-3 border-t">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Today's Progress</span>
-            <Badge variant="outline">{formatDuration(todayStats.totalTime)}</Badge>
+            <Badge variant="outline">
+              {formatDuration(todayStats.totalTime)}
+            </Badge>
           </div>
 
           <div className="space-y-2">
@@ -227,7 +245,9 @@ export const TimeTrackingWidget: React.FC = () => {
                 <Target className="h-3 w-3 text-blue-600" />
                 <span>Focus Time</span>
               </div>
-              <span className="font-medium">{Math.round(focusTimePercentage)}%</span>
+              <span className="font-medium">
+                {Math.round(focusTimePercentage)}%
+              </span>
             </div>
             <Progress value={focusTimePercentage} className="h-2" />
           </div>
@@ -238,7 +258,9 @@ export const TimeTrackingWidget: React.FC = () => {
               <div className="text-muted-foreground text-xs">Sessions</div>
             </div>
             <div>
-              <div className="font-medium">{formatDuration(todayStats.focusTime)}</div>
+              <div className="font-medium">
+                {formatDuration(todayStats.focusTime)}
+              </div>
               <div className="text-muted-foreground text-xs">Deep Work</div>
             </div>
           </div>

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,17 +20,23 @@ interface MilestoneCompletionProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function MilestoneCompletion({ milestone, open, onOpenChange }: MilestoneCompletionProps) {
+export function MilestoneCompletion({
+  milestone,
+  open,
+  onOpenChange,
+}: MilestoneCompletionProps) {
   const completeMilestone = useCompleteMilestone();
   const [notes, setNotes] = useState("");
-  const [actualHours, setActualHours] = useState<number | undefined>(milestone.estimated_hours || undefined);
+  const [actualHours, setActualHours] = useState<number | undefined>(
+    milestone.estimated_hours || undefined,
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await completeMilestone.mutateAsync({
       milestoneId: milestone.id,
       notes: notes.trim() || undefined,
-      actualHours
+      actualHours,
     });
     onOpenChange(false);
     setNotes("");
@@ -51,15 +64,18 @@ export function MilestoneCompletion({ milestone, open, onOpenChange }: Milestone
                   min="0"
                   step="0.5"
                   value={actualHours || ""}
-                  onChange={(e) => setActualHours(e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    setActualHours(
+                      e.target.value ? parseFloat(e.target.value) : undefined,
+                    )
+                  }
                   placeholder={`Estimated: ${milestone.estimated_hours}h`}
                 />
                 {milestone.estimated_hours && actualHours && (
                   <p className="text-sm text-muted-foreground">
                     {actualHours > milestone.estimated_hours
                       ? `${(actualHours - milestone.estimated_hours).toFixed(1)}h over estimate`
-                      : `${(milestone.estimated_hours - actualHours).toFixed(1)}h under estimate`
-                    }
+                      : `${(milestone.estimated_hours - actualHours).toFixed(1)}h under estimate`}
                   </p>
                 )}
               </div>
@@ -78,11 +94,17 @@ export function MilestoneCompletion({ milestone, open, onOpenChange }: Milestone
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={completeMilestone.isPending}>
-              {completeMilestone.isPending ? "Completing..." : "Complete Milestone"}
+              {completeMilestone.isPending
+                ? "Completing..."
+                : "Complete Milestone"}
             </Button>
           </DialogFooter>
         </form>

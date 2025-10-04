@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 // Types
 export interface NotificationSettings {
@@ -71,16 +71,16 @@ export interface AutomationLog {
 // Fetch notification settings for current user
 export const useNotificationSettings = () => {
   return useQuery({
-    queryKey: ['notification-settings'],
+    queryKey: ["notification-settings"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('notification_settings')
-        .select('*')
+        .from("notification_settings")
+        .select("*")
         .single();
 
       if (error) {
         // If no settings exist, return default values
-        if (error.code === 'PGRST116') {
+        if (error.code === "PGRST116") {
           return null;
         }
         throw error;
@@ -97,21 +97,21 @@ export const useUpdateNotificationSettings = () => {
   return useMutation({
     mutationFn: async (settings: Partial<NotificationSettings>) => {
       const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error('Not authenticated');
+      if (!userData.user) throw new Error("Not authenticated");
 
       // Check if settings exist
       const { data: existing } = await supabase
-        .from('notification_settings')
-        .select('id')
-        .eq('user_id', userData.user.id)
+        .from("notification_settings")
+        .select("id")
+        .eq("user_id", userData.user.id)
         .single();
 
       if (existing) {
         // Update existing settings
         const { data, error } = await supabase
-          .from('notification_settings')
+          .from("notification_settings")
           .update(settings)
-          .eq('user_id', userData.user.id)
+          .eq("user_id", userData.user.id)
           .select()
           .single();
 
@@ -120,7 +120,7 @@ export const useUpdateNotificationSettings = () => {
       } else {
         // Create new settings
         const { data, error } = await supabase
-          .from('notification_settings')
+          .from("notification_settings")
           .insert({
             ...settings,
             user_id: userData.user.id,
@@ -133,8 +133,8 @@ export const useUpdateNotificationSettings = () => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notification-settings'] });
-      toast.success('Notification settings updated');
+      queryClient.invalidateQueries({ queryKey: ["notification-settings"] });
+      toast.success("Notification settings updated");
     },
     onError: (error: Error) => {
       toast.error(`Failed to update settings: ${error.message}`);
@@ -145,12 +145,12 @@ export const useUpdateNotificationSettings = () => {
 // Fetch automation rules
 export const useAutomationRules = () => {
   return useQuery({
-    queryKey: ['automation-rules'],
+    queryKey: ["automation-rules"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('automation_rules')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("automation_rules")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data as AutomationRule[];
@@ -165,10 +165,10 @@ export const useCreateAutomationRule = () => {
   return useMutation({
     mutationFn: async (rule: Partial<AutomationRule>) => {
       const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error('Not authenticated');
+      if (!userData.user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
-        .from('automation_rules')
+        .from("automation_rules")
         .insert({
           name: rule.name!,
           description: rule.description || null,
@@ -186,8 +186,8 @@ export const useCreateAutomationRule = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['automation-rules'] });
-      toast.success('Automation rule created');
+      queryClient.invalidateQueries({ queryKey: ["automation-rules"] });
+      toast.success("Automation rule created");
     },
     onError: (error: Error) => {
       toast.error(`Failed to create rule: ${error.message}`);
@@ -200,11 +200,14 @@ export const useUpdateAutomationRule = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...updates }: Partial<AutomationRule> & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...updates
+    }: Partial<AutomationRule> & { id: string }) => {
       const { data, error } = await supabase
-        .from('automation_rules')
+        .from("automation_rules")
         .update(updates)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -212,8 +215,8 @@ export const useUpdateAutomationRule = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['automation-rules'] });
-      toast.success('Automation rule updated');
+      queryClient.invalidateQueries({ queryKey: ["automation-rules"] });
+      toast.success("Automation rule updated");
     },
     onError: (error: Error) => {
       toast.error(`Failed to update rule: ${error.message}`);
@@ -228,15 +231,15 @@ export const useDeleteAutomationRule = () => {
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('automation_rules')
+        .from("automation_rules")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['automation-rules'] });
-      toast.success('Automation rule deleted');
+      queryClient.invalidateQueries({ queryKey: ["automation-rules"] });
+      toast.success("Automation rule deleted");
     },
     onError: (error: Error) => {
       toast.error(`Failed to delete rule: ${error.message}`);
@@ -247,17 +250,19 @@ export const useDeleteAutomationRule = () => {
 // Fetch notifications
 export const useNotifications = () => {
   return useQuery({
-    queryKey: ['notifications'],
+    queryKey: ["notifications"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('notifications')
-        .select(`
+        .from("notifications")
+        .select(
+          `
           *,
           tasks (
             title
           )
-        `)
-        .order('created_at', { ascending: false })
+        `,
+        )
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
@@ -274,14 +279,14 @@ export const useMarkNotificationRead = () => {
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('notifications')
+        .from("notifications")
         .update({ read_at: new Date().toISOString() })
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
 };
@@ -289,16 +294,16 @@ export const useMarkNotificationRead = () => {
 // Fetch automation logs
 export const useAutomationLogs = (ruleId?: string) => {
   return useQuery({
-    queryKey: ['automation-logs', ruleId],
+    queryKey: ["automation-logs", ruleId],
     queryFn: async () => {
       let query = supabase
-        .from('automation_logs')
-        .select('*')
-        .order('executed_at', { ascending: false })
+        .from("automation_logs")
+        .select("*")
+        .order("executed_at", { ascending: false })
         .limit(100);
 
       if (ruleId) {
-        query = query.eq('rule_id', ruleId);
+        query = query.eq("rule_id", ruleId);
       }
 
       const { data, error } = await query;
@@ -314,13 +319,13 @@ export const useProcessAutomationRules = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.rpc('process_automation_rules');
+      const { data, error } = await supabase.rpc("process_automation_rules");
       if (error) throw error;
       return data;
     },
     onSuccess: (rulesExecuted) => {
-      queryClient.invalidateQueries({ queryKey: ['automation-logs'] });
-      queryClient.invalidateQueries({ queryKey: ['automation-rules'] });
+      queryClient.invalidateQueries({ queryKey: ["automation-logs"] });
+      queryClient.invalidateQueries({ queryKey: ["automation-rules"] });
       toast.success(`Processed ${rulesExecuted} automation rules`);
     },
     onError: (error: Error) => {

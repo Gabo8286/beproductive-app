@@ -1,0 +1,253 @@
+/* RTL Support Styles */
+
+/* Base RTL setup */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Flexbox RTL adjustments */
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .flex-col {
+  flex-direction: column;
+}
+
+/* Margin and padding logical properties for RTL */
+.ms-auto {
+  margin-inline-start: auto;
+}
+
+.me-auto {
+  margin-inline-end: auto;
+}
+
+.ps-4 {
+  padding-inline-start: 1rem;
+}
+
+.pe-4 {
+  padding-inline-end: 1rem;
+}
+
+/* Transform for RTL icons */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Form inputs RTL support */
+[dir="rtl"] input[type="text"],
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="password"],
+[dir="rtl"] textarea {
+  text-align: right;
+}
+
+[dir="rtl"] input[type="number"] {
+  text-align: left; /* Numbers should remain LTR */
+}
+
+/* Navigation RTL adjustments */
+[dir="rtl"] .nav-item {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-item .icon {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Widget grid RTL support */
+[dir="rtl"] .widget-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .widget-header {
+  flex-direction: row-reverse;
+}
+
+/* Dropdown menu RTL positioning */
+[dir="rtl"] .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* Toast notifications RTL positioning */
+[dir="rtl"] .toast-container {
+  left: 1rem;
+  right: auto;
+}
+
+/* Modal RTL adjustments */
+[dir="rtl"] .modal-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .modal-close {
+  left: 1rem;
+  right: auto;
+}
+
+/* Progress bars RTL */
+[dir="rtl"] .progress-bar {
+  transform: scaleX(-1);
+}
+
+/* Date picker RTL */
+[dir="rtl"] .date-picker {
+  direction: rtl;
+}
+
+[dir="rtl"] .date-picker .calendar-grid {
+  direction: rtl;
+}
+
+/* Chart adjustments for RTL */
+[dir="rtl"] .chart-container {
+  direction: ltr; /* Charts usually need to remain LTR */
+}
+
+/* Table RTL support */
+[dir="rtl"] table {
+  direction: rtl;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
+}
+
+[dir="rtl"] th:first-child,
+[dir="rtl"] td:first-child {
+  border-right: none;
+  border-left: 1px solid #e5e7eb;
+}
+
+/* Form layout RTL */
+[dir="rtl"] .form-group {
+  text-align: right;
+}
+
+[dir="rtl"] .form-label {
+  text-align: right;
+}
+
+[dir="rtl"] .form-help {
+  text-align: right;
+}
+
+/* Card component RTL */
+[dir="rtl"] .card-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .card-actions {
+  flex-direction: row-reverse;
+}
+
+/* Sidebar RTL adjustments */
+[dir="rtl"] .sidebar {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .sidebar-item {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .sidebar-icon {
+  margin-left: 0.75rem;
+  margin-right: 0;
+}
+
+/* Breadcrumb RTL */
+[dir="rtl"] .breadcrumb {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .breadcrumb-separator {
+  transform: scaleX(-1);
+}
+
+/* Pagination RTL */
+[dir="rtl"] .pagination {
+  flex-direction: row-reverse;
+}
+
+/* Steps/Stepper RTL */
+[dir="rtl"] .steps {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .step-connector {
+  transform: scaleX(-1);
+}
+
+/* Search input RTL */
+[dir="rtl"] .search-input {
+  padding-left: 2.5rem;
+  padding-right: 0.75rem;
+}
+
+[dir="rtl"] .search-icon {
+  left: 0.75rem;
+  right: auto;
+}
+
+/* Command palette RTL */
+[dir="rtl"] .command-palette {
+  direction: rtl;
+}
+
+[dir="rtl"] .command-item {
+  flex-direction: row-reverse;
+}
+
+/* Specific component overrides for popular libraries */
+
+/* React Select RTL */
+[dir="rtl"] .react-select__control {
+  text-align: right;
+}
+
+[dir="rtl"] .react-select__indicator-separator {
+  margin-left: 8px;
+  margin-right: 0;
+}
+
+/* Recharts RTL - keep charts LTR for readability */
+[dir="rtl"] .recharts-wrapper {
+  direction: ltr;
+}
+
+/* Framer Motion RTL animations */
+[dir="rtl"] .slide-in-left {
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .slide-in-right {
+  transform: translateX(-100%);
+}
+
+/* Utilities for RTL development */
+.debug-rtl {
+  outline: 2px solid red;
+}
+
+.debug-rtl:before {
+  content: "RTL";
+  background: red;
+  color: white;
+  padding: 2px 4px;
+  font-size: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

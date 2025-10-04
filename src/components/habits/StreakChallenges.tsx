@@ -17,8 +17,8 @@ interface Challenge {
   target: number;
   progress: number;
   reward: string;
-  type: 'personal' | 'community' | 'seasonal';
-  difficulty: 'easy' | 'medium' | 'hard';
+  type: "personal" | "community" | "seasonal";
+  difficulty: "easy" | "medium" | "hard";
 }
 
 export function StreakChallenges({ habit }: StreakChallengesProps) {
@@ -28,64 +28,64 @@ export function StreakChallenges({ habit }: StreakChallengesProps) {
   const getChallenges = (): Challenge[] => {
     return [
       {
-        id: 'perfect-week',
-        title: 'Perfect Week',
-        description: 'Complete your habit 7 days in a row',
+        id: "perfect-week",
+        title: "Perfect Week",
+        description: "Complete your habit 7 days in a row",
         icon: <Target className="h-5 w-5" />,
         target: 7,
         progress: Math.min(currentStreak, 7),
-        reward: '🔥 Week Warrior Badge',
-        type: 'personal',
-        difficulty: 'easy',
+        reward: "🔥 Week Warrior Badge",
+        type: "personal",
+        difficulty: "easy",
       },
       {
-        id: 'habit-month',
-        title: 'Habit Month',
-        description: 'Build a 30-day streak',
+        id: "habit-month",
+        title: "Habit Month",
+        description: "Build a 30-day streak",
         icon: <Calendar className="h-5 w-5" />,
         target: 30,
         progress: Math.min(currentStreak, 30),
-        reward: '⭐ Month Master Badge',
-        type: 'personal',
-        difficulty: 'medium',
+        reward: "⭐ Month Master Badge",
+        type: "personal",
+        difficulty: "medium",
       },
       {
-        id: 'streak-recovery',
-        title: 'Comeback Kid',
-        description: 'Get back to a 7-day streak after breaking one',
+        id: "streak-recovery",
+        title: "Comeback Kid",
+        description: "Get back to a 7-day streak after breaking one",
         icon: <TrendingUp className="h-5 w-5" />,
         target: 7,
         progress: longestStreak > 7 && currentStreak < 7 ? currentStreak : 0,
-        reward: '💪 Resilience Badge',
-        type: 'personal',
-        difficulty: 'medium',
+        reward: "💪 Resilience Badge",
+        type: "personal",
+        difficulty: "medium",
       },
       {
-        id: 'century-challenge',
-        title: 'Century Challenge',
-        description: 'Achieve a 100-day streak',
+        id: "century-challenge",
+        title: "Century Challenge",
+        description: "Achieve a 100-day streak",
         icon: <Target className="h-5 w-5" />,
         target: 100,
         progress: Math.min(currentStreak, 100),
-        reward: '💯 Century Club Badge',
-        type: 'community',
-        difficulty: 'hard',
+        reward: "💯 Century Club Badge",
+        type: "community",
+        difficulty: "hard",
       },
     ];
   };
 
   const challenges = getChallenges();
-  const activeChallenges = challenges.filter(c => c.progress < c.target);
-  const completedChallenges = challenges.filter(c => c.progress >= c.target);
+  const activeChallenges = challenges.filter((c) => c.progress < c.target);
+  const completedChallenges = challenges.filter((c) => c.progress >= c.target);
 
-  const getDifficultyColor = (difficulty: Challenge['difficulty']) => {
+  const getDifficultyColor = (difficulty: Challenge["difficulty"]) => {
     switch (difficulty) {
-      case 'easy':
-        return 'text-green-500';
-      case 'medium':
-        return 'text-yellow-500';
-      case 'hard':
-        return 'text-red-500';
+      case "easy":
+        return "text-green-500";
+      case "medium":
+        return "text-yellow-500";
+      case "hard":
+        return "text-red-500";
     }
   };
 
@@ -169,24 +169,23 @@ export function StreakChallenges({ habit }: StreakChallengesProps) {
                         </p>
                       </div>
                     </div>
-                    <Badge className="bg-green-500">
-                      ✓ Completed
-                    </Badge>
+                    <Badge className="bg-green-500">✓ Completed</Badge>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          {activeChallenges.length === 0 && completedChallenges.length === challenges.length && (
-            <div className="text-center py-8">
-              <div className="text-4xl mb-2">🎉</div>
-              <p className="font-semibold">All Challenges Complete!</p>
-              <p className="text-sm text-muted-foreground">
-                You've mastered all available challenges
-              </p>
-            </div>
-          )}
+          {activeChallenges.length === 0 &&
+            completedChallenges.length === challenges.length && (
+              <div className="text-center py-8">
+                <div className="text-4xl mb-2">🎉</div>
+                <p className="font-semibold">All Challenges Complete!</p>
+                <p className="text-sm text-muted-foreground">
+                  You've mastered all available challenges
+                </p>
+              </div>
+            )}
         </div>
       </CardContent>
     </Card>

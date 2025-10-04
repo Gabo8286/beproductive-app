@@ -13,7 +13,7 @@ export function DemoProgressTracker({
   currentStep,
   completedSteps,
   totalSteps,
-  progress
+  progress,
 }: DemoProgressTrackerProps) {
   return (
     <motion.div

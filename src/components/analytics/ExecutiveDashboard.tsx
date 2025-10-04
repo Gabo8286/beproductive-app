@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -10,12 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   LineChart,
   Line,
@@ -33,7 +34,7 @@ import {
   Legend,
   ResponsiveContainer,
   RadialBarChart,
-  RadialBar
+  RadialBar,
 } from "recharts";
 import {
   Crown,
@@ -56,7 +57,7 @@ import {
   Clock,
   Zap,
   BarChart3,
-  PieChart as PieChartIcon
+  PieChart as PieChartIcon,
 } from "lucide-react";
 import {
   ExecutiveDashboard as ExecutiveDashboardType,
@@ -65,7 +66,7 @@ import {
   KPISection,
   TrendAnalysis,
   ActionItem,
-  AnalyticsTimeframe
+  AnalyticsTimeframe,
 } from "@/types/analytics";
 
 // Mock executive data
@@ -80,25 +81,25 @@ const mockExecutiveSummary: ExecutiveSummary = {
     goal_completion_change: 15.2,
     total_users: 1247,
     active_users: 1089,
-    user_growth_rate: 18.4
+    user_growth_rate: 18.4,
   },
   key_achievements: [
     "Productivity score increased by 12.3% this quarter",
     "Team collaboration efficiency up 8.7%",
     "Goal completion rate improved by 15.2%",
     "User adoption increased by 18.4%",
-    "AI feature usage grew by 245%"
+    "AI feature usage grew by 245%",
   ],
   areas_for_improvement: [
     "Meeting efficiency could be optimized",
     "Task delegation patterns need refinement",
-    "Cross-team communication gaps identified"
+    "Cross-team communication gaps identified",
   ],
   strategic_insights: [
     "AI-powered features show highest ROI",
     "Remote teams outperforming office teams",
-    "Goal-setting automation reduces completion time by 23%"
-  ]
+    "Goal-setting automation reduces completion time by 23%",
+  ],
 };
 
 const mockKPISections: KPISection[] = [
@@ -122,8 +123,8 @@ const mockKPISections: KPISection[] = [
         benchmark_comparison: {
           industry_average: 72.3,
           top_quartile: 84.2,
-          percentile_rank: 89
-        }
+          percentile_rank: 89,
+        },
       },
       {
         id: "task_completion",
@@ -134,7 +135,7 @@ const mockKPISections: KPISection[] = [
         unit: "%",
         format: "percentage",
         trend: "up",
-        performance_rating: "excellent"
+        performance_rating: "excellent",
       },
       {
         id: "response_time",
@@ -145,9 +146,9 @@ const mockKPISections: KPISection[] = [
         unit: "hours",
         format: "number",
         trend: "up",
-        performance_rating: "good"
-      }
-    ]
+        performance_rating: "good",
+      },
+    ],
   },
   {
     id: "financial",
@@ -165,7 +166,7 @@ const mockKPISections: KPISection[] = [
         unit: "%",
         format: "percentage",
         trend: "up",
-        performance_rating: "excellent"
+        performance_rating: "excellent",
       },
       {
         id: "cost_savings",
@@ -176,9 +177,9 @@ const mockKPISections: KPISection[] = [
         unit: "$",
         format: "currency",
         trend: "up",
-        performance_rating: "excellent"
-      }
-    ]
+        performance_rating: "excellent",
+      },
+    ],
   },
   {
     id: "team",
@@ -196,7 +197,7 @@ const mockKPISections: KPISection[] = [
         unit: "/10",
         format: "number",
         trend: "up",
-        performance_rating: "excellent"
+        performance_rating: "excellent",
       },
       {
         id: "retention",
@@ -207,10 +208,10 @@ const mockKPISections: KPISection[] = [
         unit: "%",
         format: "percentage",
         trend: "up",
-        performance_rating: "excellent"
-      }
-    ]
-  }
+        performance_rating: "excellent",
+      },
+    ],
+  },
 ];
 
 const mockTrendData = [
@@ -222,14 +223,15 @@ const mockTrendData = [
   { month: "Jun", productivity: 85, efficiency: 85, goals: 81 },
   { month: "Jul", productivity: 86, efficiency: 88, goals: 83 },
   { month: "Aug", productivity: 87, efficiency: 90, goals: 86 },
-  { month: "Sep", productivity: 88, efficiency: 92, goals: 89 }
+  { month: "Sep", productivity: 88, efficiency: 92, goals: 89 },
 ];
 
 const mockActionItems: ActionItem[] = [
   {
     id: "action_1",
     title: "Optimize Meeting Efficiency",
-    description: "Implement AI-powered meeting analytics to reduce average meeting time by 25%",
+    description:
+      "Implement AI-powered meeting analytics to reduce average meeting time by 25%",
     priority: "high",
     category: "efficiency",
     assigned_to: "Operations Team",
@@ -237,12 +239,13 @@ const mockActionItems: ActionItem[] = [
     status: "in_progress",
     impact_estimation: "High - Potential 15% productivity increase",
     effort_estimation: "Medium - 2-3 weeks implementation",
-    created_at: "2024-10-01T00:00:00Z"
+    created_at: "2024-10-01T00:00:00Z",
   },
   {
     id: "action_2",
     title: "Enhance Cross-Team Communication",
-    description: "Deploy automated workflow notifications to improve inter-team coordination",
+    description:
+      "Deploy automated workflow notifications to improve inter-team coordination",
     priority: "medium",
     category: "productivity",
     assigned_to: "IT Department",
@@ -250,12 +253,13 @@ const mockActionItems: ActionItem[] = [
     status: "pending",
     impact_estimation: "Medium - Improved collaboration scores",
     effort_estimation: "Low - 1 week setup",
-    created_at: "2024-10-01T00:00:00Z"
+    created_at: "2024-10-01T00:00:00Z",
   },
   {
     id: "action_3",
     title: "Scale AI Feature Adoption",
-    description: "Increase AI feature utilization across all departments to maximize ROI",
+    description:
+      "Increase AI feature utilization across all departments to maximize ROI",
     priority: "critical",
     category: "growth",
     assigned_to: "Product Team",
@@ -263,62 +267,84 @@ const mockActionItems: ActionItem[] = [
     status: "in_progress",
     impact_estimation: "Very High - 30% efficiency gain potential",
     effort_estimation: "High - 4-6 weeks rollout",
-    created_at: "2024-10-01T00:00:00Z"
-  }
+    created_at: "2024-10-01T00:00:00Z",
+  },
 ];
 
 export function ExecutiveDashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState("Q3 2024");
-  const [selectedAudience, setSelectedAudience] = useState<'all' | 'ceo' | 'cto' | 'coo' | 'hr'>('all');
+  const [selectedAudience, setSelectedAudience] = useState<
+    "all" | "ceo" | "cto" | "coo" | "hr"
+  >("all");
   const [refreshing, setRefreshing] = useState(false);
 
-  const filteredKPISections = selectedAudience === 'all'
-    ? mockKPISections
-    : mockKPISections.filter(section => section.target_audience === selectedAudience || section.target_audience === 'all');
+  const filteredKPISections =
+    selectedAudience === "all"
+      ? mockKPISections
+      : mockKPISections.filter(
+          (section) =>
+            section.target_audience === selectedAudience ||
+            section.target_audience === "all",
+        );
 
   const handleRefresh = async () => {
     setRefreshing(true);
     // Simulate data refresh
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     setRefreshing(false);
   };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(value);
   };
 
   const getPerformanceColor = (rating: string) => {
     switch (rating) {
-      case 'excellent': return 'text-green-600';
-      case 'good': return 'text-blue-600';
-      case 'needs_improvement': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+      case "excellent":
+        return "text-green-600";
+      case "good":
+        return "text-blue-600";
+      case "needs_improvement":
+        return "text-yellow-600";
+      case "critical":
+        return "text-red-600";
+      default:
+        return "text-gray-600";
     }
   };
 
   const getPerformanceIcon = (rating: string) => {
     switch (rating) {
-      case 'excellent': return <Award className="h-4 w-4" />;
-      case 'good': return <CheckCircle className="h-4 w-4" />;
-      case 'needs_improvement': return <AlertTriangle className="h-4 w-4" />;
-      case 'critical': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Activity className="h-4 w-4" />;
+      case "excellent":
+        return <Award className="h-4 w-4" />;
+      case "good":
+        return <CheckCircle className="h-4 w-4" />;
+      case "needs_improvement":
+        return <AlertTriangle className="h-4 w-4" />;
+      case "critical":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Activity className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "critical":
+        return "bg-red-100 text-red-800";
+      case "high":
+        return "bg-orange-100 text-orange-800";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "low":
+        return "bg-green-100 text-green-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -336,7 +362,10 @@ export function ExecutiveDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Select value={selectedAudience} onValueChange={(value: any) => setSelectedAudience(value)}>
+          <Select
+            value={selectedAudience}
+            onValueChange={(value: any) => setSelectedAudience(value)}
+          >
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -358,9 +387,15 @@ export function ExecutiveDashboard() {
               <SelectItem value="Q1 2024">Q1 2024</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={handleRefresh} disabled={refreshing}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? 'Refreshing...' : 'Refresh'}
+          <Button
+            variant="outline"
+            onClick={handleRefresh}
+            disabled={refreshing}
+          >
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
+            />
+            {refreshing ? "Refreshing..." : "Refresh"}
           </Button>
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
@@ -384,37 +419,59 @@ export function ExecutiveDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-purple-600">
-                {mockExecutiveSummary.headline_metrics.productivity_score.toFixed(1)}
+                {mockExecutiveSummary.headline_metrics.productivity_score.toFixed(
+                  1,
+                )}
               </div>
-              <p className="text-sm text-muted-foreground">Productivity Score</p>
+              <p className="text-sm text-muted-foreground">
+                Productivity Score
+              </p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-green-600" />
                 <span className="text-xs text-green-600">
-                  +{mockExecutiveSummary.headline_metrics.productivity_change.toFixed(1)}%
+                  +
+                  {mockExecutiveSummary.headline_metrics.productivity_change.toFixed(
+                    1,
+                  )}
+                  %
                 </span>
               </div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600">
-                {mockExecutiveSummary.headline_metrics.team_efficiency.toFixed(1)}%
+                {mockExecutiveSummary.headline_metrics.team_efficiency.toFixed(
+                  1,
+                )}
+                %
               </div>
               <p className="text-sm text-muted-foreground">Team Efficiency</p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-green-600" />
                 <span className="text-xs text-green-600">
-                  +{mockExecutiveSummary.headline_metrics.efficiency_change.toFixed(1)}%
+                  +
+                  {mockExecutiveSummary.headline_metrics.efficiency_change.toFixed(
+                    1,
+                  )}
+                  %
                 </span>
               </div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-green-600">
-                {mockExecutiveSummary.headline_metrics.goal_completion_rate.toFixed(1)}%
+                {mockExecutiveSummary.headline_metrics.goal_completion_rate.toFixed(
+                  1,
+                )}
+                %
               </div>
               <p className="text-sm text-muted-foreground">Goal Completion</p>
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-green-600" />
                 <span className="text-xs text-green-600">
-                  +{mockExecutiveSummary.headline_metrics.goal_completion_change.toFixed(1)}%
+                  +
+                  {mockExecutiveSummary.headline_metrics.goal_completion_change.toFixed(
+                    1,
+                  )}
+                  %
                 </span>
               </div>
             </div>
@@ -426,7 +483,11 @@ export function ExecutiveDashboard() {
               <div className="flex items-center justify-center gap-1 mt-1">
                 <TrendingUp className="h-3 w-3 text-green-600" />
                 <span className="text-xs text-green-600">
-                  +{mockExecutiveSummary.headline_metrics.user_growth_rate.toFixed(1)}%
+                  +
+                  {mockExecutiveSummary.headline_metrics.user_growth_rate.toFixed(
+                    1,
+                  )}
+                  %
                 </span>
               </div>
             </div>
@@ -451,7 +512,9 @@ export function ExecutiveDashboard() {
                 <CardTitle className="flex items-center justify-between">
                   {section.title}
                   <Badge variant="outline" className="capitalize">
-                    {section.target_audience === 'all' ? 'All Roles' : section.target_audience.toUpperCase()}
+                    {section.target_audience === "all"
+                      ? "All Roles"
+                      : section.target_audience.toUpperCase()}
                   </Badge>
                 </CardTitle>
                 <CardDescription>{section.description}</CardDescription>
@@ -459,13 +522,25 @@ export function ExecutiveDashboard() {
               <CardContent>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {section.metrics.map((metric) => (
-                    <Card key={metric.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={metric.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardHeader>
                         <div className="flex items-center justify-between">
-                          <CardTitle className="text-base">{metric.name}</CardTitle>
-                          <div className={`flex items-center gap-1 ${getPerformanceColor(metric.performance_rating)}`}>
+                          <CardTitle className="text-base">
+                            {metric.name}
+                          </CardTitle>
+                          <div
+                            className={`flex items-center gap-1 ${getPerformanceColor(metric.performance_rating)}`}
+                          >
                             {getPerformanceIcon(metric.performance_rating)}
-                            <Badge variant="outline" className={getPerformanceColor(metric.performance_rating)}>
+                            <Badge
+                              variant="outline"
+                              className={getPerformanceColor(
+                                metric.performance_rating,
+                              )}
+                            >
                               {metric.performance_rating}
                             </Badge>
                           </div>
@@ -474,48 +549,81 @@ export function ExecutiveDashboard() {
                       <CardContent>
                         <div className="space-y-3">
                           <div className="text-2xl font-bold">
-                            {metric.format === 'currency'
+                            {metric.format === "currency"
                               ? formatCurrency(metric.current_value)
-                              : metric.format === 'percentage'
-                              ? `${metric.current_value.toFixed(1)}%`
-                              : `${metric.current_value.toFixed(1)}${metric.unit}`
-                            }
+                              : metric.format === "percentage"
+                                ? `${metric.current_value.toFixed(1)}%`
+                                : `${metric.current_value.toFixed(1)}${metric.unit}`}
                           </div>
 
                           {/* Progress towards target */}
                           <div>
                             <div className="flex items-center justify-between text-sm mb-1">
-                              <span>Target: {metric.format === 'currency'
-                                ? formatCurrency(metric.target_value)
-                                : `${metric.target_value}${metric.unit}`
-                              }</span>
-                              <span>{Math.round((metric.current_value / metric.target_value) * 100)}%</span>
+                              <span>
+                                Target:{" "}
+                                {metric.format === "currency"
+                                  ? formatCurrency(metric.target_value)
+                                  : `${metric.target_value}${metric.unit}`}
+                              </span>
+                              <span>
+                                {Math.round(
+                                  (metric.current_value / metric.target_value) *
+                                    100,
+                                )}
+                                %
+                              </span>
                             </div>
                             <Progress
-                              value={(metric.current_value / metric.target_value) * 100}
+                              value={
+                                (metric.current_value / metric.target_value) *
+                                100
+                              }
                               className="h-2"
                             />
                           </div>
 
                           {/* Change from previous */}
                           <div className="flex items-center gap-2 text-sm">
-                            {metric.trend === 'up' ? (
+                            {metric.trend === "up" ? (
                               <TrendingUp className="h-3 w-3 text-green-600" />
                             ) : (
                               <TrendingDown className="h-3 w-3 text-red-600" />
                             )}
-                            <span className={metric.trend === 'up' ? 'text-green-600' : 'text-red-600'}>
-                              {((metric.current_value - metric.previous_value) / metric.previous_value * 100).toFixed(1)}%
+                            <span
+                              className={
+                                metric.trend === "up"
+                                  ? "text-green-600"
+                                  : "text-red-600"
+                              }
+                            >
+                              {(
+                                ((metric.current_value -
+                                  metric.previous_value) /
+                                  metric.previous_value) *
+                                100
+                              ).toFixed(1)}
+                              %
                             </span>
-                            <span className="text-muted-foreground">vs previous period</span>
+                            <span className="text-muted-foreground">
+                              vs previous period
+                            </span>
                           </div>
 
                           {/* Benchmark comparison */}
                           {metric.benchmark_comparison && (
                             <div className="text-xs text-muted-foreground space-y-1">
-                              <div>Industry avg: {metric.benchmark_comparison.industry_average}</div>
-                              <div>Top quartile: {metric.benchmark_comparison.top_quartile}</div>
-                              <div>Your percentile: {metric.benchmark_comparison.percentile_rank}th</div>
+                              <div>
+                                Industry avg:{" "}
+                                {metric.benchmark_comparison.industry_average}
+                              </div>
+                              <div>
+                                Top quartile:{" "}
+                                {metric.benchmark_comparison.top_quartile}
+                              </div>
+                              <div>
+                                Your percentile:{" "}
+                                {metric.benchmark_comparison.percentile_rank}th
+                              </div>
                             </div>
                           )}
                         </div>
@@ -578,12 +686,14 @@ export function ExecutiveDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockExecutiveSummary.key_achievements.map((achievement, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                      <span className="text-sm">{achievement}</span>
-                    </div>
-                  ))}
+                  {mockExecutiveSummary.key_achievements.map(
+                    (achievement, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                        <span className="text-sm">{achievement}</span>
+                      </div>
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -595,12 +705,14 @@ export function ExecutiveDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {mockExecutiveSummary.areas_for_improvement.map((area, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                      <span className="text-sm">{area}</span>
-                    </div>
-                  ))}
+                  {mockExecutiveSummary.areas_for_improvement.map(
+                    (area, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                        <span className="text-sm">{area}</span>
+                      </div>
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -612,22 +724,29 @@ export function ExecutiveDashboard() {
             <CardHeader>
               <CardTitle>Strategic Insights</CardTitle>
               <CardDescription>
-                AI-powered analysis and recommendations for strategic decision-making
+                AI-powered analysis and recommendations for strategic
+                decision-making
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockExecutiveSummary.strategic_insights.map((insight, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
-                    <div className="flex items-start gap-3">
-                      <Zap className="h-5 w-5 text-blue-600 mt-1" />
-                      <div>
-                        <p className="font-medium mb-1">Strategic Insight #{index + 1}</p>
-                        <p className="text-sm text-muted-foreground">{insight}</p>
+                {mockExecutiveSummary.strategic_insights.map(
+                  (insight, index) => (
+                    <div key={index} className="p-4 border rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <Zap className="h-5 w-5 text-blue-600 mt-1" />
+                        <div>
+                          <p className="font-medium mb-1">
+                            Strategic Insight #{index + 1}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {insight}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ),
+                )}
               </div>
             </CardContent>
           </Card>
@@ -636,7 +755,10 @@ export function ExecutiveDashboard() {
         <TabsContent value="actions" className="space-y-6">
           <div className="grid gap-4">
             {mockActionItems.map((action) => (
-              <Card key={action.id} className="hover:shadow-md transition-shadow">
+              <Card
+                key={action.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -648,7 +770,7 @@ export function ExecutiveDashboard() {
                         {action.priority}
                       </Badge>
                       <Badge variant="outline" className="capitalize">
-                        {action.status.replace('_', ' ')}
+                        {action.status.replace("_", " ")}
                       </Badge>
                     </div>
                   </div>
@@ -656,15 +778,25 @@ export function ExecutiveDashboard() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <p className="font-medium text-muted-foreground">Assigned To</p>
+                      <p className="font-medium text-muted-foreground">
+                        Assigned To
+                      </p>
                       <p>{action.assigned_to}</p>
                     </div>
                     <div>
-                      <p className="font-medium text-muted-foreground">Due Date</p>
-                      <p>{action.due_date ? new Date(action.due_date).toLocaleDateString() : 'Not set'}</p>
+                      <p className="font-medium text-muted-foreground">
+                        Due Date
+                      </p>
+                      <p>
+                        {action.due_date
+                          ? new Date(action.due_date).toLocaleDateString()
+                          : "Not set"}
+                      </p>
                     </div>
                     <div>
-                      <p className="font-medium text-muted-foreground">Category</p>
+                      <p className="font-medium text-muted-foreground">
+                        Category
+                      </p>
                       <p className="capitalize">{action.category}</p>
                     </div>
                   </div>
@@ -672,11 +804,15 @@ export function ExecutiveDashboard() {
                   <div className="mt-4 space-y-2">
                     <div>
                       <p className="font-medium text-sm">Expected Impact</p>
-                      <p className="text-sm text-muted-foreground">{action.impact_estimation}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {action.impact_estimation}
+                      </p>
                     </div>
                     <div>
                       <p className="font-medium text-sm">Effort Required</p>
-                      <p className="text-sm text-muted-foreground">{action.effort_estimation}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {action.effort_estimation}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -696,9 +832,12 @@ export function ExecutiveDashboard() {
             <CardContent>
               <div className="text-center py-8">
                 <BarChart3 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Benchmark Analysis</h3>
+                <h3 className="text-lg font-semibold mb-2">
+                  Benchmark Analysis
+                </h3>
                 <p className="text-muted-foreground mb-4">
-                  Detailed industry benchmark comparisons and competitive analysis
+                  Detailed industry benchmark comparisons and competitive
+                  analysis
                 </p>
                 <Button variant="outline">
                   <Download className="h-4 w-4 mr-2" />

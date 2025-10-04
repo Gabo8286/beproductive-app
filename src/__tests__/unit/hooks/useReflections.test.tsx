@@ -1,16 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   useReflections,
   useCreateReflection,
   useUpdateReflection,
   useDeleteReflection,
-} from '@/hooks/useReflections';
-import { supabase } from '@/integrations/supabase/client';
-import type { ReactNode } from 'react';
+} from "@/hooks/useReflections";
+import { supabase } from "@/integrations/supabase/client";
+import type { ReactNode } from "react";
 
-vi.mock('@/integrations/supabase/client');
+vi.mock("@/integrations/supabase/client");
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -25,24 +25,24 @@ const createWrapper = () => {
   );
 };
 
-describe('useReflections Hook', () => {
+describe("useReflections Hook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should track mood patterns', async () => {
+  it("should track mood patterns", async () => {
     const mockReflections = [
       {
-        id: '1',
-        mood: 'great',
+        id: "1",
+        mood: "great",
         energy_level: 8,
-        reflection_date: '2025-01-01',
+        reflection_date: "2025-01-01",
       },
       {
-        id: '2',
-        mood: 'good',
+        id: "2",
+        mood: "good",
         energy_level: 7,
-        reflection_date: '2025-01-02',
+        reflection_date: "2025-01-02",
       },
     ];
 
@@ -58,8 +58,8 @@ describe('useReflections Hook', () => {
     } as any);
 
     const { result } = renderHook(
-      () => useReflections('workspace-id', { mood: 'great' }),
-      { wrapper: createWrapper() }
+      () => useReflections("workspace-id", { mood: "great" }),
+      { wrapper: createWrapper() },
     );
 
     await waitFor(() => {
@@ -67,13 +67,13 @@ describe('useReflections Hook', () => {
     });
   });
 
-  it('should analyze content themes', async () => {
+  it("should analyze content themes", async () => {
     const mockReflection = {
-      id: '1',
-      title: 'Work Progress',
-      content: 'Made good progress on project',
-      tags: ['work', 'productivity'],
-      metadata: { themes: ['career', 'achievement'] },
+      id: "1",
+      title: "Work Progress",
+      content: "Made good progress on project",
+      tags: ["work", "productivity"],
+      metadata: { themes: ["career", "achievement"] },
     };
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -86,23 +86,23 @@ describe('useReflections Hook', () => {
     } as any);
 
     const { result } = renderHook(
-      () => useReflections('workspace-id', { tags: ['work'] }),
-      { wrapper: createWrapper() }
+      () => useReflections("workspace-id", { tags: ["work"] }),
+      { wrapper: createWrapper() },
     );
 
     await waitFor(() => {
-      expect(result.current.data?.[0].tags).toContain('work');
+      expect(result.current.data?.[0].tags).toContain("work");
     });
   });
 
-  it('should link reflections to goals', async () => {
+  it("should link reflections to goals", async () => {
     const mockReflection = {
-      id: '1',
-      title: 'Goal Progress',
+      id: "1",
+      title: "Goal Progress",
       goal_links: [
         {
-          goal_id: 'goal-1',
-          goal: { id: 'goal-1', title: 'Learn React' },
+          goal_id: "goal-1",
+          goal: { id: "goal-1", title: "Learn React" },
         },
       ],
     };
@@ -116,27 +116,26 @@ describe('useReflections Hook', () => {
       }),
     } as any);
 
-    const { result } = renderHook(
-      () => useReflections('workspace-id'),
-      { wrapper: createWrapper() }
-    );
+    const { result } = renderHook(() => useReflections("workspace-id"), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(result.current.data?.[0].goal_links).toBeDefined();
     });
   });
 
-  it('should validate reflection input', async () => {
+  it("should validate reflection input", async () => {
     const invalidReflection = {
-      workspace_id: 'workspace-id',
-      title: '', // Invalid: empty title
-      content: 'Test',
-      reflection_type: 'daily' as const,
-      reflection_date: '2025-01-01',
+      workspace_id: "workspace-id",
+      title: "", // Invalid: empty title
+      content: "Test",
+      reflection_type: "daily" as const,
+      reflection_date: "2025-01-01",
     };
 
     vi.mocked(supabase.auth.getUser).mockResolvedValue({
-      data: { user: { id: 'user-id' } as any },
+      data: { user: { id: "user-id" } as any },
       error: null,
     });
 
@@ -151,20 +150,30 @@ describe('useReflections Hook', () => {
     });
   });
 
-  it('should calculate average mood and energy', async () => {
+  it("should calculate average mood and energy", async () => {
     const mockReflections = [
-      { mood: 'amazing', energy_level: 9, stress_level: 2 },
-      { mood: 'great', energy_level: 8, stress_level: 3 },
-      { mood: 'good', energy_level: 7, stress_level: 4 },
+      { mood: "amazing", energy_level: 9, stress_level: 2 },
+      { mood: "great", energy_level: 8, stress_level: 3 },
+      { mood: "good", energy_level: 7, stress_level: 4 },
     ];
 
-    const moodScores = { amazing: 6, great: 5, good: 4, neutral: 3, bad: 2, terrible: 1 };
-    const avgMood = mockReflections.reduce(
-      (sum, r) => sum + moodScores[r.mood as keyof typeof moodScores],
-      0
-    ) / mockReflections.length;
+    const moodScores = {
+      amazing: 6,
+      great: 5,
+      good: 4,
+      neutral: 3,
+      bad: 2,
+      terrible: 1,
+    };
+    const avgMood =
+      mockReflections.reduce(
+        (sum, r) => sum + moodScores[r.mood as keyof typeof moodScores],
+        0,
+      ) / mockReflections.length;
 
-    const avgEnergy = mockReflections.reduce((sum, r) => sum + r.energy_level, 0) / mockReflections.length;
+    const avgEnergy =
+      mockReflections.reduce((sum, r) => sum + r.energy_level, 0) /
+      mockReflections.length;
 
     expect(avgMood).toBe(5); // (6+5+4)/3
     expect(avgEnergy).toBe(8); // (9+8+7)/3

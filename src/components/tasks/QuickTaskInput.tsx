@@ -1,9 +1,14 @@
-import { useState, useRef, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Check, X, Loader2 } from 'lucide-react';
-import { useQuickCreateTask, useBatchCreateTasks, QuickTaskDefaults, parseMultilineInput } from '@/hooks/useQuickTask';
-import { Textarea } from '@/components/ui/textarea';
+import { useState, useRef, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Check, X, Loader2 } from "lucide-react";
+import {
+  useQuickCreateTask,
+  useBatchCreateTasks,
+  QuickTaskDefaults,
+  parseMultilineInput,
+} from "@/hooks/useQuickTask";
+import { Textarea } from "@/components/ui/textarea";
 
 interface QuickTaskInputProps {
   onCancel?: () => void;
@@ -20,14 +25,14 @@ export function QuickTaskInput({
   onSuccess,
   defaults,
   autoFocus = true,
-  placeholder = 'Task title...',
+  placeholder = "Task title...",
   batchMode = false,
-  className = '',
+  className = "",
 }: QuickTaskInputProps) {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  
+
   const quickCreate = useQuickCreateTask();
   const batchCreate = useBatchCreateTasks();
 
@@ -48,26 +53,26 @@ export function QuickTaskInput({
     if (batchMode) {
       const titles = parseMultilineInput(trimmedValue);
       if (titles.length === 0) return;
-      
+
       await batchCreate.mutateAsync({ titles, defaults });
     } else {
       await quickCreate.mutateAsync({ title: trimmedValue, defaults });
     }
 
-    setValue('');
+    setValue("");
     onSuccess?.();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && !batchMode) {
+    if (e.key === "Enter" && !e.shiftKey && !batchMode) {
       e.preventDefault();
       handleSubmit();
-    } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && batchMode) {
+    } else if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && batchMode) {
       e.preventDefault();
       handleSubmit();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       e.preventDefault();
-      setValue('');
+      setValue("");
       onCancel?.();
     }
   };
@@ -75,7 +80,9 @@ export function QuickTaskInput({
   const isLoading = quickCreate.isPending || batchCreate.isPending;
 
   return (
-    <div className={`flex items-start gap-2 animate-in fade-in slide-in-from-top-2 duration-200 ${className}`}>
+    <div
+      className={`flex items-start gap-2 animate-in fade-in slide-in-from-top-2 duration-200 ${className}`}
+    >
       {batchMode ? (
         <Textarea
           ref={textareaRef}
@@ -98,7 +105,7 @@ export function QuickTaskInput({
           disabled={isLoading}
         />
       )}
-      
+
       <div className="flex gap-1 flex-shrink-0">
         <Button
           size="icon"
@@ -117,7 +124,7 @@ export function QuickTaskInput({
           size="icon"
           variant="outline"
           onClick={() => {
-            setValue('');
+            setValue("");
             onCancel?.();
           }}
           disabled={isLoading}

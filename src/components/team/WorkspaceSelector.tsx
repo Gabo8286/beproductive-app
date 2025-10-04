@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -15,19 +15,26 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Plus, Settings, Users, Building, User, MoreHorizontal } from 'lucide-react';
-import { useWorkspaces, type CreateWorkspaceData } from '@/hooks/useWorkspaces';
-import { toast } from 'sonner';
+} from "@/components/ui/dropdown-menu";
+import {
+  Plus,
+  Settings,
+  Users,
+  Building,
+  User,
+  MoreHorizontal,
+} from "lucide-react";
+import { useWorkspaces, type CreateWorkspaceData } from "@/hooks/useWorkspaces";
+import { toast } from "sonner";
 
 interface WorkspaceSelectorProps {
   value?: string;
@@ -35,12 +42,16 @@ interface WorkspaceSelectorProps {
   className?: string;
 }
 
-export function WorkspaceSelector({ value, onValueChange, className }: WorkspaceSelectorProps) {
+export function WorkspaceSelector({
+  value,
+  onValueChange,
+  className,
+}: WorkspaceSelectorProps) {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [createForm, setCreateForm] = useState<CreateWorkspaceData>({
-    name: '',
-    description: '',
-    type: 'team'
+    name: "",
+    description: "",
+    type: "team",
   });
 
   const { workspaces, isLoading, createWorkspace } = useWorkspaces();
@@ -49,14 +60,14 @@ export function WorkspaceSelector({ value, onValueChange, className }: Workspace
     e.preventDefault();
 
     if (!createForm.name.trim()) {
-      toast.error('Workspace name is required');
+      toast.error("Workspace name is required");
       return;
     }
 
     try {
       await createWorkspace.mutateAsync(createForm);
       setCreateDialogOpen(false);
-      setCreateForm({ name: '', description: '', type: 'team' });
+      setCreateForm({ name: "", description: "", type: "team" });
     } catch (error) {
       // Error handling is done in the mutation
     }
@@ -64,16 +75,16 @@ export function WorkspaceSelector({ value, onValueChange, className }: Workspace
 
   const getWorkspaceIcon = (type: string) => {
     switch (type) {
-      case 'personal':
+      case "personal":
         return <User className="h-4 w-4" />;
-      case 'organization':
+      case "organization":
         return <Building className="h-4 w-4" />;
       default:
         return <Users className="h-4 w-4" />;
     }
   };
 
-  const selectedWorkspace = workspaces.find(w => w.id === value);
+  const selectedWorkspace = workspaces.find((w) => w.id === value);
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
@@ -140,7 +151,9 @@ export function WorkspaceSelector({ value, onValueChange, className }: Workspace
               <Input
                 id="name"
                 value={createForm.name}
-                onChange={(e) => setCreateForm(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setCreateForm((prev) => ({ ...prev, name: e.target.value }))
+                }
                 placeholder="Enter workspace name"
                 required
               />
@@ -151,7 +164,12 @@ export function WorkspaceSelector({ value, onValueChange, className }: Workspace
               <Textarea
                 id="description"
                 value={createForm.description}
-                onChange={(e) => setCreateForm(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setCreateForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 placeholder="Describe the purpose of this workspace"
                 rows={3}
               />
@@ -161,10 +179,12 @@ export function WorkspaceSelector({ value, onValueChange, className }: Workspace
               <Label htmlFor="type">Workspace Type</Label>
               <Select
                 value={createForm.type}
-                onValueChange={(value) => setCreateForm(prev => ({
-                  ...prev,
-                  type: value as 'personal' | 'team' | 'organization'
-                }))}
+                onValueChange={(value) =>
+                  setCreateForm((prev) => ({
+                    ...prev,
+                    type: value as "personal" | "team" | "organization",
+                  }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select workspace type" />
@@ -216,7 +236,7 @@ export function WorkspaceSelector({ value, onValueChange, className }: Workspace
                 Cancel
               </Button>
               <Button type="submit" disabled={createWorkspace.isPending}>
-                {createWorkspace.isPending ? 'Creating...' : 'Create Workspace'}
+                {createWorkspace.isPending ? "Creating..." : "Create Workspace"}
               </Button>
             </div>
           </form>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
   SheetContent,
@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 import {
   Home,
   Target,
@@ -23,54 +23,54 @@ import {
   Plus,
   BarChart3,
   Globe,
-  Building
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useModules } from '@/contexts/ModulesContext';
+  Building,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useModules } from "@/contexts/ModulesContext";
 
 const mobileNavItems = [
   {
-    name: 'Dashboard',
-    href: '/dashboard',
+    name: "Dashboard",
+    href: "/dashboard",
     icon: Home,
-    color: 'text-blue-600',
-    moduleId: null
+    color: "text-blue-600",
+    moduleId: null,
   },
   {
-    name: 'Goals',
-    href: '/goals',
+    name: "Goals",
+    href: "/goals",
     icon: Target,
-    color: 'text-green-600',
-    moduleId: 'goals' as const
+    color: "text-green-600",
+    moduleId: "goals" as const,
   },
   {
-    name: 'Tasks',
-    href: '/tasks',
+    name: "Tasks",
+    href: "/tasks",
     icon: CheckSquare,
-    color: 'text-orange-600',
-    moduleId: 'tasks' as const
+    color: "text-orange-600",
+    moduleId: "tasks" as const,
   },
   {
-    name: 'Analytics',
-    href: '/analytics',
+    name: "Analytics",
+    href: "/analytics",
     icon: BarChart3,
-    color: 'text-purple-600',
-    moduleId: 'analytics' as const
+    color: "text-purple-600",
+    moduleId: "analytics" as const,
   },
   {
-    name: 'Integrations',
-    href: '/integrations',
+    name: "Integrations",
+    href: "/integrations",
     icon: Globe,
-    color: 'text-indigo-600',
-    moduleId: 'integrations' as const
+    color: "text-indigo-600",
+    moduleId: "integrations" as const,
   },
   {
-    name: 'Enterprise',
-    href: '/enterprise',
+    name: "Enterprise",
+    href: "/enterprise",
     icon: Building,
-    color: 'text-gray-600',
-    moduleId: 'enterprise' as const
-  }
+    color: "text-gray-600",
+    moduleId: "enterprise" as const,
+  },
 ];
 
 export function MobileNavigation() {
@@ -80,7 +80,7 @@ export function MobileNavigation() {
   const { isModuleEnabled } = useModules();
 
   const visibleItems = mobileNavItems.filter(
-    (item) => !item.moduleId || isModuleEnabled(item.moduleId)
+    (item) => !item.moduleId || isModuleEnabled(item.moduleId),
   );
 
   // Close navigation when route changes
@@ -94,8 +94,9 @@ export function MobileNavigation() {
       setIsOpen(false);
     };
 
-    window.addEventListener('orientationchange', handleOrientationChange);
-    return () => window.removeEventListener('orientationchange', handleOrientationChange);
+    window.addEventListener("orientationchange", handleOrientationChange);
+    return () =>
+      window.removeEventListener("orientationchange", handleOrientationChange);
   }, []);
 
   return (
@@ -114,12 +115,21 @@ export function MobileNavigation() {
                   "active:scale-95 touch-manipulation",
                   isActive
                     ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                 )}
               >
-                <item.icon className={cn("h-5 w-5", isActive ? "text-primary" : item.color)} />
-                <span className="text-xs font-medium truncate">{item.name}</span>
-                {isActive && <div className="w-1 h-1 bg-primary rounded-full" />}
+                <item.icon
+                  className={cn(
+                    "h-5 w-5",
+                    isActive ? "text-primary" : item.color,
+                  )}
+                />
+                <span className="text-xs font-medium truncate">
+                  {item.name}
+                </span>
+                {isActive && (
+                  <div className="w-1 h-1 bg-primary rounded-full" />
+                )}
               </NavLink>
             );
           })}
@@ -133,10 +143,16 @@ export function MobileNavigation() {
                 className={cn(
                   "flex flex-col items-center gap-1 p-2 rounded-lg min-w-[60px]",
                   "active:scale-95 touch-manipulation",
-                  isOpen ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                  isOpen
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground",
                 )}
               >
-                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {isOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Menu className="h-5 w-5" />
+                )}
                 <span className="text-xs font-medium">More</span>
                 {activeNotifications > 0 && (
                   <Badge
@@ -163,7 +179,9 @@ export function MobileNavigation() {
               <div className="mt-6 space-y-6">
                 {/* Quick Actions */}
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-3">Quick Actions</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                    Quick Actions
+                  </h3>
                   <div className="grid grid-cols-2 gap-3">
                     <Button variant="outline" className="h-16 flex-col gap-2">
                       <Plus className="h-5 w-5" />
@@ -177,7 +195,10 @@ export function MobileNavigation() {
                       <Search className="h-5 w-5" />
                       <span className="text-sm">Search</span>
                     </Button>
-                    <Button variant="outline" className="h-16 flex-col gap-2 relative">
+                    <Button
+                      variant="outline"
+                      className="h-16 flex-col gap-2 relative"
+                    >
                       <Bell className="h-5 w-5" />
                       <span className="text-sm">Notifications</span>
                       {activeNotifications > 0 && (
@@ -194,7 +215,9 @@ export function MobileNavigation() {
 
                 {/* All Navigation Items */}
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-3">Navigation</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                    Navigation
+                  </h3>
                   <div className="space-y-2">
                     {visibleItems.map((item) => {
                       const isActive = location.pathname === item.href;
@@ -207,13 +230,21 @@ export function MobileNavigation() {
                             "active:scale-[0.98] touch-manipulation",
                             isActive
                               ? "bg-primary/10 text-primary border border-primary/20"
-                              : "hover:bg-accent/50"
+                              : "hover:bg-accent/50",
                           )}
                         >
-                          <item.icon className={cn("h-5 w-5", isActive ? "text-primary" : item.color)} />
+                          <item.icon
+                            className={cn(
+                              "h-5 w-5",
+                              isActive ? "text-primary" : item.color,
+                            )}
+                          />
                           <span className="font-medium">{item.name}</span>
                           {isActive && (
-                            <Badge variant="secondary" className="ml-auto text-xs">
+                            <Badge
+                              variant="secondary"
+                              className="ml-auto text-xs"
+                            >
                               Active
                             </Badge>
                           )}
@@ -225,7 +256,9 @@ export function MobileNavigation() {
 
                 {/* Settings */}
                 <div className="pt-4 border-t">
-                  <h3 className="text-sm font-medium text-muted-foreground mb-3">Settings</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                    Settings
+                  </h3>
                   <div className="space-y-2">
                     <NavLink
                       to="/profile"

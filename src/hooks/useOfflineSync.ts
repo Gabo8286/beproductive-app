@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface OfflineAction {
   id: string;
-  type: 'CREATE' | 'UPDATE' | 'DELETE';
+  type: "CREATE" | "UPDATE" | "DELETE";
   resource: string;
   data: any;
   timestamp: number;
@@ -46,10 +46,10 @@ export function useOfflineSync({
   useEffect(() => {
     const initDB = async () => {
       try {
-        const request = indexedDB.open('offlineSync', 1);
+        const request = indexedDB.open("offlineSync", 1);
 
         request.onerror = () => {
-          console.error('Failed to open IndexedDB');
+          console.error("Failed to open IndexedDB");
         };
 
         request.onsuccess = () => {
@@ -59,14 +59,14 @@ export function useOfflineSync({
 
         request.onupgradeneeded = () => {
           const db = request.result;
-          if (!db.objectStoreNames.contains('actions')) {
-            const store = db.createObjectStore('actions', { keyPath: 'id' });
-            store.createIndex('timestamp', 'timestamp', { unique: false });
-            store.createIndex('resource', 'resource', { unique: false });
+          if (!db.objectStoreNames.contains("actions")) {
+            const store = db.createObjectStore("actions", { keyPath: "id" });
+            store.createIndex("timestamp", "timestamp", { unique: false });
+            store.createIndex("resource", "resource", { unique: false });
           }
         };
       } catch (error) {
-        console.error('Failed to initialize IndexedDB:', error);
+        console.error("Failed to initialize IndexedDB:", error);
       }
     };
 
@@ -78,19 +78,19 @@ export function useOfflineSync({
     if (!dbRef.current) return;
 
     try {
-      const transaction = dbRef.current.transaction(['actions'], 'readonly');
-      const store = transaction.objectStore('actions');
+      const transaction = dbRef.current.transaction(["actions"], "readonly");
+      const store = transaction.objectStore("actions");
       const request = store.getAll();
 
       request.onsuccess = () => {
         const actions = request.result || [];
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           pendingActions: actions.sort((a, b) => a.timestamp - b.timestamp),
         }));
       };
     } catch (error) {
-      console.error('Failed to load pending actions:', error);
+      console.error("Failed to load pending actions:", error);
     }
   }, []);
 
@@ -99,11 +99,11 @@ export function useOfflineSync({
     if (!dbRef.current) return;
 
     try {
-      const transaction = dbRef.current.transaction(['actions'], 'readwrite');
-      const store = transaction.objectStore('actions');
+      const transaction = dbRef.current.transaction(["actions"], "readwrite");
+      const store = transaction.objectStore("actions");
       await store.put(action);
     } catch (error) {
-      console.error('Failed to save action to DB:', error);
+      console.error("Failed to save action to DB:", error);
     }
   }, []);
 
@@ -112,17 +112,17 @@ export function useOfflineSync({
     if (!dbRef.current) return;
 
     try {
-      const transaction = dbRef.current.transaction(['actions'], 'readwrite');
-      const store = transaction.objectStore('actions');
+      const transaction = dbRef.current.transaction(["actions"], "readwrite");
+      const store = transaction.objectStore("actions");
       await store.delete(actionId);
     } catch (error) {
-      console.error('Failed to remove action from DB:', error);
+      console.error("Failed to remove action from DB:", error);
     }
   }, []);
 
   // Queue offline action
   const queueAction = useCallback(
-    async (type: OfflineAction['type'], resource: string, data: any) => {
+    async (type: OfflineAction["type"], resource: string, data: any) => {
       const action: OfflineAction = {
         id: `${type}_${resource}_${Date.now()}_${Math.random()}`,
         type,
@@ -135,7 +135,7 @@ export function useOfflineSync({
 
       await saveActionToDB(action);
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         pendingActions: [...prev.pendingActions, action],
       }));
@@ -146,16 +146,20 @@ export function useOfflineSync({
 
       return action.id;
     },
-    [maxRetries, saveActionToDB, state.isOnline, enableAutoSync]
+    [maxRetries, saveActionToDB, state.isOnline, enableAutoSync],
   );
 
   // Sync pending actions to server
   const syncPendingActions = useCallback(async () => {
-    if (state.syncInProgress || !state.isOnline || state.pendingActions.length === 0) {
+    if (
+      state.syncInProgress ||
+      !state.isOnline ||
+      state.pendingActions.length === 0
+    ) {
       return;
     }
 
-    setState(prev => ({ ...prev, syncInProgress: true }));
+    setState((prev) => ({ ...prev, syncInProgress: true }));
 
     const actionsToSync = [...state.pendingActions];
     const succeededActions: string[] = [];
@@ -189,7 +193,7 @@ export function useOfflineSync({
           }
         }
       } catch (error) {
-        console.error('Sync error:', error);
+        console.error("Sync error:", error);
         const updatedAction = {
           ...action,
           retryCount: action.retryCount + 1,
@@ -205,11 +209,11 @@ export function useOfflineSync({
 
       // Add delay between requests to avoid overwhelming the server
       if (retryDelay > 0) {
-        await new Promise(resolve => setTimeout(resolve, retryDelay / 10));
+        await new Promise((resolve) => setTimeout(resolve, retryDelay / 10));
       }
     }
 
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       pendingActions: failedActions,
       syncInProgress: false,
@@ -241,9 +245,13 @@ export function useOfflineSync({
   ]);
 
   // Simulate server sync - replace with actual API calls
-  const syncActionToServer = async (action: OfflineAction): Promise<boolean> => {
+  const syncActionToServer = async (
+    action: OfflineAction,
+  ): Promise<boolean> => {
     // Simulate network request
-    await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 200));
+    await new Promise((resolve) =>
+      setTimeout(resolve, 100 + Math.random() * 200),
+    );
 
     // Simulate 90% success rate
     return Math.random() > 0.1;
@@ -254,11 +262,11 @@ export function useOfflineSync({
     if (!dbRef.current) return;
 
     try {
-      const transaction = dbRef.current.transaction(['actions'], 'readwrite');
-      const store = transaction.objectStore('actions');
+      const transaction = dbRef.current.transaction(["actions"], "readwrite");
+      const store = transaction.objectStore("actions");
       await store.clear();
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         pendingActions: [],
       }));
@@ -268,14 +276,14 @@ export function useOfflineSync({
         description: "All pending offline actions have been cleared.",
       });
     } catch (error) {
-      console.error('Failed to clear actions:', error);
+      console.error("Failed to clear actions:", error);
     }
   }, [toast]);
 
   // Listen for online/offline events
   useEffect(() => {
     const handleOnline = () => {
-      setState(prev => ({ ...prev, isOnline: true }));
+      setState((prev) => ({ ...prev, isOnline: true }));
       if (enableAutoSync) {
         syncPendingActions();
       }
@@ -286,20 +294,21 @@ export function useOfflineSync({
     };
 
     const handleOffline = () => {
-      setState(prev => ({ ...prev, isOnline: false }));
+      setState((prev) => ({ ...prev, isOnline: false }));
       toast({
         title: "Offline Mode",
-        description: "You're now offline. Changes will be synced when connection is restored.",
+        description:
+          "You're now offline. Changes will be synced when connection is restored.",
         variant: "destructive",
       });
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
       if (syncTimeoutRef.current) {
         clearTimeout(syncTimeoutRef.current);
       }
@@ -317,7 +326,13 @@ export function useOfflineSync({
     }, syncInterval);
 
     return () => clearInterval(interval);
-  }, [enableAutoSync, state.isOnline, state.pendingActions.length, syncInterval, syncPendingActions]);
+  }, [
+    enableAutoSync,
+    state.isOnline,
+    state.pendingActions.length,
+    syncInterval,
+    syncPendingActions,
+  ]);
 
   return {
     isOnline: state.isOnline,
@@ -337,23 +352,23 @@ export function useOfflineTaskSync() {
 
   const createTask = useCallback(
     async (taskData: any) => {
-      return sync.queueAction('CREATE', 'tasks', taskData);
+      return sync.queueAction("CREATE", "tasks", taskData);
     },
-    [sync]
+    [sync],
   );
 
   const updateTask = useCallback(
     async (taskId: string, updates: any) => {
-      return sync.queueAction('UPDATE', 'tasks', { id: taskId, ...updates });
+      return sync.queueAction("UPDATE", "tasks", { id: taskId, ...updates });
     },
-    [sync]
+    [sync],
   );
 
   const deleteTask = useCallback(
     async (taskId: string) => {
-      return sync.queueAction('DELETE', 'tasks', { id: taskId });
+      return sync.queueAction("DELETE", "tasks", { id: taskId });
     },
-    [sync]
+    [sync],
   );
 
   return {
@@ -369,23 +384,23 @@ export function useOfflineGoalSync() {
 
   const createGoal = useCallback(
     async (goalData: any) => {
-      return sync.queueAction('CREATE', 'goals', goalData);
+      return sync.queueAction("CREATE", "goals", goalData);
     },
-    [sync]
+    [sync],
   );
 
   const updateGoal = useCallback(
     async (goalId: string, updates: any) => {
-      return sync.queueAction('UPDATE', 'goals', { id: goalId, ...updates });
+      return sync.queueAction("UPDATE", "goals", { id: goalId, ...updates });
     },
-    [sync]
+    [sync],
   );
 
   const deleteGoal = useCallback(
     async (goalId: string) => {
-      return sync.queueAction('DELETE', 'goals', { id: goalId });
+      return sync.queueAction("DELETE", "goals", { id: goalId });
     },
-    [sync]
+    [sync],
   );
 
   return {

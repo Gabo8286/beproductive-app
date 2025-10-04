@@ -120,10 +120,15 @@ interface PersonaSelectorProps {
   onPersonaSelect?: (personaId: string) => void;
 }
 
-export function PersonaSelector({ onPersonaSelect }: PersonaSelectorProps = {}) {
-  const [selectedPersona, setSelectedPersona] = useState<string>(personas[0].id);
+export function PersonaSelector({
+  onPersonaSelect,
+}: PersonaSelectorProps = {}) {
+  const [selectedPersona, setSelectedPersona] = useState<string>(
+    personas[0].id,
+  );
 
-  const selected = personas.find((p) => p.id === selectedPersona) || personas[0];
+  const selected =
+    personas.find((p) => p.id === selectedPersona) || personas[0];
 
   const handleSelect = (personaId: string) => {
     setSelectedPersona(personaId);
@@ -147,14 +152,14 @@ export function PersonaSelector({ onPersonaSelect }: PersonaSelectorProps = {}) 
                 "cursor-pointer elevated-card group transition-all duration-300",
                 selectedPersona === persona.id
                   ? "ring-2 ring-primary shadow-xl"
-                  : "hover:shadow-lg"
+                  : "hover:shadow-lg",
               )}
             >
               <CardContent className="p-6 text-center space-y-3">
                 <div
                   className={cn(
                     "w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br flex items-center justify-center group-hover:scale-110 transition-transform duration-300",
-                    persona.gradient
+                    persona.gradient,
                   )}
                 >
                   {persona.icon}
@@ -190,7 +195,7 @@ export function PersonaSelector({ onPersonaSelect }: PersonaSelectorProps = {}) 
                     <div
                       className={cn(
                         "inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br mb-4",
-                        selected.gradient
+                        selected.gradient,
                       )}
                     >
                       {selected.icon}
@@ -251,9 +256,7 @@ export function PersonaSelector({ onPersonaSelect }: PersonaSelectorProps = {}) 
                     className="w-full apple-button shadow-lg hover:shadow-xl font-medium"
                     asChild
                   >
-                    <a href="/signup">
-                      Start As {selected.title}
-                    </a>
+                    <a href="/signup">Start As {selected.title}</a>
                   </Button>
                 </div>
               </div>

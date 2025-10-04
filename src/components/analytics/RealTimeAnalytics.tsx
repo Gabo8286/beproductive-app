@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,12 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   LineChart,
   Line,
@@ -31,7 +32,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ReferenceLine
+  ReferenceLine,
 } from "recharts";
 import {
   Activity,
@@ -52,12 +53,12 @@ import {
   EyeOff,
   BarChart3,
   LineChart as LineChartIcon,
-  PieChart as PieChartIcon
+  PieChart as PieChartIcon,
 } from "lucide-react";
 import {
   AnalyticsDataset,
   AnalyticsTimeframe,
-  DataPoint
+  DataPoint,
 } from "@/types/analytics";
 import { useRealTimeMetrics, useMetricData } from "@/hooks/useAnalytics";
 
@@ -66,14 +67,22 @@ interface RealTimeAnalyticsProps {
   defaultRefreshInterval?: number;
 }
 
-const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#F97316'];
+const COLORS = [
+  "#3B82F6",
+  "#10B981",
+  "#F59E0B",
+  "#EF4444",
+  "#8B5CF6",
+  "#06B6D4",
+  "#F97316",
+];
 
 const generateMockRealTimeData = (previousData: DataPoint[] = []) => {
   const now = new Date();
   const newDataPoint: DataPoint = {
     timestamp: now.toISOString(),
     value: Math.random() * 100 + Math.sin(Date.now() / 10000) * 20 + 50,
-    metadata: { source: 'real_time' }
+    metadata: { source: "real_time" },
   };
 
   // Keep only last 50 points for performance
@@ -82,38 +91,45 @@ const generateMockRealTimeData = (previousData: DataPoint[] = []) => {
 };
 
 export function RealTimeAnalytics({
-  metricIds = ['metric_1', 'metric_2', 'metric_3'],
-  defaultRefreshInterval = 5000
+  metricIds = ["metric_1", "metric_2", "metric_3"],
+  defaultRefreshInterval = 5000,
 }: RealTimeAnalyticsProps) {
   const [isLive, setIsLive] = useState(true);
-  const [refreshInterval, setRefreshInterval] = useState(defaultRefreshInterval);
-  const [selectedTimeframe, setSelectedTimeframe] = useState<AnalyticsTimeframe>('1d');
-  const [chartType, setChartType] = useState<'line' | 'area' | 'bar'>('line');
-  const [realTimeData, setRealTimeData] = useState<Record<string, DataPoint[]>>({});
+  const [refreshInterval, setRefreshInterval] = useState(
+    defaultRefreshInterval,
+  );
+  const [selectedTimeframe, setSelectedTimeframe] =
+    useState<AnalyticsTimeframe>("1d");
+  const [chartType, setChartType] = useState<"line" | "area" | "bar">("line");
+  const [realTimeData, setRealTimeData] = useState<Record<string, DataPoint[]>>(
+    {},
+  );
   const [visibleMetrics, setVisibleMetrics] = useState<Record<string, boolean>>(
-    metricIds.reduce((acc, id) => ({ ...acc, [id]: true }), {})
+    metricIds.reduce((acc, id) => ({ ...acc, [id]: true }), {}),
   );
 
   // Real-time data hook
   const { data: liveMetrics } = useRealTimeMetrics(
     metricIds,
-    isLive ? refreshInterval : undefined
+    isLive ? refreshInterval : undefined,
   );
 
   // Static data for comparison
-  const { data: metric1Data } = useMetricData('metric_1', selectedTimeframe);
-  const { data: metric2Data } = useMetricData('metric_2', selectedTimeframe);
-  const { data: metric3Data } = useMetricData('metric_3', selectedTimeframe);
+  const { data: metric1Data } = useMetricData("metric_1", selectedTimeframe);
+  const { data: metric2Data } = useMetricData("metric_2", selectedTimeframe);
+  const { data: metric3Data } = useMetricData("metric_3", selectedTimeframe);
 
   // Simulate real-time data updates
   useEffect(() => {
     if (!isLive) return;
 
     const interval = setInterval(() => {
-      setRealTimeData(prevData => {
+      setRealTimeData((prevData) => {
         const newData = { ...prevData };
-        metricIds.forEach(metricId => {
-          newData[metricId] = generateMockRealTimeData(prevData[metricId] || []);
+        metricIds.forEach((metricId) => {
+          newData[metricId] = generateMockRealTimeData(
+            prevData[metricId] || [],
+          );
         });
         return newData;
       });
@@ -123,18 +139,18 @@ export function RealTimeAnalytics({
   }, [isLive, refreshInterval, metricIds]);
 
   const toggleMetricVisibility = (metricId: string) => {
-    setVisibleMetrics(prev => ({
+    setVisibleMetrics((prev) => ({
       ...prev,
-      [metricId]: !prev[metricId]
+      [metricId]: !prev[metricId],
     }));
   };
 
   const formatTimestamp = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString('en-US', {
+    return new Date(timestamp).toLocaleTimeString("en-US", {
       hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
   };
 
@@ -145,14 +161,14 @@ export function RealTimeAnalytics({
 
   const getTrend = (metricId: string) => {
     const data = realTimeData[metricId];
-    if (!data || data.length < 2) return 'stable';
+    if (!data || data.length < 2) return "stable";
 
     const current = data[data.length - 1].value;
     const previous = data[data.length - 2].value;
     const change = ((current - previous) / previous) * 100;
 
-    if (Math.abs(change) < 1) return 'stable';
-    return change > 0 ? 'up' : 'down';
+    if (Math.abs(change) < 1) return "stable";
+    return change > 0 ? "up" : "down";
   };
 
   const getChangePercentage = (metricId: string) => {
@@ -165,37 +181,48 @@ export function RealTimeAnalytics({
   };
 
   // Prepare combined chart data
-  const combinedChartData = realTimeData[metricIds[0]]?.map((_, index) => {
-    const dataPoint: any = {
-      time: formatTimestamp(realTimeData[metricIds[0]][index].timestamp)
-    };
+  const combinedChartData =
+    realTimeData[metricIds[0]]?.map((_, index) => {
+      const dataPoint: any = {
+        time: formatTimestamp(realTimeData[metricIds[0]][index].timestamp),
+      };
 
-    metricIds.forEach(metricId => {
-      if (realTimeData[metricId] && realTimeData[metricId][index]) {
-        dataPoint[metricId] = realTimeData[metricId][index].value.toFixed(2);
-      }
-    });
+      metricIds.forEach((metricId) => {
+        if (realTimeData[metricId] && realTimeData[metricId][index]) {
+          dataPoint[metricId] = realTimeData[metricId][index].value.toFixed(2);
+        }
+      });
 
-    return dataPoint;
-  }) || [];
+      return dataPoint;
+    }) || [];
 
   // Prepare pie chart data
   const pieChartData = metricIds.map((metricId, index) => ({
     name: `Metric ${index + 1}`,
     value: getCurrentValue(metricId),
-    color: COLORS[index % COLORS.length]
+    color: COLORS[index % COLORS.length],
   }));
 
-  const MetricCard = ({ metricId, index }: { metricId: string; index: number }) => {
+  const MetricCard = ({
+    metricId,
+    index,
+  }: {
+    metricId: string;
+    index: number;
+  }) => {
     const currentValue = getCurrentValue(metricId);
     const trend = getTrend(metricId);
     const changePercentage = getChangePercentage(metricId);
     const isVisible = visibleMetrics[metricId];
 
     return (
-      <Card className={`transition-all duration-200 ${isVisible ? 'opacity-100' : 'opacity-50'}`}>
+      <Card
+        className={`transition-all duration-200 ${isVisible ? "opacity-100" : "opacity-50"}`}
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Metric {index + 1}</CardTitle>
+          <CardTitle className="text-sm font-medium">
+            Metric {index + 1}
+          </CardTitle>
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
@@ -203,16 +230,28 @@ export function RealTimeAnalytics({
               onClick={() => toggleMetricVisibility(metricId)}
               className="h-6 w-6 p-0"
             >
-              {isVisible ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+              {isVisible ? (
+                <Eye className="h-3 w-3" />
+              ) : (
+                <EyeOff className="h-3 w-3" />
+              )}
             </Button>
-            <div className={`h-4 w-4 ${
-              trend === 'up' ? 'text-green-600' :
-              trend === 'down' ? 'text-red-600' :
-              'text-gray-600'
-            }`}>
-              {trend === 'up' ? <TrendingUp className="h-4 w-4" /> :
-               trend === 'down' ? <TrendingDown className="h-4 w-4" /> :
-               <Minus className="h-4 w-4" />}
+            <div
+              className={`h-4 w-4 ${
+                trend === "up"
+                  ? "text-green-600"
+                  : trend === "down"
+                    ? "text-red-600"
+                    : "text-gray-600"
+              }`}
+            >
+              {trend === "up" ? (
+                <TrendingUp className="h-4 w-4" />
+              ) : trend === "down" ? (
+                <TrendingDown className="h-4 w-4" />
+              ) : (
+                <Minus className="h-4 w-4" />
+              )}
             </div>
           </div>
         </CardHeader>
@@ -222,12 +261,15 @@ export function RealTimeAnalytics({
             <Badge
               variant="outline"
               className={`text-xs ${
-                trend === 'up' ? 'text-green-600' :
-                trend === 'down' ? 'text-red-600' :
-                'text-gray-600'
+                trend === "up"
+                  ? "text-green-600"
+                  : trend === "down"
+                    ? "text-red-600"
+                    : "text-gray-600"
               }`}
             >
-              {changePercentage > 0 ? '+' : ''}{changePercentage.toFixed(1)}%
+              {changePercentage > 0 ? "+" : ""}
+              {changePercentage.toFixed(1)}%
             </Badge>
             <span className="text-xs text-muted-foreground">vs previous</span>
           </div>
@@ -250,11 +292,11 @@ export function RealTimeAnalytics({
 
     const commonProps = {
       data: combinedChartData,
-      margin: { top: 20, right: 30, left: 20, bottom: 5 }
+      margin: { top: 20, right: 30, left: 20, bottom: 5 },
     };
 
     switch (chartType) {
-      case 'area':
+      case "area":
         return (
           <ResponsiveContainer width="100%" height={400}>
             <AreaChart {...commonProps}>
@@ -263,24 +305,25 @@ export function RealTimeAnalytics({
               <YAxis />
               <Tooltip />
               <Legend />
-              {metricIds.map((metricId, index) =>
-                visibleMetrics[metricId] && (
-                  <Area
-                    key={metricId}
-                    type="monotone"
-                    dataKey={metricId}
-                    stackId="1"
-                    stroke={COLORS[index % COLORS.length]}
-                    fill={COLORS[index % COLORS.length]}
-                    fillOpacity={0.3}
-                  />
-                )
+              {metricIds.map(
+                (metricId, index) =>
+                  visibleMetrics[metricId] && (
+                    <Area
+                      key={metricId}
+                      type="monotone"
+                      dataKey={metricId}
+                      stackId="1"
+                      stroke={COLORS[index % COLORS.length]}
+                      fill={COLORS[index % COLORS.length]}
+                      fillOpacity={0.3}
+                    />
+                  ),
               )}
             </AreaChart>
           </ResponsiveContainer>
         );
 
-      case 'bar':
+      case "bar":
         return (
           <ResponsiveContainer width="100%" height={400}>
             <BarChart {...commonProps}>
@@ -289,14 +332,15 @@ export function RealTimeAnalytics({
               <YAxis />
               <Tooltip />
               <Legend />
-              {metricIds.map((metricId, index) =>
-                visibleMetrics[metricId] && (
-                  <Bar
-                    key={metricId}
-                    dataKey={metricId}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                )
+              {metricIds.map(
+                (metricId, index) =>
+                  visibleMetrics[metricId] && (
+                    <Bar
+                      key={metricId}
+                      dataKey={metricId}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ),
               )}
             </BarChart>
           </ResponsiveContainer>
@@ -311,17 +355,18 @@ export function RealTimeAnalytics({
               <YAxis />
               <Tooltip />
               <Legend />
-              {metricIds.map((metricId, index) =>
-                visibleMetrics[metricId] && (
-                  <Line
-                    key={metricId}
-                    type="monotone"
-                    dataKey={metricId}
-                    stroke={COLORS[index % COLORS.length]}
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                )
+              {metricIds.map(
+                (metricId, index) =>
+                  visibleMetrics[metricId] && (
+                    <Line
+                      key={metricId}
+                      type="monotone"
+                      dataKey={metricId}
+                      stroke={COLORS[index % COLORS.length]}
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                  ),
               )}
             </LineChart>
           </ResponsiveContainer>
@@ -343,7 +388,12 @@ export function RealTimeAnalytics({
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Select value={chartType} onValueChange={(value: 'line' | 'area' | 'bar') => setChartType(value)}>
+          <Select
+            value={chartType}
+            onValueChange={(value: "line" | "area" | "bar") =>
+              setChartType(value)
+            }
+          >
             <SelectTrigger className="w-32">
               <SelectValue />
             </SelectTrigger>
@@ -387,8 +437,12 @@ export function RealTimeAnalytics({
             variant={isLive ? "default" : "outline"}
             onClick={() => setIsLive(!isLive)}
           >
-            {isLive ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
-            {isLive ? 'Pause' : 'Resume'}
+            {isLive ? (
+              <Pause className="h-4 w-4 mr-2" />
+            ) : (
+              <Play className="h-4 w-4 mr-2" />
+            )}
+            {isLive ? "Pause" : "Resume"}
           </Button>
         </div>
       </div>
@@ -396,9 +450,11 @@ export function RealTimeAnalytics({
       {/* Live Status Indicator */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <div className={`w-3 h-3 rounded-full ${isLive ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+          <div
+            className={`w-3 h-3 rounded-full ${isLive ? "bg-green-500 animate-pulse" : "bg-gray-400"}`}
+          />
           <span className="text-sm font-medium">
-            {isLive ? 'Live' : 'Paused'}
+            {isLive ? "Live" : "Paused"}
           </span>
         </div>
         <div className="text-sm text-muted-foreground">
@@ -431,7 +487,8 @@ export function RealTimeAnalytics({
                 <div>
                   <CardTitle>Real-Time Data Stream</CardTitle>
                   <CardDescription>
-                    Live metrics visualization with {refreshInterval / 1000} second updates
+                    Live metrics visualization with {refreshInterval / 1000}{" "}
+                    second updates
                   </CardDescription>
                 </div>
                 <div className="flex items-center gap-2">
@@ -446,9 +503,7 @@ export function RealTimeAnalytics({
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              {renderChart()}
-            </CardContent>
+            <CardContent>{renderChart()}</CardContent>
           </Card>
         </TabsContent>
 
@@ -468,7 +523,9 @@ export function RealTimeAnalytics({
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) =>
+                      `${name} ${(percent * 100).toFixed(0)}%`
+                    }
                     outerRadius={120}
                     fill="#8884d8"
                     dataKey="value"
@@ -533,7 +590,9 @@ export function RealTimeAnalytics({
                       <RefreshCw className="h-4 w-4 text-blue-600" />
                       <span className="text-sm">Update Rate</span>
                     </div>
-                    <span className="font-semibold">{1000 / refreshInterval} Hz</span>
+                    <span className="font-semibold">
+                      {1000 / refreshInterval} Hz
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -541,7 +600,8 @@ export function RealTimeAnalytics({
                       <span className="text-sm">Active Metrics</span>
                     </div>
                     <span className="font-semibold">
-                      {Object.values(visibleMetrics).filter(Boolean).length}/{metricIds.length}
+                      {Object.values(visibleMetrics).filter(Boolean).length}/
+                      {metricIds.length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">

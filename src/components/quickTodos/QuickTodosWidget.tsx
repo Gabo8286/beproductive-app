@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export function QuickTodosWidget() {
   const { data: quickTodos = [] } = useQuickTodos();
-  const activeCount = quickTodos.filter(todo => !todo.completed_at).length;
+  const activeCount = quickTodos.filter((todo) => !todo.completed_at).length;
   const recentTodos = quickTodos.slice(0, 3);
 
   return (
@@ -41,7 +41,8 @@ export function QuickTodosWidget() {
                 key={todo.id}
                 className={cn(
                   "text-sm p-2 rounded border bg-muted/30 transition-opacity",
-                  todo.completed_at && "line-through text-muted-foreground opacity-60"
+                  todo.completed_at &&
+                    "line-through text-muted-foreground opacity-60",
                 )}
               >
                 {todo.content}

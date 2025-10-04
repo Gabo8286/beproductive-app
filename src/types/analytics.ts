@@ -1,10 +1,41 @@
 // Advanced Analytics & Reporting Types
 
-export type AnalyticsTimeframe = '1d' | '7d' | '30d' | '90d' | '1y' | 'custom';
-export type ReportFrequency = 'real_time' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'quarterly';
-export type MetricType = 'counter' | 'gauge' | 'histogram' | 'summary' | 'rate' | 'percentage';
-export type VisualizationType = 'line' | 'bar' | 'pie' | 'donut' | 'area' | 'scatter' | 'heatmap' | 'table' | 'metric_card' | 'gauge';
-export type DataSource = 'tasks' | 'goals' | 'habits' | 'integrations' | 'ai_usage' | 'team' | 'processes' | 'automation' | 'custom';
+export type AnalyticsTimeframe = "1d" | "7d" | "30d" | "90d" | "1y" | "custom";
+export type ReportFrequency =
+  | "real_time"
+  | "hourly"
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "quarterly";
+export type MetricType =
+  | "counter"
+  | "gauge"
+  | "histogram"
+  | "summary"
+  | "rate"
+  | "percentage";
+export type VisualizationType =
+  | "line"
+  | "bar"
+  | "pie"
+  | "donut"
+  | "area"
+  | "scatter"
+  | "heatmap"
+  | "table"
+  | "metric_card"
+  | "gauge";
+export type DataSource =
+  | "tasks"
+  | "goals"
+  | "habits"
+  | "integrations"
+  | "ai_usage"
+  | "team"
+  | "processes"
+  | "automation"
+  | "custom";
 
 export interface AnalyticsMetric {
   id: string;
@@ -14,9 +45,9 @@ export interface AnalyticsMetric {
   data_source: DataSource;
   calculation_method: string;
   unit: string;
-  format: 'number' | 'percentage' | 'currency' | 'duration' | 'bytes';
+  format: "number" | "percentage" | "currency" | "duration" | "bytes";
   is_real_time: boolean;
-  aggregation_level: 'user' | 'team' | 'organization' | 'global';
+  aggregation_level: "user" | "team" | "organization" | "global";
   tags: string[];
   created_at: string;
   updated_at: string;
@@ -35,7 +66,7 @@ export interface AnalyticsDataset {
   data_points: DataPoint[];
   total_count: number;
   aggregated_value: number;
-  trend_direction: 'up' | 'down' | 'stable';
+  trend_direction: "up" | "down" | "stable";
   trend_percentage: number;
   last_updated: string;
 }
@@ -99,11 +130,11 @@ export interface WidgetDataConfig {
     start_date: string;
     end_date: string;
   };
-  aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct';
+  aggregation: "sum" | "avg" | "min" | "max" | "count" | "distinct";
   group_by?: string[];
   sort_by?: {
     field: string;
-    direction: 'asc' | 'desc';
+    direction: "asc" | "desc";
   };
   limit?: number;
 }
@@ -118,13 +149,20 @@ export interface WidgetDisplayConfig {
   decimal_places: number;
   prefix?: string;
   suffix?: string;
-  theme: 'light' | 'dark' | 'auto';
-  font_size: 'small' | 'medium' | 'large';
+  theme: "light" | "dark" | "auto";
+  font_size: "small" | "medium" | "large";
 }
 
 export interface WidgetFilter {
   field: string;
-  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'between';
+  operator:
+    | "equals"
+    | "not_equals"
+    | "greater_than"
+    | "less_than"
+    | "contains"
+    | "in"
+    | "between";
   value: any;
   is_dynamic: boolean;
 }
@@ -132,7 +170,7 @@ export interface WidgetFilter {
 export interface DashboardFilter {
   id: string;
   name: string;
-  type: 'text' | 'select' | 'multi_select' | 'date_range' | 'number_range';
+  type: "text" | "select" | "multi_select" | "date_range" | "number_range";
   field: string;
   options?: FilterOption[];
   default_value?: any;
@@ -147,13 +185,13 @@ export interface FilterOption {
 export interface ConditionalFormatting {
   condition: {
     field: string;
-    operator: 'greater_than' | 'less_than' | 'equals' | 'between';
+    operator: "greater_than" | "less_than" | "equals" | "between";
     value: any;
   };
   format: {
     color?: string;
     background_color?: string;
-    font_weight?: 'normal' | 'bold';
+    font_weight?: "normal" | "bold";
     icon?: string;
   };
 }
@@ -163,11 +201,11 @@ export interface ReportTemplate {
   name: string;
   description: string;
   category: string;
-  type: 'dashboard' | 'scheduled_report' | 'alert';
+  type: "dashboard" | "scheduled_report" | "alert";
   template_data: CustomDashboard | ScheduledReport | AnalyticsAlert;
   preview_image?: string;
   popularity_score: number;
-  created_by: 'system' | 'community' | 'enterprise';
+  created_by: "system" | "community" | "enterprise";
   is_verified: boolean;
   tags: string[];
   required_permissions: string[];
@@ -204,7 +242,7 @@ export interface DeliveryConfig {
   email_recipients: string[];
   slack_channels?: string[];
   webhook_urls?: string[];
-  file_format: 'pdf' | 'excel' | 'csv' | 'png';
+  file_format: "pdf" | "excel" | "csv" | "png";
   include_data: boolean;
   custom_message?: string;
 }
@@ -224,23 +262,23 @@ export interface AnalyticsAlert {
 }
 
 export interface AlertCondition {
-  type: 'threshold' | 'anomaly' | 'trend' | 'comparison';
+  type: "threshold" | "anomaly" | "trend" | "comparison";
   threshold_config?: {
-    operator: 'greater_than' | 'less_than' | 'equals';
+    operator: "greater_than" | "less_than" | "equals";
     value: number;
     duration_minutes?: number;
   };
   anomaly_config?: {
-    sensitivity: 'low' | 'medium' | 'high';
+    sensitivity: "low" | "medium" | "high";
     lookback_period_days: number;
   };
   trend_config?: {
-    direction: 'increasing' | 'decreasing';
+    direction: "increasing" | "decreasing";
     percentage_change: number;
     time_window_hours: number;
   };
   comparison_config?: {
-    compare_to: 'previous_period' | 'same_period_last_year' | 'baseline';
+    compare_to: "previous_period" | "same_period_last_year" | "baseline";
     percentage_change: number;
   };
 }
@@ -250,7 +288,7 @@ export interface AlertNotificationConfig {
   slack_channels: string[];
   webhook_urls: string[];
   in_app_notification: boolean;
-  notification_frequency: 'immediate' | 'hourly' | 'daily';
+  notification_frequency: "immediate" | "hourly" | "daily";
   escalation_rules?: EscalationRule[];
 }
 
@@ -263,15 +301,15 @@ export interface EscalationRule {
 export interface AnalyticsExport {
   id: string;
   name: string;
-  type: 'dashboard' | 'raw_data' | 'custom_query';
-  format: 'pdf' | 'excel' | 'csv' | 'json';
+  type: "dashboard" | "raw_data" | "custom_query";
+  format: "pdf" | "excel" | "csv" | "json";
   timeframe: AnalyticsTimeframe;
   custom_timeframe?: {
     start_date: string;
     end_date: string;
   };
   filters: Record<string, any>;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   file_url?: string;
   file_size_bytes?: number;
   progress_percentage: number;
@@ -286,7 +324,11 @@ export interface PredictiveAnalytics {
   id: string;
   name: string;
   description: string;
-  model_type: 'linear_regression' | 'time_series' | 'classification' | 'clustering';
+  model_type:
+    | "linear_regression"
+    | "time_series"
+    | "classification"
+    | "clustering";
   target_metric: string;
   input_features: string[];
   prediction_horizon_days: number;
@@ -310,15 +352,15 @@ export interface PredictionResult {
 
 export interface AnalyticsInsight {
   id: string;
-  type: 'trend' | 'anomaly' | 'correlation' | 'recommendation';
+  type: "trend" | "anomaly" | "correlation" | "recommendation";
   title: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   confidence_score: number;
   related_metrics: string[];
   data_sources: DataSource[];
   insight_data: {
-    trend_direction?: 'up' | 'down' | 'stable';
+    trend_direction?: "up" | "down" | "stable";
     percentage_change?: number;
     time_period?: string;
     correlation_coefficient?: number;
@@ -377,9 +419,16 @@ export interface AnalyticsPermissions {
 export interface AnalyticsAuditLog {
   id: string;
   user_id: string;
-  action: 'view_dashboard' | 'create_dashboard' | 'edit_dashboard' | 'delete_dashboard' |
-          'export_data' | 'create_report' | 'share_dashboard' | 'create_alert';
-  resource_type: 'dashboard' | 'report' | 'alert' | 'export' | 'metric';
+  action:
+    | "view_dashboard"
+    | "create_dashboard"
+    | "edit_dashboard"
+    | "delete_dashboard"
+    | "export_data"
+    | "create_report"
+    | "share_dashboard"
+    | "create_alert";
+  resource_type: "dashboard" | "report" | "alert" | "export" | "metric";
   resource_id: string;
   details: Record<string, any>;
   ip_address: string;
@@ -441,7 +490,7 @@ export interface KPISection {
   description: string;
   metrics: ExecutiveKPI[];
   visualization_type: VisualizationType;
-  target_audience: 'ceo' | 'cto' | 'coo' | 'hr' | 'all';
+  target_audience: "ceo" | "cto" | "coo" | "hr" | "all";
 }
 
 export interface ExecutiveKPI {
@@ -452,8 +501,8 @@ export interface ExecutiveKPI {
   previous_value: number;
   unit: string;
   format: string;
-  trend: 'up' | 'down' | 'stable';
-  performance_rating: 'excellent' | 'good' | 'needs_improvement' | 'critical';
+  trend: "up" | "down" | "stable";
+  performance_rating: "excellent" | "good" | "needs_improvement" | "critical";
   benchmark_comparison?: {
     industry_average: number;
     top_quartile: number;
@@ -472,7 +521,7 @@ export interface TrendAnalysis {
 
 export interface ComparativeAnalysis {
   dimension: string;
-  comparison_type: 'period_over_period' | 'cohort' | 'segment';
+  comparison_type: "period_over_period" | "cohort" | "segment";
   data_points: {
     label: string;
     current_period: number;
@@ -487,10 +536,10 @@ export interface PredictiveInsight {
   prediction_horizon: string;
   confidence_score: number;
   predicted_outcomes: {
-    scenario: 'optimistic' | 'realistic' | 'pessimistic';
+    scenario: "optimistic" | "realistic" | "pessimistic";
     probability: number;
     description: string;
-    impact_level: 'low' | 'medium' | 'high';
+    impact_level: "low" | "medium" | "high";
   }[];
   recommended_actions: string[];
 }
@@ -499,11 +548,11 @@ export interface ActionItem {
   id: string;
   title: string;
   description: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  category: 'productivity' | 'efficiency' | 'growth' | 'risk_mitigation';
+  priority: "low" | "medium" | "high" | "critical";
+  category: "productivity" | "efficiency" | "growth" | "risk_mitigation";
   assigned_to?: string;
   due_date?: string;
-  status: 'pending' | 'in_progress' | 'completed';
+  status: "pending" | "in_progress" | "completed";
   impact_estimation: string;
   effort_estimation: string;
   created_at: string;

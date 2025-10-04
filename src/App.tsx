@@ -3,7 +3,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
@@ -45,24 +51,19 @@ const Notes = lazy(() => import("@/pages/Notes"));
 const Gamification = lazy(() => import("@/pages/Gamification"));
 const ProfileAssessment = lazy(() => import("@/pages/ProfileAssessment"));
 const AIInsights = lazy(() => import("@/pages/AIInsights"));
-const AccessibilitySettingsPage = lazy(() => import("@/pages/AccessibilitySettings"));
-const AccessibilityStatement = lazy(() => import("@/pages/AccessibilityStatement"));
+const AccessibilitySettingsPage = lazy(
+  () => import("@/pages/AccessibilitySettings"),
+);
+const AccessibilityStatement = lazy(
+  () => import("@/pages/AccessibilityStatement"),
+);
 const NotFound = lazy(() => import("@/pages/NotFound"));
-const APIManagementDashboard = lazy(() => import("@/components/admin/APIManagement/APIManagementDashboard"));
+const APIManagementDashboard = lazy(
+  () => import("@/components/admin/APIManagement/APIManagementDashboard"),
+);
 const Analytics = lazy(() => import("@/pages/Analytics"));
 
-// Lazy loaded AI components
-export const SmartRecommendationsWidget = lazy(() =>
-  import("@/components/widgets/SmartRecommendationsWidget").then(module => ({
-    default: module.SmartRecommendationsWidget
-  }))
-);
-
-export const TimeTrackingWidget = lazy(() =>
-  import("@/components/widgets/TimeTrackingWidget").then(module => ({
-    default: module.TimeTrackingWidget
-  }))
-);
+// AI components are exported from widgets/index.ts
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -88,7 +89,7 @@ function RouteAnnouncer() {
 
   useEffect(() => {
     // Announce route changes for screen readers
-    const pageName = location.pathname.split('/').pop() || 'home';
+    const pageName = location.pathname.split("/").pop() || "home";
     document.title = `${pageName} - BeProductive`;
   }, [location]);
 
@@ -123,7 +124,13 @@ function AppContent() {
           />
 
           {/* Protected routes */}
-          <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+          <Route
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route path="/dashboard" element={<Dashboard />} />
             <Route
               path="/profile"
@@ -329,7 +336,10 @@ function AppContent() {
           />
         </Routes>
 
-        <KeyboardShortcutsDialog open={isOpen} onOpenChange={(open) => open ? undefined : close()} />
+        <KeyboardShortcutsDialog
+          open={isOpen}
+          onOpenChange={(open) => (open ? undefined : close())}
+        />
         <Toaster />
         <Sonner />
       </TooltipProvider>

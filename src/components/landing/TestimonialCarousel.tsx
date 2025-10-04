@@ -115,7 +115,9 @@ export function TestimonialCarousel() {
 
   const handlePrevious = () => {
     setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setCurrentIndex(
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
+    );
   };
 
   const handleDotClick = (index: number) => {
@@ -182,7 +184,7 @@ export function TestimonialCarousel() {
                   {/* Content Section */}
                   <div className="space-y-4">
                     <Quote className="h-8 w-8 text-primary/20" />
-                    
+
                     <div className="flex items-center gap-1 mb-2">
                       {Array.from({ length: current.rating }).map((_, i) => (
                         <Star
@@ -233,7 +235,7 @@ export function TestimonialCarousel() {
                 "h-2 rounded-full transition-all duration-300",
                 index === currentIndex
                   ? "w-8 bg-primary"
-                  : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                  : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50",
               )}
             />
           ))}
@@ -253,15 +255,21 @@ export function TestimonialCarousel() {
       {/* Stats Bar */}
       <div className="grid grid-cols-3 gap-4 mt-8">
         <div className="text-center glass-card p-4 rounded-xl">
-          <div className="text-3xl font-heading font-bold text-primary">10K+</div>
+          <div className="text-3xl font-heading font-bold text-primary">
+            10K+
+          </div>
           <div className="text-sm text-muted-foreground">Active Users</div>
         </div>
         <div className="text-center glass-card p-4 rounded-xl">
-          <div className="text-3xl font-heading font-bold text-success">500K+</div>
+          <div className="text-3xl font-heading font-bold text-success">
+            500K+
+          </div>
           <div className="text-sm text-muted-foreground">Goals Completed</div>
         </div>
         <div className="text-center glass-card p-4 rounded-xl">
-          <div className="text-3xl font-heading font-bold text-secondary">4.9★</div>
+          <div className="text-3xl font-heading font-bold text-secondary">
+            4.9★
+          </div>
           <div className="text-sm text-muted-foreground">Average Rating</div>
         </div>
       </div>

@@ -1,18 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   useHabits,
   useCreateHabit,
   useUpdateHabit,
   useDeleteHabit,
   useArchiveHabit,
-} from '@/hooks/useHabits';
-import { supabase } from '@/integrations/supabase/client';
-import { createMockHabit } from '@/test/fixtures/mockData';
-import type { ReactNode } from 'react';
+} from "@/hooks/useHabits";
+import { supabase } from "@/integrations/supabase/client";
+import { createMockHabit } from "@/test/fixtures/mockData";
+import type { ReactNode } from "react";
 
-vi.mock('@/integrations/supabase/client');
+vi.mock("@/integrations/supabase/client");
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -27,19 +27,19 @@ const createWrapper = () => {
   );
 };
 
-describe('useHabits Hook', () => {
+describe("useHabits Hook", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should track daily completions', async () => {
-    const mockHabit = createMockHabit({ frequency: 'daily' });
+  it("should track daily completions", async () => {
+    const mockHabit = createMockHabit({ frequency: "daily" });
     const mockEntries = [
-      { habit_id: mockHabit.id, status: 'completed', date: '2025-01-01' },
+      { habit_id: mockHabit.id, status: "completed", date: "2025-01-01" },
     ];
 
     vi.mocked(supabase.from).mockImplementation((table) => {
-      if (table === 'habits') {
+      if (table === "habits") {
         return {
           select: vi.fn().mockReturnThis(),
           eq: vi.fn().mockReturnThis(),
@@ -61,8 +61,8 @@ describe('useHabits Hook', () => {
     });
 
     const { result } = renderHook(
-      () => useHabits('workspace-id', undefined, 'position', 'asc'),
-      { wrapper: createWrapper() }
+      () => useHabits("workspace-id", undefined, "position", "asc"),
+      { wrapper: createWrapper() },
     );
 
     await waitFor(() => {
@@ -72,7 +72,7 @@ describe('useHabits Hook', () => {
     expect(result.current.data).toBeDefined();
   });
 
-  it('should calculate streaks correctly', async () => {
+  it("should calculate streaks correctly", async () => {
     const mockHabit = createMockHabit({ current_streak: 7, best_streak: 10 });
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -89,10 +89,9 @@ describe('useHabits Hook', () => {
       }),
     } as any);
 
-    const { result } = renderHook(
-      () => useHabits('workspace-id'),
-      { wrapper: createWrapper() }
-    );
+    const { result } = renderHook(() => useHabits("workspace-id"), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
@@ -103,7 +102,7 @@ describe('useHabits Hook', () => {
     expect(habit).toBeDefined();
   });
 
-  it('should handle streak breaks', async () => {
+  it("should handle streak breaks", async () => {
     const mockHabit = createMockHabit({ current_streak: 0, best_streak: 5 });
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -120,26 +119,25 @@ describe('useHabits Hook', () => {
       }),
     } as any);
 
-    const { result } = renderHook(
-      () => useHabits('workspace-id'),
-      { wrapper: createWrapper() }
-    );
+    const { result } = renderHook(() => useHabits("workspace-id"), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(result.current.data?.[0].current_streak).toBe(0);
     });
   });
 
-  it('should generate habit analytics', async () => {
+  it("should generate habit analytics", async () => {
     const mockHabit = createMockHabit();
     const mockEntries = Array.from({ length: 30 }, (_, i) => ({
       habit_id: mockHabit.id,
-      status: i % 2 === 0 ? 'completed' : 'skipped',
-      date: `2025-01-${String(i + 1).padStart(2, '0')}`,
+      status: i % 2 === 0 ? "completed" : "skipped",
+      date: `2025-01-${String(i + 1).padStart(2, "0")}`,
     }));
 
     vi.mocked(supabase.from).mockImplementation((table) => {
-      if (table === 'habits') {
+      if (table === "habits") {
         return {
           select: vi.fn().mockReturnThis(),
           eq: vi.fn().mockReturnThis(),
@@ -160,10 +158,9 @@ describe('useHabits Hook', () => {
       } as any;
     });
 
-    const { result } = renderHook(
-      () => useHabits('workspace-id'),
-      { wrapper: createWrapper() }
-    );
+    const { result } = renderHook(() => useHabits("workspace-id"), {
+      wrapper: createWrapper(),
+    });
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
@@ -173,10 +170,10 @@ describe('useHabits Hook', () => {
     expect(habit?.completion_rate).toBeGreaterThan(0);
   });
 
-  it('should manage habit reminders', async () => {
+  it("should manage habit reminders", async () => {
     const mockHabit = createMockHabit({
       reminder_enabled: true,
-      reminder_time: '09:00',
+      reminder_time: "09:00",
     });
 
     vi.mocked(supabase.from).mockReturnValue({
@@ -203,7 +200,7 @@ describe('useHabits Hook', () => {
     });
   });
 
-  it('should archive habit (soft delete)', async () => {
+  it("should archive habit (soft delete)", async () => {
     const mockHabit = createMockHabit();
 
     vi.mocked(supabase.from).mockReturnValue({

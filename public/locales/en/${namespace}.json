@@ -1,0 +1,8 @@
+{
+  "generic": "Something went wrong. Please try again.",
+  "network": "Network error. Please check your connection.",
+  "notFound": "The requested resource was not found.",
+  "unauthorized": "You are not authorized to perform this action.",
+  "validation": "Please check your input and try again.",
+  "timeout": "The request timed out. Please try again."
+}

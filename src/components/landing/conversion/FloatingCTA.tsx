@@ -6,22 +6,28 @@ import { useEffect, useState } from "react";
 
 interface FloatingCTAProps {
   scrollThreshold?: number;
-  engagementLevel: 'low' | 'medium' | 'high';
+  engagementLevel: "low" | "medium" | "high";
 }
 
-export function FloatingCTA({ scrollThreshold = 50, engagementLevel }: FloatingCTAProps) {
+export function FloatingCTA({
+  scrollThreshold = 50,
+  engagementLevel,
+}: FloatingCTAProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      const scrollPercentage =
+        (window.scrollY /
+          (document.documentElement.scrollHeight - window.innerHeight)) *
+        100;
       setIsVisible(scrollPercentage > scrollThreshold);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // Check initial state
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollThreshold]);
 
   const ctaMessages = {

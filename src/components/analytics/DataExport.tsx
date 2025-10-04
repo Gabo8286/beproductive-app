@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -14,12 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -28,9 +29,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Calendar as CalendarIcon
-} from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -59,7 +58,7 @@ import {
   FileImage,
   Database,
   Zap,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import {
   AnalyticsExport,
@@ -67,16 +66,16 @@ import {
   DeliveryConfig,
   ScheduleConfig,
   AnalyticsTimeframe,
-  DataSource
+  DataSource,
 } from "@/types/analytics";
 import { useExportData, useCreateReport } from "@/hooks/useAnalytics";
 
 interface ExportJob {
   id: string;
   name: string;
-  type: 'dashboard' | 'raw_data' | 'custom_query' | 'scheduled_report';
-  format: 'pdf' | 'excel' | 'csv' | 'json' | 'png';
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  type: "dashboard" | "raw_data" | "custom_query" | "scheduled_report";
+  format: "pdf" | "excel" | "csv" | "json" | "png";
+  status: "pending" | "processing" | "completed" | "failed";
   progress: number;
   fileSize?: string;
   downloadUrl?: string;
@@ -87,108 +86,134 @@ interface ExportJob {
 
 const mockExportJobs: ExportJob[] = [
   {
-    id: 'export_1',
-    name: 'Q3 Executive Summary',
-    type: 'dashboard',
-    format: 'pdf',
-    status: 'completed',
+    id: "export_1",
+    name: "Q3 Executive Summary",
+    type: "dashboard",
+    format: "pdf",
+    status: "completed",
     progress: 100,
-    fileSize: '2.4 MB',
-    downloadUrl: '#',
-    createdAt: '2024-10-02T14:30:00Z',
-    completedAt: '2024-10-02T14:32:15Z',
-    expiresAt: '2024-10-09T14:30:00Z'
+    fileSize: "2.4 MB",
+    downloadUrl: "#",
+    createdAt: "2024-10-02T14:30:00Z",
+    completedAt: "2024-10-02T14:32:15Z",
+    expiresAt: "2024-10-09T14:30:00Z",
   },
   {
-    id: 'export_2',
-    name: 'Raw Productivity Data',
-    type: 'raw_data',
-    format: 'excel',
-    status: 'processing',
+    id: "export_2",
+    name: "Raw Productivity Data",
+    type: "raw_data",
+    format: "excel",
+    status: "processing",
     progress: 67,
-    createdAt: '2024-10-02T15:45:00Z',
-    expiresAt: '2024-10-09T15:45:00Z'
+    createdAt: "2024-10-02T15:45:00Z",
+    expiresAt: "2024-10-09T15:45:00Z",
   },
   {
-    id: 'export_3',
-    name: 'Team Performance Analysis',
-    type: 'custom_query',
-    format: 'csv',
-    status: 'failed',
+    id: "export_3",
+    name: "Team Performance Analysis",
+    type: "custom_query",
+    format: "csv",
+    status: "failed",
     progress: 0,
-    createdAt: '2024-10-02T13:20:00Z',
-    expiresAt: '2024-10-09T13:20:00Z'
-  }
+    createdAt: "2024-10-02T13:20:00Z",
+    expiresAt: "2024-10-09T13:20:00Z",
+  },
 ];
 
 const mockScheduledReports: ScheduledReport[] = [
   {
-    id: 'report_1',
-    name: 'Weekly Team Summary',
-    description: 'Automated weekly team performance report sent every Monday',
-    dashboard_id: 'dashboard_1',
-    frequency: 'weekly',
+    id: "report_1",
+    name: "Weekly Team Summary",
+    description: "Automated weekly team performance report sent every Monday",
+    dashboard_id: "dashboard_1",
+    frequency: "weekly",
     schedule_config: {
-      frequency: 'weekly',
-      time_of_day: '09:00',
+      frequency: "weekly",
+      time_of_day: "09:00",
       day_of_week: 1,
-      timezone: 'America/New_York'
+      timezone: "America/New_York",
     },
     delivery_config: {
-      email_recipients: ['team@company.com', 'manager@company.com'],
-      slack_channels: ['#team-reports'],
-      file_format: 'pdf',
+      email_recipients: ["team@company.com", "manager@company.com"],
+      slack_channels: ["#team-reports"],
+      file_format: "pdf",
       include_data: true,
-      custom_message: 'Weekly team performance summary attached.'
+      custom_message: "Weekly team performance summary attached.",
     },
     is_active: true,
-    next_run_at: '2024-10-07T09:00:00Z',
-    last_run_at: '2024-09-30T09:00:00Z',
-    created_at: '2024-09-01T00:00:00Z',
-    updated_at: '2024-09-30T09:00:00Z'
+    next_run_at: "2024-10-07T09:00:00Z",
+    last_run_at: "2024-09-30T09:00:00Z",
+    created_at: "2024-09-01T00:00:00Z",
+    updated_at: "2024-09-30T09:00:00Z",
   },
   {
-    id: 'report_2',
-    name: 'Monthly Executive Dashboard',
-    description: 'Comprehensive monthly executive summary with KPIs and insights',
-    dashboard_id: 'dashboard_2',
-    frequency: 'monthly',
+    id: "report_2",
+    name: "Monthly Executive Dashboard",
+    description:
+      "Comprehensive monthly executive summary with KPIs and insights",
+    dashboard_id: "dashboard_2",
+    frequency: "monthly",
     schedule_config: {
-      frequency: 'monthly',
-      time_of_day: '08:00',
+      frequency: "monthly",
+      time_of_day: "08:00",
       day_of_month: 1,
-      timezone: 'America/New_York'
+      timezone: "America/New_York",
     },
     delivery_config: {
-      email_recipients: ['executives@company.com'],
-      file_format: 'pdf',
-      include_data: false
+      email_recipients: ["executives@company.com"],
+      file_format: "pdf",
+      include_data: false,
     },
     is_active: true,
-    next_run_at: '2024-11-01T08:00:00Z',
-    last_run_at: '2024-10-01T08:00:00Z',
-    created_at: '2024-08-01T00:00:00Z',
-    updated_at: '2024-10-01T08:00:00Z'
-  }
+    next_run_at: "2024-11-01T08:00:00Z",
+    last_run_at: "2024-10-01T08:00:00Z",
+    created_at: "2024-08-01T00:00:00Z",
+    updated_at: "2024-10-01T08:00:00Z",
+  },
 ];
 
 const dataSourceOptions: Array<{ value: DataSource; label: string }> = [
-  { value: 'tasks', label: 'Tasks & Projects' },
-  { value: 'goals', label: 'Goals & Objectives' },
-  { value: 'habits', label: 'Habits & Routines' },
-  { value: 'integrations', label: 'Integration Data' },
-  { value: 'ai_usage', label: 'AI Usage Metrics' },
-  { value: 'team', label: 'Team Collaboration' },
-  { value: 'processes', label: 'Process Analytics' },
-  { value: 'automation', label: 'Automation Metrics' }
+  { value: "tasks", label: "Tasks & Projects" },
+  { value: "goals", label: "Goals & Objectives" },
+  { value: "habits", label: "Habits & Routines" },
+  { value: "integrations", label: "Integration Data" },
+  { value: "ai_usage", label: "AI Usage Metrics" },
+  { value: "team", label: "Team Collaboration" },
+  { value: "processes", label: "Process Analytics" },
+  { value: "automation", label: "Automation Metrics" },
 ];
 
 const formatOptions = [
-  { value: 'pdf', label: 'PDF Document', icon: FileText, description: 'Formatted report with charts and tables' },
-  { value: 'excel', label: 'Excel Spreadsheet', icon: FileSpreadsheet, description: 'Raw data with formulas and pivot tables' },
-  { value: 'csv', label: 'CSV File', icon: Database, description: 'Comma-separated values for data analysis' },
-  { value: 'json', label: 'JSON Data', icon: Database, description: 'Structured data for API integration' },
-  { value: 'png', label: 'PNG Image', icon: FileImage, description: 'High-resolution chart images' }
+  {
+    value: "pdf",
+    label: "PDF Document",
+    icon: FileText,
+    description: "Formatted report with charts and tables",
+  },
+  {
+    value: "excel",
+    label: "Excel Spreadsheet",
+    icon: FileSpreadsheet,
+    description: "Raw data with formulas and pivot tables",
+  },
+  {
+    value: "csv",
+    label: "CSV File",
+    icon: Database,
+    description: "Comma-separated values for data analysis",
+  },
+  {
+    value: "json",
+    label: "JSON Data",
+    icon: Database,
+    description: "Structured data for API integration",
+  },
+  {
+    value: "png",
+    label: "PNG Image",
+    icon: FileImage,
+    description: "High-resolution chart images",
+  },
 ];
 
 export function DataExport() {
@@ -196,38 +221,39 @@ export function DataExport() {
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [exportJobs, setExportJobs] = useState<ExportJob[]>(mockExportJobs);
-  const [scheduledReports, setScheduledReports] = useState<ScheduledReport[]>(mockScheduledReports);
+  const [scheduledReports, setScheduledReports] =
+    useState<ScheduledReport[]>(mockScheduledReports);
 
   // Export form state
   const [exportForm, setExportForm] = useState({
-    name: '',
-    type: 'dashboard' as AnalyticsExport['type'],
-    format: 'pdf' as AnalyticsExport['format'],
-    timeframe: '30d' as AnalyticsTimeframe,
+    name: "",
+    type: "dashboard" as AnalyticsExport["type"],
+    format: "pdf" as AnalyticsExport["format"],
+    timeframe: "30d" as AnalyticsTimeframe,
     dataSources: [] as DataSource[],
     includeCharts: true,
     includeRawData: false,
     customDateRange: {
       start: null as Date | null,
-      end: null as Date | null
-    }
+      end: null as Date | null,
+    },
   });
 
   // Report form state
   const [reportForm, setReportForm] = useState({
-    name: '',
-    description: '',
-    dashboardId: '',
-    frequency: 'weekly' as ScheduledReport['frequency'],
-    timeOfDay: '09:00',
+    name: "",
+    description: "",
+    dashboardId: "",
+    frequency: "weekly" as ScheduledReport["frequency"],
+    timeOfDay: "09:00",
     dayOfWeek: 1,
     dayOfMonth: 1,
-    timezone: 'America/New_York',
+    timezone: "America/New_York",
     emailRecipients: [] as string[],
     slackChannels: [] as string[],
-    fileFormat: 'pdf' as DeliveryConfig['file_format'],
+    fileFormat: "pdf" as DeliveryConfig["file_format"],
     includeData: true,
-    customMessage: ''
+    customMessage: "",
   });
 
   const exportData = useExportData();
@@ -240,13 +266,18 @@ export function DataExport() {
         type: exportForm.type,
         format: exportForm.format,
         timeframe: exportForm.timeframe,
-        custom_timeframe: exportForm.customDateRange.start && exportForm.customDateRange.end ? {
-          start_date: exportForm.customDateRange.start.toISOString(),
-          end_date: exportForm.customDateRange.end.toISOString()
-        } : undefined,
+        custom_timeframe:
+          exportForm.customDateRange.start && exportForm.customDateRange.end
+            ? {
+                start_date: exportForm.customDateRange.start.toISOString(),
+                end_date: exportForm.customDateRange.end.toISOString(),
+              }
+            : undefined,
         filters: {},
-        requested_by: 'current_user',
-        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+        requested_by: "current_user",
+        expires_at: new Date(
+          Date.now() + 7 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
       };
 
       const result = await exportData.mutateAsync(exportConfig);
@@ -257,28 +288,28 @@ export function DataExport() {
         name: exportForm.name,
         type: exportForm.type,
         format: exportForm.format,
-        status: 'processing',
+        status: "processing",
         progress: 0,
         createdAt: result.created_at,
-        expiresAt: result.expires_at
+        expiresAt: result.expires_at,
       };
 
-      setExportJobs(prev => [newJob, ...prev]);
+      setExportJobs((prev) => [newJob, ...prev]);
       setExportDialogOpen(false);
 
       // Reset form
       setExportForm({
-        name: '',
-        type: 'dashboard',
-        format: 'pdf',
-        timeframe: '30d',
+        name: "",
+        type: "dashboard",
+        format: "pdf",
+        timeframe: "30d",
         dataSources: [],
         includeCharts: true,
         includeRawData: false,
-        customDateRange: { start: null, end: null }
+        customDateRange: { start: null, end: null },
       });
     } catch (error) {
-      console.error('Failed to create export:', error);
+      console.error("Failed to create export:", error);
     }
   };
 
@@ -294,17 +325,17 @@ export function DataExport() {
           time_of_day: reportForm.timeOfDay,
           day_of_week: reportForm.dayOfWeek,
           day_of_month: reportForm.dayOfMonth,
-          timezone: reportForm.timezone
+          timezone: reportForm.timezone,
         },
         delivery_config: {
           email_recipients: reportForm.emailRecipients,
           slack_channels: reportForm.slackChannels,
           file_format: reportForm.fileFormat,
           include_data: reportForm.includeData,
-          custom_message: reportForm.customMessage
+          custom_message: reportForm.customMessage,
         },
         is_active: true,
-        next_run_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        next_run_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       };
 
       await createReport.mutateAsync(reportConfig);
@@ -312,47 +343,57 @@ export function DataExport() {
 
       // Reset form
       setReportForm({
-        name: '',
-        description: '',
-        dashboardId: '',
-        frequency: 'weekly',
-        timeOfDay: '09:00',
+        name: "",
+        description: "",
+        dashboardId: "",
+        frequency: "weekly",
+        timeOfDay: "09:00",
         dayOfWeek: 1,
         dayOfMonth: 1,
-        timezone: 'America/New_York',
+        timezone: "America/New_York",
         emailRecipients: [],
         slackChannels: [],
-        fileFormat: 'pdf',
+        fileFormat: "pdf",
         includeData: true,
-        customMessage: ''
+        customMessage: "",
       });
     } catch (error) {
-      console.error('Failed to create report:', error);
+      console.error("Failed to create report:", error);
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'processing': return 'text-blue-600 bg-blue-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'failed': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case "completed":
+        return "text-green-600 bg-green-100";
+      case "processing":
+        return "text-blue-600 bg-blue-100";
+      case "pending":
+        return "text-yellow-600 bg-yellow-100";
+      case "failed":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-gray-600 bg-gray-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return <CheckCircle className="h-4 w-4" />;
-      case 'processing': return <RefreshCw className="h-4 w-4 animate-spin" />;
-      case 'pending': return <Clock className="h-4 w-4" />;
-      case 'failed': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
+      case "completed":
+        return <CheckCircle className="h-4 w-4" />;
+      case "processing":
+        return <RefreshCw className="h-4 w-4 animate-spin" />;
+      case "pending":
+        return <Clock className="h-4 w-4" />;
+      case "failed":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Clock className="h-4 w-4" />;
     }
   };
 
   const getFormatIcon = (format: string) => {
-    const formatOption = formatOptions.find(f => f.value === format);
+    const formatOption = formatOptions.find((f) => f.value === format);
     return formatOption ? formatOption.icon : FileText;
   };
 
@@ -382,7 +423,11 @@ export function DataExport() {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="export">Data Exports</TabsTrigger>
           <TabsTrigger value="reports">Scheduled Reports</TabsTrigger>
@@ -395,7 +440,10 @@ export function DataExport() {
             {exportJobs.map((job) => {
               const FormatIcon = getFormatIcon(job.format);
               return (
-                <Card key={job.id} className="hover:shadow-md transition-shadow">
+                <Card
+                  key={job.id}
+                  className="hover:shadow-md transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
@@ -406,13 +454,15 @@ export function DataExport() {
                           <CardTitle className="text-lg">{job.name}</CardTitle>
                           <CardDescription className="flex items-center gap-2">
                             <Badge variant="outline" className="capitalize">
-                              {job.type.replace('_', ' ')}
+                              {job.type.replace("_", " ")}
                             </Badge>
                             <Badge variant="outline" className="uppercase">
                               {job.format}
                             </Badge>
                             {job.fileSize && (
-                              <span className="text-xs text-muted-foreground">{job.fileSize}</span>
+                              <span className="text-xs text-muted-foreground">
+                                {job.fileSize}
+                              </span>
                             )}
                           </CardDescription>
                         </div>
@@ -429,7 +479,7 @@ export function DataExport() {
                   <CardContent>
                     <div className="space-y-4">
                       {/* Progress Bar */}
-                      {job.status === 'processing' && (
+                      {job.status === "processing" && (
                         <div>
                           <div className="flex items-center justify-between text-sm mb-1">
                             <span>Processing...</span>
@@ -442,30 +492,42 @@ export function DataExport() {
                       {/* Timestamps */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                         <div>
-                          <span className="text-muted-foreground">Created:</span>
-                          <p className="font-medium">{new Date(job.createdAt).toLocaleString()}</p>
+                          <span className="text-muted-foreground">
+                            Created:
+                          </span>
+                          <p className="font-medium">
+                            {new Date(job.createdAt).toLocaleString()}
+                          </p>
                         </div>
                         {job.completedAt && (
                           <div>
-                            <span className="text-muted-foreground">Completed:</span>
-                            <p className="font-medium">{new Date(job.completedAt).toLocaleString()}</p>
+                            <span className="text-muted-foreground">
+                              Completed:
+                            </span>
+                            <p className="font-medium">
+                              {new Date(job.completedAt).toLocaleString()}
+                            </p>
                           </div>
                         )}
                         <div>
-                          <span className="text-muted-foreground">Expires:</span>
-                          <p className="font-medium">{new Date(job.expiresAt).toLocaleString()}</p>
+                          <span className="text-muted-foreground">
+                            Expires:
+                          </span>
+                          <p className="font-medium">
+                            {new Date(job.expiresAt).toLocaleString()}
+                          </p>
                         </div>
                       </div>
 
                       {/* Actions */}
                       <div className="flex gap-2 pt-2 border-t">
-                        {job.status === 'completed' && job.downloadUrl && (
+                        {job.status === "completed" && job.downloadUrl && (
                           <Button size="sm">
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </Button>
                         )}
-                        {job.status === 'completed' && (
+                        {job.status === "completed" && (
                           <Button variant="outline" size="sm">
                             <Share className="h-4 w-4 mr-2" />
                             Share
@@ -491,7 +553,8 @@ export function DataExport() {
                   <Download className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
                   <h3 className="text-lg font-semibold mb-2">No export jobs</h3>
                   <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
-                    Create your first data export to download analytics reports and raw data
+                    Create your first data export to download analytics reports
+                    and raw data
                   </p>
                   <Button onClick={() => setExportDialogOpen(true)}>
                     <Download className="h-4 w-4 mr-2" />
@@ -507,7 +570,10 @@ export function DataExport() {
           {/* Scheduled Reports */}
           <div className="space-y-4">
             {scheduledReports.map((report) => (
-              <Card key={report.id} className="hover:shadow-md transition-shadow">
+              <Card
+                key={report.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -520,8 +586,10 @@ export function DataExport() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={report.is_active ? "secondary" : "outline"}>
-                        {report.is_active ? 'Active' : 'Inactive'}
+                      <Badge
+                        variant={report.is_active ? "secondary" : "outline"}
+                      >
+                        {report.is_active ? "Active" : "Inactive"}
                       </Badge>
                       <Badge variant="outline" className="capitalize">
                         {report.frequency}
@@ -536,17 +604,25 @@ export function DataExport() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <span className="text-muted-foreground">Next Run:</span>
-                        <p className="font-medium">{new Date(report.next_run_at).toLocaleString()}</p>
+                        <p className="font-medium">
+                          {new Date(report.next_run_at).toLocaleString()}
+                        </p>
                       </div>
                       {report.last_run_at && (
                         <div>
-                          <span className="text-muted-foreground">Last Run:</span>
-                          <p className="font-medium">{new Date(report.last_run_at).toLocaleString()}</p>
+                          <span className="text-muted-foreground">
+                            Last Run:
+                          </span>
+                          <p className="font-medium">
+                            {new Date(report.last_run_at).toLocaleString()}
+                          </p>
                         </div>
                       )}
                       <div>
                         <span className="text-muted-foreground">Format:</span>
-                        <p className="font-medium uppercase">{report.delivery_config.file_format}</p>
+                        <p className="font-medium uppercase">
+                          {report.delivery_config.file_format}
+                        </p>
                       </div>
                     </div>
 
@@ -554,18 +630,30 @@ export function DataExport() {
                     <div>
                       <h5 className="font-medium text-sm mb-2">Delivery</h5>
                       <div className="flex flex-wrap gap-2">
-                        {report.delivery_config.email_recipients.map((email) => (
-                          <Badge key={email} variant="outline" className="text-xs">
-                            <Mail className="h-3 w-3 mr-1" />
-                            {email}
-                          </Badge>
-                        ))}
-                        {report.delivery_config.slack_channels?.map((channel) => (
-                          <Badge key={channel} variant="outline" className="text-xs">
-                            <Share className="h-3 w-3 mr-1" />
-                            {channel}
-                          </Badge>
-                        ))}
+                        {report.delivery_config.email_recipients.map(
+                          (email) => (
+                            <Badge
+                              key={email}
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              <Mail className="h-3 w-3 mr-1" />
+                              {email}
+                            </Badge>
+                          ),
+                        )}
+                        {report.delivery_config.slack_channels?.map(
+                          (channel) => (
+                            <Badge
+                              key={channel}
+                              variant="outline"
+                              className="text-xs"
+                            >
+                              <Share className="h-3 w-3 mr-1" />
+                              {channel}
+                            </Badge>
+                          ),
+                        )}
                       </div>
                     </div>
 
@@ -584,7 +672,11 @@ export function DataExport() {
                         Edit
                       </Button>
                       <Button variant="ghost" size="sm">
-                        {report.is_active ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                        {report.is_active ? (
+                          <Pause className="h-4 w-4" />
+                        ) : (
+                          <Play className="h-4 w-4" />
+                        )}
                       </Button>
                       <Button variant="ghost" size="sm">
                         <Trash2 className="h-4 w-4" />
@@ -599,9 +691,12 @@ export function DataExport() {
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12">
                   <CalendarIconLucide className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-                  <h3 className="text-lg font-semibold mb-2">No scheduled reports</h3>
+                  <h3 className="text-lg font-semibold mb-2">
+                    No scheduled reports
+                  </h3>
                   <p className="text-sm text-muted-foreground mb-4 text-center max-w-sm">
-                    Set up automated reports to deliver analytics insights to your team regularly
+                    Set up automated reports to deliver analytics insights to
+                    your team regularly
                   </p>
                   <Button onClick={() => setReportDialogOpen(true)}>
                     <CalendarIconLucide className="h-4 w-4 mr-2" />
@@ -647,14 +742,21 @@ export function DataExport() {
                 id="export-name"
                 placeholder="Q3 2024 Analytics Report"
                 value={exportForm.name}
-                onChange={(e) => setExportForm(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setExportForm((prev) => ({ ...prev, name: e.target.value }))
+                }
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Export Type</Label>
-                <Select value={exportForm.type} onValueChange={(value: any) => setExportForm(prev => ({ ...prev, type: value }))}>
+                <Select
+                  value={exportForm.type}
+                  onValueChange={(value: any) =>
+                    setExportForm((prev) => ({ ...prev, type: value }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -668,7 +770,12 @@ export function DataExport() {
 
               <div>
                 <Label>File Format</Label>
-                <Select value={exportForm.format} onValueChange={(value: any) => setExportForm(prev => ({ ...prev, format: value }))}>
+                <Select
+                  value={exportForm.format}
+                  onValueChange={(value: any) =>
+                    setExportForm((prev) => ({ ...prev, format: value }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -688,7 +795,12 @@ export function DataExport() {
 
             <div>
               <Label>Time Range</Label>
-              <Select value={exportForm.timeframe} onValueChange={(value: any) => setExportForm(prev => ({ ...prev, timeframe: value }))}>
+              <Select
+                value={exportForm.timeframe}
+                onValueChange={(value: any) =>
+                  setExportForm((prev) => ({ ...prev, timeframe: value }))
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -706,25 +818,33 @@ export function DataExport() {
               <Label>Data Sources</Label>
               <div className="grid grid-cols-2 gap-2 mt-2">
                 {dataSourceOptions.map((source) => (
-                  <div key={source.value} className="flex items-center space-x-2">
+                  <div
+                    key={source.value}
+                    className="flex items-center space-x-2"
+                  >
                     <Checkbox
                       id={`source-${source.value}`}
                       checked={exportForm.dataSources.includes(source.value)}
                       onCheckedChange={(checked) => {
                         if (checked) {
-                          setExportForm(prev => ({
+                          setExportForm((prev) => ({
                             ...prev,
-                            dataSources: [...prev.dataSources, source.value]
+                            dataSources: [...prev.dataSources, source.value],
                           }));
                         } else {
-                          setExportForm(prev => ({
+                          setExportForm((prev) => ({
                             ...prev,
-                            dataSources: prev.dataSources.filter(ds => ds !== source.value)
+                            dataSources: prev.dataSources.filter(
+                              (ds) => ds !== source.value,
+                            ),
                           }));
                         }
                       }}
                     />
-                    <Label htmlFor={`source-${source.value}`} className="text-sm">
+                    <Label
+                      htmlFor={`source-${source.value}`}
+                      className="text-sm"
+                    >
                       {source.label}
                     </Label>
                   </div>
@@ -737,7 +857,12 @@ export function DataExport() {
                 <Checkbox
                   id="include-charts"
                   checked={exportForm.includeCharts}
-                  onCheckedChange={(checked) => setExportForm(prev => ({ ...prev, includeCharts: checked as boolean }))}
+                  onCheckedChange={(checked) =>
+                    setExportForm((prev) => ({
+                      ...prev,
+                      includeCharts: checked as boolean,
+                    }))
+                  }
                 />
                 <Label htmlFor="include-charts">Include Charts</Label>
               </div>
@@ -745,7 +870,12 @@ export function DataExport() {
                 <Checkbox
                   id="include-raw-data"
                   checked={exportForm.includeRawData}
-                  onCheckedChange={(checked) => setExportForm(prev => ({ ...prev, includeRawData: checked as boolean }))}
+                  onCheckedChange={(checked) =>
+                    setExportForm((prev) => ({
+                      ...prev,
+                      includeRawData: checked as boolean,
+                    }))
+                  }
                 />
                 <Label htmlFor="include-raw-data">Include Raw Data</Label>
               </div>
@@ -753,10 +883,16 @@ export function DataExport() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setExportDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setExportDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleCreateExport} disabled={!exportForm.name || exportData.isPending}>
+            <Button
+              onClick={handleCreateExport}
+              disabled={!exportForm.name || exportData.isPending}
+            >
               {exportData.isPending ? (
                 <>
                   <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
@@ -791,12 +927,19 @@ export function DataExport() {
                   id="report-name"
                   placeholder="Weekly Team Summary"
                   value={reportForm.name}
-                  onChange={(e) => setReportForm(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) =>
+                    setReportForm((prev) => ({ ...prev, name: e.target.value }))
+                  }
                 />
               </div>
               <div>
                 <Label htmlFor="report-frequency">Frequency</Label>
-                <Select value={reportForm.frequency} onValueChange={(value: any) => setReportForm(prev => ({ ...prev, frequency: value }))}>
+                <Select
+                  value={reportForm.frequency}
+                  onValueChange={(value: any) =>
+                    setReportForm((prev) => ({ ...prev, frequency: value }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -816,7 +959,12 @@ export function DataExport() {
                 id="report-description"
                 placeholder="Describe what this report contains..."
                 value={reportForm.description}
-                onChange={(e) => setReportForm(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setReportForm((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 rows={3}
               />
             </div>
@@ -827,13 +975,26 @@ export function DataExport() {
                 <Input
                   type="time"
                   value={reportForm.timeOfDay}
-                  onChange={(e) => setReportForm(prev => ({ ...prev, timeOfDay: e.target.value }))}
+                  onChange={(e) =>
+                    setReportForm((prev) => ({
+                      ...prev,
+                      timeOfDay: e.target.value,
+                    }))
+                  }
                 />
               </div>
-              {reportForm.frequency === 'weekly' && (
+              {reportForm.frequency === "weekly" && (
                 <div>
                   <Label>Day of Week</Label>
-                  <Select value={reportForm.dayOfWeek.toString()} onValueChange={(value) => setReportForm(prev => ({ ...prev, dayOfWeek: parseInt(value) }))}>
+                  <Select
+                    value={reportForm.dayOfWeek.toString()}
+                    onValueChange={(value) =>
+                      setReportForm((prev) => ({
+                        ...prev,
+                        dayOfWeek: parseInt(value),
+                      }))
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -847,7 +1008,7 @@ export function DataExport() {
                   </Select>
                 </div>
               )}
-              {reportForm.frequency === 'monthly' && (
+              {reportForm.frequency === "monthly" && (
                 <div>
                   <Label>Day of Month</Label>
                   <Input
@@ -855,13 +1016,23 @@ export function DataExport() {
                     min="1"
                     max="31"
                     value={reportForm.dayOfMonth}
-                    onChange={(e) => setReportForm(prev => ({ ...prev, dayOfMonth: parseInt(e.target.value) }))}
+                    onChange={(e) =>
+                      setReportForm((prev) => ({
+                        ...prev,
+                        dayOfMonth: parseInt(e.target.value),
+                      }))
+                    }
                   />
                 </div>
               )}
               <div>
                 <Label>File Format</Label>
-                <Select value={reportForm.fileFormat} onValueChange={(value: any) => setReportForm(prev => ({ ...prev, fileFormat: value }))}>
+                <Select
+                  value={reportForm.fileFormat}
+                  onValueChange={(value: any) =>
+                    setReportForm((prev) => ({ ...prev, fileFormat: value }))
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -878,11 +1049,16 @@ export function DataExport() {
               <Label>Email Recipients</Label>
               <Input
                 placeholder="user1@company.com, user2@company.com"
-                value={reportForm.emailRecipients.join(', ')}
-                onChange={(e) => setReportForm(prev => ({
-                  ...prev,
-                  emailRecipients: e.target.value.split(',').map(email => email.trim()).filter(Boolean)
-                }))}
+                value={reportForm.emailRecipients.join(", ")}
+                onChange={(e) =>
+                  setReportForm((prev) => ({
+                    ...prev,
+                    emailRecipients: e.target.value
+                      .split(",")
+                      .map((email) => email.trim())
+                      .filter(Boolean),
+                  }))
+                }
               />
             </div>
 
@@ -892,7 +1068,12 @@ export function DataExport() {
                 id="custom-message"
                 placeholder="Add a custom message to include with the report..."
                 value={reportForm.customMessage}
-                onChange={(e) => setReportForm(prev => ({ ...prev, customMessage: e.target.value }))}
+                onChange={(e) =>
+                  setReportForm((prev) => ({
+                    ...prev,
+                    customMessage: e.target.value,
+                  }))
+                }
                 rows={2}
               />
             </div>
@@ -901,17 +1082,28 @@ export function DataExport() {
               <Checkbox
                 id="include-data"
                 checked={reportForm.includeData}
-                onCheckedChange={(checked) => setReportForm(prev => ({ ...prev, includeData: checked as boolean }))}
+                onCheckedChange={(checked) =>
+                  setReportForm((prev) => ({
+                    ...prev,
+                    includeData: checked as boolean,
+                  }))
+                }
               />
               <Label htmlFor="include-data">Include raw data in export</Label>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setReportDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setReportDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleCreateReport} disabled={!reportForm.name || createReport.isPending}>
+            <Button
+              onClick={handleCreateReport}
+              disabled={!reportForm.name || createReport.isPending}
+            >
               {createReport.isPending ? (
                 <>
                   <RefreshCw className="h-4 w-4 mr-2 animate-spin" />

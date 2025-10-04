@@ -10,7 +10,11 @@ interface StreakAnalyticsProps {
   detailed?: boolean;
 }
 
-export default function StreakAnalytics({ workspaceId, compact = false, detailed = false }: StreakAnalyticsProps) {
+export default function StreakAnalytics({
+  workspaceId,
+  compact = false,
+  detailed = false,
+}: StreakAnalyticsProps) {
   const { data: streakData, isLoading } = useReflectionStreak(workspaceId);
 
   if (isLoading) {
@@ -32,7 +36,9 @@ export default function StreakAnalytics({ workspaceId, compact = false, detailed
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Flame className="h-5 w-5 text-orange-500" />
-            <p className="text-sm font-medium text-muted-foreground">Reflection Streak</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              Reflection Streak
+            </p>
           </div>
           <div>
             <p className="text-3xl font-bold">{currentStreak}</p>
@@ -61,7 +67,9 @@ export default function StreakAnalytics({ workspaceId, compact = false, detailed
           <div className="p-4 rounded-lg border bg-card">
             <div className="flex items-center gap-2 mb-2">
               <Flame className="h-5 w-5 text-orange-500" />
-              <p className="text-sm font-medium text-muted-foreground">Current Streak</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Current Streak
+              </p>
             </div>
             <p className="text-3xl font-bold">{currentStreak}</p>
             <p className="text-sm text-muted-foreground">consecutive days</p>
@@ -70,7 +78,9 @@ export default function StreakAnalytics({ workspaceId, compact = false, detailed
           <div className="p-4 rounded-lg border bg-card">
             <div className="flex items-center gap-2 mb-2">
               <Trophy className="h-5 w-5 text-yellow-500" />
-              <p className="text-sm font-medium text-muted-foreground">Longest Streak</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Longest Streak
+              </p>
             </div>
             <p className="text-3xl font-bold">{longestStreak}</p>
             <p className="text-sm text-muted-foreground">personal best</p>
@@ -99,14 +109,20 @@ export default function StreakAnalytics({ workspaceId, compact = false, detailed
                 <Trophy className="h-5 w-5 text-yellow-500" />
                 <div>
                   <p className="font-medium">7-Day Warrior</p>
-                  <p className="text-xs text-muted-foreground">Reflected for a full week</p>
+                  <p className="text-xs text-muted-foreground">
+                    Reflected for a full week
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Trophy className="h-5 w-5 text-gray-400" />
                 <div>
-                  <p className="font-medium text-muted-foreground">30-Day Champion</p>
-                  <p className="text-xs text-muted-foreground">Not yet achieved</p>
+                  <p className="font-medium text-muted-foreground">
+                    30-Day Champion
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Not yet achieved
+                  </p>
                 </div>
               </div>
             </div>

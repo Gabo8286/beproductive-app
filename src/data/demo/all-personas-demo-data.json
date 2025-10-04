@@ -1,0 +1,897 @@
+{
+  "sarah": {
+    "user": {
+      "id": "sarah-001",
+      "name": "Sarah Chen",
+      "email": "sarah.chen@company.com",
+      "role": "Executive",
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "timezone": "America/New_York"
+      },
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah Chen",
+      "joinDate": "2024-01-01T08:00:00.000Z",
+      "lastActive": "2025-10-04T18:58:00.432Z"
+    },
+    "activityData": {
+      "tasks": [
+        {
+          "id": "sarah-task-1",
+          "title": "Board meeting preparation",
+          "description": "Prepare Q4 financial reports and strategy presentation",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-06T18:58:00.432Z",
+          "priority": "high",
+          "category": "meeting",
+          "estimatedTime": 180,
+          "tags": [
+            "quarterly",
+            "board",
+            "finance"
+          ]
+        },
+        {
+          "id": "sarah-task-2",
+          "title": "Review team performance metrics",
+          "description": "Analyze team KPIs and prepare feedback sessions",
+          "completed": true,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "completedAt": "2025-10-04T18:58:00.432Z",
+          "priority": "high",
+          "category": "management",
+          "estimatedTime": 120,
+          "actualTime": 105,
+          "tags": [
+            "team",
+            "performance",
+            "kpi"
+          ]
+        },
+        {
+          "id": "sarah-task-3",
+          "title": "Investor call - Series B discussion",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-05T18:58:00.432Z",
+          "priority": "high",
+          "category": "meeting",
+          "estimatedTime": 90,
+          "tags": [
+            "investor",
+            "funding",
+            "series-b"
+          ]
+        },
+        {
+          "id": "sarah-task-4",
+          "title": "Approve marketing budget for Q1",
+          "completed": false,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "dueDate": "2025-10-11T18:58:00.432Z",
+          "priority": "medium",
+          "category": "finance",
+          "estimatedTime": 60,
+          "tags": [
+            "budget",
+            "marketing",
+            "q1"
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "sarah-goal-1",
+          "title": "Increase company revenue by 25%",
+          "description": "Drive revenue growth through strategic initiatives",
+          "progress": 78,
+          "deadline": "2025-12-31T08:00:00.000Z",
+          "category": "business",
+          "milestones": [
+            {
+              "title": "Q1 targets met",
+              "completed": true,
+              "date": "2025-03-31T07:00:00.000Z"
+            },
+            {
+              "title": "Q2 targets met",
+              "completed": true,
+              "date": "2025-06-30T07:00:00.000Z"
+            },
+            {
+              "title": "Q3 targets met",
+              "completed": true,
+              "date": "2025-09-30T07:00:00.000Z"
+            },
+            {
+              "title": "Q4 targets",
+              "completed": false,
+              "date": "2025-12-31T08:00:00.000Z"
+            }
+          ]
+        },
+        {
+          "id": "sarah-goal-2",
+          "title": "Complete executive leadership program",
+          "description": "Enhance leadership skills through certified program",
+          "progress": 45,
+          "deadline": "2025-06-30T07:00:00.000Z",
+          "category": "professional",
+          "milestones": [
+            {
+              "title": "Module 1: Strategic Thinking",
+              "completed": true
+            },
+            {
+              "title": "Module 2: Team Leadership",
+              "completed": true
+            },
+            {
+              "title": "Module 3: Financial Management",
+              "completed": false
+            },
+            {
+              "title": "Module 4: Innovation Leadership",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "habits": [
+        {
+          "id": "sarah-habit-1",
+          "title": "Morning meditation",
+          "description": "10 minutes of mindfulness to start the day",
+          "completions": [
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-02T18:58:00.432Z",
+            "2025-10-04T18:58:00.432Z"
+          ],
+          "target": 7,
+          "frequency": "daily",
+          "streak": 3
+        },
+        {
+          "id": "sarah-habit-2",
+          "title": "Review daily priorities",
+          "description": "Plan and prioritize the day ahead",
+          "completions": [
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-02T18:58:00.432Z",
+            "2025-10-01T18:58:00.432Z",
+            "2025-10-04T18:58:00.432Z"
+          ],
+          "target": 7,
+          "frequency": "daily",
+          "streak": 4
+        }
+      ],
+      "timeEntries": [
+        {
+          "id": "time-sarah-task-2",
+          "taskId": "sarah-task-2",
+          "startTime": "2025-10-04T18:58:00.432Z",
+          "endTime": "2025-10-04T20:43:00.432Z",
+          "duration": 105,
+          "category": "management",
+          "description": "Review team performance metrics"
+        }
+      ],
+      "notes": [
+        {
+          "id": "sarah-note-1",
+          "title": "Board Meeting Strategy",
+          "content": "Key points for Q4 board presentation:\n- Revenue up 23% YoY\n- Team expansion in Q1\n- New product line launch timeline\n- Investment in AI/ML capabilities",
+          "tags": [
+            "board",
+            "strategy",
+            "q4"
+          ],
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "updatedAt": "2025-10-04T18:58:00.432Z"
+        },
+        {
+          "id": "sarah-note-2",
+          "title": "Leadership Insights",
+          "content": "Notes from executive coaching session:\n- Focus on delegation\n- Improve cross-functional collaboration\n- Develop succession planning\n- Invest in team development",
+          "tags": [
+            "leadership",
+            "coaching",
+            "development"
+          ],
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "updatedAt": "2025-10-03T18:58:00.432Z"
+        }
+      ]
+    },
+    "statistics": {
+      "totalTasks": 4,
+      "completedTasks": 1,
+      "totalGoals": 2,
+      "avgGoalProgress": 61.5,
+      "totalHabits": 2,
+      "habitStreak": 4,
+      "totalTimeTracked": 105
+    }
+  },
+  "marcus": {
+    "user": {
+      "id": "marcus-001",
+      "name": "Marcus Rodriguez",
+      "email": "marcus.rodriguez@dev.com",
+      "role": "Developer",
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "timezone": "America/Los_Angeles"
+      },
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus Rodriguez",
+      "joinDate": "2024-01-01T08:00:00.000Z",
+      "lastActive": "2025-10-04T18:58:00.432Z"
+    },
+    "activityData": {
+      "tasks": [
+        {
+          "id": "marcus-task-1",
+          "title": "Fix authentication bug in user login",
+          "description": "Resolve OAuth integration issue causing login failures",
+          "completed": true,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "completedAt": "2025-10-04T18:58:00.432Z",
+          "priority": "high",
+          "category": "bug",
+          "estimatedTime": 120,
+          "actualTime": 95,
+          "tags": [
+            "auth",
+            "oauth",
+            "critical"
+          ]
+        },
+        {
+          "id": "marcus-task-2",
+          "title": "Implement dark mode toggle component",
+          "description": "Create reusable theme switcher with smooth transitions",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-07T18:58:00.432Z",
+          "priority": "medium",
+          "category": "feature",
+          "estimatedTime": 180,
+          "tags": [
+            "ui",
+            "theme",
+            "component"
+          ]
+        },
+        {
+          "id": "marcus-task-3",
+          "title": "Code review for team PRs",
+          "description": "Review 5 pending pull requests from team members",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-05T18:58:00.432Z",
+          "priority": "medium",
+          "category": "review",
+          "estimatedTime": 90,
+          "tags": [
+            "review",
+            "team",
+            "pr"
+          ]
+        },
+        {
+          "id": "marcus-task-4",
+          "title": "Optimize database queries",
+          "description": "Improve performance of user data fetching",
+          "completed": false,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "priority": "low",
+          "category": "optimization",
+          "estimatedTime": 240,
+          "tags": [
+            "database",
+            "performance",
+            "optimization"
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "marcus-goal-1",
+          "title": "Master TypeScript advanced patterns",
+          "description": "Become proficient in advanced TS concepts and patterns",
+          "progress": 65,
+          "deadline": "2025-03-31T07:00:00.000Z",
+          "category": "learning",
+          "milestones": [
+            {
+              "title": "Generic Types",
+              "completed": true
+            },
+            {
+              "title": "Conditional Types",
+              "completed": true
+            },
+            {
+              "title": "Template Literal Types",
+              "completed": false
+            },
+            {
+              "title": "Advanced Mapped Types",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": "marcus-goal-2",
+          "title": "Contribute to 3 open source projects",
+          "description": "Make meaningful contributions to OSS community",
+          "progress": 33,
+          "deadline": "2025-12-31T08:00:00.000Z",
+          "category": "professional",
+          "milestones": [
+            {
+              "title": "React component library",
+              "completed": true
+            },
+            {
+              "title": "Node.js utility package",
+              "completed": false
+            },
+            {
+              "title": "TypeScript definitions",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "habits": [
+        {
+          "id": "marcus-habit-1",
+          "title": "Daily coding practice",
+          "description": "Solve algorithmic problems and practice coding",
+          "completions": [
+            "2025-10-04T18:58:00.432Z",
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-02T18:58:00.432Z",
+            "2025-10-01T18:58:00.432Z",
+            "2025-09-30T18:58:00.432Z"
+          ],
+          "target": 7,
+          "frequency": "daily",
+          "streak": 5
+        },
+        {
+          "id": "marcus-habit-2",
+          "title": "Read tech articles",
+          "description": "Stay updated with latest development trends",
+          "completions": [
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-01T18:58:00.432Z",
+            "2025-10-04T18:58:00.432Z"
+          ],
+          "target": 5,
+          "frequency": "weekly",
+          "streak": 3
+        }
+      ],
+      "timeEntries": [
+        {
+          "id": "time-marcus-task-1",
+          "taskId": "marcus-task-1",
+          "startTime": "2025-10-04T18:58:00.432Z",
+          "endTime": "2025-10-04T20:33:00.432Z",
+          "duration": 95,
+          "category": "bug",
+          "description": "Fix authentication bug in user login"
+        }
+      ],
+      "notes": [
+        {
+          "id": "marcus-note-1",
+          "title": "TypeScript Advanced Patterns",
+          "content": "Conditional types syntax:\n```typescript\ntype NonNullable<T> = T extends null | undefined ? never : T\n```\nUseful for creating more precise type definitions.",
+          "tags": [
+            "typescript",
+            "learning",
+            "programming"
+          ],
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "updatedAt": "2025-10-04T18:58:00.432Z"
+        },
+        {
+          "id": "marcus-note-2",
+          "title": "Code Review Checklist",
+          "content": "- Security vulnerabilities\n- Performance implications\n- Code readability\n- Test coverage\n- Documentation updates\n- Breaking changes",
+          "tags": [
+            "code-review",
+            "checklist",
+            "best-practices"
+          ],
+          "createdAt": "2025-10-02T18:58:00.432Z",
+          "updatedAt": "2025-10-02T18:58:00.432Z"
+        }
+      ]
+    },
+    "statistics": {
+      "totalTasks": 4,
+      "completedTasks": 1,
+      "totalGoals": 2,
+      "avgGoalProgress": 49,
+      "totalHabits": 2,
+      "habitStreak": 5,
+      "totalTimeTracked": 95
+    }
+  },
+  "elena": {
+    "user": {
+      "id": "elena-001",
+      "name": "Elena Petrov",
+      "email": "elena.petrov@pm.com",
+      "role": "Project Manager",
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "timezone": "Europe/London"
+      },
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena Petrov",
+      "joinDate": "2024-01-01T08:00:00.000Z",
+      "lastActive": "2025-10-04T18:58:00.432Z"
+    },
+    "activityData": {
+      "tasks": [
+        {
+          "id": "elena-task-1",
+          "title": "Sprint planning meeting",
+          "description": "Plan user stories and estimate effort for next sprint",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-05T18:58:00.432Z",
+          "priority": "high",
+          "category": "planning",
+          "estimatedTime": 120,
+          "tags": [
+            "sprint",
+            "planning",
+            "team"
+          ]
+        },
+        {
+          "id": "elena-task-2",
+          "title": "Update project timeline",
+          "description": "Adjust milestones based on current progress",
+          "completed": true,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "completedAt": "2025-10-04T18:58:00.432Z",
+          "priority": "medium",
+          "category": "planning",
+          "estimatedTime": 90,
+          "actualTime": 75,
+          "tags": [
+            "timeline",
+            "milestones",
+            "tracking"
+          ]
+        },
+        {
+          "id": "elena-task-3",
+          "title": "Client stakeholder review",
+          "description": "Present project progress to key stakeholders",
+          "completed": false,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "dueDate": "2025-10-06T18:58:00.432Z",
+          "priority": "high",
+          "category": "meeting",
+          "estimatedTime": 60,
+          "tags": [
+            "client",
+            "stakeholder",
+            "review"
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "elena-goal-1",
+          "title": "Deliver project on time and budget",
+          "description": "Successfully complete the digital transformation project",
+          "progress": 75,
+          "deadline": "2025-06-30T07:00:00.000Z",
+          "category": "project",
+          "milestones": [
+            {
+              "title": "Discovery Phase",
+              "completed": true
+            },
+            {
+              "title": "Design Phase",
+              "completed": true
+            },
+            {
+              "title": "Development Phase",
+              "completed": false
+            },
+            {
+              "title": "Testing & Launch",
+              "completed": false
+            }
+          ]
+        },
+        {
+          "id": "elena-goal-2",
+          "title": "Achieve PMP certification",
+          "description": "Complete Project Management Professional certification",
+          "progress": 40,
+          "deadline": "2025-09-30T07:00:00.000Z",
+          "category": "professional",
+          "milestones": [
+            {
+              "title": "Complete training hours",
+              "completed": false
+            },
+            {
+              "title": "Submit application",
+              "completed": false
+            },
+            {
+              "title": "Take exam",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "habits": [
+        {
+          "id": "elena-habit-1",
+          "title": "Daily team standup",
+          "description": "Check in with team progress and blockers",
+          "completions": [
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-02T18:58:00.432Z",
+            "2025-10-01T18:58:00.432Z",
+            "2025-10-04T18:58:00.432Z"
+          ],
+          "target": 5,
+          "frequency": "weekdays",
+          "streak": 4
+        }
+      ],
+      "timeEntries": [
+        {
+          "id": "time-elena-task-2",
+          "taskId": "elena-task-2",
+          "startTime": "2025-10-04T18:58:00.432Z",
+          "endTime": "2025-10-04T20:13:00.432Z",
+          "duration": 75,
+          "category": "planning",
+          "description": "Update project timeline"
+        }
+      ],
+      "notes": [
+        {
+          "id": "elena-note-1",
+          "title": "Project Retrospective",
+          "content": "Sprint 12 retrospective notes:\nWhat went well:\n- Team velocity improved\n- Better estimation accuracy\n\nWhat to improve:\n- Earlier stakeholder feedback\n- More thorough testing",
+          "tags": [
+            "project",
+            "retrospective",
+            "scrum"
+          ],
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "updatedAt": "2025-10-04T18:58:00.432Z"
+        }
+      ]
+    },
+    "statistics": {
+      "totalTasks": 3,
+      "completedTasks": 1,
+      "totalGoals": 2,
+      "avgGoalProgress": 57.5,
+      "totalHabits": 1,
+      "habitStreak": 4,
+      "totalTimeTracked": 75
+    }
+  },
+  "james": {
+    "user": {
+      "id": "james-001",
+      "name": "James Thompson",
+      "email": "james.thompson@freelancer.com",
+      "role": "Freelancer",
+      "preferences": {
+        "theme": "auto",
+        "language": "en",
+        "timezone": "America/Chicago"
+      },
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=James Thompson",
+      "joinDate": "2024-01-01T08:00:00.000Z",
+      "lastActive": "2025-10-04T18:58:00.432Z"
+    },
+    "activityData": {
+      "tasks": [
+        {
+          "id": "james-task-1",
+          "title": "Client A - Website redesign",
+          "description": "Complete homepage and product pages redesign",
+          "completed": false,
+          "createdAt": "2025-09-27T18:58:00.432Z",
+          "dueDate": "2025-10-09T18:58:00.432Z",
+          "priority": "high",
+          "category": "client_work",
+          "estimatedTime": 480,
+          "tags": [
+            "client-a",
+            "redesign",
+            "website"
+          ]
+        },
+        {
+          "id": "james-task-2",
+          "title": "Invoice Client B for December",
+          "description": "Generate and send invoice for completed work",
+          "completed": true,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "completedAt": "2025-10-04T18:58:00.432Z",
+          "priority": "high",
+          "category": "administrative",
+          "estimatedTime": 30,
+          "actualTime": 25,
+          "tags": [
+            "invoice",
+            "client-b",
+            "billing"
+          ]
+        },
+        {
+          "id": "james-task-3",
+          "title": "Update portfolio website",
+          "description": "Add recent projects and client testimonials",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "priority": "medium",
+          "category": "personal",
+          "estimatedTime": 120,
+          "tags": [
+            "portfolio",
+            "marketing",
+            "website"
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "james-goal-1",
+          "title": "Increase monthly income by 30%",
+          "description": "Grow freelance business through better rates and more clients",
+          "progress": 45,
+          "deadline": "2025-12-31T08:00:00.000Z",
+          "category": "financial",
+          "milestones": [
+            {
+              "title": "Raise rates by 20%",
+              "completed": true
+            },
+            {
+              "title": "Get 2 new premium clients",
+              "completed": false
+            },
+            {
+              "title": "Launch premium service package",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "habits": [
+        {
+          "id": "james-habit-1",
+          "title": "Track time for all projects",
+          "description": "Record time spent on each client project",
+          "completions": [
+            "2025-10-04T18:58:00.432Z",
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-02T18:58:00.432Z",
+            "2025-10-01T18:58:00.432Z",
+            "2025-09-30T18:58:00.432Z",
+            "2025-09-29T18:58:00.432Z",
+            "2025-09-28T18:58:00.432Z"
+          ],
+          "target": 7,
+          "frequency": "daily",
+          "streak": 7
+        }
+      ],
+      "timeEntries": [
+        {
+          "id": "time-james-task-2",
+          "taskId": "james-task-2",
+          "startTime": "2025-10-04T18:58:00.432Z",
+          "endTime": "2025-10-04T19:23:00.432Z",
+          "duration": 25,
+          "category": "administrative",
+          "description": "Invoice Client B for December"
+        }
+      ],
+      "notes": [
+        {
+          "id": "james-note-1",
+          "title": "Client Feedback - Website Project",
+          "content": "Client A feedback on homepage:\n- Love the modern design\n- Request mobile optimization\n- Add contact form\n- Consider adding testimonials section",
+          "tags": [
+            "client-feedback",
+            "website",
+            "design"
+          ],
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "updatedAt": "2025-10-04T18:58:00.432Z"
+        }
+      ]
+    },
+    "statistics": {
+      "totalTasks": 3,
+      "completedTasks": 1,
+      "totalGoals": 1,
+      "avgGoalProgress": 45,
+      "totalHabits": 1,
+      "habitStreak": 7,
+      "totalTimeTracked": 25
+    }
+  },
+  "aisha": {
+    "user": {
+      "id": "aisha-001",
+      "name": "Aisha Williams",
+      "email": "aisha.williams@student.edu",
+      "role": "Student",
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "timezone": "America/New_York"
+      },
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Aisha Williams",
+      "joinDate": "2024-01-01T08:00:00.000Z",
+      "lastActive": "2025-10-04T18:58:00.432Z"
+    },
+    "activityData": {
+      "tasks": [
+        {
+          "id": "aisha-task-1",
+          "title": "Complete calculus homework - Chapter 8",
+          "description": "Solve integration problems 1-25",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-05T18:58:00.432Z",
+          "priority": "high",
+          "category": "study",
+          "estimatedTime": 120,
+          "tags": [
+            "calculus",
+            "homework",
+            "math"
+          ]
+        },
+        {
+          "id": "aisha-task-2",
+          "title": "Read \"Pride and Prejudice\" - Chapters 10-15",
+          "description": "Reading assignment for English Literature class",
+          "completed": true,
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "completedAt": "2025-10-04T18:58:00.432Z",
+          "priority": "medium",
+          "category": "study",
+          "estimatedTime": 90,
+          "actualTime": 105,
+          "tags": [
+            "english",
+            "literature",
+            "reading"
+          ]
+        },
+        {
+          "id": "aisha-task-3",
+          "title": "Study group - Chemistry exam prep",
+          "description": "Review organic chemistry concepts with study group",
+          "completed": false,
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "dueDate": "2025-10-06T18:58:00.432Z",
+          "priority": "high",
+          "category": "study",
+          "estimatedTime": 180,
+          "tags": [
+            "chemistry",
+            "exam",
+            "study-group"
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "aisha-goal-1",
+          "title": "Maintain 3.8 GPA this semester",
+          "description": "Keep high academic performance across all courses",
+          "progress": 85,
+          "deadline": "2025-05-15T07:00:00.000Z",
+          "category": "academic",
+          "milestones": [
+            {
+              "title": "Midterm exams average 3.8+",
+              "completed": true
+            },
+            {
+              "title": "Complete all major assignments",
+              "completed": false
+            },
+            {
+              "title": "Final exams average 3.8+",
+              "completed": false
+            }
+          ]
+        }
+      ],
+      "habits": [
+        {
+          "id": "aisha-habit-1",
+          "title": "Study for 2 hours daily",
+          "description": "Dedicated study time for coursework",
+          "completions": [
+            "2025-10-03T18:58:00.432Z",
+            "2025-10-02T18:58:00.432Z",
+            "2025-10-01T18:58:00.432Z",
+            "2025-10-04T18:58:00.432Z"
+          ],
+          "target": 7,
+          "frequency": "daily",
+          "streak": 4
+        }
+      ],
+      "timeEntries": [
+        {
+          "id": "time-aisha-task-2",
+          "taskId": "aisha-task-2",
+          "startTime": "2025-10-04T18:58:00.432Z",
+          "endTime": "2025-10-04T20:43:00.432Z",
+          "duration": 105,
+          "category": "study",
+          "description": "Read \"Pride and Prejudice\" - Chapters 10-15"
+        }
+      ],
+      "notes": [
+        {
+          "id": "aisha-note-1",
+          "title": "Chemistry Study Notes",
+          "content": "Organic Chemistry - Chapter 12:\n- Alcohols and Phenols\n- Naming conventions: -ol suffix\n- Properties: hydrogen bonding affects boiling point\n- Reactions: dehydration, oxidation",
+          "tags": [
+            "chemistry",
+            "study",
+            "organic"
+          ],
+          "createdAt": "2025-10-04T18:58:00.432Z",
+          "updatedAt": "2025-10-04T18:58:00.432Z"
+        },
+        {
+          "id": "aisha-note-2",
+          "title": "Literature Essay Ideas",
+          "content": "Pride and Prejudice essay topics:\n1. Social class and marriage\n2. Character development of Elizabeth Bennet\n3. Irony and wit in Austen's writing\n4. Gender roles in Regency England",
+          "tags": [
+            "literature",
+            "essay",
+            "pride-prejudice"
+          ],
+          "createdAt": "2025-10-03T18:58:00.432Z",
+          "updatedAt": "2025-10-03T18:58:00.432Z"
+        }
+      ]
+    },
+    "statistics": {
+      "totalTasks": 3,
+      "completedTasks": 1,
+      "totalGoals": 1,
+      "avgGoalProgress": 85,
+      "totalHabits": 1,
+      "habitStreak": 4,
+      "totalTimeTracked": 105
+    }
+  }
+}

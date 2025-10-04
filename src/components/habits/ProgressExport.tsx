@@ -19,24 +19,33 @@ export function ProgressExport({ habitId, habitTitle }: ProgressExportProps) {
       return;
     }
 
-    const headers = ['Date', 'Status', 'Duration (min)', 'Mood', 'Energy', 'Notes'];
+    const headers = [
+      "Date",
+      "Status",
+      "Duration (min)",
+      "Mood",
+      "Energy",
+      "Notes",
+    ];
     const csvContent = [
-      headers.join(','),
-      ...entries.map(e => [
-        e.date,
-        e.status,
-        e.duration_minutes || '',
-        e.mood || '',
-        e.energy_level || '',
-        `"${(e.notes || '').replace(/"/g, '""')}"`,
-      ].join(','))
-    ].join('\n');
+      headers.join(","),
+      ...entries.map((e) =>
+        [
+          e.date,
+          e.status,
+          e.duration_minutes || "",
+          e.mood || "",
+          e.energy_level || "",
+          `"${(e.notes || "").replace(/"/g, '""')}"`,
+        ].join(","),
+      ),
+    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `${habitTitle.replace(/\s+/g, '_')}_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+    a.download = `${habitTitle.replace(/\s+/g, "_")}_${format(new Date(), "yyyy-MM-dd")}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -57,11 +66,13 @@ export function ProgressExport({ habitId, habitTitle }: ProgressExportProps) {
       entries: entries,
     };
 
-    const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(jsonData, null, 2)], {
+      type: "application/json",
+    });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `${habitTitle.replace(/\s+/g, '_')}_${format(new Date(), 'yyyy-MM-dd')}.json`;
+    a.download = `${habitTitle.replace(/\s+/g, "_")}_${format(new Date(), "yyyy-MM-dd")}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -71,21 +82,27 @@ export function ProgressExport({ habitId, habitTitle }: ProgressExportProps) {
   };
 
   const shareProgress = () => {
-    const completionRate = entries?.length 
-      ? ((entries.filter(e => e.status === 'completed').length / entries.length) * 100).toFixed(1)
+    const completionRate = entries?.length
+      ? (
+          (entries.filter((e) => e.status === "completed").length /
+            entries.length) *
+          100
+        ).toFixed(1)
       : "0";
 
     const text = `I've been tracking my "${habitTitle}" habit with ${entries?.length || 0} entries and a ${completionRate}% completion rate! 🎯`;
 
     if (navigator.share) {
-      navigator.share({
-        title: 'My Habit Progress',
-        text: text,
-      }).catch(() => {
-        // Fallback to clipboard
-        navigator.clipboard.writeText(text);
-        toast.success("Copied to clipboard!");
-      });
+      navigator
+        .share({
+          title: "My Habit Progress",
+          text: text,
+        })
+        .catch(() => {
+          // Fallback to clipboard
+          navigator.clipboard.writeText(text);
+          toast.success("Copied to clipboard!");
+        });
     } else {
       navigator.clipboard.writeText(text);
       toast.success("Copied to clipboard!");
@@ -106,7 +123,7 @@ export function ProgressExport({ habitId, habitTitle }: ProgressExportProps) {
             <FileText className="h-4 w-4 mr-2" />
             Export to CSV
           </Button>
-          
+
           <Button variant="outline" onClick={exportToJSON} className="w-full">
             <FileText className="h-4 w-4 mr-2" />
             Export to JSON
@@ -123,7 +140,7 @@ export function ProgressExport({ habitId, habitTitle }: ProgressExportProps) {
             <span className="ml-2 text-xs">(Coming Soon)</span>
           </Button>
         </div>
-        
+
         <p className="text-sm text-muted-foreground mt-4">
           Export your habit data or share your progress with others.
         </p>

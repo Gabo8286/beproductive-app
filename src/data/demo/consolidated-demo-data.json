@@ -1,0 +1,174 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "generated": "2025-10-04T19:00:00.000Z",
+    "personas": ["sarah", "marcus", "elena", "james", "aisha"],
+    "description": "Consolidated demo data for all user personas in BeProductive v2"
+  },
+  "personas": {
+    "sarah": {
+      "name": "Sarah Chen",
+      "role": "Executive",
+      "description": "CEO of tech startup, focuses on high-level strategy and delegation",
+      "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b97c?w=150&h=150&fit=crop&crop=face",
+      "email": "sarah.chen@techstartup.com",
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "timezone": "America/Los_Angeles",
+        "workingHours": { "start": "08:00", "end": "18:00" },
+        "notifications": { "email": true, "desktop": true, "mobile": false }
+      }
+    },
+    "marcus": {
+      "name": "Marcus Rodriguez",
+      "role": "Developer",
+      "description": "Senior Full-Stack Developer, focuses on technical project management",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      "email": "marcus@devstudio.io",
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "timezone": "America/New_York",
+        "workingHours": { "start": "09:00", "end": "17:00" },
+        "notifications": { "email": true, "desktop": true, "mobile": true }
+      }
+    },
+    "elena": {
+      "name": "Elena Kowalski",
+      "role": "Project Manager",
+      "description": "Agile Project Manager, coordinates teams and tracks deliverables",
+      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      "email": "elena.kowalski@consulting.com",
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "timezone": "Europe/Warsaw",
+        "workingHours": { "start": "08:30", "end": "17:30" },
+        "notifications": { "email": true, "desktop": true, "mobile": true }
+      }
+    },
+    "james": {
+      "name": "James Thompson",
+      "role": "Freelancer",
+      "description": "Digital Marketing Consultant, manages multiple clients and projects",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      "email": "james@freelance.digital",
+      "preferences": {
+        "theme": "light",
+        "language": "en",
+        "timezone": "America/Chicago",
+        "workingHours": { "start": "07:00", "end": "19:00" },
+        "notifications": { "email": true, "desktop": false, "mobile": true }
+      }
+    },
+    "aisha": {
+      "name": "Aisha Patel",
+      "role": "Student",
+      "description": "Computer Science graduate student, balances coursework and research",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+      "email": "aisha.patel@university.edu",
+      "preferences": {
+        "theme": "dark",
+        "language": "en",
+        "timezone": "America/Los_Angeles",
+        "workingHours": { "start": "10:00", "end": "22:00" },
+        "notifications": { "email": true, "desktop": true, "mobile": true }
+      }
+    }
+  },
+  "statistics": {
+    "totalTasks": 125,
+    "totalGoals": 25,
+    "totalHabits": 35,
+    "totalNotes": 85,
+    "totalTimeEntries": 450,
+    "completionRates": {
+      "sarah": 0.85,
+      "marcus": 0.92,
+      "elena": 0.88,
+      "james": 0.78,
+      "aisha": 0.76
+    },
+    "averageProductivityScores": {
+      "sarah": 8.7,
+      "marcus": 9.1,
+      "elena": 8.9,
+      "james": 8.2,
+      "aisha": 7.8
+    }
+  },
+  "common_patterns": {
+    "peak_hours": {
+      "sarah": [9, 10, 14, 15],
+      "marcus": [10, 11, 14, 15],
+      "elena": [9, 10, 13, 14],
+      "james": [8, 9, 16, 17],
+      "aisha": [14, 15, 20, 21]
+    },
+    "preferred_categories": {
+      "sarah": ["strategic", "meetings", "decision-making"],
+      "marcus": ["development", "technical", "learning"],
+      "elena": ["planning", "coordination", "tracking"],
+      "james": ["client-work", "marketing", "business"],
+      "aisha": ["study", "research", "assignments"]
+    },
+    "productivity_insights": {
+      "sarah": "Most productive in morning hours, benefits from time-blocking",
+      "marcus": "Consistent high performer, prefers deep work sessions",
+      "elena": "Excellent at coordination, thrives with structured workflows",
+      "james": "Variable schedule works well, good at context switching",
+      "aisha": "Night owl tendencies, benefits from flexible scheduling"
+    }
+  },
+  "widget_preferences": {
+    "sarah": ["analytics", "calendar", "goals", "smart-recommendations"],
+    "marcus": ["tasks", "time-tracking", "notes", "analytics"],
+    "elena": ["tasks", "goals", "calendar", "analytics"],
+    "james": ["tasks", "time-tracking", "notes", "calendar"],
+    "aisha": ["tasks", "habits", "goals", "notes"]
+  },
+  "ai_usage_patterns": {
+    "task_extraction": {
+      "sarah": "High usage for meeting notes and strategic planning",
+      "marcus": "Moderate usage for technical task breakdown",
+      "elena": "High usage for project planning and coordination",
+      "james": "High usage for client communication parsing",
+      "aisha": "Moderate usage for study planning and assignments"
+    },
+    "insights_requests": {
+      "sarah": ["productivity trends", "goal progress", "time allocation"],
+      "marcus": ["code review patterns", "learning progress", "deep work metrics"],
+      "elena": ["team coordination", "project health", "resource allocation"],
+      "james": ["client profitability", "project efficiency", "work-life balance"],
+      "aisha": ["study effectiveness", "habit consistency", "assignment deadlines"]
+    }
+  },
+  "sample_queries": {
+    "sarah": [
+      "Show me my quarterly goal progress",
+      "What are my productivity trends this month?",
+      "Create a task to review budget proposals next week"
+    ],
+    "marcus": [
+      "Analyze my deep work patterns",
+      "Track time for React component development",
+      "Show me my learning progress on TypeScript"
+    ],
+    "elena": [
+      "Create sprint planning tasks for next week",
+      "Show team coordination metrics",
+      "Analyze project delivery timelines"
+    ],
+    "james": [
+      "Track billable hours for Client ABC",
+      "Show client profitability analysis",
+      "Create marketing campaign tasks"
+    ],
+    "aisha": [
+      "Plan study schedule for midterm exams",
+      "Track research paper progress",
+      "Show my habit consistency this month"
+    ]
+  }
+}

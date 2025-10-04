@@ -8,7 +8,7 @@ import {
   ProjectTemplate,
   CreateTemplateInput,
   UpdateTemplateInput,
-  CreateProjectInput
+  CreateProjectInput,
 } from "@/types/projects";
 import { useAuth } from "@/contexts/AuthContext";
 import { projectKeys } from "./useProjects";
@@ -18,11 +18,11 @@ import { projectKeys } from "./useProjects";
 // =====================================================
 
 export const templateKeys = {
-  all: ['project-templates'] as const,
-  lists: () => [...templateKeys.all, 'list'] as const,
+  all: ["project-templates"] as const,
+  lists: () => [...templateKeys.all, "list"] as const,
   list: (category?: string, isPublic?: boolean) =>
     [...templateKeys.lists(), category, isPublic] as const,
-  detail: (id: string) => [...templateKeys.all, 'detail', id] as const,
+  detail: (id: string) => [...templateKeys.all, "detail", id] as const,
 };
 
 // =====================================================
@@ -32,42 +32,47 @@ export const templateKeys = {
 /**
  * Get all project templates with optional filtering
  */
-export function useProjectTemplates(category?: string, includePublic: boolean = true) {
+export function useProjectTemplates(
+  category?: string,
+  includePublic: boolean = true,
+) {
   const { user } = useAuth();
 
   return useQuery({
     queryKey: templateKeys.list(category, includePublic),
     queryFn: async () => {
       let query = supabase
-        .from('project_templates')
-        .select(`
+        .from("project_templates")
+        .select(
+          `
           *,
           created_by_profile:profiles(id, full_name, avatar_url)
-        `)
-        .order('usage_count', { ascending: false });
+        `,
+        )
+        .order("usage_count", { ascending: false });
 
       // Filter by category if provided
       if (category) {
-        query = query.eq('category', category);
+        query = query.eq("category", category);
       }
 
       // Include public templates and user's own templates
       if (includePublic && user?.id) {
         query = query.or(`is_public.eq.true,created_by.eq.${user.id}`);
       } else if (user?.id) {
-        query = query.eq('created_by', user.id);
+        query = query.eq("created_by", user.id);
       } else if (includePublic) {
-        query = query.eq('is_public', true);
+        query = query.eq("is_public", true);
       }
 
       const { data, error } = await query;
 
       if (error) throw error;
-      return (data || []).map(template => ({
+      return (data || []).map((template) => ({
         ...template,
         default_milestones: template.default_milestones as any,
         default_tasks: template.default_tasks as any,
-        template_data: template.template_data as any
+        template_data: template.template_data as any,
       })) as ProjectTemplate[];
     },
     enabled: !!user || includePublic,
@@ -82,12 +87,14 @@ export function useProjectTemplate(templateId: string) {
     queryKey: templateKeys.detail(templateId),
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('project_templates')
-        .select(`
+        .from("project_templates")
+        .select(
+          `
           *,
           created_by_profile:profiles(id, full_name, avatar_url)
-        `)
-        .eq('id', templateId)
+        `,
+        )
+        .eq("id", templateId)
         .single();
 
       if (error) throw error;
@@ -95,7 +102,7 @@ export function useProjectTemplate(templateId: string) {
         ...data,
         default_milestones: data.default_milestones as any,
         default_tasks: data.default_tasks as any,
-        template_data: data.template_data as any
+        template_data: data.template_data as any,
       } as ProjectTemplate;
     },
     enabled: !!templateId,
@@ -107,26 +114,29 @@ export function useProjectTemplate(templateId: string) {
  */
 export function useTemplateCategories() {
   return useQuery({
-    queryKey: [...templateKeys.all, 'categories'],
+    queryKey: [...templateKeys.all, "categories"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('project_templates')
-        .select('category')
-        .eq('is_public', true);
+        .from("project_templates")
+        .select("category")
+        .eq("is_public", true);
 
       if (error) throw error;
 
       // Count templates by category
-      const categoryCounts = (data || []).reduce((acc, template) => {
-        const category = template.category || 'general';
-        acc[category] = (acc[category] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const categoryCounts = (data || []).reduce(
+        (acc, template) => {
+          const category = template.category || "general";
+          acc[category] = (acc[category] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
       return Object.entries(categoryCounts).map(([category, count]) => ({
         category,
         count,
-        label: category.charAt(0).toUpperCase() + category.slice(1)
+        label: category.charAt(0).toUpperCase() + category.slice(1),
       }));
     },
   });
@@ -151,7 +161,7 @@ export function useCreateTemplate() {
       };
 
       const { data, error } = await supabase
-        .from('project_templates')
+        .from("project_templates")
         .insert(templateData)
         .select()
         .single();
@@ -165,7 +175,7 @@ export function useCreateTemplate() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to create template");
-      console.error('Create template error:', error);
+      console.error("Create template error:", error);
     },
   });
 }
@@ -177,11 +187,14 @@ export function useUpdateTemplate() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, ...input }: UpdateTemplateInput & { id: string }) => {
+    mutationFn: async ({
+      id,
+      ...input
+    }: UpdateTemplateInput & { id: string }) => {
       const { data, error } = await supabase
-        .from('project_templates')
+        .from("project_templates")
         .update(input)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -190,12 +203,14 @@ export function useUpdateTemplate() {
     },
     onSuccess: (template) => {
       queryClient.invalidateQueries({ queryKey: templateKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: templateKeys.detail(template.id) });
+      queryClient.invalidateQueries({
+        queryKey: templateKeys.detail(template.id),
+      });
       toast.success("Template updated successfully!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to update template");
-      console.error('Update template error:', error);
+      console.error("Update template error:", error);
     },
   });
 }
@@ -209,9 +224,9 @@ export function useDeleteTemplate() {
   return useMutation({
     mutationFn: async (templateId: string) => {
       const { error } = await supabase
-        .from('project_templates')
+        .from("project_templates")
         .delete()
-        .eq('id', templateId);
+        .eq("id", templateId);
 
       if (error) throw error;
       return templateId;
@@ -223,7 +238,7 @@ export function useDeleteTemplate() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to delete template");
-      console.error('Delete template error:', error);
+      console.error("Delete template error:", error);
     },
   });
 }
@@ -238,33 +253,36 @@ export function useCreateProjectFromTemplate() {
   return useMutation({
     mutationFn: async ({
       templateId,
-      projectData
+      projectData,
     }: {
       templateId: string;
-      projectData: Partial<CreateProjectInput>
+      projectData: Partial<CreateProjectInput>;
     }) => {
       // Get template data
       const { data: template, error: templateError } = await supabase
-        .from('project_templates')
-        .select('*')
-        .eq('id', templateId)
+        .from("project_templates")
+        .select("*")
+        .eq("id", templateId)
         .single();
 
       if (templateError) throw templateError;
 
       // Create project with template data
-      const templateDataObj = typeof template.template_data === 'object' ? template.template_data : {};
+      const templateDataObj =
+        typeof template.template_data === "object"
+          ? template.template_data
+          : {};
       const projectInput: CreateProjectInput = {
         workspace_id: projectData.workspace_id!,
         title: projectData.title || template.title,
-        description: projectData.description || template.description || '',
+        description: projectData.description || template.description || "",
         ...(templateDataObj as any),
         ...projectData, // Override with provided data
         template_id: templateId,
       };
 
       const { data: project, error: projectError } = await supabase
-        .from('projects')
+        .from("projects")
         .insert({
           ...projectInput,
           created_by: user?.id,
@@ -275,34 +293,43 @@ export function useCreateProjectFromTemplate() {
       if (projectError) throw projectError;
 
       // Create milestones from template
-      const milestones = Array.isArray(template.default_milestones) ? template.default_milestones : [];
+      const milestones = Array.isArray(template.default_milestones)
+        ? template.default_milestones
+        : [];
       if (milestones && milestones.length > 0) {
-        const milestoneData = milestones.map((milestone: any, index: number) => ({
-          project_id: project.id,
-          title: milestone.title,
-          description: milestone.description,
-          position: milestone.position || index,
-          // Calculate due date based on project start date and estimated days
-          due_date: projectData.start_date && milestone.estimated_days
-            ? new Date(
-                new Date(projectData.start_date).getTime() +
-                milestone.estimated_days * 24 * 60 * 60 * 1000
-              ).toISOString().split('T')[0]
-            : null,
-        }));
+        const milestoneData = milestones.map(
+          (milestone: any, index: number) => ({
+            project_id: project.id,
+            title: milestone.title,
+            description: milestone.description,
+            position: milestone.position || index,
+            // Calculate due date based on project start date and estimated days
+            due_date:
+              projectData.start_date && milestone.estimated_days
+                ? new Date(
+                    new Date(projectData.start_date).getTime() +
+                      milestone.estimated_days * 24 * 60 * 60 * 1000,
+                  )
+                    .toISOString()
+                    .split("T")[0]
+                : null,
+          }),
+        );
 
         const { error: milestonesError } = await supabase
-          .from('project_milestones')
+          .from("project_milestones")
           .insert(milestoneData);
 
         if (milestonesError) {
-          console.error('Failed to create milestones:', milestonesError);
+          console.error("Failed to create milestones:", milestonesError);
           // Don't throw error here as project is already created
         }
       }
 
       // Create tasks from template
-      const tasks = Array.isArray(template.default_tasks) ? template.default_tasks : [];
+      const tasks = Array.isArray(template.default_tasks)
+        ? template.default_tasks
+        : [];
       if (tasks && tasks.length > 0) {
         const taskData = tasks.map((task: any, index: number) => ({
           workspace_id: projectData.workspace_id!,
@@ -317,33 +344,37 @@ export function useCreateProjectFromTemplate() {
         }));
 
         const { error: tasksError } = await supabase
-          .from('tasks')
+          .from("tasks")
           .insert(taskData);
 
         if (tasksError) {
-          console.error('Failed to create tasks:', tasksError);
+          console.error("Failed to create tasks:", tasksError);
           // Don't throw error here as project is already created
         }
       }
 
       // Increment template usage count
       await supabase
-        .from('project_templates')
+        .from("project_templates")
         .update({ usage_count: template.usage_count + 1 })
-        .eq('id', templateId);
+        .eq("id", templateId);
 
       return project;
     },
     onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: projectKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: projectKeys.analytics(project.workspace_id) });
-      queryClient.invalidateQueries({ queryKey: projectKeys.dashboard(project.workspace_id) });
+      queryClient.invalidateQueries({
+        queryKey: projectKeys.analytics(project.workspace_id),
+      });
+      queryClient.invalidateQueries({
+        queryKey: projectKeys.dashboard(project.workspace_id),
+      });
       queryClient.invalidateQueries({ queryKey: templateKeys.lists() });
       toast.success("Project created from template successfully!");
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to create project from template");
-      console.error('Create project from template error:', error);
+      console.error("Create project from template error:", error);
     },
   });
 }
@@ -358,20 +389,22 @@ export function useSaveProjectAsTemplate() {
   return useMutation({
     mutationFn: async ({
       projectId,
-      templateData
+      templateData,
     }: {
       projectId: string;
-      templateData: Omit<CreateTemplateInput, 'template_data'>
+      templateData: Omit<CreateTemplateInput, "template_data">;
     }) => {
       // Get project data
       const { data: project, error: projectError } = await supabase
-        .from('projects')
-        .select(`
+        .from("projects")
+        .select(
+          `
           *,
           milestones:project_milestones(title, description, position),
           tasks:tasks(title, description, priority, estimated_hours)
-        `)
-        .eq('id', projectId)
+        `,
+        )
+        .eq("id", projectId)
         .single();
 
       if (projectError) throw projectError;
@@ -386,21 +419,23 @@ export function useSaveProjectAsTemplate() {
           default_color: project.color,
           default_icon: project.icon,
         },
-        default_milestones: project.milestones?.map((m: any) => ({
-          title: m.title,
-          description: m.description,
-          position: m.position,
-        })) || [],
-        default_tasks: project.tasks?.map((t: any) => ({
-          title: t.title,
-          description: t.description,
-          priority: t.priority,
-          estimated_hours: t.estimated_hours,
-        })) || [],
+        default_milestones:
+          project.milestones?.map((m: any) => ({
+            title: m.title,
+            description: m.description,
+            position: m.position,
+          })) || [],
+        default_tasks:
+          project.tasks?.map((t: any) => ({
+            title: t.title,
+            description: t.description,
+            priority: t.priority,
+            estimated_hours: t.estimated_hours,
+          })) || [],
       };
 
       const { data, error } = await supabase
-        .from('project_templates')
+        .from("project_templates")
         .insert({
           ...template,
           created_by: user?.id,
@@ -417,7 +452,7 @@ export function useSaveProjectAsTemplate() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to save project as template");
-      console.error('Save project as template error:', error);
+      console.error("Save project as template error:", error);
     },
   });
 }

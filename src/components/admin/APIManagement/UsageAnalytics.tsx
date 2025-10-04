@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   LineChart,
   Line,
@@ -18,8 +24,8 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
-} from 'recharts';
+  Cell,
+} from "recharts";
 import {
   BarChart3,
   TrendingUp,
@@ -29,34 +35,44 @@ import {
   Clock,
   AlertCircle,
   Download,
-  RefreshCw
-} from 'lucide-react';
-import { useSystemAIUsageStats, useAIUsageLimits, useRecentAIActivity } from '@/hooks/useAIUsageStats';
-import { PROVIDER_LABELS } from '@/types/api-management';
-import { Skeleton } from '@/components/ui/skeleton';
+  RefreshCw,
+} from "lucide-react";
+import {
+  useSystemAIUsageStats,
+  useAIUsageLimits,
+  useRecentAIActivity,
+} from "@/hooks/useAIUsageStats";
+import { PROVIDER_LABELS } from "@/types/api-management";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const UsageAnalytics: React.FC = () => {
   const [timeRange, setTimeRange] = useState(30);
 
-  const { data: systemStats, isLoading: statsLoading, refetch: refetchStats } = useSystemAIUsageStats(timeRange);
+  const {
+    data: systemStats,
+    isLoading: statsLoading,
+    refetch: refetchStats,
+  } = useSystemAIUsageStats(timeRange);
   const { data: limitsData, isLoading: limitsLoading } = useAIUsageLimits();
-  const { data: recentActivity, isLoading: activityLoading } = useRecentAIActivity(20);
+  const { data: recentActivity, isLoading: activityLoading } =
+    useRecentAIActivity(20);
 
   const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
   const formatNumber = (num: number) => num.toLocaleString();
 
   const getProviderBadgeColor = (provider: string) => {
     const colors = {
-      openai: 'bg-green-100 text-green-800',
-      claude: 'bg-blue-100 text-blue-800',
-      gemini: 'bg-purple-100 text-purple-800',
-      lovable: 'bg-orange-100 text-orange-800',
-      custom: 'bg-gray-100 text-gray-800',
+      openai: "bg-green-100 text-green-800",
+      claude: "bg-blue-100 text-blue-800",
+      gemini: "bg-purple-100 text-purple-800",
+      lovable: "bg-orange-100 text-orange-800",
+      custom: "bg-gray-100 text-gray-800",
     };
     return colors[provider as keyof typeof colors] || colors.custom;
   };
 
-  const alertsCount = limitsData?.filter(limit => limit.warnings?.length > 0).length || 0;
+  const alertsCount =
+    limitsData?.filter((limit) => limit.warnings?.length > 0).length || 0;
 
   return (
     <div className="space-y-6">
@@ -65,7 +81,8 @@ export const UsageAnalytics: React.FC = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Usage Analytics</h2>
           <p className="text-gray-600 mt-1">
-            Real-time analytics and monitoring for AI service usage across the platform
+            Real-time analytics and monitoring for AI service usage across the
+            platform
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -95,17 +112,19 @@ export const UsageAnalytics: React.FC = () => {
                     total_cost: systemStats.total_cost,
                     unique_users: systemStats.unique_users,
                     success_rate: systemStats.success_rate,
-                    total_tokens: systemStats.total_tokens
+                    total_tokens: systemStats.total_tokens,
                   },
                   by_provider: systemStats.by_provider,
-                  daily_breakdown: systemStats.daily_breakdown
+                  daily_breakdown: systemStats.daily_breakdown,
                 };
 
-                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                  type: "application/json",
+                });
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
+                const a = document.createElement("a");
                 a.href = url;
-                a.download = `ai-usage-analytics-${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `ai-usage-analytics-${new Date().toISOString().split("T")[0]}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -127,10 +146,12 @@ export const UsageAnalytics: React.FC = () => {
               <AlertCircle className="h-5 w-5 text-amber-600" />
               <div>
                 <p className="text-amber-800 font-medium">
-                  {alertsCount} API key{alertsCount > 1 ? 's' : ''} approaching limits
+                  {alertsCount} API key{alertsCount > 1 ? "s" : ""} approaching
+                  limits
                 </p>
                 <p className="text-amber-700 text-sm">
-                  Some API keys are nearing their usage limits. Review the limits tab for details.
+                  Some API keys are nearing their usage limits. Review the
+                  limits tab for details.
                 </p>
               </div>
             </div>
@@ -142,7 +163,9 @@ export const UsageAnalytics: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Requests</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Requests
+            </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -191,9 +214,7 @@ export const UsageAnalytics: React.FC = () => {
                 {formatNumber(systemStats?.unique_users || 0)}
               </div>
             )}
-            <p className="text-xs text-muted-foreground">
-              Unique users
-            </p>
+            <p className="text-xs text-muted-foreground">Unique users</p>
           </CardContent>
         </Card>
 
@@ -229,9 +250,7 @@ export const UsageAnalytics: React.FC = () => {
                 {formatNumber(systemStats?.total_tokens || 0)}
               </div>
             )}
-            <p className="text-xs text-muted-foreground">
-              Total tokens
-            </p>
+            <p className="text-xs text-muted-foreground">Total tokens</p>
           </CardContent>
         </Card>
       </div>
@@ -262,20 +281,34 @@ export const UsageAnalytics: React.FC = () => {
                       <Skeleton className="h-4 w-1/2" />
                     </div>
                   </div>
-                ) : systemStats?.daily_breakdown && systemStats.daily_breakdown.length > 0 ? (
+                ) : systemStats?.daily_breakdown &&
+                  systemStats.daily_breakdown.length > 0 ? (
                   <ResponsiveContainer width="100%" height={240}>
                     <AreaChart data={systemStats.daily_breakdown}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis
                         dataKey="date"
-                        tickFormatter={(date) => new Date(date).toLocaleDateString('en', { month: 'short', day: 'numeric' })}
+                        tickFormatter={(date) =>
+                          new Date(date).toLocaleDateString("en", {
+                            month: "short",
+                            day: "numeric",
+                          })
+                        }
                       />
                       <YAxis />
                       <Tooltip
-                        labelFormatter={(date) => new Date(date).toLocaleDateString()}
+                        labelFormatter={(date) =>
+                          new Date(date).toLocaleDateString()
+                        }
                         formatter={(value: number, name: string) => [
-                          name === 'cost' ? formatCurrency(value) : formatNumber(value),
-                          name === 'cost' ? 'Cost' : name === 'requests' ? 'Requests' : 'Tokens'
+                          name === "cost"
+                            ? formatCurrency(value)
+                            : formatNumber(value),
+                          name === "cost"
+                            ? "Cost"
+                            : name === "requests"
+                              ? "Requests"
+                              : "Tokens",
                         ]}
                       />
                       <Legend />
@@ -305,7 +338,9 @@ export const UsageAnalytics: React.FC = () => {
                     <div className="text-center">
                       <BarChart3 className="h-12 w-12 mx-auto mb-4" />
                       <p>No usage data available</p>
-                      <p className="text-sm">Data will appear when AI services are used</p>
+                      <p className="text-sm">
+                        Data will appear when AI services are used
+                      </p>
                     </div>
                   </div>
                 )}
@@ -357,29 +392,58 @@ export const UsageAnalytics: React.FC = () => {
                 <div className="h-64 flex items-center justify-center">
                   <Skeleton className="h-32 w-32 rounded-full" />
                 </div>
-              ) : systemStats?.by_provider && Object.keys(systemStats.by_provider).length > 0 ? (
+              ) : systemStats?.by_provider &&
+                Object.keys(systemStats.by_provider).length > 0 ? (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
-                      data={Object.entries(systemStats.by_provider).map(([provider, stats], index) => ({
-                        name: PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS] || provider,
-                        value: (stats as any).cost || 0,
-                        provider: provider,
-                        color: ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#6b7280'][index % 5]
-                      }))}
+                      data={Object.entries(systemStats.by_provider).map(
+                        ([provider, stats], index) => ({
+                          name:
+                            PROVIDER_LABELS[
+                              provider as keyof typeof PROVIDER_LABELS
+                            ] || provider,
+                          value: (stats as any).cost || 0,
+                          provider: provider,
+                          color: [
+                            "#3b82f6",
+                            "#10b981",
+                            "#8b5cf6",
+                            "#f59e0b",
+                            "#6b7280",
+                          ][index % 5],
+                        }),
+                      )}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
                     >
-                      {Object.entries(systemStats.by_provider).map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#6b7280'][index % 5]} />
-                      ))}
+                      {Object.entries(systemStats.by_provider).map(
+                        (_, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={
+                              [
+                                "#3b82f6",
+                                "#10b981",
+                                "#8b5cf6",
+                                "#f59e0b",
+                                "#6b7280",
+                              ][index % 5]
+                            }
+                          />
+                        ),
+                      )}
                     </Pie>
-                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Tooltip
+                      formatter={(value: number) => formatCurrency(value)}
+                    />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>
@@ -395,62 +459,72 @@ export const UsageAnalytics: React.FC = () => {
           </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {statsLoading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <Card key={i}>
-                  <CardHeader>
-                    <Skeleton className="h-6 w-24" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <Skeleton className="h-8 w-20" />
-                      <Skeleton className="h-4 w-32" />
-                      <Skeleton className="h-4 w-28" />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              Object.entries(systemStats?.by_provider || {}).map(([provider, providerStats]) => {
-                const stats = providerStats as any;
-                return (
-                  <Card key={provider}>
-                    <CardHeader className="pb-2">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">
-                          {PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS]}
-                        </CardTitle>
-                        <Badge className={getProviderBadgeColor(provider)}>
-                          {provider}
-                        </Badge>
-                      </div>
+            {statsLoading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <Card key={i}>
+                    <CardHeader>
+                      <Skeleton className="h-6 w-24" />
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-2xl font-bold">{formatCurrency(stats.cost)}</p>
-                          <p className="text-sm text-gray-500">Total Cost</p>
-                        </div>
-                        <div>
-                          <p className="text-2xl font-bold">{formatNumber(stats.requests)}</p>
-                          <p className="text-sm text-gray-500">Requests</p>
-                        </div>
-                      </div>
+                    <CardContent>
                       <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Tokens:</span>
-                          <span>{formatNumber(stats.tokens)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span>Users:</span>
-                          <span>{formatNumber(stats.users)}</span>
-                        </div>
+                        <Skeleton className="h-8 w-20" />
+                        <Skeleton className="h-4 w-32" />
+                        <Skeleton className="h-4 w-28" />
                       </div>
                     </CardContent>
                   </Card>
-                );
-              })
-            )}
+                ))
+              : Object.entries(systemStats?.by_provider || {}).map(
+                  ([provider, providerStats]) => {
+                    const stats = providerStats as any;
+                    return (
+                      <Card key={provider}>
+                        <CardHeader className="pb-2">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-lg">
+                              {
+                                PROVIDER_LABELS[
+                                  provider as keyof typeof PROVIDER_LABELS
+                                ]
+                              }
+                            </CardTitle>
+                            <Badge className={getProviderBadgeColor(provider)}>
+                              {provider}
+                            </Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-2xl font-bold">
+                                {formatCurrency(stats.cost)}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                Total Cost
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-2xl font-bold">
+                                {formatNumber(stats.requests)}
+                              </p>
+                              <p className="text-sm text-gray-500">Requests</p>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span>Tokens:</span>
+                              <span>{formatNumber(stats.tokens)}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span>Users:</span>
+                              <span>{formatNumber(stats.users)}</span>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  },
+                )}
           </div>
         </TabsContent>
 
@@ -469,7 +543,10 @@ export const UsageAnalytics: React.FC = () => {
               <div className="space-y-3">
                 {activityLoading ? (
                   Array.from({ length: 10 }).map((_, i) => (
-                    <div key={i} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                    <div
+                      key={i}
+                      className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
+                    >
                       <Skeleton className="h-8 w-8 rounded" />
                       <div className="flex-1 space-y-2">
                         <Skeleton className="h-4 w-[200px]" />
@@ -480,23 +557,31 @@ export const UsageAnalytics: React.FC = () => {
                   ))
                 ) : recentActivity && recentActivity.length > 0 ? (
                   recentActivity.map((activity) => (
-                    <div key={activity.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                      <Badge className={getProviderBadgeColor(activity.provider)}>
+                    <div
+                      key={activity.id}
+                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                    >
+                      <Badge
+                        className={getProviderBadgeColor(activity.provider)}
+                      >
                         {activity.provider}
                       </Badge>
                       <div className="flex-1">
                         <p className="text-sm font-medium">
-                          {(activity.request_metadata as any)?.request_type || 'AI Request'}
+                          {(activity.request_metadata as any)?.request_type ||
+                            "AI Request"}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {activity.profiles?.full_name || activity.profiles?.email || 'Unknown User'} •
-                          {formatCurrency(activity.estimated_cost)} •
+                          {activity.profiles?.full_name ||
+                            activity.profiles?.email ||
+                            "Unknown User"}{" "}
+                          •{formatCurrency(activity.estimated_cost)} •
                           {formatNumber(activity.tokens_total)} tokens
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">
-                          {activity.success ? '✅' : '❌'}
+                          {activity.success ? "✅" : "❌"}
                         </p>
                         <p className="text-xs text-gray-500">
                           {new Date(activity.requested_at).toLocaleTimeString()}
@@ -534,10 +619,17 @@ export const UsageAnalytics: React.FC = () => {
               ))
             ) : limitsData && limitsData.length > 0 ? (
               limitsData.map((limit) => (
-                <Card key={limit.api_key_id} className={limit.warnings?.length > 0 ? 'border-amber-200' : ''}>
+                <Card
+                  key={limit.api_key_id}
+                  className={
+                    limit.warnings?.length > 0 ? "border-amber-200" : ""
+                  }
+                >
                   <CardHeader>
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{limit.key_name}</CardTitle>
+                      <CardTitle className="text-lg">
+                        {limit.key_name}
+                      </CardTitle>
                       <Badge className={getProviderBadgeColor(limit.provider)}>
                         {limit.provider}
                       </Badge>
@@ -553,10 +645,15 @@ export const UsageAnalytics: React.FC = () => {
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full ${
-                              (limit.cost_usage_percent || 0) > 90 ? 'bg-red-500' :
-                              (limit.cost_usage_percent || 0) > 75 ? 'bg-amber-500' : 'bg-green-500'
+                              (limit.cost_usage_percent || 0) > 90
+                                ? "bg-red-500"
+                                : (limit.cost_usage_percent || 0) > 75
+                                  ? "bg-amber-500"
+                                  : "bg-green-500"
                             }`}
-                            style={{ width: `${Math.min(limit.cost_usage_percent || 0, 100)}%` }}
+                            style={{
+                              width: `${Math.min(limit.cost_usage_percent || 0, 100)}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -564,15 +661,22 @@ export const UsageAnalytics: React.FC = () => {
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Daily Requests</span>
-                          <span>{limit.request_usage_percent?.toFixed(1)}%</span>
+                          <span>
+                            {limit.request_usage_percent?.toFixed(1)}%
+                          </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full ${
-                              (limit.request_usage_percent || 0) > 90 ? 'bg-red-500' :
-                              (limit.request_usage_percent || 0) > 75 ? 'bg-amber-500' : 'bg-green-500'
+                              (limit.request_usage_percent || 0) > 90
+                                ? "bg-red-500"
+                                : (limit.request_usage_percent || 0) > 75
+                                  ? "bg-amber-500"
+                                  : "bg-green-500"
                             }`}
-                            style={{ width: `${Math.min(limit.request_usage_percent || 0, 100)}%` }}
+                            style={{
+                              width: `${Math.min(limit.request_usage_percent || 0, 100)}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -585,10 +689,15 @@ export const UsageAnalytics: React.FC = () => {
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full ${
-                              (limit.token_usage_percent || 0) > 90 ? 'bg-red-500' :
-                              (limit.token_usage_percent || 0) > 75 ? 'bg-amber-500' : 'bg-green-500'
+                              (limit.token_usage_percent || 0) > 90
+                                ? "bg-red-500"
+                                : (limit.token_usage_percent || 0) > 75
+                                  ? "bg-amber-500"
+                                  : "bg-green-500"
                             }`}
-                            style={{ width: `${Math.min(limit.token_usage_percent || 0, 100)}%` }}
+                            style={{
+                              width: `${Math.min(limit.token_usage_percent || 0, 100)}%`,
+                            }}
                           />
                         </div>
                       </div>
@@ -599,7 +708,9 @@ export const UsageAnalytics: React.FC = () => {
                         <div className="flex items-start gap-2">
                           <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5" />
                           <div>
-                            <p className="text-sm font-medium text-amber-800">Warnings</p>
+                            <p className="text-sm font-medium text-amber-800">
+                              Warnings
+                            </p>
                             <ul className="text-sm text-amber-700 mt-1">
                               {limit.warnings.map((warning, idx) => (
                                 <li key={idx}>• {warning}</li>

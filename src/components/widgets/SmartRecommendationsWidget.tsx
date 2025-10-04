@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Brain,
   Lightbulb,
@@ -13,16 +19,16 @@ import {
   TrendingUp,
   Calendar,
   ExternalLink,
-  Sparkles
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Sparkles,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface SmartRecommendation {
   id: string;
   title: string;
   description: string;
-  type: 'productivity' | 'wellness' | 'learning' | 'optimization';
-  priority: 'high' | 'medium' | 'low';
+  type: "productivity" | "wellness" | "learning" | "optimization";
+  priority: "high" | "medium" | "low";
   confidence: number;
   timeToImplement: number; // in minutes
   potentialImpact: string;
@@ -31,7 +37,9 @@ interface SmartRecommendation {
 }
 
 export const SmartRecommendationsWidget: React.FC = () => {
-  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>(
+    [],
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,53 +47,61 @@ export const SmartRecommendationsWidget: React.FC = () => {
     // Mock recommendations with rotation
     const mockRecommendations: SmartRecommendation[] = [
       {
-        id: 'rec_1',
-        title: 'Schedule deep work block',
-        description: 'Block 2 hours for focused work during your peak productivity time (9-11 AM)',
-        type: 'productivity',
-        priority: 'high',
+        id: "rec_1",
+        title: "Schedule deep work block",
+        description:
+          "Block 2 hours for focused work during your peak productivity time (9-11 AM)",
+        type: "productivity",
+        priority: "high",
         confidence: 0.89,
         timeToImplement: 2,
-        potentialImpact: '+25% productivity',
-        reasoning: 'Analysis shows you complete 73% more tasks during morning hours',
-        icon: Target
+        potentialImpact: "+25% productivity",
+        reasoning:
+          "Analysis shows you complete 73% more tasks during morning hours",
+        icon: Target,
       },
       {
-        id: 'rec_2',
-        title: 'Take a 15-minute break',
-        description: 'You\'ve been working for 90 minutes. A short break will boost your focus.',
-        type: 'wellness',
-        priority: 'medium',
+        id: "rec_2",
+        title: "Take a 15-minute break",
+        description:
+          "You've been working for 90 minutes. A short break will boost your focus.",
+        type: "wellness",
+        priority: "medium",
         confidence: 0.92,
         timeToImplement: 15,
-        potentialImpact: '+15% focus',
-        reasoning: 'Regular breaks improve sustained attention and prevent burnout',
-        icon: Clock
+        potentialImpact: "+15% focus",
+        reasoning:
+          "Regular breaks improve sustained attention and prevent burnout",
+        icon: Clock,
       },
       {
-        id: 'rec_3',
-        title: 'Review weekly goals',
-        description: 'Spend 10 minutes reviewing and adjusting your weekly objectives',
-        type: 'optimization',
-        priority: 'medium',
+        id: "rec_3",
+        title: "Review weekly goals",
+        description:
+          "Spend 10 minutes reviewing and adjusting your weekly objectives",
+        type: "optimization",
+        priority: "medium",
         confidence: 0.76,
         timeToImplement: 10,
-        potentialImpact: '+18% goal completion',
-        reasoning: 'Weekly reviews correlate with 40% higher goal achievement rates',
-        icon: Calendar
+        potentialImpact: "+18% goal completion",
+        reasoning:
+          "Weekly reviews correlate with 40% higher goal achievement rates",
+        icon: Calendar,
       },
       {
-        id: 'rec_4',
-        title: 'Learn time estimation',
-        description: 'Practice breaking down tasks into smaller, more estimatable chunks',
-        type: 'learning',
-        priority: 'low',
+        id: "rec_4",
+        title: "Learn time estimation",
+        description:
+          "Practice breaking down tasks into smaller, more estimatable chunks",
+        type: "learning",
+        priority: "low",
         confidence: 0.84,
         timeToImplement: 20,
-        potentialImpact: '+30% accuracy',
-        reasoning: 'Your estimation accuracy could improve by practicing decomposition techniques',
-        icon: TrendingUp
-      }
+        potentialImpact: "+30% accuracy",
+        reasoning:
+          "Your estimation accuracy could improve by practicing decomposition techniques",
+        icon: TrendingUp,
+      },
     ];
 
     setRecommendations(mockRecommendations);
@@ -102,17 +118,17 @@ export const SmartRecommendationsWidget: React.FC = () => {
   const currentRec = recommendations[currentIndex];
 
   const handleImplement = (recId: string) => {
-    console.log('Implementing recommendation:', recId);
+    console.log("Implementing recommendation:", recId);
     // Here you would implement the recommendation logic
-    setRecommendations(prev => prev.filter(r => r.id !== recId));
+    setRecommendations((prev) => prev.filter((r) => r.id !== recId));
     if (currentIndex >= recommendations.length - 1) {
       setCurrentIndex(0);
     }
   };
 
   const handleDismiss = (recId: string) => {
-    console.log('Dismissing recommendation:', recId);
-    setRecommendations(prev => prev.filter(r => r.id !== recId));
+    console.log("Dismissing recommendation:", recId);
+    setRecommendations((prev) => prev.filter((r) => r.id !== recId));
     if (currentIndex >= recommendations.length - 1) {
       setCurrentIndex(0);
     }
@@ -120,20 +136,29 @@ export const SmartRecommendationsWidget: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-blue-100 text-blue-800 border-blue-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "low":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'productivity': return Target;
-      case 'wellness': return Clock;
-      case 'learning': return Lightbulb;
-      case 'optimization': return TrendingUp;
-      default: return Sparkles;
+      case "productivity":
+        return Target;
+      case "wellness":
+        return Clock;
+      case "learning":
+        return Lightbulb;
+      case "optimization":
+        return TrendingUp;
+      default:
+        return Sparkles;
     }
   };
 
@@ -155,12 +180,16 @@ export const SmartRecommendationsWidget: React.FC = () => {
               >
                 <Brain className="h-8 w-8 text-purple-600 mx-auto mb-2" />
               </motion.div>
-              <p className="text-sm text-muted-foreground">Analyzing your patterns...</p>
+              <p className="text-sm text-muted-foreground">
+                Analyzing your patterns...
+              </p>
             </div>
           ) : (
             <div className="text-center">
               <Lightbulb className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No recommendations available</p>
+              <p className="text-sm text-muted-foreground">
+                No recommendations available
+              </p>
             </div>
           )}
         </CardContent>
@@ -221,15 +250,21 @@ export const SmartRecommendationsWidget: React.FC = () => {
               {/* Metrics */}
               <div className="grid grid-cols-3 gap-2 text-center text-xs">
                 <div>
-                  <div className="font-medium">{Math.round(currentRec.confidence * 100)}%</div>
+                  <div className="font-medium">
+                    {Math.round(currentRec.confidence * 100)}%
+                  </div>
                   <div className="text-muted-foreground">Confidence</div>
                 </div>
                 <div>
-                  <div className="font-medium">{currentRec.timeToImplement}m</div>
+                  <div className="font-medium">
+                    {currentRec.timeToImplement}m
+                  </div>
                   <div className="text-muted-foreground">Time</div>
                 </div>
                 <div>
-                  <div className="font-medium text-green-600">{currentRec.potentialImpact}</div>
+                  <div className="font-medium text-green-600">
+                    {currentRec.potentialImpact}
+                  </div>
                   <div className="text-muted-foreground">Impact</div>
                 </div>
               </div>
@@ -269,7 +304,7 @@ export const SmartRecommendationsWidget: React.FC = () => {
                   <motion.button
                     key={index}
                     className={`h-2 w-2 rounded-full transition-colors ${
-                      index === currentIndex ? 'bg-purple-600' : 'bg-gray-300'
+                      index === currentIndex ? "bg-purple-600" : "bg-gray-300"
                     }`}
                     onClick={() => setCurrentIndex(index)}
                     whileHover={{ scale: 1.2 }}

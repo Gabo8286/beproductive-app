@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, X } from 'lucide-react';
-import { useCreateSubtask } from '@/hooks/useSubtasks';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, X } from "lucide-react";
+import { useCreateSubtask } from "@/hooks/useSubtasks";
 
 interface SubtaskCreatorProps {
   parentId: string;
@@ -10,7 +10,7 @@ interface SubtaskCreatorProps {
 
 export function SubtaskCreator({ parentId }: SubtaskCreatorProps) {
   const [isCreating, setIsCreating] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const createSubtask = useCreateSubtask();
 
   const handleCreate = async () => {
@@ -20,22 +20,22 @@ export function SubtaskCreator({ parentId }: SubtaskCreatorProps) {
       parentId,
       taskData: {
         title: title.trim(),
-        status: 'todo',
-        priority: 'medium',
+        status: "todo",
+        priority: "medium",
         tags: [],
       },
     });
 
-    setTitle('');
+    setTitle("");
     setIsCreating(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleCreate();
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       setIsCreating(false);
-      setTitle('');
+      setTitle("");
     }
   };
 
@@ -75,7 +75,7 @@ export function SubtaskCreator({ parentId }: SubtaskCreatorProps) {
         variant="ghost"
         onClick={() => {
           setIsCreating(false);
-          setTitle('');
+          setTitle("");
         }}
       >
         <X className="h-4 w-4" />

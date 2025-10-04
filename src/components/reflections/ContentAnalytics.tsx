@@ -9,7 +9,9 @@ interface ContentAnalyticsProps {
   workspaceId: string;
 }
 
-export default function ContentAnalytics({ workspaceId }: ContentAnalyticsProps) {
+export default function ContentAnalytics({
+  workspaceId,
+}: ContentAnalyticsProps) {
   const { data: reflections, isLoading } = useReflections(workspaceId, {});
 
   const analytics = useMemo(() => {
@@ -78,7 +80,7 @@ export default function ContentAnalytics({ workspaceId }: ContentAnalyticsProps)
             </div>
             <p className="text-2xl font-bold">{analytics.avgWordCount}</p>
           </div>
-          
+
           <div className="p-3 rounded-lg bg-muted/50">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="h-4 w-4 text-muted-foreground" />

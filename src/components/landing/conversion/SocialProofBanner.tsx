@@ -12,7 +12,7 @@ export function SocialProofBanner() {
   useEffect(() => {
     // Simulate live counter updates
     const interval = setInterval(() => {
-      setStats(prev => ({
+      setStats((prev) => ({
         activeUsers: prev.activeUsers + Math.floor(Math.random() * 3),
         goalsCompleted: prev.goalsCompleted + Math.floor(Math.random() * 5),
         growthRate: prev.growthRate + (Math.random() > 0.5 ? 1 : 0),
@@ -66,15 +66,15 @@ export function SocialProofBanner() {
             transition={{ delay: index * 0.1 }}
             className="text-center"
           >
-            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-background/50 mb-3 ${item.color}`}>
+            <div
+              className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-background/50 mb-3 ${item.color}`}
+            >
               <item.icon className="w-6 h-6" />
             </div>
             <div className="text-2xl font-heading font-bold mb-1">
               {item.value}
             </div>
-            <div className="text-sm text-muted-foreground">
-              {item.label}
-            </div>
+            <div className="text-sm text-muted-foreground">{item.label}</div>
           </motion.div>
         ))}
       </div>

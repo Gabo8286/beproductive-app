@@ -2,37 +2,37 @@ import { AutomationRule } from "@/hooks/useAutomation";
 
 // Enhanced AI Automation Types
 export type AIAutomationType =
-  | 'smart_prioritization'
-  | 'pattern_recognition'
-  | 'workflow_optimization'
-  | 'predictive_scheduling'
-  | 'intelligent_tagging'
-  | 'cross_module_chain'
-  | 'natural_language_rule'
-  | 'adaptive_workflow'
-  | 'sentiment_analysis'
-  | 'time_optimization';
+  | "smart_prioritization"
+  | "pattern_recognition"
+  | "workflow_optimization"
+  | "predictive_scheduling"
+  | "intelligent_tagging"
+  | "cross_module_chain"
+  | "natural_language_rule"
+  | "adaptive_workflow"
+  | "sentiment_analysis"
+  | "time_optimization";
 
 export type TriggerType =
-  | 'time_based'
-  | 'event_based'
-  | 'pattern_based'
-  | 'ai_predicted'
-  | 'user_behavior'
-  | 'performance_metric'
-  | 'cross_module'
-  | 'natural_language';
+  | "time_based"
+  | "event_based"
+  | "pattern_based"
+  | "ai_predicted"
+  | "user_behavior"
+  | "performance_metric"
+  | "cross_module"
+  | "natural_language";
 
 export type ActionType =
-  | 'modify_task'
-  | 'create_goal'
-  | 'update_habit'
-  | 'send_notification'
-  | 'execute_process'
-  | 'ai_suggestion'
-  | 'workflow_redirect'
-  | 'insight_generation'
-  | 'optimization_trigger';
+  | "modify_task"
+  | "create_goal"
+  | "update_habit"
+  | "send_notification"
+  | "execute_process"
+  | "ai_suggestion"
+  | "workflow_redirect"
+  | "insight_generation"
+  | "optimization_trigger";
 
 export interface AIContext {
   user_patterns: Record<string, any>;
@@ -59,7 +59,8 @@ export interface SmartAction {
   learning_feedback?: boolean;
 }
 
-export interface AIAutomationRule extends Omit<AutomationRule, 'trigger_conditions' | 'actions'> {
+export interface AIAutomationRule
+  extends Omit<AutomationRule, "trigger_conditions" | "actions"> {
   ai_type: AIAutomationType;
   smart_triggers: SmartTriggerCondition[];
   smart_actions: SmartAction[];
@@ -85,15 +86,15 @@ export interface AutomationSuggestion {
   description: string;
   ai_type: AIAutomationType;
   confidence: number;
-  potential_impact: 'low' | 'medium' | 'high' | 'critical';
-  implementation_complexity: 'simple' | 'moderate' | 'complex';
+  potential_impact: "low" | "medium" | "high" | "critical";
+  implementation_complexity: "simple" | "moderate" | "complex";
   estimated_time_saved_minutes: number;
   suggested_rule: Partial<AIAutomationRule>;
   reasoning: string;
   evidence: string[];
   user_patterns_used: string[];
   created_at: string;
-  status: 'pending' | 'accepted' | 'rejected' | 'implemented';
+  status: "pending" | "accepted" | "rejected" | "implemented";
 }
 
 export interface WorkflowChain {
@@ -124,7 +125,7 @@ export interface WorkflowStep {
   timeout_seconds?: number;
   retry_policy?: {
     max_attempts: number;
-    backoff_strategy: 'linear' | 'exponential';
+    backoff_strategy: "linear" | "exponential";
   };
   ai_enhancements: {
     dynamic_parameters: boolean;
@@ -143,7 +144,7 @@ export interface NaturalLanguageRule {
     confidence: number;
   };
   generated_rule: Partial<AIAutomationRule>;
-  status: 'parsing' | 'confirmed' | 'active' | 'failed';
+  status: "parsing" | "confirmed" | "active" | "failed";
   clarifications_needed: string[];
   examples: string[];
   created_at: string;
@@ -151,7 +152,7 @@ export interface NaturalLanguageRule {
 
 export interface AIInsight {
   id: string;
-  type: 'pattern' | 'optimization' | 'prediction' | 'anomaly';
+  type: "pattern" | "optimization" | "prediction" | "anomaly";
   title: string;
   description: string;
   data: Record<string, any>;
@@ -214,7 +215,7 @@ export interface LearningData {
 export interface CrossModuleConnection {
   source_module: string;
   target_module: string;
-  connection_type: 'trigger' | 'data_flow' | 'dependency' | 'optimization';
+  connection_type: "trigger" | "data_flow" | "dependency" | "optimization";
   mapping: Record<string, string>;
   conditions: Record<string, any>;
   ai_enhanced: boolean;

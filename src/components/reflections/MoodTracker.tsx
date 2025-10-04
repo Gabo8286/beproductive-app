@@ -4,13 +4,18 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { MoodLevel } from "@/types/reflections";
 
-const moodOptions: { value: MoodLevel; emoji: string; label: string; color: string }[] = [
-  { value: 'amazing', emoji: '🤩', label: 'Amazing', color: 'bg-purple-500' },
-  { value: 'great', emoji: '😊', label: 'Great', color: 'bg-green-500' },
-  { value: 'good', emoji: '🙂', label: 'Good', color: 'bg-blue-500' },
-  { value: 'neutral', emoji: '😐', label: 'Neutral', color: 'bg-gray-500' },
-  { value: 'bad', emoji: '😔', label: 'Bad', color: 'bg-orange-500' },
-  { value: 'terrible', emoji: '😢', label: 'Terrible', color: 'bg-red-500' },
+const moodOptions: {
+  value: MoodLevel;
+  emoji: string;
+  label: string;
+  color: string;
+}[] = [
+  { value: "amazing", emoji: "🤩", label: "Amazing", color: "bg-purple-500" },
+  { value: "great", emoji: "😊", label: "Great", color: "bg-green-500" },
+  { value: "good", emoji: "🙂", label: "Good", color: "bg-blue-500" },
+  { value: "neutral", emoji: "😐", label: "Neutral", color: "bg-gray-500" },
+  { value: "bad", emoji: "😔", label: "Bad", color: "bg-orange-500" },
+  { value: "terrible", emoji: "😢", label: "Terrible", color: "bg-red-500" },
 ];
 
 interface MoodTrackerProps {
@@ -47,7 +52,7 @@ export default function MoodTracker({
               variant={mood === option.value ? "default" : "outline"}
               className={cn(
                 "flex flex-col items-center gap-2 h-auto py-3",
-                mood === option.value && option.color
+                mood === option.value && option.color,
               )}
               onClick={() => onMoodChange(option.value)}
             >
@@ -63,7 +68,9 @@ export default function MoodTracker({
         <div className="flex items-center justify-between">
           <Label>⚡ Energy Level</Label>
           {energyLevel && (
-            <span className="text-sm text-muted-foreground">{energyLevel}/10</span>
+            <span className="text-sm text-muted-foreground">
+              {energyLevel}/10
+            </span>
           )}
         </div>
         <Slider
@@ -85,7 +92,9 @@ export default function MoodTracker({
         <div className="flex items-center justify-between">
           <Label>😰 Stress Level</Label>
           {stressLevel && (
-            <span className="text-sm text-muted-foreground">{stressLevel}/10</span>
+            <span className="text-sm text-muted-foreground">
+              {stressLevel}/10
+            </span>
           )}
         </div>
         <Slider
@@ -107,7 +116,9 @@ export default function MoodTracker({
         <div className="flex items-center justify-between">
           <Label>😊 Satisfaction Level</Label>
           {satisfactionLevel && (
-            <span className="text-sm text-muted-foreground">{satisfactionLevel}/10</span>
+            <span className="text-sm text-muted-foreground">
+              {satisfactionLevel}/10
+            </span>
           )}
         </div>
         <Slider

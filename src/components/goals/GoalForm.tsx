@@ -5,30 +5,49 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { CreateGoalInput } from "@/types/goals";
 
-const goalSchema = z.object({
-  title: z.string().min(1, "Title is required").max(200, "Title must be less than 200 characters"),
-  description: z.string().max(1000, "Description must be less than 1000 characters").optional(),
-  start_date: z.date().optional(),
-  target_date: z.date().optional(),
-}).refine(
-  (data) => {
-    if (data.start_date && data.target_date) {
-      return data.target_date >= data.start_date;
-    }
-    return true;
-  },
-  {
-    message: "Target date must be after start date",
-    path: ["target_date"],
-  }
-);
+const goalSchema = z
+  .object({
+    title: z
+      .string()
+      .min(1, "Title is required")
+      .max(200, "Title must be less than 200 characters"),
+    description: z
+      .string()
+      .max(1000, "Description must be less than 1000 characters")
+      .optional(),
+    start_date: z.date().optional(),
+    target_date: z.date().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.start_date && data.target_date) {
+        return data.target_date >= data.start_date;
+      }
+      return true;
+    },
+    {
+      message: "Target date must be after start date",
+      path: ["target_date"],
+    },
+  );
 
 interface GoalFormProps {
   onSubmit: (data: CreateGoalInput) => void;
@@ -36,7 +55,11 @@ interface GoalFormProps {
   defaultValues?: Partial<CreateGoalInput>;
 }
 
-export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProps) {
+export function GoalForm({
+  onSubmit,
+  isSubmitting,
+  defaultValues,
+}: GoalFormProps) {
   const form = useForm<z.infer<typeof goalSchema>>({
     resolver: zodResolver(goalSchema),
     defaultValues: {
@@ -57,8 +80,8 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
             <FormItem>
               <FormLabel>Destination Name</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder="What destination would you like to reach?" 
+                <Input
+                  placeholder="What destination would you like to reach?"
                   className="focus-brand transition-all duration-200 hover:border-primary/50"
                   {...field}
                   aria-label="Destination name"
@@ -102,7 +125,7 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal focus-brand transition-all duration-200 hover:border-primary/50",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
                         )}
                         aria-label="Select start date"
                       >
@@ -143,7 +166,7 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal focus-brand transition-all duration-200 hover:border-primary/50",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
                         )}
                         aria-label="Select target date"
                       >
@@ -172,7 +195,11 @@ export function GoalForm({ onSubmit, isSubmitting, defaultValues }: GoalFormProp
           />
         </div>
 
-        <Button type="submit" className="w-full apple-button focus-brand" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full apple-button focus-brand"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Planning Route..." : "Set Destination"}
         </Button>
       </form>

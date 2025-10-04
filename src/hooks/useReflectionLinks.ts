@@ -19,12 +19,14 @@ export function useReflectionGoalLinks(reflectionId: string) {
     queryKey: [GOAL_LINKS_QUERY_KEY, reflectionId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflection_goal_links')
-        .select(`
+        .from("reflection_goal_links")
+        .select(
+          `
           *,
           goal:goals(*)
-        `)
-        .eq('reflection_id', reflectionId);
+        `,
+        )
+        .eq("reflection_id", reflectionId);
 
       if (error) throw error;
       return data as ReflectionGoalLink[];
@@ -41,21 +43,25 @@ export function useReflectionHabitLinks(reflectionId: string) {
     queryKey: [HABIT_LINKS_QUERY_KEY, reflectionId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflection_habit_links')
-        .select(`
+        .from("reflection_habit_links")
+        .select(
+          `
           *,
           habit:habits(*)
-        `)
-        .eq('reflection_id', reflectionId);
+        `,
+        )
+        .eq("reflection_id", reflectionId);
 
       if (error) throw error;
-      return data.map(link => ({
+      return data.map((link) => ({
         ...link,
-        habit: link.habit ? {
-          ...link.habit,
-          custom_frequency: link.habit.custom_frequency as any,
-          metadata: link.habit.metadata as any,
-        } : undefined,
+        habit: link.habit
+          ? {
+              ...link.habit,
+              custom_frequency: link.habit.custom_frequency as any,
+              metadata: link.habit.metadata as any,
+            }
+          : undefined,
       })) as ReflectionHabitLink[];
     },
     enabled: !!reflectionId,
@@ -71,7 +77,7 @@ export function useCreateReflectionGoalLink() {
   return useMutation({
     mutationFn: async (input: CreateReflectionGoalLinkInput) => {
       const { data, error } = await supabase
-        .from('reflection_goal_links')
+        .from("reflection_goal_links")
         .insert({
           reflection_id: input.reflection_id,
           goal_id: input.goal_id,
@@ -86,8 +92,12 @@ export function useCreateReflectionGoalLink() {
       return data as ReflectionGoalLink;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [GOAL_LINKS_QUERY_KEY, data.reflection_id] });
-      queryClient.invalidateQueries({ queryKey: ['reflections', data.reflection_id] });
+      queryClient.invalidateQueries({
+        queryKey: [GOAL_LINKS_QUERY_KEY, data.reflection_id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["reflections", data.reflection_id],
+      });
       toast.success("Goal linked to reflection");
     },
     onError: (error: Error) => {
@@ -105,7 +115,7 @@ export function useCreateReflectionHabitLink() {
   return useMutation({
     mutationFn: async (input: CreateReflectionHabitLinkInput) => {
       const { data, error } = await supabase
-        .from('reflection_habit_links')
+        .from("reflection_habit_links")
         .insert({
           reflection_id: input.reflection_id,
           habit_id: input.habit_id,
@@ -120,8 +130,12 @@ export function useCreateReflectionHabitLink() {
       return data as ReflectionHabitLink;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: [HABIT_LINKS_QUERY_KEY, data.reflection_id] });
-      queryClient.invalidateQueries({ queryKey: ['reflections', data.reflection_id] });
+      queryClient.invalidateQueries({
+        queryKey: [HABIT_LINKS_QUERY_KEY, data.reflection_id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["reflections", data.reflection_id],
+      });
       toast.success("Habit linked to reflection");
     },
     onError: (error: Error) => {
@@ -139,9 +153,9 @@ export function useDeleteReflectionGoalLink() {
   return useMutation({
     mutationFn: async (linkId: string) => {
       const { error } = await supabase
-        .from('reflection_goal_links')
+        .from("reflection_goal_links")
         .delete()
-        .eq('id', linkId);
+        .eq("id", linkId);
 
       if (error) throw error;
       return linkId;
@@ -165,9 +179,9 @@ export function useDeleteReflectionHabitLink() {
   return useMutation({
     mutationFn: async (linkId: string) => {
       const { error } = await supabase
-        .from('reflection_habit_links')
+        .from("reflection_habit_links")
         .delete()
-        .eq('id', linkId);
+        .eq("id", linkId);
 
       if (error) throw error;
       return linkId;
@@ -187,13 +201,13 @@ export function useDeleteReflectionHabitLink() {
  */
 export function useLinkSuggestions(reflectionId: string, content: string) {
   return useQuery({
-    queryKey: ['link-suggestions', reflectionId, content],
+    queryKey: ["link-suggestions", reflectionId, content],
     queryFn: async () => {
       // Get user's workspace
       const { data: reflection } = await supabase
-        .from('reflections')
-        .select('workspace_id')
-        .eq('id', reflectionId)
+        .from("reflections")
+        .select("workspace_id")
+        .eq("id", reflectionId)
         .single();
 
       if (!reflection) return { goals: [], habits: [] };
@@ -201,42 +215,46 @@ export function useLinkSuggestions(reflectionId: string, content: string) {
       // Fetch active goals and habits
       const [goalsResult, habitsResult] = await Promise.all([
         supabase
-          .from('goals')
-          .select('*')
-          .eq('workspace_id', reflection.workspace_id)
-          .in('status', ['active', 'draft']),
+          .from("goals")
+          .select("*")
+          .eq("workspace_id", reflection.workspace_id)
+          .in("status", ["active", "draft"]),
         supabase
-          .from('habits')
-          .select('*')
-          .eq('workspace_id', reflection.workspace_id)
-          .is('archived_at', null),
+          .from("habits")
+          .select("*")
+          .eq("workspace_id", reflection.workspace_id)
+          .is("archived_at", null),
       ]);
 
       if (goalsResult.error) throw goalsResult.error;
       if (habitsResult.error) throw habitsResult.error;
 
       const lowerContent = content.toLowerCase();
-      
+
       // Simple keyword matching for suggestions
-      const suggestedGoals = goalsResult.data.filter(goal => {
+      const suggestedGoals = goalsResult.data.filter((goal) => {
         const goalKeywords = [
           goal.title.toLowerCase(),
-          goal.description?.toLowerCase() || '',
-          ...goal.tags.map(t => t.toLowerCase()),
+          goal.description?.toLowerCase() || "",
+          ...goal.tags.map((t) => t.toLowerCase()),
         ];
-        return goalKeywords.some(keyword => 
-          lowerContent.includes(keyword) || keyword.includes(lowerContent.slice(0, 20))
+        return goalKeywords.some(
+          (keyword) =>
+            lowerContent.includes(keyword) ||
+            keyword.includes(lowerContent.slice(0, 20)),
         );
       });
 
-      const suggestedHabits = habitsResult.data.filter(habit => {
+      const suggestedHabits = habitsResult.data.filter((habit) => {
         const habitKeywords = [
           habit.title.toLowerCase(),
-          habit.description?.toLowerCase() || '',
-          ...habit.tags.map(t => t.toLowerCase()),
+          habit.description?.toLowerCase() || "",
+          ...habit.tags.map((t) => t.toLowerCase()),
         ];
-        return habitKeywords.some(keyword => 
-          lowerContent.includes(keyword) || keyword.includes(lowerContent.slice(0, 20))
+        return habitKeywords.some(
+          (keyword) =>
+            lowerContent.includes(keyword) ||
+            keyword.includes(lowerContent.slice(0, 20)),
         );
       });
 

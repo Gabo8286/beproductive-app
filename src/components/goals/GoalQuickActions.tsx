@@ -1,11 +1,24 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Goal } from "@/types/goals";
 import { useUpdateGoal, useUpdateGoalProgress } from "@/hooks/useGoals";
-import { getAvailableStatusTransitions, getStatusLabel } from "@/utils/goalStatus";
+import {
+  getAvailableStatusTransitions,
+  getStatusLabel,
+} from "@/utils/goalStatus";
 import { Percent } from "lucide-react";
 
 interface GoalQuickActionsProps {
@@ -15,11 +28,13 @@ interface GoalQuickActionsProps {
 export function GoalQuickActions({ goal }: GoalQuickActionsProps) {
   const updateGoalMutation = useUpdateGoal(goal.id);
   const updateProgressMutation = useUpdateGoalProgress();
-  const [newProgress, setNewProgress] = useState(goal.progress?.toString() || "0");
+  const [newProgress, setNewProgress] = useState(
+    goal.progress?.toString() || "0",
+  );
 
   const availableTransitions = getAvailableStatusTransitions(goal.status);
 
-  const handleStatusChange = (status: Goal['status']) => {
+  const handleStatusChange = (status: Goal["status"]) => {
     updateGoalMutation.mutate({ status });
   };
 
@@ -67,7 +82,9 @@ export function GoalQuickActions({ goal }: GoalQuickActionsProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={goal.status}>{getStatusLabel(goal.status)}</SelectItem>
+            <SelectItem value={goal.status}>
+              {getStatusLabel(goal.status)}
+            </SelectItem>
             {availableTransitions.map((status) => (
               <SelectItem key={status} value={status}>
                 {getStatusLabel(status)}

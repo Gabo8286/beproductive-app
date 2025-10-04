@@ -7,17 +7,17 @@ export function useTheme() {
   useEffect(() => {
     const root = document.documentElement;
 
-    if (userPreferences.theme === 'auto') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (userPreferences.theme === "auto") {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
       const handleChange = () => {
-        root.classList.toggle('dark', mediaQuery.matches);
+        root.classList.toggle("dark", mediaQuery.matches);
       };
 
       handleChange();
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
     } else {
-      root.classList.toggle('dark', userPreferences.theme === 'dark');
+      root.classList.toggle("dark", userPreferences.theme === "dark");
     }
   }, [userPreferences.theme]);
 }

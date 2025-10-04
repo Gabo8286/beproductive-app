@@ -23,8 +23,8 @@ class SafeStorage {
 
     try {
       // Test localStorage with a simple operation
-      const testKey = '__storage_test__';
-      const testValue = 'test';
+      const testKey = "__storage_test__";
+      const testValue = "test";
 
       localStorage.setItem(testKey, testValue);
       const retrieved = localStorage.getItem(testKey);
@@ -33,7 +33,7 @@ class SafeStorage {
       this.isAvailable = retrieved === testValue;
       return this.isAvailable;
     } catch (error) {
-      console.warn('[SafeStorage] localStorage not available:', error);
+      console.warn("[SafeStorage] localStorage not available:", error);
       this.isAvailable = false;
       return false;
     }
@@ -55,7 +55,9 @@ class SafeStorage {
             this.memoryFallback.delete(key);
             return null;
           }
-          return typeof item.value === 'string' ? item.value : JSON.stringify(item.value);
+          return typeof item.value === "string"
+            ? item.value
+            : JSON.stringify(item.value);
         }
         return null;
       }
@@ -87,7 +89,10 @@ class SafeStorage {
       console.warn(`[SafeStorage] Failed to set item "${key}":`, error);
 
       // If quota exceeded, try to clear old items
-      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+      if (
+        error instanceof DOMException &&
+        error.name === "QuotaExceededError"
+      ) {
         this.clearExpiredItems();
         // Try again
         try {
@@ -157,7 +162,7 @@ class SafeStorage {
         localStorage.clear();
       }
     } catch (error) {
-      console.warn('[SafeStorage] Failed to clear localStorage:', error);
+      console.warn("[SafeStorage] Failed to clear localStorage:", error);
     }
     this.memoryFallback.clear();
   }
@@ -174,16 +179,16 @@ export const safeJSON = {
     try {
       return JSON.parse(text);
     } catch (error) {
-      console.warn('[SafeStorage] JSON parse failed:', error);
+      console.warn("[SafeStorage] JSON parse failed:", error);
       return fallback;
     }
   },
 
-  stringify: (value: any, fallback: string = '{}'): string => {
+  stringify: (value: any, fallback: string = "{}"): string => {
     try {
       return JSON.stringify(value);
     } catch (error) {
-      console.warn('[SafeStorage] JSON stringify failed:', error);
+      console.warn("[SafeStorage] JSON stringify failed:", error);
       return fallback;
     }
   },
@@ -202,7 +207,11 @@ export const asyncStorage = {
     });
   },
 
-  setItem: async (key: string, value: string, expirationMs?: number): Promise<boolean> => {
+  setItem: async (
+    key: string,
+    value: string,
+    expirationMs?: number,
+  ): Promise<boolean> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(safeStorage.setItem(key, value, expirationMs));

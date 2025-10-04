@@ -2,37 +2,61 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useHabitAnalytics, useHabitTrends } from "@/hooks/useHabitAnalytics";
 import { TrendingUp, Target, Zap, Award } from "lucide-react";
-import { Line, LineChart, Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
+import {
+  Line,
+  LineChart,
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Area,
+  AreaChart,
+} from "recharts";
 import { format, subDays } from "date-fns";
 
 interface HabitAnalyticsDashboardProps {
   habitId: string;
 }
 
-export function HabitAnalyticsDashboard({ habitId }: HabitAnalyticsDashboardProps) {
-  const { data: weekAnalytics } = useHabitAnalytics(habitId, 'week');
-  const { data: monthAnalytics } = useHabitAnalytics(habitId, 'month');
+export function HabitAnalyticsDashboard({
+  habitId,
+}: HabitAnalyticsDashboardProps) {
+  const { data: weekAnalytics } = useHabitAnalytics(habitId, "week");
+  const { data: monthAnalytics } = useHabitAnalytics(habitId, "month");
   const { data: trends30 } = useHabitTrends(habitId, 30);
   const { data: trends90 } = useHabitTrends(habitId, 90);
 
-  const trendChartData = trends30?.map(t => ({
-    date: format(new Date(t.date), 'MMM dd'),
-    rate: t.completion_rate,
-    streak: t.streak,
-  })) || [];
+  const trendChartData =
+    trends30?.map((t) => ({
+      date: format(new Date(t.date), "MMM dd"),
+      rate: t.completion_rate,
+      streak: t.streak,
+    })) || [];
 
-  const weeklyData = trends30?.reduce((acc, t) => {
-    const week = Math.floor((new Date().getTime() - new Date(t.date).getTime()) / (7 * 24 * 60 * 60 * 1000));
-    const weekKey = `Week ${Math.max(0, 4 - week)}`;
-    if (!acc[weekKey]) {
-      acc[weekKey] = { week: weekKey, completions: 0, total: 0 };
-    }
-    acc[weekKey].total++;
-    if (t.completions > 0) acc[weekKey].completions++;
-    return acc;
-  }, {} as Record<string, { week: string; completions: number; total: number }>) || {};
+  const weeklyData =
+    trends30?.reduce(
+      (acc, t) => {
+        const week = Math.floor(
+          (new Date().getTime() - new Date(t.date).getTime()) /
+            (7 * 24 * 60 * 60 * 1000),
+        );
+        const weekKey = `Week ${Math.max(0, 4 - week)}`;
+        if (!acc[weekKey]) {
+          acc[weekKey] = { week: weekKey, completions: 0, total: 0 };
+        }
+        acc[weekKey].total++;
+        if (t.completions > 0) acc[weekKey].completions++;
+        return acc;
+      },
+      {} as Record<
+        string,
+        { week: string; completions: number; total: number }
+      >,
+    ) || {};
 
-  const weeklyChartData = Object.values(weeklyData).map(d => ({
+  const weeklyChartData = Object.values(weeklyData).map((d) => ({
     week: d.week,
     rate: d.total > 0 ? (d.completions / d.total) * 100 : 0,
   }));
@@ -80,9 +104,7 @@ export function HabitAnalyticsDashboard({ habitId }: HabitAnalyticsDashboardProp
             <div className="text-2xl font-bold">
               {monthAnalytics?.average_mood?.toFixed(1) || "N/A"}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              out of 5.0
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">out of 5.0</p>
           </CardContent>
         </Card>
 
@@ -93,7 +115,10 @@ export function HabitAnalyticsDashboard({ habitId }: HabitAnalyticsDashboardProp
               <span className="text-sm text-muted-foreground">Consistency</span>
             </div>
             <div className="text-2xl font-bold">
-              {weekAnalytics?.total_completions && weekAnalytics.total_completions >= 5 ? "High" : "Medium"}
+              {weekAnalytics?.total_completions &&
+              weekAnalytics.total_completions >= 5
+                ? "High"
+                : "Medium"}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
               {weekAnalytics?.total_misses || 0} misses
@@ -166,7 +191,9 @@ export function HabitAnalyticsDashboard({ habitId }: HabitAnalyticsDashboardProp
                 <AreaChart
                   data={trendChartData.map((d, i, arr) => ({
                     ...d,
-                    cumulative: arr.slice(0, i + 1).reduce((sum, item) => sum + (item.rate > 0 ? 1 : 0), 0),
+                    cumulative: arr
+                      .slice(0, i + 1)
+                      .reduce((sum, item) => sum + (item.rate > 0 ? 1 : 0), 0),
                   }))}
                 >
                   <XAxis dataKey="date" />

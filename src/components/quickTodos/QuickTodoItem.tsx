@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check, X, Edit3, Trash2 } from "lucide-react";
 import { QuickTodo } from "@/types/quickTodos";
-import { useUpdateQuickTodo, useDeleteQuickTodo, useToggleQuickTodoCompletion } from "@/hooks/quickTodos";
+import {
+  useUpdateQuickTodo,
+  useDeleteQuickTodo,
+  useToggleQuickTodoCompletion,
+} from "@/hooks/quickTodos";
 import { cn } from "@/lib/utils";
 
 interface QuickTodoItemProps {
@@ -70,11 +74,13 @@ export function QuickTodoItem({ todo, className }: QuickTodoItemProps) {
   };
 
   return (
-    <Card className={cn(
-      "journey-progress apple-hover group transition-all duration-200",
-      todo.completed_at && "bg-muted/50",
-      className
-    )}>
+    <Card
+      className={cn(
+        "journey-progress apple-hover group transition-all duration-200",
+        todo.completed_at && "bg-muted/50",
+        className,
+      )}
+    >
       <div className="flex items-center gap-3 p-4">
         {/* Completion Toggle */}
         <Button
@@ -84,9 +90,9 @@ export function QuickTodoItem({ todo, className }: QuickTodoItemProps) {
           disabled={toggleCompletion.isPending}
           className={cn(
             "apple-button shrink-0 h-8 w-8 p-0 rounded-full",
-            todo.completed_at 
-              ? "bg-success text-success-foreground" 
-              : "border-2 border-muted-foreground/30 hover:border-success"
+            todo.completed_at
+              ? "bg-success text-success-foreground"
+              : "border-2 border-muted-foreground/30 hover:border-success",
           )}
         >
           {todo.completed_at && <Check className="h-4 w-4" />}
@@ -108,7 +114,7 @@ export function QuickTodoItem({ todo, className }: QuickTodoItemProps) {
               className={cn(
                 "cursor-pointer transition-all duration-200",
                 todo.completed_at && "line-through text-muted-foreground",
-                "hover:text-foreground"
+                "hover:text-foreground",
               )}
               onClick={handleEdit}
             >

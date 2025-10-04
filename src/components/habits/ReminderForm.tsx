@@ -3,16 +3,32 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useCreateReminder, useUpdateReminder } from "@/hooks/useHabitReminders";
+import {
+  useCreateReminder,
+  useUpdateReminder,
+} from "@/hooks/useHabitReminders";
 import { HabitReminder, ReminderType } from "@/types/habits";
 
 const reminderSchema = z.object({
-  reminder_type: z.enum(['time_based', 'location_based', 'trigger_based']),
+  reminder_type: z.enum(["time_based", "location_based", "trigger_based"]),
   time: z.string().optional(),
   days_of_week: z.array(z.number()).optional(),
   message: z.string().optional(),
@@ -29,47 +45,56 @@ interface ReminderFormProps {
 }
 
 const DAYS = [
-  { value: 0, label: 'Sunday' },
-  { value: 1, label: 'Monday' },
-  { value: 2, label: 'Tuesday' },
-  { value: 3, label: 'Wednesday' },
-  { value: 4, label: 'Thursday' },
-  { value: 5, label: 'Friday' },
-  { value: 6, label: 'Saturday' },
+  { value: 0, label: "Sunday" },
+  { value: 1, label: "Monday" },
+  { value: 2, label: "Tuesday" },
+  { value: 3, label: "Wednesday" },
+  { value: 4, label: "Thursday" },
+  { value: 5, label: "Friday" },
+  { value: 6, label: "Saturday" },
 ];
 
 const QUICK_TIMES = [
-  { label: 'Morning (8:00 AM)', value: '08:00' },
-  { label: 'Noon (12:00 PM)', value: '12:00' },
-  { label: 'Afternoon (3:00 PM)', value: '15:00' },
-  { label: 'Evening (6:00 PM)', value: '18:00' },
-  { label: 'Night (9:00 PM)', value: '21:00' },
+  { label: "Morning (8:00 AM)", value: "08:00" },
+  { label: "Noon (12:00 PM)", value: "12:00" },
+  { label: "Afternoon (3:00 PM)", value: "15:00" },
+  { label: "Evening (6:00 PM)", value: "18:00" },
+  { label: "Night (9:00 PM)", value: "21:00" },
 ];
 
-export function ReminderForm({ habitId, habitTitle, reminder, onSuccess, onCancel }: ReminderFormProps) {
-  const [selectedDays, setSelectedDays] = useState<number[]>(reminder?.days_of_week || []);
-  
+export function ReminderForm({
+  habitId,
+  habitTitle,
+  reminder,
+  onSuccess,
+  onCancel,
+}: ReminderFormProps) {
+  const [selectedDays, setSelectedDays] = useState<number[]>(
+    reminder?.days_of_week || [],
+  );
+
   const createReminder = useCreateReminder();
   const updateReminder = useUpdateReminder();
 
   const form = useForm<ReminderFormValues>({
     resolver: zodResolver(reminderSchema),
     defaultValues: {
-      reminder_type: reminder?.reminder_type || 'time_based',
-      time: reminder?.time || '09:00',
+      reminder_type: reminder?.reminder_type || "time_based",
+      time: reminder?.time || "09:00",
       days_of_week: reminder?.days_of_week || [],
-      message: reminder?.message || '',
+      message: reminder?.message || "",
     },
   });
 
-  const reminderType = form.watch('reminder_type');
+  const reminderType = form.watch("reminder_type");
 
   const onSubmit = (data: ReminderFormValues) => {
     const reminderData = {
       habit_id: habitId,
       reminder_type: data.reminder_type as ReminderType,
-      time: data.reminder_type === 'time_based' ? data.time : undefined,
-      days_of_week: data.reminder_type === 'time_based' ? selectedDays : undefined,
+      time: data.reminder_type === "time_based" ? data.time : undefined,
+      days_of_week:
+        data.reminder_type === "time_based" ? selectedDays : undefined,
       message: data.message,
       is_active: true,
     };
@@ -77,7 +102,7 @@ export function ReminderForm({ habitId, habitTitle, reminder, onSuccess, onCance
     if (reminder) {
       updateReminder.mutate(
         { id: reminder.id, ...reminderData },
-        { onSuccess }
+        { onSuccess },
       );
     } else {
       createReminder.mutate(reminderData, { onSuccess });
@@ -86,7 +111,7 @@ export function ReminderForm({ habitId, habitTitle, reminder, onSuccess, onCance
 
   const handleDayToggle = (day: number) => {
     setSelectedDays((prev) =>
-      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day],
     );
   };
 
@@ -120,7 +145,7 @@ export function ReminderForm({ habitId, habitTitle, reminder, onSuccess, onCance
           )}
         />
 
-        {reminderType === 'time_based' && (
+        {reminderType === "time_based" && (
           <>
             <FormField
               control={form.control}
@@ -203,11 +228,11 @@ export function ReminderForm({ habitId, habitTitle, reminder, onSuccess, onCance
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={createReminder.isPending || updateReminder.isPending}
           >
-            {reminder ? 'Update' : 'Create'} Reminder
+            {reminder ? "Update" : "Create"} Reminder
           </Button>
         </div>
       </form>

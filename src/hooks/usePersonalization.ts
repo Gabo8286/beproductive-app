@@ -4,7 +4,7 @@ import { useGoals } from "@/hooks/useGoals";
 import { useTasks } from "@/hooks/useTasks";
 
 interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';
+  theme: "light" | "dark" | "auto";
   enableDragDrop: boolean;
   showMotivationalMessages: boolean;
   refreshInterval: number;
@@ -26,22 +26,22 @@ export function usePersonalization() {
   const { data: tasks = [], isLoading: tasksLoading } = useTasks();
 
   const [preferences, setPreferences] = useState<UserPreferences>({
-    theme: 'auto',
+    theme: "auto",
     enableDragDrop: true,
     showMotivationalMessages: true,
     refreshInterval: 300000, // 5 minutes
     compactMode: false,
-    celebrateMilestones: true
+    celebrateMilestones: true,
   });
 
   // Load preferences from localStorage
   useEffect(() => {
-    const savedPrefs = localStorage.getItem('user-preferences');
+    const savedPrefs = localStorage.getItem("user-preferences");
     if (savedPrefs) {
       try {
         setPreferences(JSON.parse(savedPrefs));
       } catch (error) {
-        console.error('Failed to load preferences:', error);
+        console.error("Failed to load preferences:", error);
       }
     }
   }, []);
@@ -50,7 +50,7 @@ export function usePersonalization() {
   const updatePreferences = (newPrefs: Partial<UserPreferences>) => {
     const updated = { ...preferences, ...newPrefs };
     setPreferences(updated);
-    localStorage.setItem('user-preferences', JSON.stringify(updated));
+    localStorage.setItem("user-preferences", JSON.stringify(updated));
   };
 
   // Time-based greetings
@@ -61,26 +61,26 @@ export function usePersonalization() {
         "Good morning! Ready to seize the day?",
         "Morning, traveler! What destinations await today?",
         "Rise and shine! Your journey continues.",
-        "A new day, a new opportunity to grow."
+        "A new day, a new opportunity to grow.",
       ],
       afternoon: [
         "Good afternoon! How's your journey progressing?",
         "Afternoon check-in: You're doing great!",
         "Midday motivation: Keep pushing forward!",
-        "Afternoon energy: What's next on your path?"
+        "Afternoon energy: What's next on your path?",
       ],
       evening: [
         "Good evening! Time to reflect on today's journey.",
         "Evening wind-down: What did you accomplish?",
         "As the day ends, celebrate your progress.",
-        "Evening reflection: You've come so far today."
-      ]
+        "Evening reflection: You've come so far today.",
+      ],
     };
 
     let timeOfDay: keyof typeof greetings;
-    if (hour < 12) timeOfDay = 'morning';
-    else if (hour < 17) timeOfDay = 'afternoon';
-    else timeOfDay = 'evening';
+    if (hour < 12) timeOfDay = "morning";
+    else if (hour < 17) timeOfDay = "afternoon";
+    else timeOfDay = "evening";
 
     const messages = greetings[timeOfDay];
     return messages[Math.floor(Math.random() * messages.length)];
@@ -95,10 +95,12 @@ export function usePersonalization() {
     const insights = [];
 
     // Goal progress insights
-    const activeGoals = goals.filter(g => g.status === 'active');
-    const avgProgress = activeGoals.length > 0
-      ? activeGoals.reduce((sum, g) => sum + (g.progress || 0), 0) / activeGoals.length
-      : 0;
+    const activeGoals = goals.filter((g) => g.status === "active");
+    const avgProgress =
+      activeGoals.length > 0
+        ? activeGoals.reduce((sum, g) => sum + (g.progress || 0), 0) /
+          activeGoals.length
+        : 0;
 
     if (avgProgress > 75) {
       insights.push("You're crushing your goals! 🚀");
@@ -107,9 +109,11 @@ export function usePersonalization() {
     }
 
     // Task completion
-    const completedToday = tasks.filter(t => {
-      return t.completed_at &&
-             new Date(t.completed_at).toDateString() === new Date().toDateString();
+    const completedToday = tasks.filter((t) => {
+      return (
+        t.completed_at &&
+        new Date(t.completed_at).toDateString() === new Date().toDateString()
+      );
     });
 
     if (completedToday.length > 0) {
@@ -129,11 +133,13 @@ export function usePersonalization() {
   const personalizedContent: PersonalizedContent = useMemo(() => {
     // Priority tasks based on due dates and importance
     const priorityTasks = tasks
-      .filter(t => t.status !== 'done')
+      .filter((t) => t.status !== "done")
       .sort((a, b) => {
         const priorityOrder = { urgent: 4, high: 3, medium: 2, low: 1 };
-        return (priorityOrder[b.priority as keyof typeof priorityOrder] || 0) -
-               (priorityOrder[a.priority as keyof typeof priorityOrder] || 0);
+        return (
+          (priorityOrder[b.priority as keyof typeof priorityOrder] || 0) -
+          (priorityOrder[a.priority as keyof typeof priorityOrder] || 0)
+        );
       })
       .slice(0, 3);
 
@@ -144,25 +150,33 @@ export function usePersonalization() {
     const streakCelebrations: string[] = [];
 
     // Personalized insights
-    const activeGoals = goals.filter(g => g.status === 'active');
-    const avgProgress = activeGoals.length > 0
-      ? activeGoals.reduce((sum, g) => sum + (g.progress || 0), 0) / activeGoals.length
-      : 0;
+    const activeGoals = goals.filter((g) => g.status === "active");
+    const avgProgress =
+      activeGoals.length > 0
+        ? activeGoals.reduce((sum, g) => sum + (g.progress || 0), 0) /
+          activeGoals.length
+        : 0;
 
     const insights = [
-      avgProgress > 50 ? "You're making excellent progress on your goals!" : "Focus on one goal at a time for better results.",
-      tasks.length > 0 ? "Stay organized with your task list!" : "Break down your goals into actionable tasks.",
-      "Small daily actions create big changes."
+      avgProgress > 50
+        ? "You're making excellent progress on your goals!"
+        : "Focus on one goal at a time for better results.",
+      tasks.length > 0
+        ? "Stay organized with your task list!"
+        : "Break down your goals into actionable tasks.",
+      "Small daily actions create big changes.",
     ];
 
     // Smart recommendations
     const recommendations = [];
 
     if (activeGoals.length === 0) {
-      recommendations.push("Consider setting a destination (goal) for this month");
+      recommendations.push(
+        "Consider setting a destination (goal) for this month",
+      );
     }
 
-    if (tasks.filter(t => t.status !== 'done').length === 0) {
+    if (tasks.filter((t) => t.status !== "done").length === 0) {
       recommendations.push("Add some next steps to keep your momentum going");
     }
 
@@ -171,7 +185,7 @@ export function usePersonalization() {
       todayHabits,
       streakCelebrations,
       insights,
-      recommendations
+      recommendations,
     };
   }, [goals, tasks]);
 
@@ -180,6 +194,6 @@ export function usePersonalization() {
     updatePreferences,
     personalizedContent,
     getTimeBasedGreeting,
-    getMotivationalInsight
+    getMotivationalInsight,
   };
 }

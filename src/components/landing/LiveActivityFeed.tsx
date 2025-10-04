@@ -168,11 +168,16 @@ export function LiveActivityFeed() {
                   <div
                     className={cn(
                       "w-8 h-8 rounded-full bg-gradient-to-br flex items-center justify-center flex-shrink-0",
-                      activity.type === "goal" && "from-primary/20 to-primary/10",
-                      activity.type === "habit" && "from-orange-500/20 to-orange-500/10",
-                      activity.type === "reflection" && "from-success/20 to-success/10",
-                      activity.type === "milestone" && "from-secondary/20 to-secondary/10",
-                      activity.type === "streak" && "from-yellow-500/20 to-yellow-500/10"
+                      activity.type === "goal" &&
+                        "from-primary/20 to-primary/10",
+                      activity.type === "habit" &&
+                        "from-orange-500/20 to-orange-500/10",
+                      activity.type === "reflection" &&
+                        "from-success/20 to-success/10",
+                      activity.type === "milestone" &&
+                        "from-secondary/20 to-secondary/10",
+                      activity.type === "streak" &&
+                        "from-yellow-500/20 to-yellow-500/10",
                     )}
                   >
                     <span className={activity.color}>{activity.icon}</span>

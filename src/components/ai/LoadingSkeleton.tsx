@@ -1,17 +1,17 @@
-import React from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import React from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface LoadingSkeletonProps {
-  type?: 'widget' | 'page' | 'banner' | 'tracker';
+  type?: "widget" | "page" | "banner" | "tracker";
   className?: string;
 }
 
 export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
-  type = 'widget',
-  className = ''
+  type = "widget",
+  className = "",
 }) => {
-  if (type === 'widget') {
+  if (type === "widget") {
     return (
       <Card className={`h-full ${className}`}>
         <CardHeader className="pb-2">
@@ -38,7 +38,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     );
   }
 
-  if (type === 'banner') {
+  if (type === "banner") {
     return (
       <Card className={`border-l-4 border-l-purple-500 ${className}`}>
         <CardContent className="p-4">
@@ -64,7 +64,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
     );
   }
 
-  if (type === 'tracker') {
+  if (type === "tracker") {
     return (
       <div className={`space-y-6 ${className}`}>
         {/* Header */}
@@ -147,7 +147,10 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
         </CardHeader>
         <CardContent className="space-y-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+            <div
+              key={i}
+              className="flex items-center justify-between p-3 border rounded-lg"
+            >
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-48" />
                 <Skeleton className="h-3 w-32" />

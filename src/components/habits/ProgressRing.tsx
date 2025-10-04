@@ -16,7 +16,10 @@ export function ProgressRing({
   const offset = circumference - (value / 100) * circumference;
 
   return (
-    <div className={`relative ${className}`} style={{ width: size, height: size }}>
+    <div
+      className={`relative ${className}`}
+      style={{ width: size, height: size }}
+    >
       <svg width={size} height={size} className="transform -rotate-90">
         {/* Background circle */}
         <circle

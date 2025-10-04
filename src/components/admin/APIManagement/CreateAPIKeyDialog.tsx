@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,19 +6,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { CreateAPIKeyRequest, APIProviderType, PROVIDER_LABELS, PROVIDER_CONFIGS } from '@/types/api-management';
+} from "@/components/ui/select";
+import {
+  CreateAPIKeyRequest,
+  APIProviderType,
+  PROVIDER_LABELS,
+  PROVIDER_CONFIGS,
+} from "@/types/api-management";
 
 interface CreateAPIKeyDialogProps {
   open: boolean;
@@ -30,10 +35,10 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
   onOpenChange,
 }) => {
   const [formData, setFormData] = useState<Partial<CreateAPIKeyRequest>>({
-    provider: 'openai',
-    key_name: '',
-    api_key: '',
-    description: '',
+    provider: "openai",
+    key_name: "",
+    api_key: "",
+    description: "",
     monthly_limit_usd: 100,
     daily_request_limit: 1000,
     monthly_token_limit: 100000,
@@ -48,14 +53,14 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
 
     try {
       // TODO: Implement API call to create the key
-      console.log('Creating API key:', formData);
+      console.log("Creating API key:", formData);
 
       // Reset form and close dialog
       setFormData({
-        provider: 'openai',
-        key_name: '',
-        api_key: '',
-        description: '',
+        provider: "openai",
+        key_name: "",
+        api_key: "",
+        description: "",
         monthly_limit_usd: 100,
         daily_request_limit: 1000,
         monthly_token_limit: 100000,
@@ -63,13 +68,15 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
       });
       onOpenChange(false);
     } catch (error) {
-      console.error('Error creating API key:', error);
+      console.error("Error creating API key:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const selectedProviderConfig = formData.provider ? PROVIDER_CONFIGS[formData.provider] : null;
+  const selectedProviderConfig = formData.provider
+    ? PROVIDER_CONFIGS[formData.provider]
+    : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -77,7 +84,8 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Add New API Key</DialogTitle>
           <DialogDescription>
-            Add a new API key for one of the supported providers. The key will be encrypted and stored securely.
+            Add a new API key for one of the supported providers. The key will
+            be encrypted and stored securely.
           </DialogDescription>
         </DialogHeader>
 
@@ -109,7 +117,9 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
               <Input
                 id="key_name"
                 value={formData.key_name}
-                onChange={(e) => setFormData({ ...formData, key_name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, key_name: e.target.value })
+                }
                 placeholder="Production API Key"
                 required
               />
@@ -122,12 +132,15 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
               id="api_key"
               type="password"
               value={formData.api_key}
-              onChange={(e) => setFormData({ ...formData, api_key: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, api_key: e.target.value })
+              }
               placeholder="Enter your API key"
               required
             />
             <p className="text-xs text-gray-500">
-              Your API key will be encrypted before storage and never displayed in plain text.
+              Your API key will be encrypted before storage and never displayed
+              in plain text.
             </p>
           </div>
 
@@ -136,7 +149,9 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Describe the purpose of this API key"
               rows={3}
             />
@@ -146,8 +161,12 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
             <div className="space-y-2">
               <Label htmlFor="model_name">Default Model</Label>
               <Select
-                value={formData.model_name || selectedProviderConfig.default_model}
-                onValueChange={(value) => setFormData({ ...formData, model_name: value })}
+                value={
+                  formData.model_name || selectedProviderConfig.default_model
+                }
+                onValueChange={(value) =>
+                  setFormData({ ...formData, model_name: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -173,7 +192,10 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
                 step="0.01"
                 value={formData.monthly_limit_usd}
                 onChange={(e) =>
-                  setFormData({ ...formData, monthly_limit_usd: parseFloat(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    monthly_limit_usd: parseFloat(e.target.value),
+                  })
                 }
               />
             </div>
@@ -186,7 +208,10 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
                 min="0"
                 value={formData.daily_request_limit}
                 onChange={(e) =>
-                  setFormData({ ...formData, daily_request_limit: parseInt(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    daily_request_limit: parseInt(e.target.value),
+                  })
                 }
               />
             </div>
@@ -199,18 +224,28 @@ export const CreateAPIKeyDialog: React.FC<CreateAPIKeyDialogProps> = ({
                 min="0"
                 value={formData.monthly_token_limit}
                 onChange={(e) =>
-                  setFormData({ ...formData, monthly_token_limit: parseInt(e.target.value) })
+                  setFormData({
+                    ...formData,
+                    monthly_token_limit: parseInt(e.target.value),
+                  })
                 }
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || !formData.key_name || !formData.api_key}>
-              {isSubmitting ? 'Creating...' : 'Create API Key'}
+            <Button
+              type="submit"
+              disabled={isSubmitting || !formData.key_name || !formData.api_key}
+            >
+              {isSubmitting ? "Creating..." : "Create API Key"}
             </Button>
           </DialogFooter>
         </form>

@@ -1,16 +1,16 @@
-import { useEffect, useState, RefObject } from 'react';
+import { useEffect, useState, RefObject } from "react";
 
 interface UseRovingTabIndexOptions {
   items: RefObject<HTMLElement>[];
   circular?: boolean;
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   onFocusChange?: (index: number) => void;
 }
 
 /**
  * Roving tabindex for accessible keyboard navigation in lists
  * Implements ARIA authoring practices for composite widgets
- * 
+ *
  * @param items - Array of refs to focusable elements
  * @param circular - Whether navigation wraps around (default: true)
  * @param orientation - Determines which arrow keys to use (default: 'vertical')
@@ -19,16 +19,16 @@ interface UseRovingTabIndexOptions {
 export function useRovingTabIndex({
   items,
   circular = true,
-  orientation = 'vertical',
+  orientation = "vertical",
   onFocusChange,
 }: UseRovingTabIndexOptions) {
   const [focusedIndex, setFocusedIndex] = useState(0);
 
   const moveFocus = (newIndex: number) => {
     const maxIndex = items.length - 1;
-    
+
     let nextIndex: number;
-    
+
     if (newIndex < 0) {
       nextIndex = circular ? maxIndex : 0;
     } else if (newIndex > maxIndex) {
@@ -42,8 +42,8 @@ export function useRovingTabIndex({
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
-    const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+    const nextKey = orientation === "vertical" ? "ArrowDown" : "ArrowRight";
+    const prevKey = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
 
     switch (event.key) {
       case nextKey:
@@ -56,12 +56,12 @@ export function useRovingTabIndex({
         moveFocus(focusedIndex - 1);
         break;
 
-      case 'Home':
+      case "Home":
         event.preventDefault();
         moveFocus(0);
         break;
 
-      case 'End':
+      case "End":
         event.preventDefault();
         moveFocus(items.length - 1);
         break;

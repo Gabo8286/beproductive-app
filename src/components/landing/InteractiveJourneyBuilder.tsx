@@ -24,7 +24,7 @@ export function InteractiveJourneyBuilder() {
 
   const handleAddMilestone = () => {
     if (!newMilestone.trim()) return;
-    
+
     setMilestones([
       ...milestones,
       {
@@ -39,8 +39,8 @@ export function InteractiveJourneyBuilder() {
   const toggleMilestone = (id: string) => {
     setMilestones(
       milestones.map((m) =>
-        m.id === id ? { ...m, completed: !m.completed } : m
-      )
+        m.id === id ? { ...m, completed: !m.completed } : m,
+      ),
     );
   };
 
@@ -51,9 +51,10 @@ export function InteractiveJourneyBuilder() {
     setTimeout(() => setShowCelebration(false), 2000);
   };
 
-  const progress = milestones.length > 0
-    ? (milestones.filter((m) => m.completed).length / milestones.length) * 100
-    : 0;
+  const progress =
+    milestones.length > 0
+      ? (milestones.filter((m) => m.completed).length / milestones.length) * 100
+      : 0;
 
   const handleReset = () => {
     setGoalTitle("");
@@ -131,7 +132,9 @@ export function InteractiveJourneyBuilder() {
                     placeholder="E.g., Complete research phase, Build MVP..."
                     value={newMilestone}
                     onChange={(e) => setNewMilestone(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && handleAddMilestone()}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" && handleAddMilestone()
+                    }
                     className="text-base glass-card"
                   />
                   <Button
@@ -160,7 +163,7 @@ export function InteractiveJourneyBuilder() {
                       onClick={() => toggleMilestone(milestone.id)}
                       className={cn(
                         "flex items-center gap-3 p-3 rounded-lg glass-card cursor-pointer hover:bg-primary/5 transition-colors",
-                        milestone.completed && "opacity-60"
+                        milestone.completed && "opacity-60",
                       )}
                     >
                       <div
@@ -168,7 +171,7 @@ export function InteractiveJourneyBuilder() {
                           "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors",
                           milestone.completed
                             ? "bg-success border-success"
-                            : "border-muted-foreground"
+                            : "border-muted-foreground",
                         )}
                       >
                         {milestone.completed && (
@@ -178,7 +181,7 @@ export function InteractiveJourneyBuilder() {
                       <span
                         className={cn(
                           "flex-1",
-                          milestone.completed && "line-through"
+                          milestone.completed && "line-through",
                         )}
                       >
                         {milestone.title}
@@ -243,7 +246,7 @@ export function InteractiveJourneyBuilder() {
                             "w-5 h-5 rounded-full border-2 flex items-center justify-center",
                             milestone.completed
                               ? "bg-success border-success"
-                              : "border-muted-foreground"
+                              : "border-muted-foreground",
                           )}
                         >
                           {milestone.completed && (
@@ -253,7 +256,7 @@ export function InteractiveJourneyBuilder() {
                         <span
                           className={cn(
                             "flex-1",
-                            milestone.completed && "line-through opacity-60"
+                            milestone.completed && "line-through opacity-60",
                           )}
                         >
                           {milestone.title}

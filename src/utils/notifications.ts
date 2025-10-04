@@ -3,7 +3,7 @@
 // Browser notification API integration
 // =====================================================
 
-export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent';
+export type NotificationPriority = "low" | "medium" | "high" | "urgent";
 
 export interface NotificationOptions {
   title: string;
@@ -31,16 +31,16 @@ export interface NotificationAction {
  * Request notification permission
  */
 export async function requestNotificationPermission(): Promise<NotificationPermission> {
-  if (!('Notification' in window)) {
-    console.warn('Browser does not support notifications');
-    return 'denied';
+  if (!("Notification" in window)) {
+    console.warn("Browser does not support notifications");
+    return "denied";
   }
 
-  if (Notification.permission === 'granted') {
-    return 'granted';
+  if (Notification.permission === "granted") {
+    return "granted";
   }
 
-  if (Notification.permission !== 'denied') {
+  if (Notification.permission !== "denied") {
     const permission = await Notification.requestPermission();
     return permission;
   }
@@ -52,18 +52,15 @@ export async function requestNotificationPermission(): Promise<NotificationPermi
  * Check if notifications are supported and permitted
  */
 export function canSendNotifications(): boolean {
-  return (
-    'Notification' in window &&
-    Notification.permission === 'granted'
-  );
+  return "Notification" in window && Notification.permission === "granted";
 }
 
 /**
  * Get current notification permission status
  */
 export function getNotificationPermission(): NotificationPermission {
-  if (!('Notification' in window)) {
-    return 'denied';
+  if (!("Notification" in window)) {
+    return "denied";
   }
   return Notification.permission;
 }
@@ -76,17 +73,17 @@ export function getNotificationPermission(): NotificationPermission {
  * Send a browser notification
  */
 export async function sendNotification(
-  options: NotificationOptions
+  options: NotificationOptions,
 ): Promise<Notification | null> {
   if (!canSendNotifications()) {
-    console.warn('Cannot send notification: permission not granted');
+    console.warn("Cannot send notification: permission not granted");
     return null;
   }
 
   try {
     const notification = new Notification(options.title, {
       body: options.body,
-      icon: options.icon || '/favicon.ico',
+      icon: options.icon || "/favicon.ico",
       badge: options.badge,
       tag: options.tag,
       data: options.data,
@@ -101,7 +98,7 @@ export async function sendNotification(
 
     return notification;
   } catch (error) {
-    console.error('Failed to send notification:', error);
+    console.error("Failed to send notification:", error);
     return null;
   }
 }
@@ -112,19 +109,19 @@ export async function sendNotification(
 export async function sendHabitReminder(
   habitTitle: string,
   message?: string,
-  habitId?: string
+  habitId?: string,
 ): Promise<Notification | null> {
   return sendNotification({
     title: `🔔 ${habitTitle}`,
-    body: message || 'Time to complete this habit!',
-    icon: '/favicon.ico',
+    body: message || "Time to complete this habit!",
+    icon: "/favicon.ico",
     tag: `habit-${habitId}`,
-    data: { habitId, type: 'habit-reminder' },
+    data: { habitId, type: "habit-reminder" },
     requireInteraction: true,
     actions: [
-      { action: 'complete', title: '✓ Complete' },
-      { action: 'snooze', title: '⏰ Snooze' },
-      { action: 'skip', title: 'Skip' },
+      { action: "complete", title: "✓ Complete" },
+      { action: "snooze", title: "⏰ Snooze" },
+      { action: "skip", title: "Skip" },
     ],
   });
 }
@@ -134,12 +131,12 @@ export async function sendHabitReminder(
  */
 export async function sendStreakMilestone(
   habitTitle: string,
-  streakLength: number
+  streakLength: number,
 ): Promise<Notification | null> {
   return sendNotification({
     title: `🔥 ${streakLength} Day Streak!`,
     body: `Amazing! You've completed "${habitTitle}" for ${streakLength} days straight!`,
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
     requireInteraction: false,
   });
 }
@@ -149,16 +146,16 @@ export async function sendStreakMilestone(
  */
 export async function sendCompletionCelebration(
   habitTitle: string,
-  completionRate?: number
+  completionRate?: number,
 ): Promise<Notification | null> {
   const rateText = completionRate
     ? ` (${Math.round(completionRate * 100)}% this week)`
-    : '';
-  
+    : "";
+
   return sendNotification({
     title: `✅ Great Job!`,
     body: `You completed "${habitTitle}"${rateText}`,
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
     requireInteraction: false,
   });
 }
@@ -186,7 +183,7 @@ export function scheduleNotification(
   habitId: string,
   habitTitle: string,
   time: Date,
-  message?: string
+  message?: string,
 ): void {
   // Cancel existing notification with same ID
   cancelScheduledNotification(id);
@@ -196,7 +193,7 @@ export function scheduleNotification(
   const delay = scheduledTime - now;
 
   if (delay < 0) {
-    console.warn('Cannot schedule notification in the past');
+    console.warn("Cannot schedule notification in the past");
     return;
   }
 
@@ -209,7 +206,7 @@ export function scheduleNotification(
     id,
     habitId,
     time,
-    message: message || 'Time to complete this habit!',
+    message: message || "Time to complete this habit!",
     habitTitle,
     timeoutId,
   });
@@ -258,7 +255,7 @@ export interface NotificationSettings {
   vibrationEnabled: boolean;
 }
 
-const SETTINGS_KEY = 'notification-settings';
+const SETTINGS_KEY = "notification-settings";
 
 /**
  * Get notification settings from localStorage
@@ -270,15 +267,15 @@ export function getNotificationSettings(): NotificationSettings {
       return JSON.parse(stored);
     }
   } catch (error) {
-    console.error('Failed to load notification settings:', error);
+    console.error("Failed to load notification settings:", error);
   }
 
   // Default settings
   return {
     enabled: true,
     quietHoursEnabled: false,
-    quietHoursStart: '22:00',
-    quietHoursEnd: '08:00',
+    quietHoursStart: "22:00",
+    quietHoursEnd: "08:00",
     soundEnabled: true,
     vibrationEnabled: true,
   };
@@ -291,7 +288,7 @@ export function saveNotificationSettings(settings: NotificationSettings): void {
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   } catch (error) {
-    console.error('Failed to save notification settings:', error);
+    console.error("Failed to save notification settings:", error);
   }
 }
 
@@ -300,14 +297,14 @@ export function saveNotificationSettings(settings: NotificationSettings): void {
  */
 export function isInQuietHours(): boolean {
   const settings = getNotificationSettings();
-  
+
   if (!settings.quietHoursEnabled) {
     return false;
   }
 
   const now = new Date();
-  const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  
+  const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
   const start = settings.quietHoursStart;
   const end = settings.quietHoursEnd;
 
@@ -315,7 +312,7 @@ export function isInQuietHours(): boolean {
   if (start > end) {
     return currentTime >= start || currentTime <= end;
   }
-  
+
   return currentTime >= start && currentTime <= end;
 }
 

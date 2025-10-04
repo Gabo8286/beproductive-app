@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sparkles,
   Clock,
@@ -22,18 +28,24 @@ import {
   X,
   RotateCcw,
   Filter,
-  BarChart3
-} from 'lucide-react';
+  BarChart3,
+} from "lucide-react";
 
 interface SmartRecommendation {
   id: string;
-  type: 'task' | 'habit' | 'schedule' | 'workflow' | 'learning' | 'collaboration';
+  type:
+    | "task"
+    | "habit"
+    | "schedule"
+    | "workflow"
+    | "learning"
+    | "collaboration";
   title: string;
   description: string;
   reasoning: string;
   confidence: number;
-  priority: 'low' | 'medium' | 'high';
-  impact: 'productivity' | 'wellbeing' | 'learning' | 'efficiency';
+  priority: "low" | "medium" | "high";
+  impact: "productivity" | "wellbeing" | "learning" | "efficiency";
   estimatedBenefit: string;
   implementationTime: number; // minutes
   requiredActions: string[];
@@ -57,10 +69,25 @@ interface RecommendationFilters {
 interface SmartRecommendationsProps {
   userId: string;
   userContext: {
-    currentTasks: Array<{ id: string; title: string; priority: string; category: string }>;
-    recentHabits: Array<{ id: string; name: string; streak: number; consistency: number }>;
+    currentTasks: Array<{
+      id: string;
+      title: string;
+      priority: string;
+      category: string;
+    }>;
+    recentHabits: Array<{
+      id: string;
+      name: string;
+      streak: number;
+      consistency: number;
+    }>;
     productivityPatterns: Array<{ timeOfDay: string; efficiency: number }>;
-    goals: Array<{ id: string; title: string; progress: number; deadline: Date }>;
+    goals: Array<{
+      id: string;
+      title: string;
+      progress: number;
+      deadline: Date;
+    }>;
   };
   onRecommendationImplemented?: (recommendationId: string) => void;
   onRecommendationDismissed?: (recommendationId: string) => void;
@@ -70,16 +97,18 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
   userId,
   userContext,
   onRecommendationImplemented,
-  onRecommendationDismissed
+  onRecommendationDismissed,
 }) => {
-  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>([]);
+  const [recommendations, setRecommendations] = useState<SmartRecommendation[]>(
+    [],
+  );
   const [implementedIds, setImplementedIds] = useState<string[]>([]);
   const [dismissedIds, setDismissedIds] = useState<string[]>([]);
   const [filters, setFilters] = useState<RecommendationFilters>({
-    type: 'all',
-    impact: 'all',
-    priority: 'all',
-    showImplemented: false
+    type: "all",
+    impact: "all",
+    priority: "all",
+    showImplemented: false,
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -91,145 +120,212 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
     setIsLoading(true);
 
     // Simulate AI analysis delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     const generatedRecommendations: SmartRecommendation[] = [
       {
-        id: 'rec_task_optimization_1',
-        type: 'task',
-        title: 'Optimize High-Priority Task Scheduling',
-        description: 'Schedule your most important tasks during your peak performance hours (9-11 AM)',
-        reasoning: 'Analysis shows you complete 73% more high-priority tasks when scheduled during morning hours',
+        id: "rec_task_optimization_1",
+        type: "task",
+        title: "Optimize High-Priority Task Scheduling",
+        description:
+          "Schedule your most important tasks during your peak performance hours (9-11 AM)",
+        reasoning:
+          "Analysis shows you complete 73% more high-priority tasks when scheduled during morning hours",
         confidence: 0.87,
-        priority: 'high',
-        impact: 'productivity',
-        estimatedBenefit: '23% increase in task completion rate',
+        priority: "high",
+        impact: "productivity",
+        estimatedBenefit: "23% increase in task completion rate",
         implementationTime: 15,
         requiredActions: [
-          'Review your calendar for 9-11 AM availability',
-          'Move 3 high-priority tasks to morning slots',
-          'Set recurring morning focus blocks'
+          "Review your calendar for 9-11 AM availability",
+          "Move 3 high-priority tasks to morning slots",
+          "Set recurring morning focus blocks",
         ],
         relatedData: {
-          tasks: userContext.currentTasks.filter(t => t.priority === 'high').slice(0, 3).map(t => ({
-            id: t.id,
-            title: t.title,
-            status: 'pending'
-          })),
+          tasks: userContext.currentTasks
+            .filter((t) => t.priority === "high")
+            .slice(0, 3)
+            .map((t) => ({
+              id: t.id,
+              title: t.title,
+              status: "pending",
+            })),
           patterns: [
-            { type: 'peak_performance', description: 'Highest efficiency at 9-11 AM (78% completion rate)' },
-            { type: 'task_completion', description: 'Morning tasks completed 23% faster' }
-          ]
+            {
+              type: "peak_performance",
+              description:
+                "Highest efficiency at 9-11 AM (78% completion rate)",
+            },
+            {
+              type: "task_completion",
+              description: "Morning tasks completed 23% faster",
+            },
+          ],
         },
         createdAt: new Date(),
         validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        contextualFactors: ['morning_productivity', 'task_priority_patterns', 'calendar_availability']
+        contextualFactors: [
+          "morning_productivity",
+          "task_priority_patterns",
+          "calendar_availability",
+        ],
       },
       {
-        id: 'rec_habit_stack_1',
-        type: 'habit',
-        title: 'Create a Morning Habit Stack',
-        description: 'Link your existing meditation habit with a new exercise routine for better consistency',
-        reasoning: 'Users who stack habits achieve 67% higher consistency rates than standalone habits',
+        id: "rec_habit_stack_1",
+        type: "habit",
+        title: "Create a Morning Habit Stack",
+        description:
+          "Link your existing meditation habit with a new exercise routine for better consistency",
+        reasoning:
+          "Users who stack habits achieve 67% higher consistency rates than standalone habits",
         confidence: 0.82,
-        priority: 'medium',
-        impact: 'wellbeing',
-        estimatedBenefit: 'Increase habit consistency by 40%',
+        priority: "medium",
+        impact: "wellbeing",
+        estimatedBenefit: "Increase habit consistency by 40%",
         implementationTime: 20,
         requiredActions: [
-          'Add 10-minute exercise after meditation',
-          'Update habit tracker with the sequence',
-          'Set unified reminder for the stack'
+          "Add 10-minute exercise after meditation",
+          "Update habit tracker with the sequence",
+          "Set unified reminder for the stack",
         ],
         relatedData: {
-          habits: userContext.recentHabits.filter(h => h.name.includes('meditation')),
+          habits: userContext.recentHabits.filter((h) =>
+            h.name.includes("meditation"),
+          ),
           patterns: [
-            { type: 'habit_timing', description: 'Morning habits have 15% higher completion rate' },
-            { type: 'habit_stacking', description: 'Linked habits show improved consistency' }
-          ]
+            {
+              type: "habit_timing",
+              description: "Morning habits have 15% higher completion rate",
+            },
+            {
+              type: "habit_stacking",
+              description: "Linked habits show improved consistency",
+            },
+          ],
         },
         createdAt: new Date(),
         validUntil: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-        contextualFactors: ['existing_habits', 'morning_routine', 'consistency_patterns']
+        contextualFactors: [
+          "existing_habits",
+          "morning_routine",
+          "consistency_patterns",
+        ],
       },
       {
-        id: 'rec_workflow_automation_1',
-        type: 'workflow',
-        title: 'Automate Recurring Weekly Reviews',
-        description: 'Set up automated weekly review templates to reduce planning overhead by 35%',
-        reasoning: 'Your planning sessions take 45% longer when starting from scratch vs. using templates',
+        id: "rec_workflow_automation_1",
+        type: "workflow",
+        title: "Automate Recurring Weekly Reviews",
+        description:
+          "Set up automated weekly review templates to reduce planning overhead by 35%",
+        reasoning:
+          "Your planning sessions take 45% longer when starting from scratch vs. using templates",
         confidence: 0.75,
-        priority: 'medium',
-        impact: 'efficiency',
-        estimatedBenefit: '25 minutes saved per week',
+        priority: "medium",
+        impact: "efficiency",
+        estimatedBenefit: "25 minutes saved per week",
         implementationTime: 30,
         requiredActions: [
-          'Create weekly review template',
-          'Set up automated reminder system',
-          'Define review criteria checklist'
+          "Create weekly review template",
+          "Set up automated reminder system",
+          "Define review criteria checklist",
         ],
         relatedData: {
           patterns: [
-            { type: 'planning_efficiency', description: 'Template-based reviews are 45% faster' },
-            { type: 'review_consistency', description: 'Automated reminders improve review completion by 60%' }
-          ]
+            {
+              type: "planning_efficiency",
+              description: "Template-based reviews are 45% faster",
+            },
+            {
+              type: "review_consistency",
+              description:
+                "Automated reminders improve review completion by 60%",
+            },
+          ],
         },
         createdAt: new Date(),
         validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-        contextualFactors: ['planning_patterns', 'time_investment', 'consistency_goals']
+        contextualFactors: [
+          "planning_patterns",
+          "time_investment",
+          "consistency_goals",
+        ],
       },
       {
-        id: 'rec_learning_path_1',
-        type: 'learning',
-        title: 'Skill Development: Time Management Mastery',
-        description: 'Based on your productivity patterns, focus on advanced time-blocking techniques',
-        reasoning: 'Users with similar patterns who learned time-blocking improved productivity by 31%',
+        id: "rec_learning_path_1",
+        type: "learning",
+        title: "Skill Development: Time Management Mastery",
+        description:
+          "Based on your productivity patterns, focus on advanced time-blocking techniques",
+        reasoning:
+          "Users with similar patterns who learned time-blocking improved productivity by 31%",
         confidence: 0.79,
-        priority: 'medium',
-        impact: 'learning',
-        estimatedBenefit: 'Potential 30% productivity increase',
+        priority: "medium",
+        impact: "learning",
+        estimatedBenefit: "Potential 30% productivity increase",
         implementationTime: 45,
         requiredActions: [
-          'Complete time-blocking course module',
-          'Practice technique for 1 week',
-          'Implement advanced scheduling rules'
+          "Complete time-blocking course module",
+          "Practice technique for 1 week",
+          "Implement advanced scheduling rules",
         ],
         relatedData: {
           patterns: [
-            { type: 'learning_readiness', description: 'Optimal learning window detected' },
-            { type: 'skill_gap', description: 'Time management identified as high-impact skill' }
-          ]
+            {
+              type: "learning_readiness",
+              description: "Optimal learning window detected",
+            },
+            {
+              type: "skill_gap",
+              description: "Time management identified as high-impact skill",
+            },
+          ],
         },
         createdAt: new Date(),
         validUntil: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000),
-        contextualFactors: ['skill_assessment', 'learning_capacity', 'productivity_goals']
+        contextualFactors: [
+          "skill_assessment",
+          "learning_capacity",
+          "productivity_goals",
+        ],
       },
       {
-        id: 'rec_collaboration_1',
-        type: 'collaboration',
-        title: 'Optimize Team Sync Meetings',
-        description: 'Reduce meeting time by 30% using structured agendas and async updates',
-        reasoning: 'Analysis shows your meetings run 40% longer than similar productive teams',
+        id: "rec_collaboration_1",
+        type: "collaboration",
+        title: "Optimize Team Sync Meetings",
+        description:
+          "Reduce meeting time by 30% using structured agendas and async updates",
+        reasoning:
+          "Analysis shows your meetings run 40% longer than similar productive teams",
         confidence: 0.71,
-        priority: 'low',
-        impact: 'efficiency',
-        estimatedBenefit: '90 minutes saved weekly',
+        priority: "low",
+        impact: "efficiency",
+        estimatedBenefit: "90 minutes saved weekly",
         implementationTime: 25,
         requiredActions: [
-          'Create meeting agenda template',
-          'Implement async status updates',
-          'Set up 25-minute meeting blocks'
+          "Create meeting agenda template",
+          "Implement async status updates",
+          "Set up 25-minute meeting blocks",
         ],
         relatedData: {
           patterns: [
-            { type: 'meeting_efficiency', description: 'Current meetings 40% longer than optimal' },
-            { type: 'collaboration_style', description: 'High preference for structured communication' }
-          ]
+            {
+              type: "meeting_efficiency",
+              description: "Current meetings 40% longer than optimal",
+            },
+            {
+              type: "collaboration_style",
+              description: "High preference for structured communication",
+            },
+          ],
         },
         createdAt: new Date(),
         validUntil: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-        contextualFactors: ['team_dynamics', 'meeting_patterns', 'communication_preferences']
-      }
+        contextualFactors: [
+          "team_dynamics",
+          "meeting_patterns",
+          "communication_preferences",
+        ],
+      },
     ];
 
     setRecommendations(generatedRecommendations);
@@ -237,55 +333,71 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
   };
 
   const handleImplement = (recommendation: SmartRecommendation) => {
-    setImplementedIds(prev => [...prev, recommendation.id]);
+    setImplementedIds((prev) => [...prev, recommendation.id]);
     onRecommendationImplemented?.(recommendation.id);
   };
 
   const handleDismiss = (recommendation: SmartRecommendation) => {
-    setDismissedIds(prev => [...prev, recommendation.id]);
+    setDismissedIds((prev) => [...prev, recommendation.id]);
     onRecommendationDismissed?.(recommendation.id);
   };
 
-  const getTypeIcon = (type: SmartRecommendation['type']) => {
+  const getTypeIcon = (type: SmartRecommendation["type"]) => {
     switch (type) {
-      case 'task': return <Target className="h-5 w-5 text-blue-500" />;
-      case 'habit': return <Calendar className="h-5 w-5 text-green-500" />;
-      case 'schedule': return <Clock className="h-5 w-5 text-purple-500" />;
-      case 'workflow': return <Zap className="h-5 w-5 text-orange-500" />;
-      case 'learning': return <BookOpen className="h-5 w-5 text-indigo-500" />;
-      case 'collaboration': return <Users className="h-5 w-5 text-pink-500" />;
-      default: return <Sparkles className="h-5 w-5 text-gray-500" />;
+      case "task":
+        return <Target className="h-5 w-5 text-blue-500" />;
+      case "habit":
+        return <Calendar className="h-5 w-5 text-green-500" />;
+      case "schedule":
+        return <Clock className="h-5 w-5 text-purple-500" />;
+      case "workflow":
+        return <Zap className="h-5 w-5 text-orange-500" />;
+      case "learning":
+        return <BookOpen className="h-5 w-5 text-indigo-500" />;
+      case "collaboration":
+        return <Users className="h-5 w-5 text-pink-500" />;
+      default:
+        return <Sparkles className="h-5 w-5 text-gray-500" />;
     }
   };
 
-  const getPriorityColor = (priority: SmartRecommendation['priority']) => {
+  const getPriorityColor = (priority: SmartRecommendation["priority"]) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'low': return 'bg-green-100 text-green-800 border-green-200';
+      case "high":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "low":
+        return "bg-green-100 text-green-800 border-green-200";
     }
   };
 
-  const getImpactColor = (impact: SmartRecommendation['impact']) => {
+  const getImpactColor = (impact: SmartRecommendation["impact"]) => {
     switch (impact) {
-      case 'productivity': return 'bg-blue-100 text-blue-800';
-      case 'wellbeing': return 'bg-green-100 text-green-800';
-      case 'learning': return 'bg-purple-100 text-purple-800';
-      case 'efficiency': return 'bg-orange-100 text-orange-800';
+      case "productivity":
+        return "bg-blue-100 text-blue-800";
+      case "wellbeing":
+        return "bg-green-100 text-green-800";
+      case "learning":
+        return "bg-purple-100 text-purple-800";
+      case "efficiency":
+        return "bg-orange-100 text-orange-800";
     }
   };
 
-  const filteredRecommendations = recommendations.filter(rec => {
-    if (!filters.showImplemented && implementedIds.includes(rec.id)) return false;
+  const filteredRecommendations = recommendations.filter((rec) => {
+    if (!filters.showImplemented && implementedIds.includes(rec.id))
+      return false;
     if (dismissedIds.includes(rec.id)) return false;
-    if (filters.type !== 'all' && rec.type !== filters.type) return false;
-    if (filters.impact !== 'all' && rec.impact !== filters.impact) return false;
-    if (filters.priority !== 'all' && rec.priority !== filters.priority) return false;
+    if (filters.type !== "all" && rec.type !== filters.type) return false;
+    if (filters.impact !== "all" && rec.impact !== filters.impact) return false;
+    if (filters.priority !== "all" && rec.priority !== filters.priority)
+      return false;
     return true;
   });
 
-  const implementedRecommendations = recommendations.filter(rec =>
-    implementedIds.includes(rec.id)
+  const implementedRecommendations = recommendations.filter((rec) =>
+    implementedIds.includes(rec.id),
   );
 
   return (
@@ -302,7 +414,9 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
           </p>
         </div>
         <Button onClick={generateRecommendations} disabled={isLoading}>
-          <RotateCcw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+          <RotateCcw
+            className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+          />
           Refresh
         </Button>
       </div>
@@ -329,7 +443,10 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
               <div>
                 <p className="text-sm text-gray-600">High Priority</p>
                 <p className="text-2xl font-bold text-red-600">
-                  {filteredRecommendations.filter(r => r.priority === 'high').length}
+                  {
+                    filteredRecommendations.filter((r) => r.priority === "high")
+                      .length
+                  }
                 </p>
               </div>
               <Target className="h-8 w-8 text-red-500" />
@@ -358,8 +475,16 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                 <p className="text-sm text-gray-600">Avg Confidence</p>
                 <p className="text-2xl font-bold text-blue-600">
                   {recommendations.length > 0
-                    ? Math.round(recommendations.reduce((sum, r) => sum + r.confidence, 0) / recommendations.length * 100)
-                    : 0}%
+                    ? Math.round(
+                        (recommendations.reduce(
+                          (sum, r) => sum + r.confidence,
+                          0,
+                        ) /
+                          recommendations.length) *
+                          100,
+                      )
+                    : 0}
+                  %
                 </p>
               </div>
               <TrendingUp className="h-8 w-8 text-blue-500" />
@@ -379,10 +504,14 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
         <CardContent>
           <div className="flex flex-wrap gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Type
+              </label>
               <select
                 value={filters.type}
-                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, type: e.target.value }))
+                }
                 className="border rounded-md px-3 py-2 text-sm"
               >
                 <option value="all">All Types</option>
@@ -396,10 +525,14 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Impact</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Impact
+              </label>
               <select
                 value={filters.impact}
-                onChange={(e) => setFilters(prev => ({ ...prev, impact: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, impact: e.target.value }))
+                }
                 className="border rounded-md px-3 py-2 text-sm"
               >
                 <option value="all">All Impacts</option>
@@ -411,10 +544,14 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Priority
+              </label>
               <select
                 value={filters.priority}
-                onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value }))}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, priority: e.target.value }))
+                }
                 className="border rounded-md px-3 py-2 text-sm"
               >
                 <option value="all">All Priorities</option>
@@ -429,7 +566,12 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                 <input
                   type="checkbox"
                   checked={filters.showImplemented}
-                  onChange={(e) => setFilters(prev => ({ ...prev, showImplemented: e.target.checked }))}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      showImplemented: e.target.checked,
+                    }))
+                  }
                   className="rounded"
                 />
                 Show implemented
@@ -444,7 +586,9 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
         <Card>
           <CardContent className="p-12 text-center">
             <Brain className="h-12 w-12 animate-pulse mx-auto mb-4 text-purple-500" />
-            <p className="text-gray-600">Analyzing your patterns and generating recommendations...</p>
+            <p className="text-gray-600">
+              Analyzing your patterns and generating recommendations...
+            </p>
           </CardContent>
         </Card>
       ) : (
@@ -457,9 +601,11 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                   No recommendations available
                 </h3>
                 <p className="text-gray-600">
-                  {filters.type !== 'all' || filters.impact !== 'all' || filters.priority !== 'all'
-                    ? 'Try adjusting your filters to see more recommendations.'
-                    : 'Continue using the app to generate personalized recommendations.'}
+                  {filters.type !== "all" ||
+                  filters.impact !== "all" ||
+                  filters.priority !== "all"
+                    ? "Try adjusting your filters to see more recommendations."
+                    : "Continue using the app to generate personalized recommendations."}
                 </p>
               </CardContent>
             </Card>
@@ -471,9 +617,13 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 layout
               >
-                <Card className={`hover:shadow-md transition-shadow ${
-                  implementedIds.includes(recommendation.id) ? 'border-green-200 bg-green-50' : ''
-                }`}>
+                <Card
+                  className={`hover:shadow-md transition-shadow ${
+                    implementedIds.includes(recommendation.id)
+                      ? "border-green-200 bg-green-50"
+                      : ""
+                  }`}
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
@@ -491,10 +641,14 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={getPriorityColor(recommendation.priority)}>
+                        <Badge
+                          className={getPriorityColor(recommendation.priority)}
+                        >
                           {recommendation.priority}
                         </Badge>
-                        <Badge className={getImpactColor(recommendation.impact)}>
+                        <Badge
+                          className={getImpactColor(recommendation.impact)}
+                        >
                           {recommendation.impact}
                         </Badge>
                       </div>
@@ -507,12 +661,17 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                       <div className="p-3 bg-blue-50 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <Lightbulb className="h-4 w-4 text-blue-600" />
-                          <span className="font-medium text-blue-900">AI Reasoning</span>
+                          <span className="font-medium text-blue-900">
+                            AI Reasoning
+                          </span>
                           <Badge variant="outline" className="text-xs">
-                            {(recommendation.confidence * 100).toFixed(0)}% confidence
+                            {(recommendation.confidence * 100).toFixed(0)}%
+                            confidence
                           </Badge>
                         </div>
-                        <p className="text-sm text-blue-800">{recommendation.reasoning}</p>
+                        <p className="text-sm text-blue-800">
+                          {recommendation.reasoning}
+                        </p>
                       </div>
 
                       {/* Benefits & Implementation */}
@@ -522,14 +681,18 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                             <TrendingUp className="h-4 w-4 text-green-600" />
                             Expected Benefit
                           </h4>
-                          <p className="text-sm text-gray-700">{recommendation.estimatedBenefit}</p>
+                          <p className="text-sm text-gray-700">
+                            {recommendation.estimatedBenefit}
+                          </p>
                         </div>
                         <div>
                           <h4 className="font-medium mb-2 flex items-center gap-2">
                             <Clock className="h-4 w-4 text-purple-600" />
                             Implementation Time
                           </h4>
-                          <p className="text-sm text-gray-700">{recommendation.implementationTime} minutes</p>
+                          <p className="text-sm text-gray-700">
+                            {recommendation.implementationTime} minutes
+                          </p>
                         </div>
                       </div>
 
@@ -537,43 +700,73 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                       <div>
                         <h4 className="font-medium mb-2">Required Actions</h4>
                         <div className="space-y-2">
-                          {recommendation.requiredActions.map((action, index) => (
-                            <div key={index} className="flex items-start gap-2 text-sm">
-                              <ChevronRight className="h-4 w-4 mt-0.5 text-gray-400 flex-shrink-0" />
-                              <span>{action}</span>
-                            </div>
-                          ))}
+                          {recommendation.requiredActions.map(
+                            (action, index) => (
+                              <div
+                                key={index}
+                                className="flex items-start gap-2 text-sm"
+                              >
+                                <ChevronRight className="h-4 w-4 mt-0.5 text-gray-400 flex-shrink-0" />
+                                <span>{action}</span>
+                              </div>
+                            ),
+                          )}
                         </div>
                       </div>
 
                       {/* Related Data */}
-                      {(recommendation.relatedData.tasks || recommendation.relatedData.habits || recommendation.relatedData.patterns) && (
+                      {(recommendation.relatedData.tasks ||
+                        recommendation.relatedData.habits ||
+                        recommendation.relatedData.patterns) && (
                         <div>
                           <h4 className="font-medium mb-2">Related Data</h4>
                           <div className="space-y-2">
-                            {recommendation.relatedData.tasks?.map((task, index) => (
-                              <div key={index} className="flex items-center gap-2 text-sm p-2 bg-gray-50 rounded">
-                                <Target className="h-4 w-4 text-blue-500" />
-                                <span>{task.title}</span>
-                                <Badge variant="outline" className="text-xs">{task.status}</Badge>
-                              </div>
-                            ))}
-                            {recommendation.relatedData.habits?.map((habit, index) => (
-                              <div key={index} className="flex items-center gap-2 text-sm p-2 bg-gray-50 rounded">
-                                <Calendar className="h-4 w-4 text-green-500" />
-                                <span>{habit.name}</span>
-                                <Badge variant="outline" className="text-xs">{habit.streak} day streak</Badge>
-                              </div>
-                            ))}
-                            {recommendation.relatedData.patterns?.map((pattern, index) => (
-                              <div key={index} className="flex items-start gap-2 text-sm p-2 bg-gray-50 rounded">
-                                <BarChart3 className="h-4 w-4 text-purple-500 mt-0.5" />
-                                <div>
-                                  <div className="font-medium">{pattern.type.replace('_', ' ')}</div>
-                                  <div className="text-gray-600">{pattern.description}</div>
+                            {recommendation.relatedData.tasks?.map(
+                              (task, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-2 text-sm p-2 bg-gray-50 rounded"
+                                >
+                                  <Target className="h-4 w-4 text-blue-500" />
+                                  <span>{task.title}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {task.status}
+                                  </Badge>
                                 </div>
-                              </div>
-                            ))}
+                              ),
+                            )}
+                            {recommendation.relatedData.habits?.map(
+                              (habit, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-2 text-sm p-2 bg-gray-50 rounded"
+                                >
+                                  <Calendar className="h-4 w-4 text-green-500" />
+                                  <span>{habit.name}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {habit.streak} day streak
+                                  </Badge>
+                                </div>
+                              ),
+                            )}
+                            {recommendation.relatedData.patterns?.map(
+                              (pattern, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-start gap-2 text-sm p-2 bg-gray-50 rounded"
+                                >
+                                  <BarChart3 className="h-4 w-4 text-purple-500 mt-0.5" />
+                                  <div>
+                                    <div className="font-medium">
+                                      {pattern.type.replace("_", " ")}
+                                    </div>
+                                    <div className="text-gray-600">
+                                      {pattern.description}
+                                    </div>
+                                  </div>
+                                </div>
+                              ),
+                            )}
                           </div>
                         </div>
                       )}
@@ -582,18 +775,25 @@ export const SmartRecommendations: React.FC<SmartRecommendationsProps> = ({
                       <div>
                         <h4 className="font-medium mb-2">Based On</h4>
                         <div className="flex flex-wrap gap-2">
-                          {recommendation.contextualFactors.map((factor, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {factor.replace('_', ' ')}
-                            </Badge>
-                          ))}
+                          {recommendation.contextualFactors.map(
+                            (factor, index) => (
+                              <Badge
+                                key={index}
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {factor.replace("_", " ")}
+                              </Badge>
+                            ),
+                          )}
                         </div>
                       </div>
 
                       {/* Actions */}
                       <div className="flex items-center justify-between pt-4 border-t">
                         <div className="text-xs text-gray-500">
-                          Valid until {recommendation.validUntil.toLocaleDateString()}
+                          Valid until{" "}
+                          {recommendation.validUntil.toLocaleDateString()}
                         </div>
 
                         {!implementedIds.includes(recommendation.id) && (

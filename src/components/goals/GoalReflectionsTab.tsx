@@ -2,7 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, Plus, BookOpen, Lightbulb, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,24 +24,26 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
   const [filter, setFilter] = useState<GoalReflectionType | "all">("all");
 
   const { data: reflectionLinks, isLoading } = useQuery({
-    queryKey: ['goal-reflection-links', goalId],
+    queryKey: ["goal-reflection-links", goalId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('reflection_goal_links')
-        .select(`
+        .from("reflection_goal_links")
+        .select(
+          `
           *,
           reflection:reflections(*)
-        `)
-        .eq('goal_id', goalId)
-        .order('created_at', { ascending: false });
+        `,
+        )
+        .eq("goal_id", goalId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return data;
     },
   });
 
-  const filteredLinks = reflectionLinks?.filter(link => 
-    filter === "all" || link.reflection_type === filter
+  const filteredLinks = reflectionLinks?.filter(
+    (link) => filter === "all" || link.reflection_type === filter,
   );
 
   const getReflectionTypeLabel = (type: GoalReflectionType) => {
@@ -54,7 +62,8 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
       progress_review: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
       milestone_achieved: "bg-green-500/10 text-green-700 dark:text-green-400",
       challenge_faced: "bg-orange-500/10 text-orange-700 dark:text-orange-400",
-      strategy_adjustment: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+      strategy_adjustment:
+        "bg-purple-500/10 text-purple-700 dark:text-purple-400",
       completion_celebration: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
     };
     return colors[type];
@@ -63,25 +72,35 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
   const getMoodEmoji = (mood: string | null) => {
     if (!mood) return null;
     const emojis: Record<string, string> = {
-      amazing: '🤩',
-      great: '😊',
-      good: '🙂',
-      neutral: '😐',
-      bad: '😔',
-      terrible: '😢',
+      amazing: "🤩",
+      great: "😊",
+      good: "🙂",
+      neutral: "😐",
+      bad: "😔",
+      terrible: "😢",
     };
     return emojis[mood];
   };
 
   const stats = {
     total: reflectionLinks?.length || 0,
-    progressReviews: reflectionLinks?.filter(l => l.reflection_type === 'progress_review').length || 0,
-    milestones: reflectionLinks?.filter(l => l.reflection_type === 'milestone_achieved').length || 0,
-    challenges: reflectionLinks?.filter(l => l.reflection_type === 'challenge_faced').length || 0,
+    progressReviews:
+      reflectionLinks?.filter((l) => l.reflection_type === "progress_review")
+        .length || 0,
+    milestones:
+      reflectionLinks?.filter((l) => l.reflection_type === "milestone_achieved")
+        .length || 0,
+    challenges:
+      reflectionLinks?.filter((l) => l.reflection_type === "challenge_faced")
+        .length || 0,
   };
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading reflections...</div>;
+    return (
+      <div className="text-sm text-muted-foreground">
+        Loading reflections...
+      </div>
+    );
   }
 
   return (
@@ -94,7 +113,7 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
             Track insights and progress through reflections
           </p>
         </div>
-        <Button onClick={() => navigate('/reflections')}>
+        <Button onClick={() => navigate("/reflections")}>
           <Plus className="h-4 w-4 mr-2" />
           New Reflection
         </Button>
@@ -185,11 +204,19 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
                     <div className="flex-1 space-y-2">
                       <div className="flex items-center gap-2 flex-wrap">
                         <BookOpen className="h-4 w-4 text-muted-foreground" />
-                        <CardTitle className="text-base">{reflection.title}</CardTitle>
+                        <CardTitle className="text-base">
+                          {reflection.title}
+                        </CardTitle>
                         {reflection.mood && (
-                          <span className="text-lg">{getMoodEmoji(reflection.mood)}</span>
+                          <span className="text-lg">
+                            {getMoodEmoji(reflection.mood)}
+                          </span>
                         )}
-                        <Badge className={getReflectionTypeColor(link.reflection_type)}>
+                        <Badge
+                          className={getReflectionTypeColor(
+                            link.reflection_type,
+                          )}
+                        >
                           {getReflectionTypeLabel(link.reflection_type)}
                         </Badge>
                       </div>
@@ -197,7 +224,10 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {format(new Date(reflection.reflection_date), 'MMM d, yyyy')}
+                          {format(
+                            new Date(reflection.reflection_date),
+                            "MMM d, yyyy",
+                          )}
                         </div>
                         <Badge variant="secondary" className="text-xs">
                           {reflection.reflection_type}
@@ -247,11 +277,11 @@ export function GoalReflectionsTab({ goalId }: GoalReflectionsTabProps) {
             <BookOpen className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Reflections Yet</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              {filter === "all" 
+              {filter === "all"
                 ? "Create reflections about this goal to track insights and progress."
                 : `No ${getReflectionTypeLabel(filter as GoalReflectionType).toLowerCase()} reflections yet.`}
             </p>
-            <Button onClick={() => navigate('/reflections')}>
+            <Button onClick={() => navigate("/reflections")}>
               <Plus className="h-4 w-4 mr-2" />
               Create Reflection
             </Button>

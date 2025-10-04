@@ -1,15 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   useNotificationSettings,
   useUpdateNotificationSettings,
-} from '@/hooks/useAutomation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Bell, Mail, Webhook, Save } from 'lucide-react';
+} from "@/hooks/useAutomation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Bell, Mail, Webhook, Save } from "lucide-react";
 
 export function NotificationSettings() {
   const { data: settings } = useNotificationSettings();
@@ -19,7 +25,7 @@ export function NotificationSettings() {
     in_app_notifications: true,
     push_notifications: true,
     email_notifications: false,
-    webhook_url: '',
+    webhook_url: "",
     due_date_reminders: true,
     overdue_alerts: true,
     completion_celebrations: true,
@@ -28,7 +34,7 @@ export function NotificationSettings() {
     due_date_reminder_hours: [24, 1],
     overdue_escalation_hours: [1, 24, 72],
     weekly_summary_day: 1,
-    weekly_summary_time: '09:00:00',
+    weekly_summary_time: "09:00:00",
   });
 
   useEffect(() => {
@@ -37,7 +43,7 @@ export function NotificationSettings() {
         in_app_notifications: settings.in_app_notifications,
         push_notifications: settings.push_notifications,
         email_notifications: settings.email_notifications,
-        webhook_url: settings.webhook_url || '',
+        webhook_url: settings.webhook_url || "",
         due_date_reminders: settings.due_date_reminders,
         overdue_alerts: settings.overdue_alerts,
         completion_celebrations: settings.completion_celebrations,

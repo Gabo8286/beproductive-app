@@ -1,14 +1,20 @@
 import { HabitEntry, HabitTrend } from "@/types/habits";
-import { differenceInDays, format, startOfWeek, endOfWeek, eachDayOfInterval } from "date-fns";
+import {
+  differenceInDays,
+  format,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+} from "date-fns";
 
 /**
  * Calculate completion rate for a set of entries
  */
 export function calculateCompletionRate(
   entries: HabitEntry[],
-  totalDays: number
+  totalDays: number,
 ): number {
-  const completedDays = entries.filter(e => e.status === 'completed').length;
+  const completedDays = entries.filter((e) => e.status === "completed").length;
   return totalDays > 0 ? (completedDays / totalDays) * 100 : 0;
 }
 
@@ -19,7 +25,7 @@ export function calculateStreak(entries: HabitEntry[]): number {
   if (!entries || entries.length === 0) return 0;
 
   const sortedEntries = [...entries]
-    .filter(e => e.status === 'completed')
+    .filter((e) => e.status === "completed")
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   let streak = 0;
@@ -50,7 +56,7 @@ export function calculateLongestStreak(entries: HabitEntry[]): number {
   if (!entries || entries.length === 0) return 0;
 
   const sortedEntries = [...entries]
-    .filter(e => e.status === 'completed')
+    .filter((e) => e.status === "completed")
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   let maxStreak = 0;
@@ -76,7 +82,10 @@ export function calculateLongestStreak(entries: HabitEntry[]): number {
 /**
  * Calculate consistency score (0-100)
  */
-export function calculateConsistencyScore(entries: HabitEntry[], days: number): number {
+export function calculateConsistencyScore(
+  entries: HabitEntry[],
+  days: number,
+): number {
   if (days === 0) return 0;
 
   const completionRate = calculateCompletionRate(entries, days);
@@ -96,22 +105,22 @@ export function calculateWeeklyPerformance(entries: HabitEntry[]): {
 }[] {
   const weeks: Record<string, { completions: number; total: number }> = {};
 
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     const weekStart = startOfWeek(new Date(entry.date));
-    const weekKey = format(weekStart, 'yyyy-MM-dd');
+    const weekKey = format(weekStart, "yyyy-MM-dd");
 
     if (!weeks[weekKey]) {
       weeks[weekKey] = { completions: 0, total: 0 };
     }
 
     weeks[weekKey].total++;
-    if (entry.status === 'completed') {
+    if (entry.status === "completed") {
       weeks[weekKey].completions++;
     }
   });
 
   return Object.entries(weeks).map(([weekKey, stats]) => ({
-    week: format(new Date(weekKey), 'MMM dd'),
+    week: format(new Date(weekKey), "MMM dd"),
     rate: (stats.completions / stats.total) * 100,
     completions: stats.completions,
   }));
@@ -127,20 +136,28 @@ export function identifyBestDay(entries: HabitEntry[]): {
 } | null {
   const dayStats: Record<number, { completed: number; total: number }> = {};
 
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     const day = new Date(entry.date).getDay();
     if (!dayStats[day]) {
       dayStats[day] = { completed: 0, total: 0 };
     }
 
     dayStats[day].total++;
-    if (entry.status === 'completed') {
+    if (entry.status === "completed") {
       dayStats[day].completed++;
     }
   });
 
-  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  
+  const dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
   const bestDay = Object.entries(dayStats)
     .map(([day, stats]) => ({
       day: parseInt(day),
@@ -155,9 +172,12 @@ export function identifyBestDay(entries: HabitEntry[]): {
 /**
  * Calculate momentum score
  */
-export function calculateMomentum(entries: HabitEntry[], days: number = 7): number {
+export function calculateMomentum(
+  entries: HabitEntry[],
+  days: number = 7,
+): number {
   const recentEntries = entries
-    .filter(e => {
+    .filter((e) => {
       const entryDate = new Date(e.date);
       const daysAgo = differenceInDays(new Date(), entryDate);
       return daysAgo <= days;
@@ -170,7 +190,7 @@ export function calculateMomentum(entries: HabitEntry[], days: number = 7): numb
   let weight = 1;
 
   recentEntries.forEach((entry, index) => {
-    if (entry.status === 'completed') {
+    if (entry.status === "completed") {
       momentumScore += weight;
     }
     weight *= 0.9; // Decay factor
@@ -184,11 +204,10 @@ export function calculateMomentum(entries: HabitEntry[], days: number = 7): numb
  */
 export function predictStreakContinuation(entries: HabitEntry[]): number {
   const recentDays = 14;
-  const recentEntries = entries
-    .filter(e => {
-      const daysAgo = differenceInDays(new Date(), new Date(e.date));
-      return daysAgo <= recentDays;
-    });
+  const recentEntries = entries.filter((e) => {
+    const daysAgo = differenceInDays(new Date(), new Date(e.date));
+    return daysAgo <= recentDays;
+  });
 
   const completionRate = calculateCompletionRate(recentEntries, recentDays);
   const currentStreak = calculateStreak(entries);
@@ -224,7 +243,7 @@ export function calculateOptimalTarget(entries: HabitEntry[]): number {
  */
 export function generateTrendData(
   entries: HabitEntry[],
-  days: number
+  days: number,
 ): HabitTrend[] {
   const endDate = new Date();
   const startDate = new Date();
@@ -232,20 +251,22 @@ export function generateTrendData(
 
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
 
-  return allDays.map(date => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    const entry = entries.find(e => e.date === dateStr);
+  return allDays.map((date) => {
+    const dateStr = format(date, "yyyy-MM-dd");
+    const entry = entries.find((e) => e.date === dateStr);
 
-    const entriesUpToDate = entries.filter(
-      e => new Date(e.date) <= date
-    );
+    const entriesUpToDate = entries.filter((e) => new Date(e.date) <= date);
 
     return {
       date: dateStr,
-      completions: entry?.status === 'completed' ? 1 : 0,
+      completions: entry?.status === "completed" ? 1 : 0,
       completion_rate: entry ? 100 : 0,
       streak: calculateStreak(entriesUpToDate),
-      mood: entry?.mood ? ['terrible', 'bad', 'neutral', 'good', 'amazing'].indexOf(entry.mood) + 1 : undefined,
+      mood: entry?.mood
+        ? ["terrible", "bad", "neutral", "good", "amazing"].indexOf(
+            entry.mood,
+          ) + 1
+        : undefined,
       energy: entry?.energy_level,
     };
   });

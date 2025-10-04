@@ -3,25 +3,69 @@
 // Matches database schema from Sprint 6
 // =====================================================
 
-import type { Goal } from './goals';
-import type { Habit } from './habits';
-import type { Database } from '@/integrations/supabase/types';
+import type { Goal } from "./goals";
+import type { Habit } from "./habits";
+import type { Database } from "@/integrations/supabase/types";
 
 // Enums matching database types
-export type ReflectionType = 'daily' | 'weekly' | 'monthly' | 'project' | 'goal' | 'habit' | 'custom';
-export type MoodLevel = 'amazing' | 'great' | 'good' | 'neutral' | 'bad' | 'terrible';
-export type TemplateCategory = 'daily' | 'weekly' | 'monthly' | 'project' | 'goal_review' | 'habit_review' | 'personal' | 'professional' | 'custom';
-export type PromptCategory = 'gratitude' | 'challenges' | 'wins' | 'learning' | 'planning' | 'mood' | 'goals' | 'habits' | 'relationships' | 'growth';
-export type PromptFrequency = 'daily' | 'weekly' | 'monthly' | 'occasional';
-export type GoalReflectionType = 'progress_review' | 'milestone_achieved' | 'challenge_faced' | 'strategy_adjustment' | 'completion_celebration';
-export type HabitReflectionType = 'streak_milestone' | 'consistency_review' | 'difficulty_adjustment' | 'motivation_analysis' | 'pattern_recognition';
-export type AnalyticsPeriod = 'week' | 'month' | 'quarter' | 'year';
-export type ShareType = 'read_only' | 'comment_enabled' | 'collaborative';
+export type ReflectionType =
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "project"
+  | "goal"
+  | "habit"
+  | "custom";
+export type MoodLevel =
+  | "amazing"
+  | "great"
+  | "good"
+  | "neutral"
+  | "bad"
+  | "terrible";
+export type TemplateCategory =
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "project"
+  | "goal_review"
+  | "habit_review"
+  | "personal"
+  | "professional"
+  | "custom";
+export type PromptCategory =
+  | "gratitude"
+  | "challenges"
+  | "wins"
+  | "learning"
+  | "planning"
+  | "mood"
+  | "goals"
+  | "habits"
+  | "relationships"
+  | "growth";
+export type PromptFrequency = "daily" | "weekly" | "monthly" | "occasional";
+export type GoalReflectionType =
+  | "progress_review"
+  | "milestone_achieved"
+  | "challenge_faced"
+  | "strategy_adjustment"
+  | "completion_celebration";
+export type HabitReflectionType =
+  | "streak_milestone"
+  | "consistency_review"
+  | "difficulty_adjustment"
+  | "motivation_analysis"
+  | "pattern_recognition";
+export type AnalyticsPeriod = "week" | "month" | "quarter" | "year";
+export type ShareType = "read_only" | "comment_enabled" | "collaborative";
 
 // Database types
-type DbReflection = Database['public']['Tables']['reflections']['Row'];
-type DbReflectionTemplate = Database['public']['Tables']['reflection_templates']['Row'];
-type DbReflectionPrompt = Database['public']['Tables']['reflection_prompts']['Row'];
+type DbReflection = Database["public"]["Tables"]["reflections"]["Row"];
+type DbReflectionTemplate =
+  Database["public"]["Tables"]["reflection_templates"]["Row"];
+type DbReflectionPrompt =
+  Database["public"]["Tables"]["reflection_prompts"]["Row"];
 
 // Core Reflection interface
 export interface Reflection {
@@ -164,7 +208,8 @@ export interface CreateReflectionInput {
   metadata?: Record<string, any>;
 }
 
-export interface UpdateReflectionInput extends Partial<Omit<CreateReflectionInput, 'workspace_id'>> {}
+export interface UpdateReflectionInput
+  extends Partial<Omit<CreateReflectionInput, "workspace_id">> {}
 
 export interface CreateReflectionTemplateInput {
   name: string;
@@ -176,7 +221,8 @@ export interface CreateReflectionTemplateInput {
   metadata?: Record<string, any>;
 }
 
-export interface UpdateReflectionTemplateInput extends Partial<CreateReflectionTemplateInput> {}
+export interface UpdateReflectionTemplateInput
+  extends Partial<CreateReflectionTemplateInput> {}
 
 export interface CreateReflectionGoalLinkInput {
   reflection_id: string;
@@ -228,16 +274,25 @@ export interface ReflectionFilters {
   is_private?: boolean;
 }
 
-export type ReflectionSortBy = 'reflection_date' | 'created_at' | 'title' | 'mood';
-export type SortOrder = 'asc' | 'desc';
+export type ReflectionSortBy =
+  | "reflection_date"
+  | "created_at"
+  | "title"
+  | "mood";
+export type SortOrder = "asc" | "desc";
 
 // Analytics types
 export interface ReflectionInsight {
-  type: 'mood_trend' | 'energy_pattern' | 'stress_alert' | 'growth_opportunity' | 'consistency_achievement';
+  type:
+    | "mood_trend"
+    | "energy_pattern"
+    | "stress_alert"
+    | "growth_opportunity"
+    | "consistency_achievement";
   title: string;
   description: string;
   action?: string;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
   metadata?: Record<string, any>;
 }
 

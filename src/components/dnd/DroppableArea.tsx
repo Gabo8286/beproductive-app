@@ -1,5 +1,5 @@
-import { useDroppable } from '@dnd-kit/core';
-import { ReactNode } from 'react';
+import { useDroppable } from "@dnd-kit/core";
+import { ReactNode } from "react";
 
 interface DroppableAreaProps {
   id: string;
@@ -8,7 +8,12 @@ interface DroppableAreaProps {
   data?: any;
 }
 
-export function DroppableArea({ id, children, className = '', data }: DroppableAreaProps) {
+export function DroppableArea({
+  id,
+  children,
+  className = "",
+  data,
+}: DroppableAreaProps) {
   const { setNodeRef, isOver } = useDroppable({
     id,
     data,
@@ -19,9 +24,9 @@ export function DroppableArea({ id, children, className = '', data }: DroppableA
       ref={setNodeRef}
       role="region"
       aria-label={`Drop area for ${id}`}
-      aria-dropeffect={isOver ? 'move' : 'none'}
+      aria-dropeffect={isOver ? "move" : "none"}
       className={`${className} ${
-        isOver ? 'ring-2 ring-primary ring-offset-2 bg-accent/5' : ''
+        isOver ? "ring-2 ring-primary ring-offset-2 bg-accent/5" : ""
       } transition-all duration-200`}
     >
       {children}

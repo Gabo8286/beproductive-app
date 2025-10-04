@@ -10,111 +10,131 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Home, Target, CheckSquare, Repeat, Folder, BookOpen, Sparkles, Users, Workflow, Tags, FileText, Calendar, Zap, StickyNote, Notebook, BarChart3, Globe, Building, Timer } from "lucide-react";
+import {
+  Home,
+  Target,
+  CheckSquare,
+  Repeat,
+  Folder,
+  BookOpen,
+  Sparkles,
+  Users,
+  Workflow,
+  Tags,
+  FileText,
+  Calendar,
+  Zap,
+  StickyNote,
+  Notebook,
+  BarChart3,
+  Globe,
+  Building,
+  Timer,
+} from "lucide-react";
 import { useModules } from "@/contexts/ModulesContext";
 import { cn } from "@/lib/utils";
 import { brandConfig, getMotivationalMessage } from "@/lib/brand";
 
 const navigation = [
-  { 
-    name: "Dashboard", 
+  {
+    name: "Dashboard",
     displayName: "Dashboard",
-    href: "/dashboard", 
-    icon: Home, 
+    href: "/dashboard",
+    icon: Home,
     moduleId: null,
     description: "Your journey overview",
     color: "text-foreground",
-    voiceCommand: "dashboard"
+    voiceCommand: "dashboard",
   },
-  { 
-    name: "Destinations", 
+  {
+    name: "Destinations",
     displayName: "Goals",
-    href: "/goals", 
-    icon: Target, 
+    href: "/goals",
+    icon: Target,
     moduleId: "goals" as const,
     description: "Where you want to go",
     color: "text-primary",
-    voiceCommand: "goals"
+    voiceCommand: "goals",
   },
-  { 
-    name: "Next Steps", 
+  {
+    name: "Next Steps",
     displayName: "Tasks",
-    href: "/tasks", 
-    icon: CheckSquare, 
+    href: "/tasks",
+    icon: CheckSquare,
     moduleId: "tasks" as const,
     description: "What needs to be done",
     color: "text-warning",
-    voiceCommand: "tasks"
+    voiceCommand: "tasks",
   },
-  { 
-    name: "Travel Notes", 
+  {
+    name: "Travel Notes",
     displayName: "Quick To-Dos",
-    href: "/quick-todos", 
-    icon: StickyNote, 
+    href: "/quick-todos",
+    icon: StickyNote,
     moduleId: "tasks" as const,
     description: "Quick capture",
     color: "text-warning",
-    voiceCommand: "quick todos"
+    voiceCommand: "quick todos",
   },
-  { 
-    name: "Templates", 
+  {
+    name: "Templates",
     displayName: "Templates",
-    href: "/templates", 
-    icon: FileText, 
+    href: "/templates",
+    icon: FileText,
     moduleId: "tasks" as const,
     description: "Reusable patterns",
     color: "text-muted-foreground",
-    voiceCommand: "templates"
+    voiceCommand: "templates",
   },
-  { 
-    name: "Recurring", 
+  {
+    name: "Recurring",
     displayName: "Recurring",
-    href: "/recurring-tasks", 
-    icon: Calendar, 
+    href: "/recurring-tasks",
+    icon: Calendar,
     moduleId: "tasks" as const,
     description: "Regular rhythms",
     color: "text-muted-foreground",
-    voiceCommand: "recurring"
+    voiceCommand: "recurring",
   },
-  { 
-    name: "Tags", 
+  {
+    name: "Tags",
     displayName: "Tags",
-    href: "/tags", 
-    icon: Tags, 
+    href: "/tags",
+    icon: Tags,
     moduleId: "tasks" as const,
     description: "Organize your path",
     color: "text-muted-foreground",
-    voiceCommand: "tags"
+    voiceCommand: "tags",
   },
-  { 
-    name: "Automation", 
+  {
+    name: "Automation",
     displayName: "Automation",
-    href: "/automation", 
-    icon: Zap, 
+    href: "/automation",
+    icon: Zap,
     moduleId: "tasks" as const,
     description: "Smart workflows",
     color: "text-warning",
-    voiceCommand: "automation"
+    voiceCommand: "automation",
   },
-  { 
-    name: "Daily Routines", 
+  {
+    name: "Daily Routines",
     displayName: "Habits",
-    href: "/habits", 
-    icon: Repeat, 
+    href: "/habits",
+    icon: Repeat,
     moduleId: "habits" as const,
     description: "How you travel",
     color: "text-secondary",
-    voiceCommand: "habits"
+    voiceCommand: "habits",
   },
-  { 
-    name: "Projects", 
+  {
+    name: "Projects",
     displayName: "Projects",
-    href: "/projects", 
-    icon: Folder, 
+    href: "/projects",
+    icon: Folder,
     moduleId: "projects" as const,
     description: "Major expeditions",
     color: "text-muted-foreground",
-    voiceCommand: "projects"
+    voiceCommand: "projects",
   },
   {
     name: "Route Adjustments",
@@ -124,7 +144,7 @@ const navigation = [
     moduleId: "reflections" as const,
     description: "Learning from the path",
     color: "text-success",
-    voiceCommand: "reflections"
+    voiceCommand: "reflections",
   },
   {
     name: "Knowledge Base",
@@ -134,27 +154,27 @@ const navigation = [
     moduleId: "notes" as const,
     description: "Zettelkasten knowledge system",
     color: "text-info",
-    voiceCommand: "notes"
+    voiceCommand: "notes",
   },
-  { 
-    name: "AI Insights", 
+  {
+    name: "AI Insights",
     displayName: "AI Insights",
-    href: "/ai-insights", 
-    icon: Sparkles, 
+    href: "/ai-insights",
+    icon: Sparkles,
     moduleId: "ai-insights" as const,
     description: "Smart guidance",
     color: "text-primary",
-    voiceCommand: "ai insights"
+    voiceCommand: "ai insights",
   },
-  { 
-    name: "Team Journey", 
+  {
+    name: "Team Journey",
     displayName: "Team",
-    href: "/team", 
-    icon: Users, 
+    href: "/team",
+    icon: Users,
     moduleId: "team-collaboration" as const,
     description: "Traveling together",
     color: "text-secondary",
-    voiceCommand: "team"
+    voiceCommand: "team",
   },
   {
     name: "Travel Guides",
@@ -164,7 +184,7 @@ const navigation = [
     moduleId: "process-inventory" as const,
     description: "Documented workflows",
     color: "text-muted-foreground",
-    voiceCommand: "processes"
+    voiceCommand: "processes",
   },
   {
     name: "Analytics & Insights",
@@ -174,7 +194,7 @@ const navigation = [
     moduleId: "analytics" as const,
     description: "Data-driven insights",
     color: "text-blue-600",
-    voiceCommand: "analytics"
+    voiceCommand: "analytics",
   },
   {
     name: "Time Tracking",
@@ -184,7 +204,7 @@ const navigation = [
     moduleId: "time-tracking" as const,
     description: "AI-powered time insights",
     color: "text-purple-600",
-    voiceCommand: "time tracking"
+    voiceCommand: "time tracking",
   },
   {
     name: "Integrations & Connections",
@@ -194,7 +214,7 @@ const navigation = [
     moduleId: "integrations" as const,
     description: "Connect your tools",
     color: "text-green-600",
-    voiceCommand: "integrations"
+    voiceCommand: "integrations",
   },
   {
     name: "Enterprise Management",
@@ -204,7 +224,7 @@ const navigation = [
     moduleId: "enterprise" as const,
     description: "Security & access control",
     color: "text-purple-600",
-    voiceCommand: "enterprise"
+    voiceCommand: "enterprise",
   },
 ];
 
@@ -214,7 +234,7 @@ export function AppSidebar() {
   const { isModuleEnabled } = useModules();
 
   const visibleNavigation = navigation.filter(
-    (item) => !item.moduleId || isModuleEnabled(item.moduleId)
+    (item) => !item.moduleId || isModuleEnabled(item.moduleId),
   );
 
   const isCollapsed = state === "collapsed";
@@ -240,7 +260,7 @@ export function AppSidebar() {
             </div>
           )}
         </div>
-        
+
         <SidebarGroup>
           <SidebarGroupLabel>Your Journey</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -253,32 +273,42 @@ export function AppSidebar() {
                       <NavLink
                         to={item.href}
                         data-voice-command={item.voiceCommand}
-                        title={isCollapsed ? `${item.displayName} - ${item.description}` : undefined}
+                        title={
+                          isCollapsed
+                            ? `${item.displayName} - ${item.description}`
+                            : undefined
+                        }
                         className={cn(
                           "flex items-center gap-3 rounded-lg px-3 transition-all duration-200",
                           "hover:shadow-sm apple-button",
                           isCollapsed ? "py-2 justify-center" : "py-2.5",
                           isActive
                             ? "bg-gradient-primary text-primary-foreground shadow-md relative"
-                            : "text-muted-foreground hover:bg-accent/50"
+                            : "text-muted-foreground hover:bg-accent/50",
                         )}
                       >
                         {isActive && !isCollapsed && (
                           <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary-foreground rounded-r-full" />
                         )}
-                        <item.icon className={cn(
-                          "h-4 w-4 shrink-0 transition-colors",
-                          isActive ? "text-primary-foreground" : item.color
-                        )} />
+                        <item.icon
+                          className={cn(
+                            "h-4 w-4 shrink-0 transition-colors",
+                            isActive ? "text-primary-foreground" : item.color,
+                          )}
+                        />
                         {!isCollapsed && (
                           <div className="flex-1 min-w-0 text-left">
                             <span className="block text-sm font-medium leading-tight">
                               {item.displayName}
                             </span>
-                            <span className={cn(
-                              "block text-xs leading-tight mt-0.5",
-                              isActive ? "text-primary-foreground/80" : "text-muted-foreground/70"
-                            )}>
+                            <span
+                              className={cn(
+                                "block text-xs leading-tight mt-0.5",
+                                isActive
+                                  ? "text-primary-foreground/80"
+                                  : "text-muted-foreground/70",
+                              )}
+                            >
                               {item.description}
                             </span>
                           </div>

@@ -1,5 +1,5 @@
-import { useAuth } from '@/contexts/AuthContext';
-import { useMemo } from 'react';
+import { useAuth } from "@/contexts/AuthContext";
+import { useMemo } from "react";
 
 export interface SuperAdminAccess {
   isSuperAdmin: boolean;
@@ -30,17 +30,17 @@ export const useSuperAdminAccess = (): SuperAdminAccess => {
         isSuperAdmin: false,
         hasAccess: false,
         loading: false,
-        error: 'No user profile found',
+        error: "No user profile found",
       };
     }
 
-    const isSuperAdmin = profile.role === 'super_admin';
+    const isSuperAdmin = profile.role === "super_admin";
 
     return {
       isSuperAdmin,
       hasAccess: isSuperAdmin,
       loading: false,
-      error: isSuperAdmin ? null : 'Super admin access required',
+      error: isSuperAdmin ? null : "Super admin access required",
     };
   }, [profile, loading]);
 
@@ -51,7 +51,7 @@ export const useSuperAdminAccess = (): SuperAdminAccess => {
  * Higher-order component to protect routes that require super admin access
  */
 export const withSuperAdminAccess = <P extends object>(
-  Component: React.ComponentType<P>
+  Component: React.ComponentType<P>,
 ) => {
   return function SuperAdminProtectedComponent(props: P) {
     const { hasAccess, loading, error } = useSuperAdminAccess();
@@ -72,7 +72,7 @@ export const withSuperAdminAccess = <P extends object>(
               Access Restricted
             </h2>
             <p className="text-gray-600 max-w-md">
-              {error || 'You do not have permission to access this feature.'}
+              {error || "You do not have permission to access this feature."}
             </p>
           </div>
           <div className="text-sm text-gray-500">

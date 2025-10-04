@@ -76,7 +76,8 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
   "productivity-profile": {
     id: "productivity-profile",
     name: "Productivity Profile",
-    description: "Discover your productivity style and get personalized insights",
+    description:
+      "Discover your productivity style and get personalized insights",
     enabled: true,
     icon: "user-circle",
     path: "/profile-assessment",
@@ -118,7 +119,8 @@ export const modulesConfig: Record<ModuleId, ModuleConfig> = {
   analytics: {
     id: "analytics",
     name: "Analytics & Insights",
-    description: "Comprehensive analytics platform with real-time data and predictive insights",
+    description:
+      "Comprehensive analytics platform with real-time data and predictive insights",
     enabled: true,
     icon: "bar-chart-3",
     path: "/analytics",

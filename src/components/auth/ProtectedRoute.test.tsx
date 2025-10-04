@@ -1,18 +1,18 @@
-import { render, screen } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ProtectedRoute } from './ProtectedRoute';
+import { render, screen } from "@testing-library/react";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 // Mock the useAuth hook
 const mockUseAuth = vi.fn();
-vi.mock('@/contexts/AuthContext', () => ({
+vi.mock("@/contexts/AuthContext", () => ({
   useAuth: () => mockUseAuth(),
 }));
 
 // Mock Navigate component
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
   return {
     ...actual,
     Navigate: ({ to, state, replace }: any) => {
@@ -22,9 +22,14 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const TestComponent = () => <div data-testid="protected-content">Protected Content</div>;
+const TestComponent = () => (
+  <div data-testid="protected-content">Protected Content</div>
+);
 
-const renderWithRouter = (component: React.ReactElement, initialRoute = '/') => {
+const renderWithRouter = (
+  component: React.ReactElement,
+  initialRoute = "/",
+) => {
   return render(
     <BrowserRouter>
       <Routes>
@@ -32,17 +37,17 @@ const renderWithRouter = (component: React.ReactElement, initialRoute = '/') => 
         <Route path="/login" element={<div>Login Page</div>} />
         <Route path="/dashboard" element={component} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter>,
   );
 };
 
-describe('ProtectedRoute Component', () => {
+describe("ProtectedRoute Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Loading State', () => {
-    it('should show loading spinner when authentication is loading', () => {
+  describe("Loading State", () => {
+    it("should show loading spinner when authentication is loading", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: true,
@@ -51,18 +56,18 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       // Should show loading spinner
-      const spinner = document.querySelector('.animate-spin');
+      const spinner = document.querySelector(".animate-spin");
       expect(spinner).toBeInTheDocument();
 
       // Should not show protected content
-      expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
+      expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument();
     });
 
-    it('should have proper accessibility for loading state', () => {
+    it("should have proper accessibility for loading state", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: true,
@@ -71,39 +76,16 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
-      const loadingContainer = document.querySelector('.flex.min-h-screen');
+      const loadingContainer = document.querySelector(".flex.min-h-screen");
       expect(loadingContainer).toBeInTheDocument();
     });
   });
 
-  describe('Unauthenticated State', () => {
-    it('should redirect to login when user is not authenticated', () => {
-      mockUseAuth.mockReturnValue({
-        user: null,
-        loading: false,
-      });
-
-      renderWithRouter(
-        <ProtectedRoute>
-          <TestComponent />
-        </ProtectedRoute>
-      );
-
-      // Should redirect to login
-      expect(mockNavigate).toHaveBeenCalledWith({
-        to: '/login',
-        state: { from: expect.objectContaining({ pathname: '/' }) },
-        replace: true,
-      });
-
-      // Should not show protected content
-      expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
-    });
-
-    it('should pass current location state for redirect back', () => {
+  describe("Unauthenticated State", () => {
+    it("should redirect to login when user is not authenticated", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: false,
@@ -113,17 +95,20 @@ describe('ProtectedRoute Component', () => {
         <ProtectedRoute>
           <TestComponent />
         </ProtectedRoute>,
-        '/dashboard'
       );
 
+      // Should redirect to login
       expect(mockNavigate).toHaveBeenCalledWith({
-        to: '/login',
-        state: { from: expect.objectContaining({ pathname: '/' }) },
+        to: "/login",
+        state: { from: expect.objectContaining({ pathname: "/" }) },
         replace: true,
       });
+
+      // Should not show protected content
+      expect(screen.queryByTestId("protected-content")).not.toBeInTheDocument();
     });
 
-    it('should use replace navigation to prevent back button issues', () => {
+    it("should pass current location state for redirect back", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: false,
@@ -132,22 +117,42 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
+        "/dashboard",
+      );
+
+      expect(mockNavigate).toHaveBeenCalledWith({
+        to: "/login",
+        state: { from: expect.objectContaining({ pathname: "/" }) },
+        replace: true,
+      });
+    });
+
+    it("should use replace navigation to prevent back button issues", () => {
+      mockUseAuth.mockReturnValue({
+        user: null,
+        loading: false,
+      });
+
+      renderWithRouter(
+        <ProtectedRoute>
+          <TestComponent />
+        </ProtectedRoute>,
       );
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ replace: true })
+        expect.objectContaining({ replace: true }),
       );
     });
   });
 
-  describe('Authenticated State', () => {
-    it('should render children when user is authenticated', () => {
+  describe("Authenticated State", () => {
+    it("should render children when user is authenticated", () => {
       mockUseAuth.mockReturnValue({
         user: {
-          id: 'user123',
-          email: 'test@example.com',
-          full_name: 'Test User',
+          id: "user123",
+          email: "test@example.com",
+          full_name: "Test User",
         },
         loading: false,
       });
@@ -155,21 +160,21 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       // Should show protected content
-      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+      expect(screen.getByTestId("protected-content")).toBeInTheDocument();
 
       // Should not redirect
       expect(mockNavigate).not.toHaveBeenCalled();
     });
 
-    it('should render multiple children correctly', () => {
+    it("should render multiple children correctly", () => {
       mockUseAuth.mockReturnValue({
         user: {
-          id: 'user123',
-          email: 'test@example.com',
+          id: "user123",
+          email: "test@example.com",
         },
         loading: false,
       });
@@ -179,17 +184,17 @@ describe('ProtectedRoute Component', () => {
           <div data-testid="child1">Child 1</div>
           <div data-testid="child2">Child 2</div>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
-      expect(screen.getByTestId('child1')).toBeInTheDocument();
-      expect(screen.getByTestId('child2')).toBeInTheDocument();
-      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+      expect(screen.getByTestId("child1")).toBeInTheDocument();
+      expect(screen.getByTestId("child2")).toBeInTheDocument();
+      expect(screen.getByTestId("protected-content")).toBeInTheDocument();
     });
 
-    it('should handle complex child components', () => {
+    it("should handle complex child components", () => {
       mockUseAuth.mockReturnValue({
-        user: { id: 'user123' },
+        user: { id: "user123" },
         loading: false,
       });
 
@@ -204,17 +209,17 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <ComplexChild />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
-      expect(screen.getByText('Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Navigation')).toBeInTheDocument();
-      expect(screen.getByTestId('main-content')).toBeInTheDocument();
+      expect(screen.getByText("Dashboard")).toBeInTheDocument();
+      expect(screen.getByText("Navigation")).toBeInTheDocument();
+      expect(screen.getByTestId("main-content")).toBeInTheDocument();
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle undefined user gracefully', () => {
+  describe("Edge Cases", () => {
+    it("should handle undefined user gracefully", () => {
       mockUseAuth.mockReturnValue({
         user: undefined,
         loading: false,
@@ -223,15 +228,15 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ to: '/login' })
+        expect.objectContaining({ to: "/login" }),
       );
     });
 
-    it('should handle null user explicitly', () => {
+    it("should handle null user explicitly", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: false,
@@ -240,15 +245,15 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ to: '/login' })
+        expect.objectContaining({ to: "/login" }),
       );
     });
 
-    it('should handle empty user object', () => {
+    it("should handle empty user object", () => {
       mockUseAuth.mockReturnValue({
         user: {},
         loading: false,
@@ -257,15 +262,15 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       // Empty object is truthy, so should render content
-      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+      expect(screen.getByTestId("protected-content")).toBeInTheDocument();
       expect(mockNavigate).not.toHaveBeenCalled();
     });
 
-    it('should handle missing loading state', () => {
+    it("should handle missing loading state", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         // loading: undefined
@@ -274,20 +279,20 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       // Should treat missing loading as false and redirect
       expect(mockNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ to: '/login' })
+        expect.objectContaining({ to: "/login" }),
       );
     });
   });
 
-  describe('Performance', () => {
-    it('should render quickly with authenticated user', () => {
+  describe("Performance", () => {
+    it("should render quickly with authenticated user", () => {
       mockUseAuth.mockReturnValue({
-        user: { id: 'user123' },
+        user: { id: "user123" },
         loading: false,
       });
 
@@ -295,14 +300,14 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
       const endTime = performance.now();
 
       expect(endTime - startTime).toBeLessThan(50); // Should render in less than 50ms
     });
 
-    it('should not cause unnecessary re-renders', () => {
+    it("should not cause unnecessary re-renders", () => {
       const renderSpy = vi.fn();
       const SpyComponent = () => {
         renderSpy();
@@ -310,14 +315,14 @@ describe('ProtectedRoute Component', () => {
       };
 
       mockUseAuth.mockReturnValue({
-        user: { id: 'user123' },
+        user: { id: "user123" },
         loading: false,
       });
 
       const { rerender } = renderWithRouter(
         <ProtectedRoute>
           <SpyComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       expect(renderSpy).toHaveBeenCalledTimes(1);
@@ -328,28 +333,28 @@ describe('ProtectedRoute Component', () => {
           <ProtectedRoute>
             <SpyComponent />
           </ProtectedRoute>
-        </BrowserRouter>
+        </BrowserRouter>,
       );
 
       expect(renderSpy).toHaveBeenCalledTimes(2); // One additional render is expected
     });
   });
 
-  describe('Security', () => {
-    it('should immediately redirect on auth state change', () => {
+  describe("Security", () => {
+    it("should immediately redirect on auth state change", () => {
       // Start authenticated
       mockUseAuth.mockReturnValue({
-        user: { id: 'user123' },
+        user: { id: "user123" },
         loading: false,
       });
 
       const { rerender } = renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
-      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+      expect(screen.getByTestId("protected-content")).toBeInTheDocument();
 
       // Simulate logout
       mockUseAuth.mockReturnValue({
@@ -362,15 +367,15 @@ describe('ProtectedRoute Component', () => {
           <ProtectedRoute>
             <TestComponent />
           </ProtectedRoute>
-        </BrowserRouter>
+        </BrowserRouter>,
       );
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ to: '/login' })
+        expect.objectContaining({ to: "/login" }),
       );
     });
 
-    it('should not expose protected content during loading', () => {
+    it("should not expose protected content during loading", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: true,
@@ -379,13 +384,13 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <div data-testid="sensitive-data">Sensitive Information</div>
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
-      expect(screen.queryByTestId('sensitive-data')).not.toBeInTheDocument();
+      expect(screen.queryByTestId("sensitive-data")).not.toBeInTheDocument();
     });
 
-    it('should prevent access with invalid auth state', () => {
+    it("should prevent access with invalid auth state", () => {
       mockUseAuth.mockReturnValue({
         user: false, // Invalid user state
         loading: false,
@@ -394,34 +399,34 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       expect(mockNavigate).toHaveBeenCalledWith(
-        expect.objectContaining({ to: '/login' })
+        expect.objectContaining({ to: "/login" }),
       );
     });
   });
 
-  describe('Accessibility', () => {
-    it('should maintain focus management during auth state changes', () => {
+  describe("Accessibility", () => {
+    it("should maintain focus management during auth state changes", () => {
       mockUseAuth.mockReturnValue({
-        user: { id: 'user123' },
+        user: { id: "user123" },
         loading: false,
       });
 
       renderWithRouter(
         <ProtectedRoute>
           <button>Focusable Element</button>
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
-      const button = screen.getByRole('button');
+      const button = screen.getByRole("button");
       button.focus();
       expect(button).toHaveFocus();
     });
 
-    it('should have proper loading announcement for screen readers', () => {
+    it("should have proper loading announcement for screen readers", () => {
       mockUseAuth.mockReturnValue({
         user: null,
         loading: true,
@@ -430,42 +435,44 @@ describe('ProtectedRoute Component', () => {
       renderWithRouter(
         <ProtectedRoute>
           <TestComponent />
-        </ProtectedRoute>
+        </ProtectedRoute>,
       );
 
       // Loading state should be announced to screen readers
-      const loadingElement = document.querySelector('.animate-spin');
+      const loadingElement = document.querySelector(".animate-spin");
       expect(loadingElement).toBeInTheDocument();
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle auth hook errors gracefully', () => {
-      const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+  describe("Error Handling", () => {
+    it("should handle auth hook errors gracefully", () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       mockUseAuth.mockImplementation(() => {
-        throw new Error('Auth hook error');
+        throw new Error("Auth hook error");
       });
 
       expect(() => {
         renderWithRouter(
           <ProtectedRoute>
             <TestComponent />
-          </ProtectedRoute>
+          </ProtectedRoute>,
         );
-      }).toThrow('Auth hook error');
+      }).toThrow("Auth hook error");
 
       consoleError.mockRestore();
     });
 
-    it('should handle missing auth context', () => {
+    it("should handle missing auth context", () => {
       mockUseAuth.mockReturnValue(undefined);
 
       expect(() => {
         renderWithRouter(
           <ProtectedRoute>
             <TestComponent />
-          </ProtectedRoute>
+          </ProtectedRoute>,
         );
       }).toThrow();
     });

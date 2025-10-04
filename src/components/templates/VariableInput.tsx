@@ -1,16 +1,26 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, ArrowLeft } from 'lucide-react';
-import { format } from 'date-fns';
-import { Database } from '@/integrations/supabase/types';
-import { TemplateVariable } from '@/hooks/useTaskTemplates';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon, ArrowLeft } from "lucide-react";
+import { format } from "date-fns";
+import { Database } from "@/integrations/supabase/types";
+import { TemplateVariable } from "@/hooks/useTaskTemplates";
 
-type TaskTemplate = Database['public']['Tables']['task_templates']['Row'];
+type TaskTemplate = Database["public"]["Tables"]["task_templates"]["Row"];
 
 interface VariableInputProps {
   template: TaskTemplate;
@@ -19,11 +29,16 @@ interface VariableInputProps {
   isLoading?: boolean;
 }
 
-export function VariableInput({ template, onSubmit, onCancel, isLoading }: VariableInputProps) {
+export function VariableInput({
+  template,
+  onSubmit,
+  onCancel,
+  isLoading,
+}: VariableInputProps) {
   const variables = (template.variables as unknown as TemplateVariable[]) || [];
   const [values, setValues] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
-    variables.forEach(variable => {
+    variables.forEach((variable) => {
       if (variable.default_value) {
         initial[variable.key] = variable.default_value;
       }
@@ -35,9 +50,13 @@ export function VariableInput({ template, onSubmit, onCancel, isLoading }: Varia
     e.preventDefault();
 
     // Validate required fields
-    const missingRequired = variables.filter(v => v.required && !values[v.key]);
+    const missingRequired = variables.filter(
+      (v) => v.required && !values[v.key],
+    );
     if (missingRequired.length > 0) {
-      alert(`Please fill in required fields: ${missingRequired.map(v => v.label).join(', ')}`);
+      alert(
+        `Please fill in required fields: ${missingRequired.map((v) => v.label).join(", ")}`,
+      );
       return;
     }
 
@@ -75,38 +94,54 @@ export function VariableInput({ template, onSubmit, onCancel, isLoading }: Varia
           <div key={variable.key} className="space-y-2">
             <Label htmlFor={variable.key}>
               {variable.label}
-              {variable.required && <span className="text-destructive ml-1">*</span>}
+              {variable.required && (
+                <span className="text-destructive ml-1">*</span>
+              )}
             </Label>
 
-            {variable.type === 'text' && (
+            {variable.type === "text" && (
               <Input
                 id={variable.key}
-                value={values[variable.key] || ''}
-                onChange={(e) => setValues(prev => ({ ...prev, [variable.key]: e.target.value }))}
+                value={values[variable.key] || ""}
+                onChange={(e) =>
+                  setValues((prev) => ({
+                    ...prev,
+                    [variable.key]: e.target.value,
+                  }))
+                }
                 placeholder={`Enter ${variable.label.toLowerCase()}`}
                 required={variable.required}
               />
             )}
 
-            {variable.type === 'number' && (
+            {variable.type === "number" && (
               <Input
                 id={variable.key}
                 type="number"
-                value={values[variable.key] || ''}
-                onChange={(e) => setValues(prev => ({ ...prev, [variable.key]: e.target.value }))}
+                value={values[variable.key] || ""}
+                onChange={(e) =>
+                  setValues((prev) => ({
+                    ...prev,
+                    [variable.key]: e.target.value,
+                  }))
+                }
                 placeholder={`Enter ${variable.label.toLowerCase()}`}
                 required={variable.required}
               />
             )}
 
-            {variable.type === 'select' && variable.options && (
+            {variable.type === "select" && variable.options && (
               <Select
-                value={values[variable.key] || ''}
-                onValueChange={(value) => setValues(prev => ({ ...prev, [variable.key]: value }))}
+                value={values[variable.key] || ""}
+                onValueChange={(value) =>
+                  setValues((prev) => ({ ...prev, [variable.key]: value }))
+                }
                 required={variable.required}
               >
                 <SelectTrigger id={variable.key}>
-                  <SelectValue placeholder={`Select ${variable.label.toLowerCase()}`} />
+                  <SelectValue
+                    placeholder={`Select ${variable.label.toLowerCase()}`}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {variable.options.map((option) => (
@@ -118,7 +153,7 @@ export function VariableInput({ template, onSubmit, onCancel, isLoading }: Varia
               </Select>
             )}
 
-            {variable.type === 'date' && (
+            {variable.type === "date" && (
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -126,17 +161,27 @@ export function VariableInput({ template, onSubmit, onCancel, isLoading }: Varia
                     className="w-full justify-start text-left font-normal"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {values[variable.key] ? format(new Date(values[variable.key]), 'PPP') : <span>Pick a date</span>}
+                    {values[variable.key] ? (
+                      format(new Date(values[variable.key]), "PPP")
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
-                    selected={values[variable.key] ? new Date(values[variable.key]) : undefined}
-                    onSelect={(date) => setValues(prev => ({
-                      ...prev,
-                      [variable.key]: date ? format(date, 'yyyy-MM-dd') : ''
-                    }))}
+                    selected={
+                      values[variable.key]
+                        ? new Date(values[variable.key])
+                        : undefined
+                    }
+                    onSelect={(date) =>
+                      setValues((prev) => ({
+                        ...prev,
+                        [variable.key]: date ? format(date, "yyyy-MM-dd") : "",
+                      }))
+                    }
                     initialFocus
                   />
                 </PopoverContent>

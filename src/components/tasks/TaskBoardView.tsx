@@ -1,20 +1,26 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { TaskCard } from './TaskCard';
-import { Database } from '@/integrations/supabase/types';
-import { DragAndDropProvider } from '@/components/dnd/DragAndDropProvider';
-import { DroppableArea } from '@/components/dnd/DroppableArea';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
-import { useMoveTaskToStatus, useUpdateTaskPositions } from '@/hooks/useDragAndDrop';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { QuickTaskInput } from './QuickTaskInput';
-import { useSubtaskProgress } from '@/hooks/useSubtasks';
-import { ProgressIndicator } from './ProgressIndicator';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { TaskCard } from "./TaskCard";
+import { Database } from "@/integrations/supabase/types";
+import { DragAndDropProvider } from "@/components/dnd/DragAndDropProvider";
+import { DroppableArea } from "@/components/dnd/DroppableArea";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { DragEndEvent, DragOverEvent } from "@dnd-kit/core";
+import {
+  useMoveTaskToStatus,
+  useUpdateTaskPositions,
+} from "@/hooks/useDragAndDrop";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { QuickTaskInput } from "./QuickTaskInput";
+import { useSubtaskProgress } from "@/hooks/useSubtasks";
+import { ProgressIndicator } from "./ProgressIndicator";
 
-type Task = Database['public']['Tables']['tasks']['Row'] & {
+type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };
   created_by_profile?: { full_name: string | null; avatar_url: string | null };
 };
@@ -24,13 +30,13 @@ interface TaskBoardViewProps {
 }
 
 const statusColumns = [
-  { id: 'todo', title: 'To Do', icon: '📋' },
-  { id: 'in_progress', title: 'In Progress', icon: '⚡' },
-  { id: 'blocked', title: 'Blocked', icon: '🚫' },
-  { id: 'done', title: 'Done', icon: '✅' },
+  { id: "todo", title: "To Do", icon: "📋" },
+  { id: "in_progress", title: "In Progress", icon: "⚡" },
+  { id: "blocked", title: "Blocked", icon: "🚫" },
+  { id: "done", title: "Done", icon: "✅" },
 ];
 
-type TaskStatus = Database['public']['Enums']['task_status'];
+type TaskStatus = Database["public"]["Enums"]["task_status"];
 
 function TaskCardWithProgress({ task }: { task: Task }) {
   return <TaskCard task={task} />;
@@ -47,28 +53,31 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
     setLocalTasks(tasks);
   });
 
-  const tasksByStatus = statusColumns.reduce((acc, status) => {
-    acc[status.id] = localTasks.filter(task => task.status === status.id);
-    return acc;
-  }, {} as Record<string, Task[]>);
+  const tasksByStatus = statusColumns.reduce(
+    (acc, status) => {
+      acc[status.id] = localTasks.filter((task) => task.status === status.id);
+      return acc;
+    },
+    {} as Record<string, Task[]>,
+  );
 
   const handleDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
     if (!over) return;
 
-    const activeTask = localTasks.find(t => t.id === active.id);
+    const activeTask = localTasks.find((t) => t.id === active.id);
     if (!activeTask) return;
 
     const overId = over.id.toString();
-    const overStatus = statusColumns.find(col => col.id === overId);
-    
+    const overStatus = statusColumns.find((col) => col.id === overId);
+
     if (overStatus && activeTask.status !== overStatus.id) {
       // Optimistically update UI
-      setLocalTasks(prev => prev.map(t => 
-        t.id === activeTask.id 
-          ? { ...t, status: overStatus.id as any }
-          : t
-      ));
+      setLocalTasks((prev) =>
+        prev.map((t) =>
+          t.id === activeTask.id ? { ...t, status: overStatus.id as any } : t,
+        ),
+      );
     }
   };
 
@@ -79,17 +88,17 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
       return;
     }
 
-    const activeTask = localTasks.find(t => t.id === active.id);
+    const activeTask = localTasks.find((t) => t.id === active.id);
     if (!activeTask) return;
 
     const overId = over.id.toString();
-    
+
     // Check if dropped on a status column
-    const overStatus = statusColumns.find(col => col.id === overId);
+    const overStatus = statusColumns.find((col) => col.id === overId);
     if (overStatus) {
       const tasksInStatus = tasksByStatus[overStatus.id] || [];
       const newPosition = tasksInStatus.length * 100;
-      
+
       moveTaskToStatus.mutate({
         taskId: activeTask.id,
         newStatus: overStatus.id as any,
@@ -97,11 +106,11 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
       });
     } else {
       // Reordering within the same column
-      const overTask = localTasks.find(t => t.id === over.id);
+      const overTask = localTasks.find((t) => t.id === over.id);
       if (overTask && activeTask.status === overTask.status) {
         const statusTasks = tasksByStatus[activeTask.status] || [];
-        const oldIndex = statusTasks.findIndex(t => t.id === active.id);
-        const newIndex = statusTasks.findIndex(t => t.id === over.id);
+        const oldIndex = statusTasks.findIndex((t) => t.id === active.id);
+        const newIndex = statusTasks.findIndex((t) => t.id === over.id);
 
         if (oldIndex !== -1 && newIndex !== -1) {
           const reordered = [...statusTasks];
@@ -120,7 +129,7 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
   };
 
   return (
-    <DragAndDropProvider 
+    <DragAndDropProvider
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
       overlay={
@@ -152,7 +161,11 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0"
-                  onClick={() => setShowQuickCreate(showQuickCreate === column.id ? null : column.id)}
+                  onClick={() =>
+                    setShowQuickCreate(
+                      showQuickCreate === column.id ? null : column.id,
+                    )
+                  }
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -168,8 +181,8 @@ export function TaskBoardView({ tasks }: TaskBoardViewProps) {
                   />
                 )}
 
-                <SortableContext 
-                  items={tasksByStatus[column.id]?.map(t => t.id) || []} 
+                <SortableContext
+                  items={tasksByStatus[column.id]?.map((t) => t.id) || []}
                   strategy={verticalListSortingStrategy}
                 >
                   {tasksByStatus[column.id]?.length > 0 ? (

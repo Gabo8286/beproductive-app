@@ -1,12 +1,30 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { FileText, MoreHorizontal, Edit, Trash2, Copy, Eye } from 'lucide-react';
-import { Database } from '@/integrations/supabase/types';
-import { TemplateConfig } from '@/hooks/useTaskTemplates';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  FileText,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+  Copy,
+  Eye,
+} from "lucide-react";
+import { Database } from "@/integrations/supabase/types";
+import { TemplateConfig } from "@/hooks/useTaskTemplates";
 
-type TaskTemplate = Database['public']['Tables']['task_templates']['Row'];
+type TaskTemplate = Database["public"]["Tables"]["task_templates"]["Row"];
 
 interface TemplateCardProps {
   template: TaskTemplate;
@@ -47,7 +65,11 @@ export function TemplateCard({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-              <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="opacity-0 group-hover:opacity-100"
+              >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -69,7 +91,10 @@ export function TemplateCard({
                 </DropdownMenuItem>
               )}
               {onDelete && (
-                <DropdownMenuItem onClick={onDelete} className="text-destructive">
+                <DropdownMenuItem
+                  onClick={onDelete}
+                  className="text-destructive"
+                >
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete
                 </DropdownMenuItem>
@@ -93,12 +118,13 @@ export function TemplateCard({
           )}
           {config.tags && config.tags.length > 0 && (
             <Badge variant="secondary" className="text-xs">
-              {config.tags.length} tag{config.tags.length > 1 ? 's' : ''}
+              {config.tags.length} tag{config.tags.length > 1 ? "s" : ""}
             </Badge>
           )}
           {config.subtasks && config.subtasks.length > 0 && (
             <Badge variant="secondary" className="text-xs">
-              {config.subtasks.length} subtask{config.subtasks.length > 1 ? 's' : ''}
+              {config.subtasks.length} subtask
+              {config.subtasks.length > 1 ? "s" : ""}
             </Badge>
           )}
         </div>

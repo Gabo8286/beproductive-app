@@ -1,10 +1,16 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { User, ArrowRight, Lightbulb, Target } from 'lucide-react';
-import { useProductivityProfile } from '@/hooks/useProductivityProfile';
-import { Link } from 'react-router-dom';
-import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { User, ArrowRight, Lightbulb, Target } from "lucide-react";
+import { useProductivityProfile } from "@/hooks/useProductivityProfile";
+import { Link } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ProductivityProfileWidget() {
   const { currentAssessment, profiles, isLoading } = useProductivityProfile();
@@ -43,7 +49,8 @@ export function ProductivityProfileWidget() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <p className="text-sm text-gray-600">
-              Learn about your unique productivity style among 8 different profiles:
+              Learn about your unique productivity style among 8 different
+              profiles:
             </p>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <span className="flex items-center text-gray-600">
@@ -106,11 +113,18 @@ export function ProductivityProfileWidget() {
             className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold"
             style={{ backgroundColor: dominantProfile.color }}
           >
-            {dominantProfile.name.split(' ').map(word => word[0]).join('')}
+            {dominantProfile.name
+              .split(" ")
+              .map((word) => word[0])
+              .join("")}
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-gray-900">{dominantProfile.name}</h3>
-            <p className="text-sm text-gray-600 line-clamp-2">{dominantProfile.description}</p>
+            <h3 className="font-semibold text-gray-900">
+              {dominantProfile.name}
+            </h3>
+            <p className="text-sm text-gray-600 line-clamp-2">
+              {dominantProfile.description}
+            </p>
           </div>
         </div>
 
@@ -121,7 +135,10 @@ export function ProductivityProfileWidget() {
               <Target className="h-4 w-4 text-gray-500" />
               <span className="text-sm text-gray-600">Secondary:</span>
               <Badge
-                style={{ backgroundColor: secondaryProfile.color, color: 'white' }}
+                style={{
+                  backgroundColor: secondaryProfile.color,
+                  color: "white",
+                }}
                 className="text-xs"
               >
                 {secondaryProfile.name}
@@ -137,11 +154,16 @@ export function ProductivityProfileWidget() {
             Key Strategies
           </h4>
           <div className="space-y-1">
-            {(currentAssessment.recommended_strategies as string[]).slice(0, 2).map((strategy, index) => (
-              <div key={index} className="text-xs text-gray-600 pl-4 border-l-2 border-blue-200">
-                {strategy}
-              </div>
-            ))}
+            {(currentAssessment.recommended_strategies as string[])
+              .slice(0, 2)
+              .map((strategy, index) => (
+                <div
+                  key={index}
+                  className="text-xs text-gray-600 pl-4 border-l-2 border-blue-200"
+                >
+                  {strategy}
+                </div>
+              ))}
           </div>
         </div>
 

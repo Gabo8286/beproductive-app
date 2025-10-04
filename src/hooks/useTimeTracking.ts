@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 // Types
 export interface TimeEntry {
@@ -36,20 +36,22 @@ export interface ActiveTimer {
 // Fetch active timer for current user
 export const useActiveTimer = () => {
   return useQuery({
-    queryKey: ['active-timer'],
+    queryKey: ["active-timer"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('active_timers')
-        .select(`
+        .from("active_timers")
+        .select(
+          `
           *,
           tasks (
             title
           )
-        `)
+        `,
+        )
         .single();
 
       if (error) {
-        if (error.code === 'PGRST116') {
+        if (error.code === "PGRST116") {
           // No active timer, return null
           return null;
         }
@@ -67,7 +69,7 @@ export const useStartTimer = () => {
 
   return useMutation({
     mutationFn: async (taskId: string) => {
-      const { data, error } = await supabase.rpc('start_timer', {
+      const { data, error } = await supabase.rpc("start_timer", {
         p_task_id: taskId,
       });
 
@@ -75,9 +77,9 @@ export const useStartTimer = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['active-timer'] });
-      queryClient.invalidateQueries({ queryKey: ['time-entries'] });
-      toast.success('Timer started');
+      queryClient.invalidateQueries({ queryKey: ["active-timer"] });
+      queryClient.invalidateQueries({ queryKey: ["time-entries"] });
+      toast.success("Timer started");
     },
     onError: (error: Error) => {
       toast.error(`Failed to start timer: ${error.message}`);
@@ -91,13 +93,13 @@ export const useStopTimer = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc('stop_active_timer');
+      const { error } = await supabase.rpc("stop_active_timer");
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['active-timer'] });
-      queryClient.invalidateQueries({ queryKey: ['time-entries'] });
-      toast.success('Timer stopped');
+      queryClient.invalidateQueries({ queryKey: ["active-timer"] });
+      queryClient.invalidateQueries({ queryKey: ["time-entries"] });
+      toast.success("Timer stopped");
     },
     onError: (error: Error) => {
       toast.error(`Failed to stop timer: ${error.message}`);
@@ -111,13 +113,13 @@ export const useTogglePause = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.rpc('toggle_timer_pause');
+      const { data, error } = await supabase.rpc("toggle_timer_pause");
       if (error) throw error;
       return data; // Returns true if paused, false if resumed
     },
     onSuccess: (isPaused) => {
-      queryClient.invalidateQueries({ queryKey: ['active-timer'] });
-      toast.success(isPaused ? 'Timer paused' : 'Timer resumed');
+      queryClient.invalidateQueries({ queryKey: ["active-timer"] });
+      toast.success(isPaused ? "Timer paused" : "Timer resumed");
     },
     onError: (error: Error) => {
       toast.error(`Failed to toggle pause: ${error.message}`);
@@ -128,15 +130,15 @@ export const useTogglePause = () => {
 // Fetch time entries for a task or all tasks
 export const useTimeEntries = (taskId?: string) => {
   return useQuery({
-    queryKey: ['time-entries', taskId],
+    queryKey: ["time-entries", taskId],
     queryFn: async () => {
       let query = supabase
-        .from('time_entries')
-        .select('*')
-        .order('start_time', { ascending: false });
+        .from("time_entries")
+        .select("*")
+        .order("start_time", { ascending: false });
 
       if (taskId) {
-        query = query.eq('task_id', taskId);
+        query = query.eq("task_id", taskId);
       }
 
       const { data, error } = await query;
@@ -161,15 +163,17 @@ export const useCreateTimeEntry = () => {
       hourly_rate?: number;
     }) => {
       const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error('Not authenticated');
+      if (!userData.user) throw new Error("Not authenticated");
 
       // Calculate duration in seconds
       const startDate = new Date(entry.start_time);
       const endDate = new Date(entry.end_time);
-      const duration = Math.floor((endDate.getTime() - startDate.getTime()) / 1000);
+      const duration = Math.floor(
+        (endDate.getTime() - startDate.getTime()) / 1000,
+      );
 
       const { data, error } = await supabase
-        .from('time_entries')
+        .from("time_entries")
         .insert({
           ...entry,
           user_id: userData.user.id,
@@ -183,8 +187,8 @@ export const useCreateTimeEntry = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['time-entries'] });
-      toast.success('Time entry created');
+      queryClient.invalidateQueries({ queryKey: ["time-entries"] });
+      toast.success("Time entry created");
     },
     onError: (error: Error) => {
       toast.error(`Failed to create time entry: ${error.message}`);
@@ -204,9 +208,9 @@ export const useUpdateTimeEntry = () => {
       // Recalculate duration if start_time or end_time changed
       if (updates.start_time || updates.end_time) {
         const { data: existing } = await supabase
-          .from('time_entries')
-          .select('start_time, end_time')
-          .eq('id', id)
+          .from("time_entries")
+          .select("start_time, end_time")
+          .eq("id", id)
           .single();
 
         if (existing) {
@@ -214,7 +218,8 @@ export const useUpdateTimeEntry = () => {
           const endTime = updates.end_time || existing.end_time;
           if (startTime && endTime) {
             const duration = Math.floor(
-              (new Date(endTime).getTime() - new Date(startTime).getTime()) / 1000
+              (new Date(endTime).getTime() - new Date(startTime).getTime()) /
+                1000,
             );
             updates.duration = duration;
           }
@@ -222,9 +227,9 @@ export const useUpdateTimeEntry = () => {
       }
 
       const { data, error } = await supabase
-        .from('time_entries')
+        .from("time_entries")
         .update(updates)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
 
@@ -232,8 +237,8 @@ export const useUpdateTimeEntry = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['time-entries'] });
-      toast.success('Time entry updated');
+      queryClient.invalidateQueries({ queryKey: ["time-entries"] });
+      toast.success("Time entry updated");
     },
     onError: (error: Error) => {
       toast.error(`Failed to update time entry: ${error.message}`);
@@ -248,15 +253,15 @@ export const useDeleteTimeEntry = () => {
   return useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('time_entries')
+        .from("time_entries")
         .delete()
-        .eq('id', id);
+        .eq("id", id);
 
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['time-entries'] });
-      toast.success('Time entry deleted');
+      queryClient.invalidateQueries({ queryKey: ["time-entries"] });
+      toast.success("Time entry deleted");
     },
     onError: (error: Error) => {
       toast.error(`Failed to delete time entry: ${error.message}`);

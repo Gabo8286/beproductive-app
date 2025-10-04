@@ -1,6 +1,16 @@
 import { ReactNode, useState, useEffect, useRef } from "react";
-import { DndContext, closestCenter, DragEndEvent, DragStartEvent, DragOverlay } from "@dnd-kit/core";
-import { SortableContext, arrayMove, rectSortingStrategy } from "@dnd-kit/sortable";
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
 import { SortableWidget } from "./SortableWidget";
 import { useWidgets } from "@/contexts/WidgetContext";
 import { cn } from "@/lib/utils";
@@ -11,10 +21,10 @@ interface SmartWidgetGridProps {
   enableDragDrop?: boolean;
 }
 
-export function SmartWidgetGrid({ 
-  children, 
+export function SmartWidgetGrid({
+  children,
   className,
-  enableDragDrop = true 
+  enableDragDrop = true,
 }: SmartWidgetGridProps) {
   const { widgets, reorderWidgets } = useWidgets();
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -27,10 +37,13 @@ export function SmartWidgetGrid({
       if (!containerRef.current) return;
 
       const width = containerRef.current.offsetWidth;
-      if (width < 640) setGridCols(1);      // Mobile
-      else if (width < 1024) setGridCols(2); // Tablet
-      else if (width < 1280) setGridCols(3); // Small desktop
-      else setGridCols(4);                   // Large desktop
+      if (width < 640)
+        setGridCols(1); // Mobile
+      else if (width < 1024)
+        setGridCols(2); // Tablet
+      else if (width < 1280)
+        setGridCols(3); // Small desktop
+      else setGridCols(4); // Large desktop
     };
 
     updateGridCols();
@@ -45,18 +58,24 @@ export function SmartWidgetGrid({
 
   // Calculate optimal widget placement
   const getOptimalLayout = () => {
-    const visibleWidgets = widgets.filter(w => w.visible);
-    const sortedWidgets = [...visibleWidgets].sort((a, b) => a.position - b.position);
+    const visibleWidgets = widgets.filter((w) => w.visible);
+    const sortedWidgets = [...visibleWidgets].sort(
+      (a, b) => a.position - b.position,
+    );
 
     return sortedWidgets.map((widget, index) => ({
       ...widget,
       gridPosition: {
         col: index % gridCols,
         row: Math.floor(index / gridCols),
-        colSpan: widget.size === 'large' ? Math.min(2, gridCols) :
-                widget.size === 'medium' ? Math.min(2, gridCols) : 1,
-        rowSpan: widget.size === 'large' ? 2 : 1
-      }
+        colSpan:
+          widget.size === "large"
+            ? Math.min(2, gridCols)
+            : widget.size === "medium"
+              ? Math.min(2, gridCols)
+              : 1,
+        rowSpan: widget.size === "large" ? 2 : 1,
+      },
     }));
   };
 
@@ -70,8 +89,8 @@ export function SmartWidgetGrid({
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      const oldIndex = widgets.findIndex(w => w.id === active.id);
-      const newIndex = widgets.findIndex(w => w.id === over?.id);
+      const oldIndex = widgets.findIndex((w) => w.id === active.id);
+      const newIndex = widgets.findIndex((w) => w.id === over?.id);
 
       const newWidgets = arrayMove(widgets, oldIndex, newIndex);
       reorderWidgets(newWidgets.map((w, i) => ({ ...w, position: i })));
@@ -80,7 +99,7 @@ export function SmartWidgetGrid({
     setActiveId(null);
   };
 
-  const activeWidget = widgets.find(w => w.id === activeId);
+  const activeWidget = widgets.find((w) => w.id === activeId);
 
   return (
     <div
@@ -88,10 +107,10 @@ export function SmartWidgetGrid({
       className={cn(
         "grid gap-6 transition-all duration-300",
         "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
-        className
+        className,
       )}
       style={{
-        gridAutoRows: 'minmax(200px, auto)',
+        gridAutoRows: "minmax(200px, auto)",
       }}
     >
       {enableDragDrop ? (
@@ -100,8 +119,8 @@ export function SmartWidgetGrid({
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          <SortableContext 
-            items={layoutWidgets.map(w => w.id)}
+          <SortableContext
+            items={layoutWidgets.map((w) => w.id)}
             strategy={rectSortingStrategy}
           >
             {layoutWidgets.map((widget, index) => (
@@ -119,7 +138,7 @@ export function SmartWidgetGrid({
           <DragOverlay>
             {activeWidget ? (
               <div className="opacity-50 rotate-3 scale-105 transition-transform">
-                {children[widgets.findIndex(w => w.id === activeId)]}
+                {children[widgets.findIndex((w) => w.id === activeId)]}
               </div>
             ) : null}
           </DragOverlay>
@@ -130,9 +149,9 @@ export function SmartWidgetGrid({
             key={widget.id}
             className={cn(
               "transition-all duration-300",
-              widget.size === 'large' && 'md:col-span-2 md:row-span-2',
-              widget.size === 'medium' && 'md:col-span-2',
-              widget.size === 'small' && 'col-span-1'
+              widget.size === "large" && "md:col-span-2 md:row-span-2",
+              widget.size === "medium" && "md:col-span-2",
+              widget.size === "small" && "col-span-1",
             )}
           >
             {children[index]}

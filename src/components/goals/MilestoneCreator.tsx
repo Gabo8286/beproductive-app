@@ -1,11 +1,27 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCreateMilestone, CreateMilestoneInput } from "@/hooks/useGoalMilestones";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  useCreateMilestone,
+  CreateMilestoneInput,
+} from "@/hooks/useGoalMilestones";
 import { GoalMilestone } from "@/types/goals";
 
 interface MilestoneCreatorProps {
@@ -15,7 +31,12 @@ interface MilestoneCreatorProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function MilestoneCreator({ goalId, existingMilestones, open, onOpenChange }: MilestoneCreatorProps) {
+export function MilestoneCreator({
+  goalId,
+  existingMilestones,
+  open,
+  onOpenChange,
+}: MilestoneCreatorProps) {
   const createMilestone = useCreateMilestone();
   const [formData, setFormData] = useState<Partial<CreateMilestoneInput>>({
     goal_id: goalId,
@@ -48,7 +69,9 @@ export function MilestoneCreator({ goalId, existingMilestones, open, onOpenChang
               <Input
                 id="title"
                 value={formData.title || ""}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="Milestone title"
                 required
               />
@@ -59,7 +82,9 @@ export function MilestoneCreator({ goalId, existingMilestones, open, onOpenChang
               <Textarea
                 id="description"
                 value={formData.description || ""}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 placeholder="Milestone description (optional)"
                 rows={3}
               />
@@ -71,8 +96,17 @@ export function MilestoneCreator({ goalId, existingMilestones, open, onOpenChang
                 <Input
                   id="target-date"
                   type="date"
-                  value={formData.target_date?.toISOString().split('T')[0] || ""}
-                  onChange={(e) => setFormData({ ...formData, target_date: e.target.value ? new Date(e.target.value) : undefined })}
+                  value={
+                    formData.target_date?.toISOString().split("T")[0] || ""
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      target_date: e.target.value
+                        ? new Date(e.target.value)
+                        : undefined,
+                    })
+                  }
                 />
               </div>
 
@@ -80,7 +114,12 @@ export function MilestoneCreator({ goalId, existingMilestones, open, onOpenChang
                 <Label htmlFor="priority">Priority</Label>
                 <Select
                   value={formData.priority?.toString()}
-                  onValueChange={(value) => setFormData({ ...formData, priority: parseInt(value) as 1 | 2 | 3 | 4 | 5 })}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      priority: parseInt(value) as 1 | 2 | 3 | 4 | 5,
+                    })
+                  }
                 >
                   <SelectTrigger id="priority">
                     <SelectValue />
@@ -103,17 +142,31 @@ export function MilestoneCreator({ goalId, existingMilestones, open, onOpenChang
                 type="number"
                 min="0"
                 value={formData.estimated_hours || ""}
-                onChange={(e) => setFormData({ ...formData, estimated_hours: e.target.value ? parseInt(e.target.value) : undefined })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    estimated_hours: e.target.value
+                      ? parseInt(e.target.value)
+                      : undefined,
+                  })
+                }
                 placeholder="Estimated hours to complete"
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={createMilestone.isPending || !formData.title?.trim()}>
+            <Button
+              type="submit"
+              disabled={createMilestone.isPending || !formData.title?.trim()}
+            >
               {createMilestone.isPending ? "Creating..." : "Create Milestone"}
             </Button>
           </DialogFooter>

@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { QuickTaskInput } from './QuickTaskInput';
-import { TaskTemplateSelector } from './TaskTemplateSelector';
-import { QuickTaskDefaults } from '@/hooks/useQuickTask';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "@/components/ui/dialog";
+import { QuickTaskInput } from "./QuickTaskInput";
+import { TaskTemplateSelector } from "./TaskTemplateSelector";
+import { QuickTaskDefaults } from "@/hooks/useQuickTask";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface QuickTaskModalProps {
   open: boolean;
@@ -17,9 +17,15 @@ interface QuickTaskModalProps {
   defaults?: QuickTaskDefaults;
 }
 
-export function QuickTaskModal({ open, onOpenChange, defaults }: QuickTaskModalProps) {
-  const [selectedDefaults, setSelectedDefaults] = useState<QuickTaskDefaults | undefined>(defaults);
-  const [mode, setMode] = useState<'single' | 'batch'>('single');
+export function QuickTaskModal({
+  open,
+  onOpenChange,
+  defaults,
+}: QuickTaskModalProps) {
+  const [selectedDefaults, setSelectedDefaults] = useState<
+    QuickTaskDefaults | undefined
+  >(defaults);
+  const [mode, setMode] = useState<"single" | "batch">("single");
 
   const handleTemplateSelect = (templateDefaults: QuickTaskDefaults) => {
     setSelectedDefaults({ ...selectedDefaults, ...templateDefaults });
@@ -28,13 +34,13 @@ export function QuickTaskModal({ open, onOpenChange, defaults }: QuickTaskModalP
   const handleSuccess = () => {
     onOpenChange(false);
     setSelectedDefaults(defaults);
-    setMode('single');
+    setMode("single");
   };
 
   const handleCancel = () => {
     onOpenChange(false);
     setSelectedDefaults(defaults);
-    setMode('single');
+    setMode("single");
   };
 
   return (
@@ -47,7 +53,11 @@ export function QuickTaskModal({ open, onOpenChange, defaults }: QuickTaskModalP
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={mode} onValueChange={(v) => setMode(v as 'single' | 'batch')} className="w-full">
+        <Tabs
+          value={mode}
+          onValueChange={(v) => setMode(v as "single" | "batch")}
+          className="w-full"
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="single">Single Task</TabsTrigger>
             <TabsTrigger value="batch">Batch Create</TabsTrigger>

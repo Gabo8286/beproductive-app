@@ -1,6 +1,6 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { getSupabaseStatus } from '@/integrations/supabase/client';
-import { getEnvironmentInfo } from '@/utils/environment/validation';
+import { Component, ErrorInfo, ReactNode } from "react";
+import { getSupabaseStatus } from "@/integrations/supabase/client";
+import { getEnvironmentInfo } from "@/utils/environment/validation";
 
 interface Props {
   children: ReactNode;
@@ -40,8 +40,8 @@ export class AppErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[AppErrorBoundary] Caught application error:', error);
-    console.error('[AppErrorBoundary] Error info:', errorInfo);
+    console.error("[AppErrorBoundary] Caught application error:", error);
+    console.error("[AppErrorBoundary] Error info:", errorInfo);
 
     this.setState({
       errorInfo,
@@ -55,23 +55,23 @@ export class AppErrorBoundary extends Component<Props, State> {
   }
 
   private logDetailedError = (error: Error, errorInfo: ErrorInfo) => {
-    console.group('[AppErrorBoundary] Detailed Error Report');
+    console.group("[AppErrorBoundary] Detailed Error Report");
 
     // Basic error info
-    console.error('Error:', error.message);
-    console.error('Stack:', error.stack);
-    console.error('Component Stack:', errorInfo.componentStack);
+    console.error("Error:", error.message);
+    console.error("Stack:", error.stack);
+    console.error("Component Stack:", errorInfo.componentStack);
 
     // Environment info
     const envInfo = getEnvironmentInfo();
-    console.log('Environment:', envInfo);
+    console.log("Environment:", envInfo);
 
     // Supabase status
     const supabaseStatus = getSupabaseStatus();
-    console.log('Supabase Status:', supabaseStatus);
+    console.log("Supabase Status:", supabaseStatus);
 
     // Browser info
-    console.log('Browser Info:', {
+    console.log("Browser Info:", {
       userAgent: navigator.userAgent,
       cookieEnabled: navigator.cookieEnabled,
       language: navigator.language,
@@ -82,19 +82,19 @@ export class AppErrorBoundary extends Component<Props, State> {
 
     // localStorage availability
     try {
-      const testKey = '__error_boundary_test__';
-      localStorage.setItem(testKey, 'test');
+      const testKey = "__error_boundary_test__";
+      localStorage.setItem(testKey, "test");
       localStorage.removeItem(testKey);
-      console.log('localStorage: Available');
+      console.log("localStorage: Available");
     } catch (storageError) {
-      console.error('localStorage: Not available', storageError);
+      console.error("localStorage: Not available", storageError);
     }
 
     // Performance info
-    if (typeof performance !== 'undefined' && performance.now) {
-      console.log('Performance:', {
+    if (typeof performance !== "undefined" && performance.now) {
+      console.log("Performance:", {
         now: performance.now(),
-        navigation: performance.getEntriesByType?.('navigation')[0],
+        navigation: performance.getEntriesByType?.("navigation")[0],
       });
     }
 
@@ -105,7 +105,9 @@ export class AppErrorBoundary extends Component<Props, State> {
     const newRetryCount = this.state.retryCount + 1;
 
     if (newRetryCount <= this.maxRetries) {
-      console.log(`[AppErrorBoundary] Retry attempt ${newRetryCount}/${this.maxRetries}`);
+      console.log(
+        `[AppErrorBoundary] Retry attempt ${newRetryCount}/${this.maxRetries}`,
+      );
       this.setState({
         hasError: false,
         error: null,
@@ -113,12 +115,12 @@ export class AppErrorBoundary extends Component<Props, State> {
         retryCount: newRetryCount,
       });
     } else {
-      console.error('[AppErrorBoundary] Max retries reached, giving up');
+      console.error("[AppErrorBoundary] Max retries reached, giving up");
     }
   };
 
   private handleReload = () => {
-    console.log('[AppErrorBoundary] Reloading page...');
+    console.log("[AppErrorBoundary] Reloading page...");
     window.location.reload();
   };
 
@@ -134,53 +136,57 @@ export class AppErrorBoundary extends Component<Props, State> {
 
     // Default error UI with debugging info
     return (
-      <div style={{
-        padding: '2rem',
-        maxWidth: '800px',
-        margin: '2rem auto',
-        fontFamily: 'system-ui, -apple-system, sans-serif',
-        lineHeight: '1.6',
-        background: '#fef2f2',
-        border: '1px solid #fecaca',
-        borderRadius: '8px',
-        color: '#991b1b',
-      }}>
-        <h1 style={{ marginTop: 0, color: '#dc2626' }}>
-          Application Error
-        </h1>
+      <div
+        style={{
+          padding: "2rem",
+          maxWidth: "800px",
+          margin: "2rem auto",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          lineHeight: "1.6",
+          background: "#fef2f2",
+          border: "1px solid #fecaca",
+          borderRadius: "8px",
+          color: "#991b1b",
+        }}
+      >
+        <h1 style={{ marginTop: 0, color: "#dc2626" }}>Application Error</h1>
 
         <p>
           The application encountered an unexpected error and couldn't continue.
           This might be due to a temporary issue or a configuration problem.
         </p>
 
-        <div style={{
-          background: '#fff',
-          padding: '1rem',
-          borderRadius: '4px',
-          marginBottom: '1rem',
-          color: '#374151',
-        }}>
+        <div
+          style={{
+            background: "#fff",
+            padding: "1rem",
+            borderRadius: "4px",
+            marginBottom: "1rem",
+            color: "#374151",
+          }}
+        >
           <strong>Error:</strong> {error.message}
         </div>
 
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          flexWrap: 'wrap',
-          marginBottom: '1rem',
-        }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "1rem",
+            flexWrap: "wrap",
+            marginBottom: "1rem",
+          }}
+        >
           {retryCount < this.maxRetries && (
             <button
               onClick={this.handleRetry}
               style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: '#dc2626',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
+                padding: "0.5rem 1rem",
+                backgroundColor: "#dc2626",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "14px",
               }}
             >
               Try Again ({this.maxRetries - retryCount} attempts left)
@@ -190,56 +196,62 @@ export class AppErrorBoundary extends Component<Props, State> {
           <button
             onClick={this.handleReload}
             style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#374151',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontSize: '14px',
+              padding: "0.5rem 1rem",
+              backgroundColor: "#374151",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "14px",
             }}
           >
             Reload Page
           </button>
         </div>
 
-        <details style={{ marginTop: '1rem' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+        <details style={{ marginTop: "1rem" }}>
+          <summary style={{ cursor: "pointer", fontWeight: "bold" }}>
             Technical Details
           </summary>
-          <div style={{
-            background: '#fff',
-            padding: '1rem',
-            borderRadius: '4px',
-            marginTop: '0.5rem',
-            fontSize: '12px',
-            color: '#374151',
-          }}>
-            <div style={{ marginBottom: '1rem' }}>
+          <div
+            style={{
+              background: "#fff",
+              padding: "1rem",
+              borderRadius: "4px",
+              marginTop: "0.5rem",
+              fontSize: "12px",
+              color: "#374151",
+            }}
+          >
+            <div style={{ marginBottom: "1rem" }}>
               <strong>Error Stack:</strong>
-              <pre style={{
-                whiteSpace: 'pre-wrap',
-                margin: '0.5rem 0',
-                background: '#f9fafb',
-                padding: '0.5rem',
-                borderRadius: '2px',
-                overflow: 'auto',
-              }}>
+              <pre
+                style={{
+                  whiteSpace: "pre-wrap",
+                  margin: "0.5rem 0",
+                  background: "#f9fafb",
+                  padding: "0.5rem",
+                  borderRadius: "2px",
+                  overflow: "auto",
+                }}
+              >
                 {error.stack}
               </pre>
             </div>
 
             {errorInfo && (
-              <div style={{ marginBottom: '1rem' }}>
+              <div style={{ marginBottom: "1rem" }}>
                 <strong>Component Stack:</strong>
-                <pre style={{
-                  whiteSpace: 'pre-wrap',
-                  margin: '0.5rem 0',
-                  background: '#f9fafb',
-                  padding: '0.5rem',
-                  borderRadius: '2px',
-                  overflow: 'auto',
-                }}>
+                <pre
+                  style={{
+                    whiteSpace: "pre-wrap",
+                    margin: "0.5rem 0",
+                    background: "#f9fafb",
+                    padding: "0.5rem",
+                    borderRadius: "2px",
+                    overflow: "auto",
+                  }}
+                >
                   {errorInfo.componentStack}
                 </pre>
               </div>
@@ -247,7 +259,7 @@ export class AppErrorBoundary extends Component<Props, State> {
 
             <div>
               <strong>Troubleshooting Steps:</strong>
-              <ol style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
+              <ol style={{ margin: "0.5rem 0", paddingLeft: "1.5rem" }}>
                 <li>Check your internet connection</li>
                 <li>Clear your browser cache and cookies</li>
                 <li>Try refreshing the page</li>
@@ -257,7 +269,9 @@ export class AppErrorBoundary extends Component<Props, State> {
               </ol>
             </div>
 
-            <div style={{ marginTop: '1rem', fontSize: '11px', color: '#6b7280' }}>
+            <div
+              style={{ marginTop: "1rem", fontSize: "11px", color: "#6b7280" }}
+            >
               <strong>Error ID:</strong> {Date.now().toString(36)}
               <br />
               <strong>Timestamp:</strong> {new Date().toISOString()}
@@ -282,7 +296,7 @@ export class AppErrorBoundary extends Component<Props, State> {
 // Higher-order component for easier usage
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, 'children'>
+  errorBoundaryProps?: Omit<Props, "children">,
 ) {
   const WrappedComponent = (props: P) => (
     <AppErrorBoundary {...errorBoundaryProps}>

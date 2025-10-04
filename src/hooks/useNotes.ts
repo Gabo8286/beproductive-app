@@ -22,21 +22,22 @@ export const useNotes = () => {
       setError(null);
 
       const { data, error } = await supabase
-        .from('notes')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false });
+        .from("notes")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("updated_at", { ascending: false });
 
       if (error) throw error;
 
       setNotes(data || []);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch notes';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch notes";
       setError(errorMessage);
       toast({
         title: "Error loading notes",
         description: errorMessage,
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -49,28 +50,28 @@ export const useNotes = () => {
 
     try {
       const { data, error } = await supabase
-        .from('notes')
-        .select('*')
-        .eq('id', noteId)
-        .eq('user_id', user.id)
+        .from("notes")
+        .select("*")
+        .eq("id", noteId)
+        .eq("user_id", user.id)
         .single();
 
       if (error) throw error;
 
       return data;
     } catch (err) {
-      console.error('Error fetching note:', err);
+      console.error("Error fetching note:", err);
       return null;
     }
   };
 
   // Create a new note
   const createNote = async (noteData: CreateNoteData): Promise<Note> => {
-    if (!user) throw new Error('User not authenticated');
+    if (!user) throw new Error("User not authenticated");
 
     try {
       const { data, error } = await supabase
-        .from('notes')
+        .from("notes")
         .insert({
           ...noteData,
           user_id: user.id,
@@ -81,73 +82,79 @@ export const useNotes = () => {
       if (error) throw error;
 
       const newNote = data as Note;
-      setNotes(prev => [newNote, ...prev]);
+      setNotes((prev) => [newNote, ...prev]);
 
       // Process any links in the content
       await processNoteLinks(newNote);
 
       // Award points for note creation
       try {
-        await awardPoints('NOTE_CREATED', newNote.id);
+        await awardPoints("NOTE_CREATED", newNote.id);
       } catch (error) {
-        console.error('Failed to award points for note creation:', error);
+        console.error("Failed to award points for note creation:", error);
       }
 
       return newNote;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create note';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to create note";
       throw new Error(errorMessage);
     }
   };
 
   // Update an existing note
-  const updateNote = async (noteId: string, updates: UpdateNoteData): Promise<Note> => {
-    if (!user) throw new Error('User not authenticated');
+  const updateNote = async (
+    noteId: string,
+    updates: UpdateNoteData,
+  ): Promise<Note> => {
+    if (!user) throw new Error("User not authenticated");
 
     try {
       const { data, error } = await supabase
-        .from('notes')
+        .from("notes")
         .update(updates)
-        .eq('id', noteId)
-        .eq('user_id', user.id)
+        .eq("id", noteId)
+        .eq("user_id", user.id)
         .select()
         .single();
 
       if (error) throw error;
 
       const updatedNote = data as Note;
-      setNotes(prev => prev.map(note =>
-        note.id === noteId ? updatedNote : note
-      ));
+      setNotes((prev) =>
+        prev.map((note) => (note.id === noteId ? updatedNote : note)),
+      );
 
       // Process any links in the updated content
       await processNoteLinks(updatedNote);
 
       return updatedNote;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update note';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to update note";
       throw new Error(errorMessage);
     }
   };
 
   // Delete a note
   const deleteNote = async (noteId: string): Promise<void> => {
-    if (!user) throw new Error('User not authenticated');
+    if (!user) throw new Error("User not authenticated");
 
     try {
       const { error } = await supabase
-        .from('notes')
+        .from("notes")
         .delete()
-        .eq('id', noteId)
-        .eq('user_id', user.id);
+        .eq("id", noteId)
+        .eq("user_id", user.id);
 
       if (error) throw error;
 
-      setNotes(prev => prev.filter(note => note.id !== noteId));
+      setNotes((prev) => prev.filter((note) => note.id !== noteId));
 
       // Note links will be automatically deleted due to CASCADE
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete note';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to delete note";
       throw new Error(errorMessage);
     }
   };
@@ -170,52 +177,52 @@ export const useNotes = () => {
 
       // Find existing notes that match the link titles
       const { data: existingNotes, error } = await supabase
-        .from('notes')
-        .select('id, title')
-        .eq('user_id', user.id)
-        .in('title', matches);
+        .from("notes")
+        .select("id, title")
+        .eq("user_id", user.id)
+        .in("title", matches);
 
       if (error) {
-        console.error('Error fetching linked notes:', error);
+        console.error("Error fetching linked notes:", error);
         return;
       }
 
       // Create links for found notes
       if (existingNotes && existingNotes.length > 0) {
         const linksToCreate = existingNotes
-          .filter(linkedNote => linkedNote.id !== note.id) // Don't link to self
-          .map(linkedNote => ({
+          .filter((linkedNote) => linkedNote.id !== note.id) // Don't link to self
+          .map((linkedNote) => ({
             source_note_id: note.id,
             target_note_id: linkedNote.id,
-            link_type: 'reference'
+            link_type: "reference",
           }));
 
         if (linksToCreate.length > 0) {
           // Delete existing links for this note first to avoid duplicates
           await supabase
-            .from('note_links')
+            .from("note_links")
             .delete()
-            .eq('source_note_id', note.id);
+            .eq("source_note_id", note.id);
 
           // Insert new links
           const { error: linkError } = await supabase
-            .from('note_links')
+            .from("note_links")
             .insert(linksToCreate);
 
           if (linkError) {
-            console.error('Error creating note links:', linkError);
+            console.error("Error creating note links:", linkError);
           } else {
             // Award points for note linking
             try {
-              await awardPoints('NOTE_LINKED', note.id);
+              await awardPoints("NOTE_LINKED", note.id);
             } catch (error) {
-              console.error('Failed to award points for note linking:', error);
+              console.error("Failed to award points for note linking:", error);
             }
           }
         }
       }
     } catch (err) {
-      console.error('Error processing note links:', err);
+      console.error("Error processing note links:", err);
     }
   };
 
@@ -224,14 +231,15 @@ export const useNotes = () => {
     if (!user) return [];
 
     try {
-      const { data, error } = await supabase
-        .rpc('get_note_backlinks', { note_uuid: noteId });
+      const { data, error } = await supabase.rpc("get_note_backlinks", {
+        note_uuid: noteId,
+      });
 
       if (error) throw error;
 
       return data || [];
     } catch (err) {
-      console.error('Error fetching backlinks:', err);
+      console.error("Error fetching backlinks:", err);
       return [];
     }
   };
@@ -242,23 +250,24 @@ export const useNotes = () => {
 
     try {
       const { data, error } = await supabase
-        .from('notes')
-        .select('*')
-        .eq('user_id', user.id)
-        .textSearch('title,content', query, {
-          type: 'websearch',
-          config: 'english'
+        .from("notes")
+        .select("*")
+        .eq("user_id", user.id)
+        .textSearch("title,content", query, {
+          type: "websearch",
+          config: "english",
         })
-        .order('updated_at', { ascending: false });
+        .order("updated_at", { ascending: false });
 
       if (error) throw error;
 
       return data || [];
     } catch (err) {
-      console.error('Error searching notes:', err);
-      return notes.filter(note =>
-        note.title.toLowerCase().includes(query.toLowerCase()) ||
-        note.content.toLowerCase().includes(query.toLowerCase())
+      console.error("Error searching notes:", err);
+      return notes.filter(
+        (note) =>
+          note.title.toLowerCase().includes(query.toLowerCase()) ||
+          note.content.toLowerCase().includes(query.toLowerCase()),
       );
     }
   };
@@ -271,36 +280,40 @@ export const useNotes = () => {
 
     // Subscribe to changes
     const notesSubscription = supabase
-      .channel('notes_changes')
+      .channel("notes_changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'notes',
-          filter: `user_id=eq.${user.id}`
+          event: "*",
+          schema: "public",
+          table: "notes",
+          filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('Notes change received:', payload);
+          console.log("Notes change received:", payload);
 
           switch (payload.eventType) {
-            case 'INSERT':
-              setNotes(prev => {
-                const exists = prev.find(note => note.id === payload.new.id);
+            case "INSERT":
+              setNotes((prev) => {
+                const exists = prev.find((note) => note.id === payload.new.id);
                 if (exists) return prev;
                 return [payload.new as Note, ...prev];
               });
               break;
-            case 'UPDATE':
-              setNotes(prev => prev.map(note =>
-                note.id === payload.new.id ? payload.new as Note : note
-              ));
+            case "UPDATE":
+              setNotes((prev) =>
+                prev.map((note) =>
+                  note.id === payload.new.id ? (payload.new as Note) : note,
+                ),
+              );
               break;
-            case 'DELETE':
-              setNotes(prev => prev.filter(note => note.id !== payload.old.id));
+            case "DELETE":
+              setNotes((prev) =>
+                prev.filter((note) => note.id !== payload.old.id),
+              );
               break;
           }
-        }
+        },
       )
       .subscribe();
 

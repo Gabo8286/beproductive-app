@@ -3,8 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { useTags, useCreateTag, useUpdateTag, useDeleteTag } from "@/hooks/useTags";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  useTags,
+  useCreateTag,
+  useUpdateTag,
+  useDeleteTag,
+} from "@/hooks/useTags";
 import { TagBadge } from "./TagBadge";
 import { TagColorPicker } from "./TagColorPicker";
 import { Plus, Edit, Trash2 } from "lucide-react";
@@ -104,10 +115,15 @@ export function TagManager() {
                 {tags.map((tag) => (
                   <TableRow key={tag.id}>
                     <TableCell>
-                      <TagBadge name={tag.name} color={tag.color || undefined} />
+                      <TagBadge
+                        name={tag.name}
+                        color={tag.color || undefined}
+                      />
                     </TableCell>
                     <TableCell>
-                      {tag.category || <span className="text-muted-foreground">—</span>}
+                      {tag.category || (
+                        <span className="text-muted-foreground">—</span>
+                      )}
                     </TableCell>
                     <TableCell>{tag.usage_count || 0} tasks</TableCell>
                     <TableCell className="text-right">
@@ -150,7 +166,9 @@ export function TagManager() {
                 id="create-tag-name"
                 placeholder="Enter tag name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -166,12 +184,17 @@ export function TagManager() {
                 id="create-tag-category"
                 placeholder="e.g., Work, Personal, Health"
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setCreateDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleCreate} disabled={!formData.name.trim()}>
@@ -194,7 +217,9 @@ export function TagManager() {
                 id="edit-tag-name"
                 placeholder="Enter tag name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -210,7 +235,9 @@ export function TagManager() {
                 id="edit-tag-category"
                 placeholder="e.g., Work, Personal, Health"
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
               />
             </div>
           </div>

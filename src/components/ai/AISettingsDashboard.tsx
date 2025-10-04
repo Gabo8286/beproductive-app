@@ -1,19 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,7 +30,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Brain,
   Settings,
@@ -41,12 +47,16 @@ import {
   Upload,
   AlertTriangle,
   CheckCircle,
-  Zap
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useAISettings } from '@/hooks/useAISettings';
-import { useAIUsageStats } from '@/hooks/useAIUsageStats';
-import { INSIGHT_TYPE_LABELS, PROVIDER_LABELS, AIInsightType } from '@/types/ai-insights';
+  Zap,
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAISettings } from "@/hooks/useAISettings";
+import { useAIUsageStats } from "@/hooks/useAIUsageStats";
+import {
+  INSIGHT_TYPE_LABELS,
+  PROVIDER_LABELS,
+  AIInsightType,
+} from "@/types/ai-insights";
 
 export function AISettingsDashboard() {
   const { user } = useAuth();
@@ -57,13 +67,10 @@ export function AISettingsDashboard() {
     exportSettings,
     importSettings,
     isLoading,
-    error
+    error,
   } = useAISettings();
 
-  const {
-    data: usageStats,
-    isLoading: statsLoading
-  } = useAIUsageStats();
+  const { data: usageStats, isLoading: statsLoading } = useAIUsageStats();
 
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [localSettings, setLocalSettings] = useState(settings);
@@ -73,20 +80,24 @@ export function AISettingsDashboard() {
   }, [settings]);
 
   const handleSettingChange = (key: string, value: any) => {
-    setLocalSettings(prev => ({
+    setLocalSettings((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
     setUnsavedChanges(true);
   };
 
-  const handleNestedSettingChange = (parentKey: string, childKey: string, value: any) => {
-    setLocalSettings(prev => ({
+  const handleNestedSettingChange = (
+    parentKey: string,
+    childKey: string,
+    value: any,
+  ) => {
+    setLocalSettings((prev) => ({
       ...prev,
       [parentKey]: {
         ...prev[parentKey],
-        [childKey]: value
-      }
+        [childKey]: value,
+      },
     }));
     setUnsavedChanges(true);
   };
@@ -176,7 +187,9 @@ export function AISettingsDashboard() {
                   <Label>Preferred Provider</Label>
                   <Select
                     value={localSettings?.preferred_provider}
-                    onValueChange={(value) => handleSettingChange('preferred_provider', value)}
+                    onValueChange={(value) =>
+                      handleSettingChange("preferred_provider", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -195,7 +208,9 @@ export function AISettingsDashboard() {
                   <Label>Insight Generation Frequency</Label>
                   <Select
                     value={localSettings?.insight_frequency}
-                    onValueChange={(value) => handleSettingChange('insight_frequency', value)}
+                    onValueChange={(value) =>
+                      handleSettingChange("insight_frequency", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -214,7 +229,9 @@ export function AISettingsDashboard() {
                   <Switch
                     id="auto-insights"
                     checked={localSettings?.auto_generate_insights}
-                    onCheckedChange={(checked) => handleSettingChange('auto_generate_insights', checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("auto_generate_insights", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -231,17 +248,28 @@ export function AISettingsDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   {Object.entries(INSIGHT_TYPE_LABELS).map(([type, label]) => (
-                    <div key={type} className="flex items-center justify-between">
-                      <Label htmlFor={type} className="text-sm">{label}</Label>
+                    <div
+                      key={type}
+                      className="flex items-center justify-between"
+                    >
+                      <Label htmlFor={type} className="text-sm">
+                        {label}
+                      </Label>
                       <Switch
                         id={type}
-                        checked={localSettings?.enabled_insight_types?.includes(type as AIInsightType)}
+                        checked={localSettings?.enabled_insight_types?.includes(
+                          type as AIInsightType,
+                        )}
                         onCheckedChange={(checked) => {
-                          const currentTypes = localSettings?.enabled_insight_types || [];
+                          const currentTypes =
+                            localSettings?.enabled_insight_types || [];
                           const newTypes = checked
                             ? [...currentTypes, type as AIInsightType]
-                            : currentTypes.filter(t => t !== type);
-                          handleSettingChange('enabled_insight_types', newTypes);
+                            : currentTypes.filter((t) => t !== type);
+                          handleSettingChange(
+                            "enabled_insight_types",
+                            newTypes,
+                          );
                         }}
                       />
                     </div>
@@ -265,9 +293,16 @@ export function AISettingsDashboard() {
                 <div className="flex items-center justify-between">
                   <Label>New Insights</Label>
                   <Switch
-                    checked={localSettings?.notification_preferences?.new_insights !== false}
+                    checked={
+                      localSettings?.notification_preferences?.new_insights !==
+                      false
+                    }
                     onCheckedChange={(checked) =>
-                      handleNestedSettingChange('notification_preferences', 'new_insights', checked)
+                      handleNestedSettingChange(
+                        "notification_preferences",
+                        "new_insights",
+                        checked,
+                      )
                     }
                   />
                 </div>
@@ -275,9 +310,16 @@ export function AISettingsDashboard() {
                 <div className="flex items-center justify-between">
                   <Label>Weekly Summary</Label>
                   <Switch
-                    checked={localSettings?.notification_preferences?.weekly_summary !== false}
+                    checked={
+                      localSettings?.notification_preferences
+                        ?.weekly_summary !== false
+                    }
                     onCheckedChange={(checked) =>
-                      handleNestedSettingChange('notification_preferences', 'weekly_summary', checked)
+                      handleNestedSettingChange(
+                        "notification_preferences",
+                        "weekly_summary",
+                        checked,
+                      )
                     }
                   />
                 </div>
@@ -285,9 +327,16 @@ export function AISettingsDashboard() {
                 <div className="flex items-center justify-between">
                   <Label>Task Recommendations</Label>
                   <Switch
-                    checked={localSettings?.notification_preferences?.task_recommendations !== false}
+                    checked={
+                      localSettings?.notification_preferences
+                        ?.task_recommendations !== false
+                    }
                     onCheckedChange={(checked) =>
-                      handleNestedSettingChange('notification_preferences', 'task_recommendations', checked)
+                      handleNestedSettingChange(
+                        "notification_preferences",
+                        "task_recommendations",
+                        checked,
+                      )
                     }
                   />
                 </div>
@@ -295,9 +344,16 @@ export function AISettingsDashboard() {
                 <div className="flex items-center justify-between">
                   <Label>Burnout Alerts</Label>
                   <Switch
-                    checked={localSettings?.notification_preferences?.burnout_alerts !== false}
+                    checked={
+                      localSettings?.notification_preferences
+                        ?.burnout_alerts !== false
+                    }
                     onCheckedChange={(checked) =>
-                      handleNestedSettingChange('notification_preferences', 'burnout_alerts', checked)
+                      handleNestedSettingChange(
+                        "notification_preferences",
+                        "burnout_alerts",
+                        checked,
+                      )
                     }
                   />
                 </div>
@@ -316,17 +372,27 @@ export function AISettingsDashboard() {
                 <div className="space-y-2">
                   <Label>Coaching Style</Label>
                   <Select
-                    value={localSettings?.coaching_style || 'balanced'}
-                    onValueChange={(value) => handleSettingChange('coaching_style', value)}
+                    value={localSettings?.coaching_style || "balanced"}
+                    onValueChange={(value) =>
+                      handleSettingChange("coaching_style", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="supportive">Supportive & Encouraging</SelectItem>
-                      <SelectItem value="balanced">Balanced Approach</SelectItem>
-                      <SelectItem value="direct">Direct & Goal-Focused</SelectItem>
-                      <SelectItem value="analytical">Analytical & Data-Driven</SelectItem>
+                      <SelectItem value="supportive">
+                        Supportive & Encouraging
+                      </SelectItem>
+                      <SelectItem value="balanced">
+                        Balanced Approach
+                      </SelectItem>
+                      <SelectItem value="direct">
+                        Direct & Goal-Focused
+                      </SelectItem>
+                      <SelectItem value="analytical">
+                        Analytical & Data-Driven
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -334,8 +400,10 @@ export function AISettingsDashboard() {
                 <div className="space-y-2">
                   <Label>Response Length</Label>
                   <Select
-                    value={localSettings?.response_length || 'medium'}
-                    onValueChange={(value) => handleSettingChange('response_length', value)}
+                    value={localSettings?.response_length || "medium"}
+                    onValueChange={(value) =>
+                      handleSettingChange("response_length", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -343,7 +411,9 @@ export function AISettingsDashboard() {
                     <SelectContent>
                       <SelectItem value="brief">Brief & Concise</SelectItem>
                       <SelectItem value="medium">Medium Detail</SelectItem>
-                      <SelectItem value="detailed">Detailed & Comprehensive</SelectItem>
+                      <SelectItem value="detailed">
+                        Detailed & Comprehensive
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -352,7 +422,9 @@ export function AISettingsDashboard() {
                   <Label>Proactive Suggestions</Label>
                   <Switch
                     checked={localSettings?.proactive_suggestions !== false}
-                    onCheckedChange={(checked) => handleSettingChange('proactive_suggestions', checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("proactive_suggestions", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -385,9 +457,15 @@ export function AISettingsDashboard() {
                       </p>
                     </div>
                     <Switch
-                      checked={localSettings?.privacy_settings?.share_anonymous_data}
+                      checked={
+                        localSettings?.privacy_settings?.share_anonymous_data
+                      }
                       onCheckedChange={(checked) =>
-                        handleNestedSettingChange('privacy_settings', 'share_anonymous_data', checked)
+                        handleNestedSettingChange(
+                          "privacy_settings",
+                          "share_anonymous_data",
+                          checked,
+                        )
                       }
                     />
                   </div>
@@ -400,9 +478,16 @@ export function AISettingsDashboard() {
                       </p>
                     </div>
                     <Switch
-                      checked={localSettings?.privacy_settings?.improve_models !== false}
+                      checked={
+                        localSettings?.privacy_settings?.improve_models !==
+                        false
+                      }
                       onCheckedChange={(checked) =>
-                        handleNestedSettingChange('privacy_settings', 'improve_models', checked)
+                        handleNestedSettingChange(
+                          "privacy_settings",
+                          "improve_models",
+                          checked,
+                        )
                       }
                     />
                   </div>
@@ -415,9 +500,16 @@ export function AISettingsDashboard() {
                       </p>
                     </div>
                     <Switch
-                      checked={localSettings?.privacy_settings?.store_conversations !== false}
+                      checked={
+                        localSettings?.privacy_settings?.store_conversations !==
+                        false
+                      }
                       onCheckedChange={(checked) =>
-                        handleNestedSettingChange('privacy_settings', 'store_conversations', checked)
+                        handleNestedSettingChange(
+                          "privacy_settings",
+                          "store_conversations",
+                          checked,
+                        )
                       }
                     />
                   </div>
@@ -429,9 +521,16 @@ export function AISettingsDashboard() {
                   <div className="space-y-2">
                     <Label>Insight Retention Period</Label>
                     <Select
-                      value={localSettings?.privacy_settings?.insight_retention || '90d'}
+                      value={
+                        localSettings?.privacy_settings?.insight_retention ||
+                        "90d"
+                      }
                       onValueChange={(value) =>
-                        handleNestedSettingChange('privacy_settings', 'insight_retention', value)
+                        handleNestedSettingChange(
+                          "privacy_settings",
+                          "insight_retention",
+                          value,
+                        )
                       }
                     >
                       <SelectTrigger>
@@ -449,9 +548,15 @@ export function AISettingsDashboard() {
                   <div className="space-y-2">
                     <Label>Chat History Retention</Label>
                     <Select
-                      value={localSettings?.privacy_settings?.chat_retention || '30d'}
+                      value={
+                        localSettings?.privacy_settings?.chat_retention || "30d"
+                      }
                       onValueChange={(value) =>
-                        handleNestedSettingChange('privacy_settings', 'chat_retention', value)
+                        handleNestedSettingChange(
+                          "privacy_settings",
+                          "chat_retention",
+                          value,
+                        )
                       }
                     >
                       <SelectTrigger>
@@ -486,10 +591,13 @@ export function AISettingsDashboard() {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Clear All AI Data?</AlertDialogTitle>
+                          <AlertDialogTitle>
+                            Clear All AI Data?
+                          </AlertDialogTitle>
                           <AlertDialogDescription>
-                            This will permanently delete all your AI insights, recommendations,
-                            and chat history. This action cannot be undone.
+                            This will permanently delete all your AI insights,
+                            recommendations, and chat history. This action
+                            cannot be undone.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -521,7 +629,7 @@ export function AISettingsDashboard() {
               <CardContent className="space-y-4">
                 <div className="text-center">
                   <div className="text-3xl font-bold">
-                    ${usageStats?.total_cost?.toFixed(2) || '0.00'}
+                    ${usageStats?.total_cost?.toFixed(2) || "0.00"}
                   </div>
                   <p className="text-sm text-muted-foreground">Total Cost</p>
                 </div>
@@ -533,7 +641,9 @@ export function AISettingsDashboard() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Tokens Used</span>
-                    <span>{usageStats?.total_tokens?.toLocaleString() || 0}</span>
+                    <span>
+                      {usageStats?.total_tokens?.toLocaleString() || 0}
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -546,18 +656,25 @@ export function AISettingsDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {usageStats?.by_provider && Object.entries(usageStats.by_provider).map(([provider, stats]) => (
-                    <div key={provider} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="capitalize">{provider}</span>
-                        <span>${(stats as any).cost.toFixed(2)}</span>
-                      </div>
-                      <Progress
-                        value={((stats as any).cost / (usageStats.total_cost || 1)) * 100}
-                        className="h-2"
-                      />
-                    </div>
-                  ))}
+                  {usageStats?.by_provider &&
+                    Object.entries(usageStats.by_provider).map(
+                      ([provider, stats]) => (
+                        <div key={provider} className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="capitalize">{provider}</span>
+                            <span>${(stats as any).cost.toFixed(2)}</span>
+                          </div>
+                          <Progress
+                            value={
+                              ((stats as any).cost /
+                                (usageStats.total_cost || 1)) *
+                              100
+                            }
+                            className="h-2"
+                          />
+                        </div>
+                      ),
+                    )}
                 </div>
               </CardContent>
             </Card>
@@ -577,13 +694,17 @@ export function AISettingsDashboard() {
                     <span className="text-sm">$</span>
                     <Slider
                       value={[localSettings?.spending_limit || 10]}
-                      onValueChange={([value]) => handleSettingChange('spending_limit', value)}
+                      onValueChange={([value]) =>
+                        handleSettingChange("spending_limit", value)
+                      }
                       max={100}
                       min={5}
                       step={5}
                       className="flex-1"
                     />
-                    <span className="text-sm w-8">{localSettings?.spending_limit || 10}</span>
+                    <span className="text-sm w-8">
+                      {localSettings?.spending_limit || 10}
+                    </span>
                   </div>
                 </div>
 
@@ -591,7 +712,9 @@ export function AISettingsDashboard() {
                   <Label>Alert at 80% of limit</Label>
                   <Switch
                     checked={localSettings?.usage_alerts !== false}
-                    onCheckedChange={(checked) => handleSettingChange('usage_alerts', checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("usage_alerts", checked)
+                    }
                   />
                 </div>
 
@@ -599,7 +722,9 @@ export function AISettingsDashboard() {
                   <Label>Auto-pause at limit</Label>
                   <Switch
                     checked={localSettings?.auto_pause_at_limit}
-                    onCheckedChange={(checked) => handleSettingChange('auto_pause_at_limit', checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("auto_pause_at_limit", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -624,7 +749,9 @@ export function AISettingsDashboard() {
                     <span className="text-sm">Conservative</span>
                     <Slider
                       value={[localSettings?.temperature || 0.7]}
-                      onValueChange={([value]) => handleSettingChange('temperature', value)}
+                      onValueChange={([value]) =>
+                        handleSettingChange("temperature", value)
+                      }
                       max={1}
                       min={0.1}
                       step={0.1}
@@ -633,7 +760,8 @@ export function AISettingsDashboard() {
                     <span className="text-sm">Creative</span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Higher values make responses more creative but less predictable
+                    Higher values make responses more creative but less
+                    predictable
                   </p>
                 </div>
 
@@ -642,13 +770,17 @@ export function AISettingsDashboard() {
                   <div className="flex items-center gap-2">
                     <Slider
                       value={[localSettings?.max_tokens || 500]}
-                      onValueChange={([value]) => handleSettingChange('max_tokens', value)}
+                      onValueChange={([value]) =>
+                        handleSettingChange("max_tokens", value)
+                      }
                       max={1000}
                       min={100}
                       step={50}
                       className="flex-1"
                     />
-                    <span className="text-sm w-12">{localSettings?.max_tokens || 500}</span>
+                    <span className="text-sm w-12">
+                      {localSettings?.max_tokens || 500}
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -679,10 +811,12 @@ export function AISettingsDashboard() {
                         const reader = new FileReader();
                         reader.onload = (event) => {
                           try {
-                            const settings = JSON.parse(event.target?.result as string);
+                            const settings = JSON.parse(
+                              event.target?.result as string,
+                            );
                             importSettings(settings);
                           } catch (error) {
-                            console.error('Failed to import settings:', error);
+                            console.error("Failed to import settings:", error);
                           }
                         };
                         reader.readAsText(file);
@@ -708,8 +842,8 @@ export function AISettingsDashboard() {
                     <AlertDialogHeader>
                       <AlertDialogTitle>Reset AI Settings?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will reset all your AI preferences to default values.
-                        Your data and insights will not be affected.
+                        This will reset all your AI preferences to default
+                        values. Your data and insights will not be affected.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

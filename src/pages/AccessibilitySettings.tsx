@@ -1,4 +1,4 @@
-import { AccessibilitySettings } from '@/components/settings/AccessibilitySettings';
+import { AccessibilitySettings } from "@/components/settings/AccessibilitySettings";
 
 export default function AccessibilitySettingsPage() {
   return (
