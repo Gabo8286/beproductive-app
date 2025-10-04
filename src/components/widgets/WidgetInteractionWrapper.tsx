@@ -24,11 +24,11 @@ export function WidgetInteractionWrapper({
     if (!onRefresh) return;
 
     setIsRefreshing(true);
-    triggerHaptic("light");
+    triggerHaptic("impact-light");
 
     try {
       await onRefresh();
-      triggerHaptic("success");
+      triggerHaptic("notification-success");
 
       // Success animation
       const element = document.querySelector(
@@ -41,7 +41,7 @@ export function WidgetInteractionWrapper({
         }, 600);
       }
     } catch (error) {
-      triggerHaptic("error");
+      triggerHaptic("notification-error");
     } finally {
       setIsRefreshing(false);
     }
@@ -50,7 +50,7 @@ export function WidgetInteractionWrapper({
   const handleSuccess = () => {
     if (onSuccess) {
       onSuccess();
-      triggerHaptic("success");
+      triggerHaptic("notification-success");
     }
   };
 

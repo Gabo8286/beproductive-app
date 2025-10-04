@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { usePersonalization } from "./usePersonalization";
 
 export function useTheme() {
-  const { userPreferences } = usePersonalization();
+  const { userPreferences, updatePreferences } = usePersonalization();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -20,4 +20,10 @@ export function useTheme() {
       root.classList.toggle("dark", userPreferences.theme === "dark");
     }
   }, [userPreferences.theme]);
+
+  const setTheme = (theme: "light" | "dark" | "auto") => {
+    updatePreferences({ theme });
+  };
+
+  return { theme: userPreferences.theme, setTheme };
 }

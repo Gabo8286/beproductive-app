@@ -224,7 +224,7 @@ export function PredictiveInsightsWidget({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => togglePredictionExpansion(prediction.predictionId)}
+                      onClick={() => togglePredictionExpansion(prediction.id)}
                       className="h-6 w-6 p-0"
                     >
                       <ChevronDown
@@ -246,30 +246,15 @@ export function PredictiveInsightsWidget({
             <CardContent className="pt-0">
               <Separator className="mb-3" />
 
-              {/* Full prediction details */}
-              {prediction.prediction.length > 2 && (
-                <div className="space-y-2 mb-4">
-                  <h4 className="text-sm font-medium flex items-center gap-2">
-                    <BarChart className="h-4 w-4" />
-                    Detailed Analysis
-                  </h4>
-                  <div className="text-sm text-muted-foreground space-y-1">
-                    {prediction.prediction.slice(2).map((detail, idx) => (
-                      <p key={idx}>{detail}</p>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* Contributing factors */}
-              {prediction.contributingFactors.length > 0 && (
+              {prediction.contributing_factors && prediction.contributing_factors.length > 0 && (
                 <div className="space-y-2 mb-4">
                   <h4 className="text-sm font-medium flex items-center gap-2">
                     <Activity className="h-4 w-4" />
                     Key Factors
                   </h4>
                   <div className="space-y-1">
-                    {prediction.contributingFactors.slice(0, 3).map((factor, idx) => (
+                    {prediction.contributing_factors.slice(0, 3).map((factor, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-sm">
                         <div className="w-1 h-1 rounded-full bg-primary" />
                         <span>{factor}</span>
@@ -280,15 +265,15 @@ export function PredictiveInsightsWidget({
               )}
 
               {/* Recommended actions */}
-              {prediction.recommendedActions.length > 0 && (
+              {prediction.recommended_actions && prediction.recommended_actions.length > 0 && (
                 <div className="space-y-3 mb-4">
                   <h4 className="text-sm font-medium flex items-center gap-2">
                     <Lightbulb className="h-4 w-4" />
                     Recommended Actions
                   </h4>
                   <div className="space-y-2">
-                    {prediction.recommendedActions.map((action, idx) => {
-                      const actionKey = `${prediction.predictionId}_${idx}`;
+                    {prediction.recommended_actions.map((action, idx) => {
+                      const actionKey = `${prediction.id}_${idx}`;
                       const isApplied = appliedActions.has(actionKey);
 
                       return (
@@ -301,7 +286,7 @@ export function PredictiveInsightsWidget({
                             {!isApplied && (
                               <Button
                                 size="sm"
-                                onClick={() => applyAction(prediction.predictionId, idx)}
+                                onClick={() => applyAction(prediction.id, idx)}
                                 className="h-7 text-xs ml-2"
                               >
                                 <CheckCircle className="h-3 w-3 mr-1" />
@@ -332,7 +317,7 @@ export function PredictiveInsightsWidget({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => provideFeedback(prediction.predictionId, "helpful")}
+                    onClick={() => provideFeedback(prediction.id, "helpful")}
                     className="h-6 w-6 p-0"
                   >
                     <ThumbsUp className="h-3 w-3" />
@@ -340,7 +325,7 @@ export function PredictiveInsightsWidget({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => provideFeedback(prediction.predictionId, "not_helpful")}
+                    onClick={() => provideFeedback(prediction.id, "not_helpful")}
                     className="h-6 w-6 p-0"
                   >
                     <ThumbsDown className="h-3 w-3" />
