@@ -45,7 +45,7 @@ import {
   EyeOff
 } from 'lucide-react';
 
-interface SystemConfig {
+export interface SystemConfig {
   general: {
     appName: string;
     description: string;

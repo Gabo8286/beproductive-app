@@ -55,7 +55,7 @@ import {
   Trash2
 } from 'lucide-react';
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -76,7 +76,7 @@ interface User {
   };
 }
 
-interface UserFilters {
+export interface UserFilters {
   search: string;
   role: string;
   status: string;

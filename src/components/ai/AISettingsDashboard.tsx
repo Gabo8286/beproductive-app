@@ -61,8 +61,8 @@ export function AISettingsDashboard() {
   } = useAISettings();
 
   const {
-    usageStats,
-    monthlyUsage,
+    data: usageStats,
+    data: monthlyUsage,
     isLoading: statsLoading
   } = useAIUsageStats();
 

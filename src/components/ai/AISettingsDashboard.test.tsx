@@ -363,6 +363,7 @@ describe('AISettingsDashboard Component', () => {
       const { container } = render(<AISettingsDashboard />);
 
       const results = await axe(container);
+      // @ts-expect-error - Accessibility testing library types not fully configured
       expect(results).toHaveNoViolations();
     });
 

@@ -57,7 +57,7 @@ export interface SystemMetrics {
   };
 }
 
-interface ApplicationMetrics {
+export interface ApplicationMetrics {
   activeUsers: number;
   totalUsers: number;
   requestsPerMinute: number;
@@ -68,7 +68,7 @@ interface ApplicationMetrics {
   environment: string;
 }
 
-interface AlertItem {
+export interface AlertItem {
   id: string;
   type: 'error' | 'warning' | 'info';
   title: string;
@@ -147,7 +147,9 @@ export const AdminDashboard: React.FC = () => {
           ...prev.network,
           inbound: Math.max(0, prev.network.inbound + (Math.random() - 0.5) * 0.5),
           outbound: Math.max(0, prev.network.outbound + (Math.random() - 0.5) * 0.3)
-        }
+        },
+        disk: prev.disk,
+        database: prev.database
       }));
 
       setAppMetrics(prev => ({
