@@ -1,4 +1,4 @@
-export { default as use-mobile } from './use-mobile';
+export { default as useMobileHook } from './use-mobile';
 export * from './use-toast';
 export * from './useAI';
 export * from './useAIAutomation';
