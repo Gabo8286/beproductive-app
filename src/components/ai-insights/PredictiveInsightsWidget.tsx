@@ -257,7 +257,7 @@ export function PredictiveInsightsWidget({
                     {prediction.contributing_factors.slice(0, 3).map((factor, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-sm">
                         <div className="w-1 h-1 rounded-full bg-primary" />
-                        <span>{factor}</span>
+                        <span>{factor.explanation}</span>
                       </div>
                     ))}
                   </div>
@@ -278,11 +278,11 @@ export function PredictiveInsightsWidget({
 
                       return (
                         <div
-                          key={idx}
+                          key={action.id}
                           className="p-3 rounded-lg bg-muted/50 space-y-2"
                         >
                           <div className="flex items-start justify-between">
-                            <p className="text-sm flex-1">{action}</p>
+                            <p className="text-sm flex-1">{action.description}</p>
                             {!isApplied && (
                               <Button
                                 size="sm"

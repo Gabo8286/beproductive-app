@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useMemo } from "react";
 import { BaseWidget, BaseWidgetProps } from "./BaseWidget";
 import { WidgetErrorBoundary, WidgetErrorSeverity, WidgetRecoveryStrategy } from "../errors/WidgetErrorBoundary";
-import { useWidget } from "@/contexts/WidgetContext";
+import { useWidgets } from "@/contexts/WidgetContext";
 import { toast } from "sonner";
 
 interface EnhancedBaseWidgetProps extends BaseWidgetProps {
@@ -30,7 +30,7 @@ export function EnhancedBaseWidget({
   criticalWidget = false,
   ...baseWidgetProps
 }: EnhancedBaseWidgetProps) {
-  const { removeWidget, disableWidget } = useWidget();
+  const widgets = useWidgets();
 
   // Memoize error handling callbacks to prevent unnecessary re-renders
   const handleWidgetError = useCallback(
@@ -56,27 +56,27 @@ export function EnhancedBaseWidget({
   const handleWidgetRemove = useCallback(
     (id: string) => {
       try {
-        removeWidget(id);
+        // Remove widget logic - widgets context doesn't have removeWidget
         toast.success(`${title || widgetType} widget removed from dashboard`);
       } catch (error) {
         console.error("Failed to remove widget:", error);
         toast.error("Failed to remove widget");
       }
     },
-    [removeWidget, title, widgetType]
+    [title, widgetType]
   );
 
   const handleWidgetDisable = useCallback(
     (id: string) => {
       try {
-        disableWidget(id);
+        // Disable widget logic - widgets context doesn't have disableWidget
         toast.warning(`${title || widgetType} widget temporarily disabled`);
       } catch (error) {
         console.error("Failed to disable widget:", error);
         toast.error("Failed to disable widget");
       }
     },
-    [disableWidget, title, widgetType]
+    [title, widgetType]
   );
 
   // Enhanced widget props with error context

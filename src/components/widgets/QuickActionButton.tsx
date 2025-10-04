@@ -23,7 +23,7 @@ export function QuickActionButton({
   const { triggerHaptic } = useHapticFeedback();
 
   const handleClick = () => {
-    triggerHaptic("medium");
+    triggerHaptic("impact-medium");
     onClick();
   };
 

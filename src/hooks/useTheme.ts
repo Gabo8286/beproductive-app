@@ -22,7 +22,9 @@ export function useTheme() {
   }, [userPreferences.theme]);
 
   const setTheme = (theme: "light" | "dark" | "auto") => {
-    updatePreferences({ theme });
+    if (theme === "light" || theme === "dark" || theme === "auto") {
+      updatePreferences({ theme });
+    }
   };
 
   return { theme: userPreferences.theme, setTheme };

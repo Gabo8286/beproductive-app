@@ -56,7 +56,12 @@ export function ThemeToggle() {
           return (
             <DropdownMenuItem
               key={themeKey}
-              onClick={() => setTheme(themeKey as Theme)}
+              onClick={() => {
+                // Only allow supported themes
+                if (themeKey === "light" || themeKey === "dark" || themeKey === "auto") {
+                  setTheme(themeKey);
+                }
+              }}
               className={`cursor-pointer ${isSelected ? 'bg-accent' : ''}`}
             >
               <div className="flex items-center w-full">
