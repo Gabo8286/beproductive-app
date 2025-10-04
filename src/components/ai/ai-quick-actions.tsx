@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAI } from "@/hooks/useAI";
 import { useI18n } from "@/hooks/useI18n";
+import { cn } from "@/lib/utils";
 import type { ProductivityInsight } from "@/lib/ai-service";
 
 interface AIQuickActionsProps {
@@ -228,4 +229,4 @@ export const AIInsightDisplay: React.FC<AIInsightDisplayProps> = ({
   );
 };
 
-export { AIQuickActions, AIInsightDisplay };
+

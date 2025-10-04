@@ -41,25 +41,25 @@ import { EnhancedBaseWidget } from "@/components/widgets/EnhancedBaseWidget";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const predictionIcons: Record<PredictionType, React.ComponentType<{ className?: string }>> = {
-  productivity_forecast: TrendingUp,
-  burnout_risk: AlertTriangle,
+const predictionIcons: Partial<Record<PredictionType, React.ComponentType<{ className?: string }>>> = {
+  productivity_forecasting: TrendingUp,
+  burnout_detection: AlertTriangle,
   optimal_timing: Clock,
-  goal_achievement: Target,
+  goal_achievement_likelihood: Target,
 };
 
-const predictionColors: Record<PredictionType, string> = {
-  productivity_forecast: "text-green-600",
-  burnout_risk: "text-red-600",
+const predictionColors: Partial<Record<PredictionType, string>> = {
+  productivity_forecasting: "text-green-600",
+  burnout_detection: "text-red-600",
   optimal_timing: "text-blue-600",
-  goal_achievement: "text-purple-600",
+  goal_achievement_likelihood: "text-purple-600",
 };
 
-const predictionBadgeColors: Record<PredictionType, string> = {
-  productivity_forecast: "bg-green-100 text-green-800",
-  burnout_risk: "bg-red-100 text-red-800",
+const predictionBadgeColors: Partial<Record<PredictionType, string>> = {
+  productivity_forecasting: "bg-green-100 text-green-800",
+  burnout_detection: "bg-red-100 text-red-800",
   optimal_timing: "bg-blue-100 text-blue-800",
-  goal_achievement: "bg-purple-100 text-purple-800",
+  goal_achievement_likelihood: "bg-purple-100 text-purple-800",
 };
 
 interface PredictiveInsightsWidgetProps {
@@ -159,14 +159,15 @@ export function PredictiveInsightsWidget({
   }, []);
 
   const renderPredictionCard = useCallback((prediction: PredictionResult) => {
-    if (hiddenPredictions.has(prediction.predictionId)) return null;
+    if (hiddenPredictions.has(prediction.id)) return null;
 
-    const Icon = predictionIcons[prediction.type];
-    const iconColor = predictionColors[prediction.type];
-    const isExpanded = expandedPredictions.has(prediction.predictionId);
+    const Icon = predictionIcons[prediction.model_type] || Brain;
+    const iconColor = predictionColors[prediction.model_type] || "text-gray-600";
+    const isExpanded = expandedPredictions.has(prediction.id);
+    const predictionValue = String(prediction.prediction_value || "No prediction available");
 
     return (
-      <Card key={prediction.predictionId} className="border-l-4 border-l-primary/50">
+      <Card key={prediction.id} className="border-l-4 border-l-primary/50">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3 flex-1">
@@ -176,32 +177,32 @@ export function PredictiveInsightsWidget({
               <div className="flex-1 space-y-2">
                 <div>
                   <CardTitle className="text-base font-medium">
-                    {prediction.type.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+                    {prediction.model_type.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                   </CardTitle>
                   <CardDescription className="text-sm mt-1">
-                    {prediction.prediction.slice(0, 2).join(" ")}
+                    {predictionValue.slice(0, 100)}
                   </CardDescription>
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Badge className={predictionBadgeColors[prediction.type]}>
-                    {prediction.type.replace("_", " ")}
+                  <Badge className={predictionBadgeColors[prediction.model_type] || "bg-gray-100 text-gray-800"}>
+                    {prediction.model_type.replace("_", " ")}
                   </Badge>
 
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Brain className="h-3 w-3" />
-                    <span className={getConfidenceColor(prediction.confidence)}>
-                      {Math.round(prediction.confidence * 100)}% confident
+                    <span className={getConfidenceColor(prediction.confidence_score)}>
+                      {Math.round(prediction.confidence_score * 100)}% confident
                     </span>
                   </div>
 
                   <Badge variant="outline" className="text-xs">
-                    {getConfidenceBadge(prediction.confidence)}
+                    {getConfidenceBadge(prediction.confidence_score)}
                   </Badge>
 
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
-                    {new Date(prediction.generatedAt).toLocaleTimeString()}
+                    {new Date(prediction.created_at).toLocaleTimeString()}
                   </div>
                 </div>
               </div>
@@ -211,13 +212,13 @@ export function PredictiveInsightsWidget({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => hidePrediction(prediction.predictionId)}
+                onClick={() => hidePrediction(prediction.id)}
                 className="h-6 w-6 p-0"
               >
                 <EyeOff className="h-3 w-3" />
               </Button>
 
-              {(prediction.prediction.length > 2 || prediction.recommendedActions.length > 0) && (
+              {(prediction.contributing_factors.length > 0 || prediction.recommended_actions.length > 0) && (
                 <Collapsible>
                   <CollapsibleTrigger asChild>
                     <Button

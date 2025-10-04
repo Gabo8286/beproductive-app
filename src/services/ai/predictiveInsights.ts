@@ -28,6 +28,8 @@ export type ModelType =
   | "collaboration_matching"
   | "content_personalization";
 
+export type PredictionType = ModelType;
+
 export interface ModelFeature {
   name: string;
   type: "categorical" | "numerical" | "temporal" | "behavioral";
