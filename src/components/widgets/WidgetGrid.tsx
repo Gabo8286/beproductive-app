@@ -1,3 +1,9 @@
+/**
+ * WidgetGrid Component
+ * Location: src/components/widgets/WidgetGrid.tsx
+ * Index Reference: CODE_INDEX.md - Widget System > Core Widget Infrastructure
+ * Purpose: Main widget container with responsive layout and drag-and-drop functionality
+ */
 import React from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { DraggableWidget } from "./DraggableWidget";

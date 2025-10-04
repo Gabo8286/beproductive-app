@@ -1,0 +1,212 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "security:openssf-scorecard",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(deps)"
+  ],
+  "description": "FMEW Countermeasure for FM-05: Automated Dependency Management & Security Scanning",
+  "timezone": "America/Los_Angeles",
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "labels": [
+    "dependencies",
+    "automated"
+  ],
+  "assigneesFromCodeOwners": true,
+  "reviewersFromCodeOwners": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "schedule": ["at any time"],
+    "assignees": ["@gabrielsotomorales"],
+    "labels": ["security", "vulnerability"]
+  },
+  "osvVulnerabilityAlerts": true,
+  "separateMinorPatch": true,
+  "separateMajorMinor": true,
+  "separateMultipleMajor": true,
+  "prHourlyLimit": 3,
+  "prConcurrentLimit": 5,
+  "branchConcurrentLimit": 10,
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "to {{newVersion}}",
+  "commitMessageSuffix": "\n\n🤖 Automated dependency update via Renovate\n\nRisk Assessment: {{#if isMajor}}🔴 MAJOR{{else}}{{#if isMinor}}🟡 MINOR{{else}}🟢 PATCH{{/if}}{{/if}} version change\nSecurity Impact: {{#if hasVulnerabilityFix}}✅ Fixes known vulnerabilities{{else}}➖ No known security impact{{/if}}",
+  "packageRules": [
+    {
+      "description": "Group all TypeScript-related packages",
+      "groupName": "TypeScript",
+      "matchPackageNames": [
+        "typescript",
+        "@types/node",
+        "@types/react",
+        "@types/react-dom"
+      ],
+      "matchPackagePatterns": [
+        "^@typescript-eslint/",
+        "^@types/"
+      ]
+    },
+    {
+      "description": "Group React ecosystem packages",
+      "groupName": "React ecosystem",
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "react-router-dom"
+      ],
+      "matchPackagePatterns": [
+        "^@testing-library/",
+        "^react-"
+      ]
+    },
+    {
+      "description": "Group Vite and build tools",
+      "groupName": "Build tools",
+      "matchPackageNames": [
+        "vite",
+        "vitest",
+        "eslint",
+        "prettier"
+      ],
+      "matchPackagePatterns": [
+        "^@vitejs/",
+        "^vite-",
+        "^eslint-",
+        "^@vitest/"
+      ]
+    },
+    {
+      "description": "Group UI library packages",
+      "groupName": "UI libraries",
+      "matchPackagePatterns": [
+        "^@radix-ui/",
+        "^@dnd-kit/",
+        "^lucide-"
+      ]
+    },
+    {
+      "description": "Pin major versions for critical dependencies",
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "typescript",
+        "vite"
+      ],
+      "rangeStrategy": "pin"
+    },
+    {
+      "description": "Auto-merge patch updates for development dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "requiredStatusChecks": null
+    },
+    {
+      "description": "Auto-merge security fixes",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["patch"],
+      "vulnerabilityAlert": true,
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Require manual review for major updates",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "requiredStatusChecks": [
+        "lint-and-typecheck",
+        "unit-tests",
+        "build-test"
+      ],
+      "reviewRequired": true,
+      "assignees": ["@gabrielsotomorales"]
+    },
+    {
+      "description": "Pin exact versions for ESM packages to avoid breaking changes",
+      "matchPackagePatterns": [
+        "^@supabase/",
+        "^@tanstack/"
+      ],
+      "rangeStrategy": "pin"
+    },
+    {
+      "description": "Special handling for testing packages",
+      "matchPackagePatterns": [
+        "^@playwright/",
+        "^@testing-library/",
+        "^vitest",
+        "^jest"
+      ],
+      "groupName": "Testing packages",
+      "automerge": false,
+      "schedule": ["before 6am on saturday"]
+    },
+    {
+      "description": "High priority security updates",
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "vulnerabilityAlert": true,
+      "schedule": ["at any time"],
+      "prPriority": 10,
+      "assignees": ["@gabrielsotomorales"],
+      "labels": ["security", "high-priority"]
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on sunday"],
+    "commitMessageAction": "🔒 Lock file maintenance",
+    "automerge": true,
+    "automergeType": "pr"
+  },
+  "regexManagers": [
+    {
+      "description": "Update Docker images in CI workflows",
+      "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
+      "matchStrings": [
+        "image:\\s*(?<depName>[^:\\s]+):(?<currentValue>[^\\s]+)"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "description": "Update Node.js versions in workflows",
+      "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
+      "matchStrings": [
+        "node-version:\\s*['\"]?(?<currentValue>\\d+)['\"]?"
+      ],
+      "depNameTemplate": "node",
+      "datasourceTemplate": "node-version"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update package versions in scripts",
+      "fileMatch": ["^scripts/.*\\.js$", "^scripts/.*\\.ts$"],
+      "matchStrings": [
+        "version['\"]?\\s*[:=]\\s*['\"](?<currentValue>[^'\"]+)['\"]"
+      ],
+      "depNameTemplate": "manual-version-update",
+      "datasourceTemplate": "npm"
+    }
+  ],
+  "ignoreDeps": [
+    "node"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.git/**"
+  ],
+  "prFooter": "---\n\n🤖 **Automated Dependency Update**\n\nThis PR was automatically created by Renovate as part of our FMEW (Failure Mode and Effects Workshop) framework to prevent dependency drift and security vulnerabilities.\n\n**Security Assessment**: {{#if hasVulnerabilityFix}}✅ This update addresses known security vulnerabilities{{else}}ℹ️ Routine dependency maintenance{{/if}}\n\n**Testing**: All pre-commit hooks and CI checks must pass before merging.\n\n**Documentation**: [Renovate Documentation](https://docs.renovatebot.com/) | [FMEW Framework](./FMEW_FRAMEWORK.md)",
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "🔧 Dependency Dashboard - FMEW Framework",
+  "dependencyDashboardHeader": "This dashboard provides an overview of all dependency updates managed by our FMEW (Failure Mode and Effects Workshop) framework to prevent security vulnerabilities and dependency drift.\n\n**Legend**: 🔴 Major | 🟡 Minor | 🟢 Patch | 🛡️ Security Fix",
+  "dependencyDashboardFooter": "---\n\n**FMEW Framework Status**: Automated dependency management active\n**Security Scanning**: Enabled for all dependency types\n**Auto-merge**: Enabled for patches and security fixes\n**Manual Review**: Required for major version updates",
+  "platformCommit": "enabled"
+}

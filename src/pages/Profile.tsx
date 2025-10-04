@@ -11,8 +11,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2, Upload, Settings, Shield, User, Palette } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Profile() {
@@ -131,8 +138,12 @@ export default function Profile() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-          <CardDescription>Update your profile details</CardDescription>
+          <div className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            <CardTitle>Personal Information</CardTitle>
+            <Badge variant="secondary">Essential</Badge>
+          </div>
+          <CardDescription>Update your basic profile details</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -175,6 +186,119 @@ export default function Profile() {
               Save changes
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* Advanced Profile Settings - Progressive Disclosure */}
+      <Card>
+        <CardContent className="pt-6">
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full py-2">
+                <div className="flex items-center gap-2 text-left">
+                  <Settings className="h-5 w-5" />
+                  <div>
+                    <h3 className="font-semibold">Advanced Profile Settings</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Additional profile customization and privacy options
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent>
+              <div className="space-y-6 pt-4">
+                <Separator />
+
+                {/* Preferences */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Palette className="h-4 w-4" />
+                    <h4 className="font-medium">Display Preferences</h4>
+                  </div>
+
+                  <div className="space-y-4 pl-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="timezone">Timezone</Label>
+                      <Input
+                        id="timezone"
+                        type="text"
+                        value={profile?.timezone || "UTC"}
+                        disabled
+                        className="text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Automatically detected from your system
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="language">Language</Label>
+                      <Input
+                        id="language"
+                        type="text"
+                        value={profile?.language || "English"}
+                        disabled
+                        className="text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Change language in the header menu
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Privacy Settings */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    <h4 className="font-medium">Privacy & Data</h4>
+                  </div>
+
+                  <div className="space-y-4 pl-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="user-id">User ID</Label>
+                      <Input
+                        id="user-id"
+                        type="text"
+                        value={profile?.id || ""}
+                        disabled
+                        className="text-sm font-mono"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Your unique identifier in the system
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="created-at">Account Created</Label>
+                      <Input
+                        id="created-at"
+                        type="text"
+                        value={profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : ""}
+                        disabled
+                        className="text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        When your account was first created
+                      </p>
+                    </div>
+
+                    <div className="pt-2">
+                      <Button variant="outline" size="sm">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Download My Data
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Export all your profile data and activity
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
       </Card>
     </div>

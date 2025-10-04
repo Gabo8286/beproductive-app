@@ -1,3 +1,9 @@
+/**
+ * AI Service Library
+ * Location: src/lib/ai-service.ts
+ * Index Reference: CODE_INDEX.md - Library Code > AI & Intelligence
+ * Purpose: AI integration with Claude/GPT APIs for productivity features
+ */
 import { Anthropic } from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 

@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -20,10 +21,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
+        default: "h-11 px-4 py-2",
+        sm: "h-11 rounded-md px-3",
+        lg: "h-12 rounded-md px-8",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {
@@ -37,19 +38,54 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  hapticFeedback?: boolean;
+  hapticType?: "button" | "destructive" | "success" | "form-submit";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, type = "button", ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      type = "button",
+      hapticFeedback = true,
+      hapticType = "button",
+      onClick,
+      ...props
+    },
     ref,
   ) => {
+    const { buttonPress, error: hapticError, success } = useHapticFeedback();
+
+    const handleClick = React.useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+      // Trigger haptic feedback based on button type and variant
+      if (hapticFeedback) {
+        if (variant === "destructive" || hapticType === "destructive") {
+          hapticError();
+        } else if (hapticType === "success") {
+          success();
+        } else if (hapticType === "form-submit") {
+          // Use form submit haptic
+          // Custom implementation for form submit
+          buttonPress();
+        } else {
+          buttonPress();
+        }
+      }
+
+      // Call the original onClick handler
+      onClick?.(event);
+    }, [hapticFeedback, variant, hapticType, onClick, buttonPress, hapticError, success]);
+
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
         type={type}
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        onClick={handleClick}
         {...props}
       />
     );
