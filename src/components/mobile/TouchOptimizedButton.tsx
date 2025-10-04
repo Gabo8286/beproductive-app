@@ -131,7 +131,7 @@ export function TouchOptimizedButton({
       </span>
 
       {/* CSS for ripple animation */}
-      <style jsx>{`
+      <style>{`
         @keyframes ripple {
           0% {
             transform: translate(-50%, -50%) scale(0);

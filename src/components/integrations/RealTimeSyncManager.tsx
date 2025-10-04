@@ -116,7 +116,7 @@ const mockSyncLogs: SyncLog[] = [
     id: "log_3",
     integration_id: "int_google",
     sync_type: "scheduled",
-    direction: "bi_directional",
+    direction: "inbound",
     status: "failed",
     started_at: "2024-10-02T10:15:30Z",
     completed_at: "2024-10-02T10:15:45Z",
@@ -333,7 +333,6 @@ export function RealTimeSyncManager({ integrations }: RealTimeSyncManagerProps) 
                       <Switch
                         checked={status.real_time_enabled}
                         onCheckedChange={() => handleToggleRealTime(status.integration_id)}
-                        size="sm"
                       />
                     </div>
                   </div>

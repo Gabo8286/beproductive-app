@@ -20,7 +20,7 @@ import {
   Circle,
   Edit3,
   Trash2,
-  Sync,
+  RefreshCw,
   Clock,
   AlertCircle,
   CheckSquare,
@@ -211,7 +211,7 @@ export function OfflineTaskManager() {
               onClick={syncPendingActions}
               disabled={syncInProgress || !isOnline}
             >
-              <Sync className={`h-4 w-4 ${syncInProgress ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 ${syncInProgress ? 'animate-spin' : ''}`} />
               {pendingCount}
             </TouchOptimizedButton>
           )}
@@ -292,7 +292,7 @@ export function OfflineTaskManager() {
                   onClick={syncPendingActions}
                   disabled={syncInProgress}
                 >
-                  <Sync className={`h-3 w-3 ${syncInProgress ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-3 w-3 ${syncInProgress ? 'animate-spin' : ''}`} />
                   Sync Now
                 </TouchOptimizedButton>
               )}
