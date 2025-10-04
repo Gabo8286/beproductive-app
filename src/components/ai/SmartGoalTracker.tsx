@@ -64,11 +64,12 @@ export function SmartGoalTracker() {
 
     const goalsWithTasks = data.map(goal => ({
       ...goal,
+      status: goal.status === 'archived' ? 'cancelled' : goal.status,
       tasks: goal.tasks || [],
-      milestones: goal.metadata?.milestones || []
+      milestones: (goal.metadata as any)?.milestones || []
     }));
 
-    setGoals(goalsWithTasks);
+    setGoals(goalsWithTasks as any);
   };
 
   const analyzeGoals = async () => {

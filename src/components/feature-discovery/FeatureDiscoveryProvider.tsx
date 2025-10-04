@@ -428,11 +428,11 @@ export const withFeatureDiscovery = <P extends object>(
 
 // Hook for automatic feature suggestions based on current route/context
 export const useContextualSuggestions = (context: string) => {
-  const { getSuggestedFeatures, settings, showSpotlight } = useFeatureDiscovery();
+  const { getSuggestedFeatures, state, showSpotlight } = useFeatureDiscovery();
   const [suggestions, setSuggestions] = useState<Feature[]>([]);
 
   useEffect(() => {
-    if (settings.enableAutoSuggestions) {
+    if (state.settings.enableAutoSuggestions) {
       const contextualFeatures = getSuggestedFeatures()
         .filter(feature => feature.category === context ||
           feature.title.toLowerCase().includes(context.toLowerCase()));
@@ -440,7 +440,7 @@ export const useContextualSuggestions = (context: string) => {
       setSuggestions(contextualFeatures.slice(0, 2));
 
       // Auto-show spotlight for highly relevant features
-      if (contextualFeatures.length > 0 && settings.enableSpotlights) {
+      if (contextualFeatures.length > 0 && state.settings.enableSpotlights) {
         const topFeature = contextualFeatures[0];
         // Show spotlight with a delay to avoid overwhelming the user
         setTimeout(() => {
@@ -448,7 +448,7 @@ export const useContextualSuggestions = (context: string) => {
         }, 3000);
       }
     }
-  }, [context, settings.enableAutoSuggestions, settings.enableSpotlights]);
+  }, [context, state.settings.enableAutoSuggestions, state.settings.enableSpotlights, getSuggestedFeatures, showSpotlight, state]);
 
   return suggestions;
 };

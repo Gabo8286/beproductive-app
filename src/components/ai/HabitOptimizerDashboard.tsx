@@ -61,10 +61,10 @@ export function HabitOptimizerDashboard() {
       .from('habits')
       .select(`
         *,
-        habit_completions:habit_completions(*)
+        habit_entries:habit_entries(*)
       `)
-      .eq('user_id', user.id)
-      .eq('is_active', true)
+      .eq('created_by', user.id)
+      .is('archived_at', null)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -76,16 +76,16 @@ export function HabitOptimizerDashboard() {
     const habitsWithCompletions = data.map(habit => ({
       id: habit.id,
       title: habit.title,
-      description: habit.description,
-      category: habit.category || 'general',
-      frequency: habit.frequency || 'daily',
-      target_count: habit.target_count || 1,
-      is_active: habit.is_active,
+      description: habit.description || '',
+      category: habit.category || 'other',
+      frequency: habit.frequency === 'custom' ? 'daily' : habit.frequency,
+      target_count: habit.target_streak || 1,
+      is_active: !habit.archived_at,
       created_at: habit.created_at,
-      streak_count: habit.streak_count || 0,
-      total_completions: habit.habit_completions?.length || 0,
+      streak_count: habit.current_streak || 0,
+      total_completions: habit.habit_entries?.filter((e: any) => e.status === 'completed').length || 0,
       reminder_time: habit.reminder_time,
-      difficulty_level: habit.difficulty_level || 'medium',
+      difficulty_level: habit.difficulty === 'extreme' ? 'hard' : habit.difficulty,
       metadata: habit.metadata
     }));
 

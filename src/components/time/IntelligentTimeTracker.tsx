@@ -24,7 +24,8 @@ import {
   Timer,
   Activity,
   Lightbulb,
-  Settings
+  Settings,
+  RefreshCw
 } from 'lucide-react';
 
 // Types and Interfaces
