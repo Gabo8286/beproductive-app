@@ -1,13 +1,13 @@
 import React from 'react';
 import { Globe, Check } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/Badge';
+import { Badge } from '@/components/ui/badge';
 import { useTranslation } from 'react-i18next';
 import { supportedLanguages, isRTL, updateDocumentDirection } from '@/lib/i18n';
 

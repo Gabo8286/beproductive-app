@@ -1,6 +1,6 @@
 import React from 'react';
 import { Moon, Sun, Monitor, Contrast } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
