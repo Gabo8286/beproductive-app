@@ -15,7 +15,6 @@ import { CalendarIcon, X, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { useCreateReflection } from "@/hooks/useReflections";
 import MoodTracker from "./MoodTracker";
-import TemplateSelector from "./TemplateSelector";
 import GuidedReflectionFlow from "./GuidedReflectionFlow";
 import type { CreateReflectionInput, MoodLevel } from "@/types/reflections";
 import type { SystemTemplate } from "@/utils/systemTemplates";
@@ -53,7 +52,6 @@ export default function DailyReflectionForm({
   const [tomorrowFocus, setTomorrowFocus] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [currentTag, setCurrentTag] = useState("");
-  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<SystemTemplate | null>(null);
   const [useGuidedFlow, setUseGuidedFlow] = useState(false);
 
@@ -194,7 +192,7 @@ export default function DailyReflectionForm({
           <Button
             type="button"
             variant="outline"
-            onClick={() => setShowTemplateSelector(true)}
+            disabled
             className="gap-2"
           >
             <Sparkles className="h-4 w-4" />
@@ -495,11 +493,6 @@ export default function DailyReflectionForm({
         </div>
       </form>
 
-      <TemplateSelector
-        open={showTemplateSelector}
-        onClose={() => setShowTemplateSelector(false)}
-        onSelectTemplate={handleTemplateSelect}
-      />
     </>
   );
 }

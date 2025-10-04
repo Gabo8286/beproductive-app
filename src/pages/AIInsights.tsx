@@ -1,5 +1,5 @@
 import { AIInsightsDashboard } from "@/components/ai-insights/AIInsightsDashboard";
-import ErrorBoundary from "@/components/common/ErrorBoundary";
+import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
 
 export default function AIInsights() {
   return (
