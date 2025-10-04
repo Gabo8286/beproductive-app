@@ -189,7 +189,7 @@ export const AIUsageWidget: React.FC = () => {
                 ]}>
                   <XAxis dataKey="day" hide />
                   <YAxis hide />
-                  <Tooltip formatter={(value, name) => [formatCurrency(value), name === 'actual' ? 'Actual' : 'Projected']} />
+                  <Tooltip formatter={(value: number, name: string) => [formatCurrency(value as number), name === 'actual' ? 'Actual' : 'Projected']} />
                   <Line
                     type="monotone"
                     dataKey="actual"
@@ -415,11 +415,9 @@ export const AIUsageWidget: React.FC = () => {
                 <YAxis />
                 <Tooltip
                   labelFormatter={(date) => new Date(date).toLocaleDateString()}
-                  formatter={[
-                    (value, name) => [
-                      name === 'cost' ? formatCurrency(value) : formatNumber(value),
-                      name === 'cost' ? 'Cost' : name === 'requests' ? 'Requests' : 'Tokens'
-                    ]
+                  formatter={(value: number, name: string) => [
+                    name === 'cost' ? formatCurrency(value) : formatNumber(value),
+                    name === 'cost' ? 'Cost' : name === 'requests' ? 'Requests' : 'Tokens'
                   ]}
                 />
                 <Line

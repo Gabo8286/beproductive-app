@@ -334,8 +334,8 @@ export function PerformanceDashboard() {
                 <YAxis />
                 <Tooltip
                   labelFormatter={(timestamp) => new Date(timestamp).toLocaleString()}
-                  formatter={(value, name) => [
-                    name === 'score' ? value : `${Math.round(value)}ms`,
+                  formatter={(value: number, name: string) => [
+                    name === 'score' ? value : `${Math.round(value as number)}ms`,
                     name === 'LCP' ? 'Largest Contentful Paint' :
                     name === 'FCP' ? 'First Contentful Paint' :
                     name === 'TTFB' ? 'Time to First Byte' :

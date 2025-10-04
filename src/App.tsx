@@ -103,7 +103,7 @@ function AppContent() {
   useOfflineDetection();
 
   return (
-    <ErrorBoundary fallback={(error, resetError) => <PageErrorFallback error={error} resetError={resetError} />}>
+    <ErrorBoundary fallback={PageErrorFallback}>
       <TooltipProvider>
         <Routes>
           <Route path="/" element={<Index />} />

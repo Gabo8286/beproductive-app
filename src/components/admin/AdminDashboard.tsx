@@ -29,7 +29,7 @@ import {
   Filter
 } from 'lucide-react';
 
-interface SystemMetrics {
+export interface SystemMetrics {
   cpu: {
     usage: number;
     cores: number;

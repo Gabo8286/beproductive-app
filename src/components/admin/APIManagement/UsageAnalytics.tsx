@@ -379,7 +379,7 @@ export const UsageAnalytics: React.FC = () => {
                         <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#6b7280'][index % 5]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => formatCurrency(value)} />
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
                     <Legend />
                   </PieChart>
                 </ResponsiveContainer>

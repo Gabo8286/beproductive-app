@@ -355,7 +355,9 @@ describe('AI Service Integration Tests', () => {
             workingHours: { start: '09:00', end: '17:00' },
             preferredTaskTypes: [],
             energyLevels: { morning: 8, afternoon: 6, evening: 4 }
-          }
+          },
+          currentGoals: [],
+          recentProductivity: { completionRate: 0.7, averageTaskTime: 60, focusScore: 0.8 }
         }
       });
 
@@ -380,7 +382,9 @@ describe('AI Service Integration Tests', () => {
             workingHours: { start: '09:00', end: '17:00' },
             preferredTaskTypes: [],
             energyLevels: { morning: 8, afternoon: 6, evening: 4 }
-          }
+          },
+          currentGoals: [],
+          recentProductivity: { completionRate: 0, averageTaskTime: 0, focusScore: 0 }
         }
       });
 
@@ -425,7 +429,9 @@ describe('AI Service Integration Tests', () => {
             workingHours: { start: '09:00', end: '17:00' },
             preferredTaskTypes: [],
             energyLevels: { morning: 8, afternoon: 6, evening: 4 }
-          }
+          },
+          currentGoals: [],
+          recentProductivity: { completionRate: 0.5, averageTaskTime: 45, focusScore: 0.6 }
         }
       });
 
@@ -563,7 +569,9 @@ describe('AI Service Integration Tests', () => {
               workingHours: { start: '09:00', end: '17:00' },
               preferredTaskTypes: [],
               energyLevels: { morning: 8, afternoon: 6, evening: 4 }
-            }
+            },
+            currentGoals: [],
+            recentProductivity: { completionRate: 0.5, averageTaskTime: 45, focusScore: 0.6 }
           }
         })
       ];
