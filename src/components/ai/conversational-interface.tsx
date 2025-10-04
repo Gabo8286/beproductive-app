@@ -185,7 +185,7 @@ export const ConversationalInterface: React.FC<ConversationalInterfaceProps> = (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <Bot className="w-16 h-16 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">
-                {t('welcomeMessage', 'Hi! I'm your AI productivity assistant')}
+                {t('welcomeMessage', "Hi! I'm your AI productivity assistant")}
               </h3>
               <p className="text-muted-foreground mb-6">
                 {t('helpText', 'I can help you manage tasks, analyze your productivity, and provide insights.')}

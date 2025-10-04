@@ -1,15 +1,5 @@
-// Admin Dashboard Components
-export { AdminDashboard } from "./AdminDashboard";
-export { UserManagement } from "./UserManagement";
-export { SystemConfiguration } from "./SystemConfiguration";
+// Admin module exports are currently disabled because the concrete components
+// (AdminDashboard, UserManagement, SystemConfiguration) are not present.
+// This file intentionally exports nothing to avoid build-time module resolution errors.
 
-// Types
-export type {
-  SystemMetrics,
-  ApplicationMetrics,
-  AlertItem,
-} from "./AdminDashboard";
-
-export type { User, UserFilters } from "./UserManagement";
-
-export type { SystemConfig } from "./SystemConfiguration";
+export {};

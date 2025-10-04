@@ -1,5 +1,12 @@
+import React from "react";
 import { Page, Locator, expect } from "@playwright/test";
 import { PersonaTestData } from "../data/persona-test-data";
+import { render, screen, waitFor } from "@testing-library/react";
+
+export { render, screen, waitFor };
+export function renderWithProviders(ui: React.ReactElement) {
+  return render(ui);
+}
 
 /**
  * Test utilities for common testing patterns
