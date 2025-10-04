@@ -50,7 +50,7 @@ export function JourneyProgressWidget() {
                   <Badge
                     key={index}
                     variant="default"
-                    className="text-xs bg-gradient-primary"
+                    className="text-xs bg-gradient-to-r from-primary to-blue-600"
                   >
                     <Award className="h-3 w-3 mr-1" />
                     {celebration}

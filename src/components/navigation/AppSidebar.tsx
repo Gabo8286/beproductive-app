@@ -283,7 +283,7 @@ export function AppSidebar() {
                           "hover:shadow-sm apple-button",
                           isCollapsed ? "py-2 justify-center" : "py-2.5",
                           isActive
-                            ? "bg-gradient-primary text-primary-foreground shadow-md relative"
+                            ? "bg-gradient-to-r from-primary to-blue-600 text-primary-foreground shadow-md relative"
                             : "text-muted-foreground hover:bg-accent/50",
                         )}
                       >

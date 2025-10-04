@@ -1,7 +1,7 @@
 import React from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { DraggableWidget } from "./DraggableWidget";
-import { useWidgetLayout } from "../hooks/useWidgetLayout";
+import { useWidgetLayout } from "@/hooks/useWidgetLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";

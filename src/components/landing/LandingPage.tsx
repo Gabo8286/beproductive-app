@@ -424,7 +424,7 @@ export const LandingPage = () => {
       {/* Final CTA Section */}
       <section className="container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto">
-          <Card className="journey-card-featured bg-gradient-primary text-white border-0 overflow-hidden relative shadow-2xl">
+          <Card className="journey-card-featured bg-gradient-to-r from-primary to-blue-600 text-white border-0 overflow-hidden relative shadow-2xl">
             <CardContent className="py-16 px-8 md:px-12 text-center relative z-10">
               <Sparkles className="h-12 w-12 mx-auto mb-6 journey-float opacity-80" />
               <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6 leading-tight">

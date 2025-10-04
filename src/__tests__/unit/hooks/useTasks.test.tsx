@@ -30,12 +30,14 @@ const createWrapper = () => {
     session: null,
     profile: null,
     loading: false,
+    authError: null,
     signIn: vi.fn(),
     signUp: vi.fn(),
     signOut: vi.fn(),
     signInWithGoogle: vi.fn(),
     resetPassword: vi.fn(),
     updateProfile: vi.fn(),
+    clearAuthError: vi.fn(),
   };
 
   return ({ children }: { children: ReactNode }) => (

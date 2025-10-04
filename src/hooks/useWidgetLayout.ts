@@ -22,28 +22,28 @@ interface WidgetLayout {
 const WIDGET_TYPES = {
   tasks: {
     title: "Tasks",
-    component: React.lazy(() => import("../widgets/TasksWidget")),
+    component: React.lazy(() => import("@/components/widgets/TasksWidget")),
   },
   goals: {
     title: "Goals",
-    component: React.lazy(() => import("../widgets/GoalsWidget")),
+    component: React.lazy(() => import("@/components/widgets/GoalsWidget")),
   },
   "time-tracking": {
     title: "Time Tracking",
-    component: React.lazy(() => import("../widgets/TimeTrackingWidget")),
+    component: React.lazy(() => import("@/components/widgets/TimeTrackingWidget")),
   },
   notes: {
     title: "Notes",
-    component: React.lazy(() => import("../widgets/NotesWidget")),
+    component: React.lazy(() => import("@/components/widgets/NotesWidget")),
   },
   analytics: {
     title: "Analytics",
-    component: React.lazy(() => import("../widgets/AnalyticsWidget")),
+    component: React.lazy(() => import("@/components/widgets/JourneyProgressWidget")),
   },
   "ai-insights": {
     title: "AI Insights",
     component: React.lazy(
-      () => import("../widgets/SmartRecommendationsWidget"),
+      () => import("@/components/widgets/SmartRecommendationsWidget"),
     ),
   },
 };
