@@ -195,7 +195,7 @@ async function getProductivityContext(userId: string) {
   const completedThisWeek = tasks?.filter(t => t.status === 'done').length || 0;
   const activeGoals = goals?.length || 0;
   const recentMood = reflections?.length > 0 ?
-    reflections.reduce((sum, r) => sum + (r.mood || 3), 0) / reflections.length : 3;
+    reflections.reduce((sum, r) => sum + (typeof r.mood === 'number' ? r.mood : 3), 0) / reflections.length : 3;
 
   return {
     activeTasks,
