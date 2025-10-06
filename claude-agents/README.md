@@ -97,6 +97,324 @@ This directory contains specialized Claude Code agents designed to accelerate de
 
 ---
 
+## 🏢 Enterprise-Grade Security Agents
+
+### 🔒 Security Scanner Agent
+**Purpose**: Automate comprehensive security scanning, vulnerability detection, and compliance verification
+
+**Usage Example**:
+```
+"Run daily security scans with OWASP compliance checks, dependency audits, and generate security reports with remediation guidance"
+```
+
+**Key Features**:
+- OWASP Top 10 compliance verification
+- Dependency vulnerability scanning
+- Secret detection and validation
+- Automated penetration testing
+- Security metrics dashboard
+
+**File**: [security-scanner-agent.md](./security-scanner-agent.md)
+
+---
+
+### ⚔️ Threat Simulator Agent
+**Purpose**: Automate penetration testing and security threat simulations to validate application defenses
+
+**Usage Example**:
+```
+"Simulate SQL injection attacks, test authentication bypass scenarios, and validate CSRF protection mechanisms"
+```
+
+**Key Features**:
+- OWASP attack vector simulation
+- Authentication bypass testing
+- Input validation testing
+- Rate limiting validation
+- Automated security reporting
+
+**File**: [threat-simulator-agent.md](./threat-simulator-agent.md)
+
+---
+
+## ⚡ Performance & Scalability Agents
+
+### ⚡ Performance Profiler Agent
+**Purpose**: Monitor and analyze application performance, identify bottlenecks, and provide optimization recommendations
+
+**Usage Example**:
+```
+"Monitor Core Web Vitals, detect memory leaks, analyze database performance, and generate optimization reports"
+```
+
+**Key Features**:
+- Core Web Vitals tracking
+- Memory leak detection
+- Database performance profiling
+- Bundle size analysis
+- Real-time performance monitoring
+
+**File**: [performance-profiler-agent.md](./performance-profiler-agent.md)
+
+---
+
+### 🏋️ Load Tester Agent
+**Purpose**: Simulate realistic user loads and stress test application infrastructure
+
+**Usage Example**:
+```
+"Run stress tests with 1000 concurrent users, validate auto-scaling triggers, and identify system breaking points"
+```
+
+**Key Features**:
+- Automated load testing scenarios
+- Stress testing and spike testing
+- Auto-scaling validation
+- Performance degradation analysis
+- Comprehensive load reports
+
+**File**: [load-tester-agent.md](./load-tester-agent.md)
+
+---
+
+## 🛡️ Reliability & Recovery Agents
+
+### 🛡️ Reliability Monitor Agent
+**Purpose**: Continuously monitor system reliability, detect failures, and validate redundancy mechanisms
+
+**Usage Example**:
+```
+"Monitor service health, test failover mechanisms, validate circuit breakers, and ensure 99.9% uptime"
+```
+
+**Key Features**:
+- Real-time uptime monitoring
+- Failover mechanism validation
+- Circuit breaker testing
+- SLA compliance monitoring
+- Incident detection and alerting
+
+**File**: [reliability-monitor-agent.md](./reliability-monitor-agent.md)
+
+---
+
+### 🚨 Recovery Driller Agent
+**Purpose**: Automate disaster recovery testing, validate backup systems, and ensure business continuity
+
+**Usage Example**:
+```
+"Test disaster recovery procedures, validate backup integrity, and ensure RTO/RPO compliance"
+```
+
+**Key Features**:
+- Automated disaster recovery simulations
+- Backup integrity verification
+- RTO/RPO validation
+- Cross-region failover testing
+- Recovery workflow automation
+
+**File**: [recovery-driller-agent.md](./recovery-driller-agent.md)
+
+---
+
+## 📋 Compliance & Governance Agents
+
+### 📋 Compliance Auditor Agent
+**Purpose**: Automate regulatory compliance verification, conduct privacy audits, and ensure governance standards
+
+**Usage Example**:
+```
+"Verify GDPR compliance, conduct SOC 2 audits, validate data retention policies, and generate compliance reports"
+```
+
+**Key Features**:
+- GDPR/CCPA compliance verification
+- SOC 2 audit automation
+- Data privacy policy validation
+- Third-party vendor compliance assessment
+- Automated compliance reporting
+
+**File**: [compliance-auditor-agent.md](./compliance-auditor-agent.md)
+
+---
+
+## 👤 User Experience Agents
+
+### ♿ Accessibility Checker Agent
+**Purpose**: Automated accessibility testing and WCAG 2.1 compliance validation
+
+**Usage Example**:
+```
+"Validate WCAG AA compliance, test screen reader compatibility, verify keyboard navigation, and generate accessibility reports"
+```
+
+**Key Features**:
+- WCAG 2.1 compliance validation
+- Screen reader compatibility testing
+- Keyboard navigation verification
+- Color contrast analysis
+- Automated accessibility reporting
+
+**File**: [accessibility-checker-agent.md](./accessibility-checker-agent.md)
+
+---
+
+### 👤 UX Evaluator Agent
+**Purpose**: Analyze user experience through automated testing, behavior analysis, and conversion optimization
+
+**Usage Example**:
+```
+"Analyze user journeys, optimize conversion funnels, conduct A/B tests, and measure user satisfaction metrics"
+```
+
+**Key Features**:
+- User journey optimization
+- A/B testing automation
+- Conversion funnel analysis
+- Mobile UX validation
+- User sentiment analysis
+
+**File**: [ux-evaluator-agent.md](./ux-evaluator-agent.md)
+
+---
+
+### 🚀 Onboarding Optimizer Agent
+**Purpose**: Optimize user onboarding experiences through conversion analysis and flow optimization
+
+**Usage Example**:
+```
+"Analyze onboarding completion rates, identify drop-off points, A/B test onboarding variants, and optimize time-to-value"
+```
+
+**Key Features**:
+- Onboarding flow analysis
+- Drop-off point identification
+- A/B testing for variants
+- Time-to-value measurement
+- User activation tracking
+
+**File**: [onboarding-optimizer-agent.md](./onboarding-optimizer-agent.md)
+
+---
+
+## 🛠️ Development & Quality Agents
+
+### 🛡️ Code Quality Guardian Agent
+**Purpose**: Enforce code quality standards through automated reviews, static analysis, and technical debt management
+
+**Usage Example**:
+```
+"Review pull requests automatically, detect code smells, enforce test coverage, and track technical debt"
+```
+
+**Key Features**:
+- Automated pull request reviews
+- Code smell detection
+- Test coverage enforcement
+- Technical debt tracking
+- Security vulnerability detection
+
+**File**: [code-quality-guardian-agent.md](./code-quality-guardian-agent.md)
+
+---
+
+### ⚙️ DevOps Automator Agent
+**Purpose**: Automate CI/CD pipeline management, infrastructure monitoring, and deployment orchestration
+
+**Usage Example**:
+```
+"Optimize CI/CD pipelines, automate deployments, manage infrastructure as code, and ensure environment parity"
+```
+
+**Key Features**:
+- CI/CD pipeline optimization
+- Automated deployment orchestration
+- Infrastructure as Code management
+- Environment parity validation
+- Blue-green deployment automation
+
+**File**: [devops-automator-agent.md](./devops-automator-agent.md)
+
+---
+
+## 🗄️ Data & Integration Agents
+
+### 🗄️ Data Integrity Agent
+**Purpose**: Ensure data consistency, validate database transactions, and maintain ACID compliance
+
+**Usage Example**:
+```
+"Validate ACID transactions, monitor data consistency, detect orphaned data, and ensure referential integrity"
+```
+
+**Key Features**:
+- ACID transaction validation
+- Data consistency verification
+- Schema integrity monitoring
+- Data quality scoring
+- Corruption prevention
+
+**File**: [data-integrity-agent.md](./data-integrity-agent.md)
+
+---
+
+### 💾 Backup Verifier Agent
+**Purpose**: Automate backup integrity testing, validate restoration procedures, and ensure data recovery capabilities
+
+**Usage Example**:
+```
+"Test backup integrity daily, validate restoration procedures, verify encryption, and ensure recovery compliance"
+```
+
+**Key Features**:
+- Automated backup integrity testing
+- Restoration procedure validation
+- Encryption verification
+- Cross-region backup testing
+- Recovery time testing
+
+**File**: [backup-verifier-agent.md](./backup-verifier-agent.md)
+
+---
+
+### 🔗 Integration Tester Agent
+**Purpose**: Validate API integrations, test service communications, and ensure reliable inter-system connectivity
+
+**Usage Example**:
+```
+"Test API contracts, validate service mesh communications, verify webhooks, and monitor integration performance"
+```
+
+**Key Features**:
+- API contract testing
+- Service mesh validation
+- Third-party integration testing
+- Webhook reliability verification
+- Integration performance testing
+
+**File**: [integration-tester-agent.md](./integration-tester-agent.md)
+
+---
+
+### 📊 SLA Monitor Agent
+**Purpose**: Track service level agreements, monitor performance against commitments, and predict SLA breaches
+
+**Usage Example**:
+```
+"Monitor SLA compliance, track performance thresholds, predict breaches, and generate customer impact reports"
+```
+
+**Key Features**:
+- Real-time SLA tracking
+- Breach prediction and alerting
+- Customer impact assessment
+- Multi-tier SLA management
+- Automated reporting
+
+**File**: [sla-monitor-agent.md](./sla-monitor-agent.md)
+
+---
+
 ## How to Use These Agents
 
 ### 1. Component Development Workflow

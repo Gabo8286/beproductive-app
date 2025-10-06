@@ -41,7 +41,7 @@ export const initializeAccessibilityTesting = async () => {
       console.warn("⚠️ Accessibility testing initialization timed out");
     }, 5000);
 
-    axeReact.default(React.default, ReactDOM.default, 2000, {
+    axeReact.default(React, ReactDOM, 2000, {
       rules: [
         // Enable key WCAG 2.1 Level AA rules (reduced set for performance)
         { id: "color-contrast", enabled: true },

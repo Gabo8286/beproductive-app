@@ -178,23 +178,24 @@ diagnostic.measureSync("React Render", () => {
 });
 
 // Step 5: Initialize accessibility testing AFTER React mount (non-blocking)
-if (import.meta.env.DEV) {
-  setTimeout(() => {
-    diagnostic
-      .measure("Accessibility Testing Setup", async () => {
-        await initializeAccessibilityTesting();
-      })
-      .catch((error) => {
-        console.warn(
-          "[Main] Failed to initialize accessibility testing:",
-          error,
-        );
-        diagnostic.logBrowserBehavior("Accessibility Testing Failed", {
-          error: error.message,
-        });
-      });
-  }, 100);
-}
+// Temporarily disabled for debugging
+// if (import.meta.env.DEV) {
+//   setTimeout(() => {
+//     diagnostic
+//       .measure("Accessibility Testing Setup", async () => {
+//         await initializeAccessibilityTesting();
+//       })
+//       .catch((error) => {
+//         console.warn(
+//           "[Main] Failed to initialize accessibility testing:",
+//           error,
+//         );
+//         diagnostic.logBrowserBehavior("Accessibility Testing Failed", {
+//           error: error.message,
+//         });
+//       });
+//   }, 100);
+// }
 
 // Final completion
 setTimeout(() => {
