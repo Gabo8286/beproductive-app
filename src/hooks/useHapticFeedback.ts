@@ -66,7 +66,7 @@ const INTENSITY_MULTIPLIERS: Record<HapticFeedbackType, number> = {
  */
 export function useHapticFeedback(initialConfig: Partial<HapticConfig> = {}) {
   // Analytics temporarily disabled
-  const trackEvent = () => {};
+  const trackEvent = (...args: any[]) => {};
 
   const [state, setState] = useState<HapticFeedbackState>({
     isSupported: false,

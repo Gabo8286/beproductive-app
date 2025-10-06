@@ -116,7 +116,7 @@ export function useGestureNavigation(
   const location = useLocation();
   const { pageTransition, success, buttonPress } = useHapticFeedback();
   // Analytics temporarily disabled
-  const trackEvent = () => {};
+  const trackEvent = (...args: any[]) => {};
 
   const defaultConfig: GestureConfig = {
     enabled: true,
