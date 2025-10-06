@@ -13,6 +13,8 @@ interface AccessibilityPreferences {
   screenReaderMode: boolean;
   focusMode: boolean; // Distraction-free interface
   simplifiedLanguage: boolean; // Simplified language mode
+  enhancedFocus: boolean; // Enhanced focus indicators
+  skipAnimations: boolean; // Skip all animations
 }
 
 interface AccessibilityContextType {
@@ -27,6 +29,8 @@ const defaultPreferences: AccessibilityPreferences = {
   screenReaderMode: false,
   focusMode: false,
   simplifiedLanguage: false,
+  enhancedFocus: false,
+  skipAnimations: false,
 };
 
 const AccessibilityContext = createContext<
