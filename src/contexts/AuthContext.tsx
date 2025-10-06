@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/types/database";
@@ -36,10 +36,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // Track initialization state to prevent overlapping attempts
+  const isInitializing = useRef(false);
+  const retryCount = useRef(0);
+  const maxRetries = 3;
+
   useEffect(() => {
     console.log("[AuthContext] Initializing auth state...");
     let isComponentMounted = true;
     let authSubscription: any = null;
+    let retryTimeout: NodeJS.Timeout | null = null;
 
     // Add timeout to prevent infinite loading (critical for Safari/Brave)
     const loadingTimeout = setTimeout(() => {
@@ -51,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           "Authentication initialization timed out. Please refresh the page.",
         );
         setLoading(false);
+        isInitializing.current = false;
       }
     }, 10000); // 10 seconds timeout
 
@@ -61,10 +68,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           "[AuthContext] Emergency timeout - forcing auth to complete",
         );
         setLoading(false);
+        isInitializing.current = false;
       }
     }, 15000); // 15 seconds emergency timeout
 
     const initializeAuth = async () => {
+      // Prevent multiple simultaneous initialization attempts
+      if (isInitializing.current) {
+        console.log("[AuthContext] Already initializing, skipping duplicate attempt");
+        return;
+      }
+
+      isInitializing.current = true;
+
       try {
         console.log("[AuthContext] Setting up auth state listener...");
 
@@ -77,20 +93,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error(
             "[AuthContext] Supabase client not ready - auth methods unavailable",
           );
-          setAuthError(
-            "Authentication service is initializing. Please wait a moment and refresh the page.",
-          );
-          setLoading(false);
 
-          // Retry after 1 second
-          setTimeout(() => {
+          // Check if we've exceeded max retries
+          if (retryCount.current >= maxRetries) {
+            console.error("[AuthContext] Max retries exceeded, giving up");
+            setAuthError(
+              "Authentication service failed to initialize. Please refresh the page.",
+            );
+            setLoading(false);
+            isInitializing.current = false;
+            return;
+          }
+
+          setAuthError(
+            "Authentication service is initializing. Please wait a moment...",
+          );
+
+          // Increment retry count and retry after 1 second
+          retryCount.current++;
+          isInitializing.current = false; // Reset flag before retry
+
+          retryTimeout = setTimeout(() => {
             if (isComponentMounted) {
-              console.log("[AuthContext] Retrying auth initialization...");
+              console.log(`[AuthContext] Retrying auth initialization (attempt ${retryCount.current}/${maxRetries})...`);
               initializeAuth();
             }
           }, 1000);
           return;
         }
+
+        // Reset retry count on successful client check
+        retryCount.current = 0;
 
         // Set up auth state listener with error handling
         const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -110,6 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           } else {
             setProfile(null);
             setLoading(false);
+            isInitializing.current = false;
           }
         });
 
@@ -127,12 +161,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const { data: sessionData, error: sessionError } =
             (await Promise.race([sessionPromise, timeoutPromise])) as any;
 
-          if (!isComponentMounted) return;
+          if (!isComponentMounted) {
+            isInitializing.current = false;
+            return;
+          }
 
           if (sessionError) {
             console.error("[AuthContext] Session check error:", sessionError);
             setAuthError(`Failed to check session: ${sessionError.message}`);
             setLoading(false);
+            isInitializing.current = false;
             return;
           }
 
@@ -149,24 +187,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await fetchProfile(session.user.id);
           } else {
             setLoading(false);
+            isInitializing.current = false;
           }
         } catch (error) {
-          if (!isComponentMounted) return;
+          if (!isComponentMounted) {
+            isInitializing.current = false;
+            return;
+          }
 
           console.error("[AuthContext] Session check failed:", error);
           setAuthError(
             "Failed to check authentication status. Please refresh the page.",
           );
           setLoading(false);
+          isInitializing.current = false;
         }
       } catch (error) {
-        if (!isComponentMounted) return;
+        if (!isComponentMounted) {
+          isInitializing.current = false;
+          return;
+        }
 
         console.error("[AuthContext] Auth initialization failed:", error);
         setAuthError(
           `Authentication initialization failed: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
         setLoading(false);
+        isInitializing.current = false;
       }
     };
 
@@ -177,8 +224,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       console.log("[AuthContext] Cleaning up auth context...");
       isComponentMounted = false;
+      isInitializing.current = false;
       clearTimeout(loadingTimeout);
       clearTimeout(emergencyTimeout);
+
+      if (retryTimeout) {
+        clearTimeout(retryTimeout);
+      }
 
       if (authSubscription) {
         authSubscription.unsubscribe();
@@ -220,6 +272,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("[AuthContext] Profile loaded successfully");
       setProfile(data as Profile);
       setLoading(false);
+      isInitializing.current = false;
     } catch (error) {
       console.error("[AuthContext] Profile fetch failed:", error);
       const errorMessage =
@@ -232,6 +285,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       setLoading(false);
+      isInitializing.current = false;
     }
   };
 
