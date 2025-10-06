@@ -136,7 +136,7 @@ export interface AIInsightDisplayProps {
 
 // AI Context Types
 export interface AIContextType {
-  service: AIService | null;
+  service: any | null; // AIService temporarily disabled
   messages: AIMessage[];
   isLoading: boolean;
   isConfigured: boolean;

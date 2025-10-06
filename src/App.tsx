@@ -284,14 +284,7 @@ function AppContent() {
                 </Suspense>
               }
             />
-            <Route
-              path="/ai-insights"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <AIInsights />
-                </Suspense>
-              }
-            />
+            {/* AIInsights route temporarily disabled */}
             <Route
               path="/analytics"
               element={

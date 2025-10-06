@@ -224,7 +224,7 @@ export default function Profile() {
                       <Input
                         id="timezone"
                         type="text"
-                        value={profile?.timezone || "UTC"}
+                        value="UTC"
                         disabled
                         className="text-sm"
                       />
@@ -238,7 +238,7 @@ export default function Profile() {
                       <Input
                         id="language"
                         type="text"
-                        value={profile?.language || "English"}
+                        value="English"
                         disabled
                         className="text-sm"
                       />

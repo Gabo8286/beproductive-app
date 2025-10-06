@@ -136,21 +136,13 @@ export const lightTheme: ThemeColors = {
 };
 
 export const darkTheme: ThemeColors = {
-  // Dark theme uses inverted neutral scale and adjusted other colors
-  primary: {
-    50: "#172554",
-    100: "#1e3a8a",
-    200: "#1e40af",
-    300: "#1d4ed8",
-    400: "#2563eb",
-    500: "#3b82f6",
-    600: "#60a5fa",
-    700: "#93c5fd",
-    800: "#bfdbfe",
-    900: "#dbeafe",
-    950: "#eff6ff",
-  },
-  // ... other colors adjusted for dark theme
+  primary: lightTheme.primary,
+  secondary: lightTheme.secondary,
+  accent: lightTheme.accent,
+  success: lightTheme.success,
+  warning: lightTheme.warning,
+  error: lightTheme.error,
+  info: lightTheme.info,
   neutral: {
     50: "#09090b",
     100: "#18181b",
@@ -164,7 +156,6 @@ export const darkTheme: ThemeColors = {
     900: "#f4f4f5",
     950: "#fafafa",
   },
-  // ... other colors similar to light theme but optimized for dark backgrounds
 };
 
 export const highContrastTheme: ThemeColors = {
@@ -181,7 +172,12 @@ export const highContrastTheme: ThemeColors = {
     900: "#ffffff",
     950: "#ffffff",
   },
-  // ... high contrast versions with maximum contrast ratios
+  secondary: lightTheme.secondary,
+  accent: lightTheme.accent,
+  success: lightTheme.success,
+  warning: lightTheme.warning,
+  error: lightTheme.error,
+  info: lightTheme.info,
   neutral: {
     50: "#000000",
     100: "#000000",

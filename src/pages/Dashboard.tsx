@@ -9,9 +9,19 @@ import { GreetingHeader } from "@/components/dashboard/GreetingHeader";
 const Dashboard: React.FC = () => {
   const commandPalette = useCommandPalette();
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  };
+
   return (
     <div className="container mx-auto px-4 py-6 space-y-6">
-      <GreetingHeader />
+      <GreetingHeader 
+        greeting={getGreeting()} 
+        insight="Ready to make today productive?" 
+      />
 
       <WidgetGrid className="min-h-[600px]" />
 

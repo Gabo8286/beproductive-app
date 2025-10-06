@@ -22,28 +22,28 @@ interface WidgetLayout {
 const WIDGET_TYPES = {
   tasks: {
     title: "Tasks",
-    component: React.lazy(() => import("@/components/widgets/TasksWidget")),
+    component: React.lazy(() => import("@/components/widgets/TasksWidget").then(m => ({ default: m.TasksWidget }))),
   },
   goals: {
     title: "Goals",
-    component: React.lazy(() => import("@/components/widgets/GoalsWidget")),
+    component: React.lazy(() => import("@/components/widgets/GoalsWidget").then(m => ({ default: m.GoalsWidget }))),
   },
   "time-tracking": {
     title: "Time Tracking",
-    component: React.lazy(() => import("@/components/widgets/TimeTrackingWidget")),
+    component: React.lazy(() => import("@/components/widgets/TimeTrackingWidget").then(m => ({ default: m.TimeTrackingWidget }))),
   },
   notes: {
     title: "Notes",
-    component: React.lazy(() => import("@/components/widgets/NotesWidget")),
+    component: React.lazy(() => import("@/components/widgets/NotesWidget").then(m => ({ default: m.NotesWidget }))),
   },
   analytics: {
     title: "Analytics",
-    component: React.lazy(() => import("@/components/widgets/JourneyProgressWidget")),
+    component: React.lazy(() => import("@/components/widgets/JourneyProgressWidget").then(m => ({ default: m.JourneyProgressWidget }))),
   },
   "ai-insights": {
     title: "AI Insights",
     component: React.lazy(
-      () => import("@/components/widgets/SmartRecommendationsWidget"),
+      () => import("@/components/widgets/SmartRecommendationsWidget").then(m => ({ default: m.SmartRecommendationsWidget })),
     ),
   },
 };
