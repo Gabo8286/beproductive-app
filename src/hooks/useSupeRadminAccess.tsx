@@ -1,5 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface SuperAdminAccess {
   isSuperAdmin: boolean;
@@ -13,38 +14,54 @@ export interface SuperAdminAccess {
  * Only users with 'super_admin' role can access API management and other creator features
  */
 export const useSuperAdminAccess = (): SuperAdminAccess => {
-  const { profile, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const result = useMemo((): SuperAdminAccess => {
-    if (loading) {
-      return {
-        isSuperAdmin: false,
-        hasAccess: false,
-        loading: true,
-        error: null,
-      };
-    }
+  useEffect(() => {
+    const checkSuperAdminRole = async () => {
+      if (!user?.id) {
+        setIsSuperAdmin(false);
+        setLoading(false);
+        setError("No user found");
+        return;
+      }
 
-    if (!profile) {
-      return {
-        isSuperAdmin: false,
-        hasAccess: false,
-        loading: false,
-        error: "No user profile found",
-      };
-    }
+      try {
+        const { data, error: rpcError } = await supabase.rpc('has_role', {
+          _user_id: user.id,
+          _role: 'super_admin'
+        });
 
-    const isSuperAdmin = profile.role === "super_admin";
-
-    return {
-      isSuperAdmin,
-      hasAccess: isSuperAdmin,
-      loading: false,
-      error: isSuperAdmin ? null : "Super admin access required",
+        if (rpcError) {
+          console.error('Error checking super admin role:', rpcError);
+          setError(rpcError.message);
+          setIsSuperAdmin(false);
+        } else {
+          setIsSuperAdmin(data || false);
+          setError(data ? null : "Super admin access required");
+        }
+      } catch (err) {
+        console.error('Error in super admin check:', err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+        setIsSuperAdmin(false);
+      } finally {
+        setLoading(false);
+      }
     };
-  }, [profile, loading]);
 
-  return result;
+    if (!authLoading) {
+      checkSuperAdminRole();
+    }
+  }, [user?.id, authLoading]);
+
+  return {
+    isSuperAdmin,
+    hasAccess: isSuperAdmin,
+    loading: authLoading || loading,
+    error
+  };
 };
 
 /**
