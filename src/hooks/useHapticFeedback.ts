@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useBehavioralAnalytics } from "@/hooks/useBehavioralAnalytics";
 
 export type HapticFeedbackType =
   | "impact-light"

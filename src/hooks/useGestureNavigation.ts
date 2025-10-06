@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
-import { useBehavioralAnalytics } from "@/hooks/useBehavioralAnalytics";
 
 export type GestureType =
   | "swipe-left"
