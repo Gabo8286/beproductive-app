@@ -102,9 +102,14 @@ export function InteractiveJourneyBuilder() {
                 <h3 className="text-2xl font-heading font-bold mb-2">
                   Create Your First Journey
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground mb-3">
                   Experience how BeProductive helps you achieve your goals
                 </p>
+                <div className="glass-card p-3 rounded-lg border-2 border-primary/20">
+                  <p className="text-sm text-muted-foreground">
+                    <span className="font-semibold text-primary">Behind the scenes:</span> I built this interactive widget using a simple prompt to Claude AI: "Create a goal builder with milestones and progress tracking." The AI generated 294 lines of code in seconds.
+                  </p>
+                </div>
               </div>
 
               {/* Goal Input */}

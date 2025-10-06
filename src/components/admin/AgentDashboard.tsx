@@ -318,3 +318,5 @@ export const AgentDashboard: React.FC = () => {
     </div>
   );
 };
+
+export default AgentDashboard;

@@ -130,6 +130,16 @@ export function BuildStory() {
                             </li>
                           ))}
                         </ul>
+                        
+                        {/* Visual Proof Placeholder */}
+                        <div className="mt-4 pt-4 border-t border-border/50">
+                          <div className="glass-card p-3 rounded-lg bg-muted/30">
+                            <p className="text-xs text-muted-foreground mb-2 font-medium">💡 Example Prompt I Used:</p>
+                            <p className="text-xs font-mono bg-background/50 p-2 rounded border border-border/30">
+                              "Create a task management system with drag-and-drop, categories, and priority levels"
+                            </p>
+                          </div>
+                        </div>
                       </Card>
 
                       {/* Challenge & Solution */}

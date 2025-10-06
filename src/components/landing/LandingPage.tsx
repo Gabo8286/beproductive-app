@@ -98,7 +98,11 @@ export const LandingPage = () => {
                 <div className="flex items-center gap-6 pt-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    <span>Built in 30 minutes</span>
+                    <span>Built in 3 weeks</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <span>AI Agents added in 30 min</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -185,7 +189,13 @@ export const LandingPage = () => {
             </Badge>
           </div>
         </div>
-        <DemoContainer
+        <div className="relative">
+          <div className="absolute -top-4 right-8 z-10">
+            <Badge className="bg-gradient-to-r from-primary to-secondary text-white border-0 shadow-lg animate-pulse px-4 py-2 text-sm font-semibold">
+              ✨ Built by Non-Developer
+            </Badge>
+          </div>
+          <DemoContainer
           onDemoStart={() => {
             trackEvent(
               ConversionEventType.DEMO_START,
@@ -199,6 +209,7 @@ export const LandingPage = () => {
             scrollToSection("interactive-builder");
           }}
         />
+        </div>
       </section>
 
       {/* Interactive Builder Section */}
