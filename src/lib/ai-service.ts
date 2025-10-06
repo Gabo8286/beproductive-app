@@ -28,6 +28,9 @@ export interface ProductivityInsight {
   description: string;
   impact: string;
   actionable: boolean;
+  confidence?: number;
+  suggestedActions?: string[];
+  data?: any;
 }
 
 export const generateInsight = async (prompt: string) => {

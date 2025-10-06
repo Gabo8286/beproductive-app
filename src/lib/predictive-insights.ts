@@ -60,7 +60,7 @@ export class ProductivityAnalyzer {
     // Time estimation accuracy
     insights.push(...this.analyzeTimeEstimation(data));
 
-    return insights.sort((a, b) => b.confidence - a.confidence);
+    return insights.sort((a, b) => (b.confidence || 0) - (a.confidence || 0));
   }
 
   /**
@@ -109,12 +109,13 @@ export class ProductivityAnalyzer {
 
     return [
       {
+        id: `peak-hour-${peakHour.hour}`,
         type: "pattern",
         title: `Peak Productivity: ${timeRange}`,
         description: `You're ${Math.round(peakHour.rate * 100)}% more productive during ${timeRange}. Consider scheduling important tasks during this time.`,
-        data: { peakHour: peakHour.hour, productivity: peakHour.rate },
-        confidence: Math.min(0.9, peakHour.count / 10),
+        impact: "high",
         actionable: true,
+        confidence: Math.min(0.9, peakHour.count / 10),
         suggestedActions: [
           `Block ${timeRange} for your most important tasks`,
           "Avoid meetings during your peak productivity hours",

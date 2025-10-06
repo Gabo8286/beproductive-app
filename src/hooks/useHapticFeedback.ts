@@ -65,7 +65,8 @@ const INTENSITY_MULTIPLIERS: Record<HapticFeedbackType, number> = {
  * Supports both iOS Safari Haptic API and Web Vibration API
  */
 export function useHapticFeedback(initialConfig: Partial<HapticConfig> = {}) {
-  const { trackEvent } = useBehavioralAnalytics();
+  // Analytics temporarily disabled
+  const trackEvent = () => {};
 
   const [state, setState] = useState<HapticFeedbackState>({
     isSupported: false,
