@@ -61,6 +61,7 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 const APIManagementDashboard = lazy(
   () => import("@/components/admin/APIManagement/APIManagementDashboard"),
 );
+const AgentDashboard = lazy(() => import("@/components/admin/AgentDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 const AIInsights = lazy(() => import("@/pages/AIInsights"));
 
@@ -314,6 +315,14 @@ function AppContent() {
               element={
                 <Suspense fallback={<PageLoading />}>
                   <APIManagementDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/admin/agents"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <AgentDashboard />
                 </Suspense>
               }
             />
