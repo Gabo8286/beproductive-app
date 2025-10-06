@@ -3313,6 +3313,10 @@ export type Database = {
         Args: { cost_amount: number; key_id: string; token_amount: number }
         Returns: undefined
       }
+      is_project_manager: {
+        Args: { _project_id: string; _user_id: string }
+        Returns: boolean
+      }
       is_super_admin: {
         Args: { user_id?: string }
         Returns: boolean
