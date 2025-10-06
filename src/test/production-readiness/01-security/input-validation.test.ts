@@ -221,8 +221,7 @@ test.describe('Input Validation Security Tests', () => {
           await expect(page.locator('[data-testid="command-error"]')).not.toBeVisible();
 
           // Export should either fail safely or sanitize input
-          const downloadPromise = page.waitForDownload({ timeout: 5000 }).catch(() => null);
-          const download = await downloadPromise;
+          const download = await page.waitForEvent('download', { timeout: 5000 }).catch(() => null);
 
           if (download) {
             const filename = download.suggestedFilename();

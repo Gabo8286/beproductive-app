@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';
 
 test.describe('Performance Optimization Tests', () => {
   const performanceThresholds = {
     LCP: 2500, // Largest Contentful Paint < 2.5s
-    FID: 100,  // First Input Delay < 100ms
+    INP: 200,  // Interaction to Next Paint < 200ms (replaces FID)
     CLS: 0.1,  // Cumulative Layout Shift < 0.1
     FCP: 1800, // First Contentful Paint < 1.8s
     TTFB: 800, // Time to First Byte < 800ms
@@ -23,14 +23,14 @@ test.describe('Performance Optimization Tests', () => {
         return new Promise((resolve) => {
           const vitalsData = {
             LCP: 0,
-            FID: 0,
+            INP: 0,
             CLS: 0,
             FCP: 0,
             TTFB: 0
           };
 
           let metricsCollected = 0;
-          const totalMetrics = 4; // LCP, FID, CLS, FCP (TTFB is measured differently)
+          const totalMetrics = 4; // LCP, INP, CLS, FCP (TTFB is measured differently)
 
           function checkComplete() {
             if (metricsCollected >= totalMetrics) {
@@ -39,32 +39,32 @@ test.describe('Performance Optimization Tests', () => {
           }
 
           // Import and use web-vitals
-          import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-            getCLS((metric) => {
+          import('web-vitals').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
+            onCLS((metric) => {
               vitalsData.CLS = metric.value;
               metricsCollected++;
               checkComplete();
             });
 
-            getFID((metric) => {
-              vitalsData.FID = metric.value;
+            onINP((metric) => {
+              vitalsData.INP = metric.value;
               metricsCollected++;
               checkComplete();
             });
 
-            getFCP((metric) => {
+            onFCP((metric) => {
               vitalsData.FCP = metric.value;
               metricsCollected++;
               checkComplete();
             });
 
-            getLCP((metric) => {
+            onLCP((metric) => {
               vitalsData.LCP = metric.value;
               metricsCollected++;
               checkComplete();
             });
 
-            getTTFB((metric) => {
+            onTTFB((metric) => {
               vitalsData.TTFB = metric.value;
             });
           });
@@ -76,11 +76,12 @@ test.describe('Performance Optimization Tests', () => {
 
       console.log('Core Web Vitals:', vitals);
 
-      // Validate against thresholds
-      expect(vitals.LCP).toBeLessThan(performanceThresholds.LCP);
-      expect(vitals.FID).toBeLessThan(performanceThresholds.FID);
-      expect(vitals.CLS).toBeLessThan(performanceThresholds.CLS);
-      expect(vitals.FCP).toBeLessThan(performanceThresholds.FCP);
+      // Validate against thresholds (with type assertions)
+      const metrics = vitals as any;
+      expect(metrics.LCP).toBeLessThan(performanceThresholds.LCP);
+      expect(metrics.INP).toBeLessThan(performanceThresholds.INP);
+      expect(metrics.CLS).toBeLessThan(performanceThresholds.CLS);
+      expect(metrics.FCP).toBeLessThan(performanceThresholds.FCP);
     });
 
     await test.step('Test interactive performance', async () => {

@@ -265,8 +265,15 @@ test.describe("Aisha Williams (Student) - Mobile Study Management", () => {
     ).toBeVisible();
     await expect(page.locator('[data-testid="study-dashboard"]')).toBeVisible();
 
-    // Test swipe navigation
-    await page.locator('[data-testid="study-dashboard"]').swipe("left");
+    // Test touch/swipe navigation (simulate with drag)
+    const studyDashboard = page.locator('[data-testid="study-dashboard"]');
+    const box = await studyDashboard.boundingBox();
+    if (box) {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x - 100, box.y + box.height / 2);
+      await page.mouse.up();
+    }
     await expect(page.locator('[data-testid="habits-view"]')).toBeVisible();
   });
 
