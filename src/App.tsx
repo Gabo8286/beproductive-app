@@ -62,6 +62,7 @@ const APIManagementDashboard = lazy(
   () => import("@/components/admin/APIManagement/APIManagementDashboard"),
 );
 const Analytics = lazy(() => import("@/pages/Analytics"));
+const AIInsights = lazy(() => import("@/pages/AIInsights"));
 
 // AI components are exported from widgets/index.ts
 
@@ -284,7 +285,14 @@ function AppContent() {
                 </Suspense>
               }
             />
-            {/* AIInsights route temporarily disabled */}
+            <Route
+              path="/ai-insights"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <AIInsights />
+                </Suspense>
+              }
+            />
             <Route
               path="/analytics"
               element={

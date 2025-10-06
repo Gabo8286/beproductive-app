@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Minimize2, Maximize2 } from "lucide-react";
-// ConversationalInterface temporarily disabled
+import ConversationalInterface from "./ConversationalInterface";
 import { useI18n } from "@/hooks/useI18n";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,7 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({
   }
 
   return (
-    <Card className={cn("w-80 h-96", className)}>
+    <Card className={cn("w-80 h-96 flex flex-col", className)}>
       <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           {t("aiAssistant", "AI Assistant")}
@@ -56,10 +56,11 @@ export const AIChatWidget: React.FC<AIChatWidgetProps> = ({
           <Minimize2 className="w-4 h-4" />
         </Button>
       </CardHeader>
-      <CardContent className="p-4 h-80 flex items-center justify-center">
-        <p className="text-muted-foreground text-sm">
-          AI chat temporarily disabled during Phase 3 cleanup.
-        </p>
+      <CardContent className="flex-1 p-0 overflow-hidden">
+        <ConversationalInterface
+          onTaskCreated={onTaskCreated}
+          onInsightGenerated={onInsightGenerated}
+        />
       </CardContent>
     </Card>
   );
