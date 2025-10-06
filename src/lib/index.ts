@@ -4,5 +4,5 @@ export * from './color-system';
 export * from './demo-data-loader';
 export * from './i18n';
 export * from './nlp-utils';
-export * from './predictive-insights';
+// predictive-insights temporarily disabled
 export * from './utils';

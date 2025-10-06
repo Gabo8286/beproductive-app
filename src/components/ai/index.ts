@@ -3,5 +3,4 @@ export { LoadingSkeleton } from './LoadingSkeleton';
 export { RecommendationsBanner } from './RecommendationsBanner';
 export { SmartRecommendations } from './SmartRecommendations';
 export { default as AIChatWidget } from './ai-chat-widget';
-export { AIQuickActions, AIInsightDisplay } from './ai-quick-actions';
-export { default as ConversationalInterface } from './conversational-interface';
+// ai-quick-actions and conversational-interface temporarily disabled

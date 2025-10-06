@@ -1,6 +1,6 @@
 export { useIsMobile } from './use-mobile';
 export * from './use-toast';
-export * from './useAI';
+// useAI temporarily disabled
 export * from './useAIAutomation';
 export * from './useAIRecommendations';
 export * from './useAISettings';
@@ -19,7 +19,7 @@ export * from './useExitIntent';
 export * from './useFocusTrap';
 export * from './useFormError';
 export * from './useGamification';
-export * from './useGenerateAIInsights';
+// useGenerateAIInsights temporarily disabled
 export * from './useGoalMilestones';
 export * from './useGoalProgress';
 export * from './useGoals';

@@ -50,7 +50,7 @@ const Projects = lazy(() => import("@/pages/Projects"));
 const Notes = lazy(() => import("@/pages/Notes"));
 const Gamification = lazy(() => import("@/pages/Gamification"));
 const ProfileAssessment = lazy(() => import("@/pages/ProfileAssessment"));
-const AIInsights = lazy(() => import("@/pages/AIInsights"));
+// AIInsights page temporarily disabled
 const AccessibilitySettingsPage = lazy(
   () => import("@/pages/AccessibilitySettings"),
 );
