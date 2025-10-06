@@ -10,4 +10,15 @@ export const languages = {
   es: { name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', rtl: false },
 };
 
+export const supportedLanguages = languages;
+
+export const isRTL = (lang: string) => {
+  const langData = languages[lang as keyof typeof languages];
+  return langData?.rtl || false;
+};
+
+export const updateDocumentDirection = (lang: string) => {
+  document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
+};
+
 export default i18n;
