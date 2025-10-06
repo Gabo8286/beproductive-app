@@ -68,6 +68,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log("[AuthContext] Setting up auth state listener...");
 
+        // CRITICAL: Check if Supabase client is ready before using it
+        if (
+          !supabase ||
+          !supabase.auth ||
+          typeof supabase.auth.onAuthStateChange !== "function"
+        ) {
+          console.error(
+            "[AuthContext] Supabase client not ready - auth methods unavailable",
+          );
+          setAuthError(
+            "Authentication service is initializing. Please wait a moment and refresh the page.",
+          );
+          setLoading(false);
+
+          // Retry after 1 second
+          setTimeout(() => {
+            if (isComponentMounted) {
+              console.log("[AuthContext] Retrying auth initialization...");
+              initializeAuth();
+            }
+          }, 1000);
+          return;
+        }
+
         // Set up auth state listener with error handling
         const { data } = supabase.auth.onAuthStateChange((event, session) => {
           if (!isComponentMounted) return;

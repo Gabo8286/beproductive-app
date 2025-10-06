@@ -117,10 +117,32 @@ window.addEventListener("unhandledrejection", (event) => {
   });
 });
 
-// Step 4: Render React application
-diagnostic.measureSync("React Render", () => {
-  try {
-    root.render(
+// Step 4: Wait for Supabase to initialize before rendering
+diagnostic
+  .measure("Supabase Initialization", async () => {
+    const { supabasePromise } = await import(
+      "@/integrations/supabase/client"
+    );
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Supabase init timeout")), 10000),
+    );
+
+    try {
+      await Promise.race([supabasePromise, timeoutPromise]);
+      console.log("[Main] Supabase client ready - proceeding with render");
+    } catch (error) {
+      console.warn(
+        "[Main] Supabase initialization warning:",
+        error instanceof Error ? error.message : error,
+      );
+      // Continue anyway - app may work in degraded mode
+    }
+  })
+  .then(() => {
+    // Step 5: Render React application
+    diagnostic.measureSync("React Render", () => {
+      try {
+        root.render(
       <StrictMode>
         <AppErrorBoundary
           onError={(error, errorInfo) => {
@@ -133,12 +155,12 @@ diagnostic.measureSync("React Render", () => {
         </AppErrorBoundary>
       </StrictMode>,
     );
-    console.log("[Main] React app render initiated successfully");
-    diagnostics.completeStep("Application Initialization");
-  } catch (error) {
-    console.error("[Main] Failed to render React app:", error);
-    diagnostics.failStep("React Render", error as Error);
-    diagnostics.printReport();
+        console.log("[Main] React app render initiated successfully");
+        diagnostics.completeStep("Application Initialization");
+      } catch (error) {
+        console.error("[Main] Failed to render React app:", error);
+        diagnostics.failStep("React Render", error as Error);
+        diagnostics.printReport();
 
     // Show error in DOM instead of blank screen
     rootElement.innerHTML = `
@@ -173,9 +195,15 @@ diagnostic.measureSync("React Render", () => {
     </div>
   `;
 
+        throw error;
+      }
+    });
+  })
+  .catch((error) => {
+    console.error("[Main] Application initialization failed:", error);
+    diagnostics.failStep("Application Initialization", error);
     throw error;
-  }
-});
+  });
 
 // Step 5: Initialize accessibility testing AFTER React mount (non-blocking)
 // Temporarily disabled for debugging

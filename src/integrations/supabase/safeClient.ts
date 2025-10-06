@@ -249,18 +249,44 @@ export const supabase = new Proxy({} as SupabaseClient<Database>, {
   get(target, prop) {
     const client = safeSupabaseClient.getClientSync();
     if (!client) {
-      // Return a placeholder that throws meaningful errors
-      if (typeof prop === "string") {
-        return () => {
-          const error =
-            safeSupabaseClient.getInitializationError() ||
-            "Supabase client not ready";
-          throw new Error(`[SafeSupabase] Cannot access ${prop}: ${error}`);
-        };
-      }
-      return undefined;
+      console.warn(
+        `[SafeSupabase] Client not ready, accessed property: ${String(prop)}`,
+      );
+      // Return a nested Proxy that can handle further property access
+      return new Proxy(
+        {},
+        {
+          get: (nestedTarget, nestedProp) => {
+            console.warn(
+              `[SafeSupabase] Nested access attempted: ${String(prop)}.${String(nestedProp)}`,
+            );
+            // Return a function that throws a meaningful error
+            return (...args: any[]) => {
+              const error =
+                safeSupabaseClient.getInitializationError() ||
+                "Supabase client not ready";
+              throw new Error(
+                `[SafeSupabase] Cannot access ${String(prop)}.${String(nestedProp)}: ${error}`,
+              );
+            };
+          },
+          // Handle property existence checks (like 'in' operator)
+          has: () => false,
+        },
+      );
     }
-    return (client as any)[prop];
+
+    const value = (client as any)[prop];
+    // If it's a function, bind it to the client to preserve context
+    if (typeof value === "function") {
+      return value.bind(client);
+    }
+    return value;
+  },
+  // Handle property existence checks
+  has: (target, prop) => {
+    const client = safeSupabaseClient.getClientSync();
+    return client ? prop in client : false;
   },
 });
 
