@@ -5,6 +5,7 @@ import {
   PersonalizationData,
   CommitmentStep,
 } from "@/types/conversion";
+import { safeStorage, safeJSON } from "@/utils/storage/safeStorage";
 
 const STORAGE_KEY = "beproductive_conversion_data";
 const SESSION_KEY = "beproductive_session_id";
@@ -14,10 +15,10 @@ function generateSessionId(): string {
 }
 
 function getSessionId(): string {
-  let sessionId = sessionStorage.getItem(SESSION_KEY);
+  let sessionId = safeStorage.getItem(SESSION_KEY);
   if (!sessionId) {
     sessionId = generateSessionId();
-    sessionStorage.setItem(SESSION_KEY, sessionId);
+    safeStorage.setItem(SESSION_KEY, sessionId);
   }
   return sessionId;
 }
@@ -25,12 +26,11 @@ function getSessionId(): string {
 export function useConversionTracking() {
   const [personalizationData, setPersonalizationData] =
     useState<PersonalizationData>(() => {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = safeStorage.getItem(STORAGE_KEY);
       if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // Fall through to default
+        const parsed = safeJSON.parse<PersonalizationData>(saved);
+        if (parsed) {
+          return parsed;
         }
       }
       return {
@@ -223,7 +223,10 @@ export function useConversionTracking() {
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(personalizationData));
+    safeStorage.setItem(
+      STORAGE_KEY,
+      safeJSON.stringify(personalizationData)
+    );
   }, [personalizationData]);
 
   // Track previous visits
