@@ -101,10 +101,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    target: 'es2020',
-    minify: 'terser',
+    target: 'safari14',
+    minify: 'esbuild',
     cssCodeSplit: true,
     reportCompressedSize: true,
+    sourcemap: mode === 'development' ? 'inline' : false,
     rollupOptions: {
       treeshake: {
         preset: 'recommended',
@@ -114,67 +115,7 @@ export default defineConfig(({ mode }) => ({
         unknownGlobalSideEffects: false
       },
       output: {
-        manualChunks: (id) => {
-          // React ecosystem
-          if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-            return 'react-vendor';
-          }
-
-          // Query libraries
-          if (id.includes('@tanstack/react-query')) {
-            return 'query-vendor';
-          }
-
-          // UI components (Radix)
-          if (id.includes('@radix-ui/')) {
-            return 'ui-vendor';
-          }
-
-          // Animation libraries
-          if (id.includes('framer-motion')) {
-            return 'motion-vendor';
-          }
-
-          // Charts and visualization
-          if (id.includes('recharts') || id.includes('d3') || id.includes('chart')) {
-            return 'charts-vendor';
-          }
-
-          // Form libraries
-          if (id.includes('react-hook-form') || id.includes('@hookform')) {
-            return 'forms-vendor';
-          }
-
-          // Date/time utilities
-          if (id.includes('date-fns')) {
-            return 'date-vendor';
-          }
-
-          // Utility libraries
-          if (id.includes('zod') || id.includes('clsx') || id.includes('tailwind-merge') || id.includes('class-variance-authority')) {
-            return 'utils-vendor';
-          }
-
-          // Supabase
-          if (id.includes('@supabase/')) {
-            return 'supabase-vendor';
-          }
-
-          // DnD libraries
-          if (id.includes('@dnd-kit/')) {
-            return 'dnd-vendor';
-          }
-
-          // Testing libraries (should not be in production, but just in case)
-          if (id.includes('vitest') || id.includes('@testing-library') || id.includes('msw') || id.includes('playwright')) {
-            return 'test-vendor';
-          }
-
-          // Large vendor libraries
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        },
+        manualChunks: undefined,
         chunkFileNames: (chunkInfo) => {
           const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
           return `assets/js/[name]-[hash].js`;
@@ -194,21 +135,7 @@ export default defineConfig(({ mode }) => ({
       external: [],
       plugins: []
     },
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-        drop_debugger: mode === 'production',
-        pure_funcs: mode === 'production' ? ['console.log', 'console.debug', 'console.trace'] : [],
-      },
-      mangle: {
-        safari10: true,
-      },
-      format: {
-        safari10: true,
-      },
-    },
     chunkSizeWarningLimit: 1000,
-    sourcemap: mode === 'development' ? 'inline' : false,
     assetsInlineLimit: 4096, // 4kb
   },
 }));
