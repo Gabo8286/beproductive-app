@@ -95,6 +95,10 @@ export default defineConfig(({ mode }) => ({
       ext: '.br',
     }),
   ].filter(Boolean),
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(mode),
+    'process.env': {}
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
