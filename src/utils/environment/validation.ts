@@ -3,12 +3,12 @@
  * Provides clear error messages for missing or invalid environment variables
  */
 
-interface EnvironmentConfig {
+export interface EnvironmentConfig {
   VITE_SUPABASE_URL: string;
   VITE_SUPABASE_PUBLISHABLE_KEY: string;
 }
 
-interface ValidationResult {
+export interface ValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];

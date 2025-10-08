@@ -2,236 +2,123 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { initWebVitals } from "./utils/performance/webVitals";
+import { initializeApplication } from "./utils/initialization";
+import { initializeSupabase } from "./utils/initialization/supabase";
+import { initializeWebVitals } from "./utils/initialization/webVitals";
+import { setupGlobalErrorHandlers } from "./utils/errors/globalHandlers";
+import { renderError } from "./utils/errors/renderError";
 import { initializeAccessibilityTesting } from "./utils/accessibility/testing";
-import {
-  logEnvironmentValidation,
-  isEnvironmentReady,
-  createEnvironmentErrorMessage,
-} from "./utils/environment/validation";
-import { AppErrorBoundary } from "./components/errors/AppErrorBoundary";
 import { diagnostics, diagnostic } from "./utils/diagnostics/logger";
+import { AppErrorBoundary } from "./components/errors/AppErrorBoundary";
 
-// Step 1: Start diagnostic logging and validate environment
-diagnostics.startStep("Application Initialization");
-diagnostic.checkpoint("App Start", {
-  timestamp: Date.now(),
-  url: window.location.href,
-});
+/**
+ * Main application bootstrap function
+ * Handles initialization, error handling, and React rendering
+ */
+async function bootstrap() {
+  // Step 1: Setup global error handlers early
+  setupGlobalErrorHandlers();
 
-const envValidation = diagnostic.measureSync("Environment Validation", () => {
-  console.log("[Main] Starting application initialization...");
-  return logEnvironmentValidation();
-});
-
-if (!isEnvironmentReady()) {
-  diagnostics.failStep(
-    "Environment Validation",
-    "Environment validation failed",
-    envValidation,
-  );
-  diagnostics.printReport();
-
-  // Show environment error in the DOM instead of blank screen
+  // Step 2: Get root element
   const rootElement = document.getElementById("root");
-  if (rootElement) {
-    rootElement.innerHTML = `
-      <div style="
-        padding: 2rem;
-        max-width: 800px;
-        margin: 2rem auto;
-        font-family: system-ui, -apple-system, sans-serif;
-        line-height: 1.6;
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        border-radius: 8px;
-        color: #991b1b;
-      ">
-        <h1 style="margin-top: 0; color: #dc2626;">Configuration Error</h1>
-        <pre style="
-          background: #fff;
-          padding: 1rem;
-          border-radius: 4px;
-          overflow-x: auto;
-          white-space: pre-wrap;
-          color: #374151;
-        ">${createEnvironmentErrorMessage(envValidation)}</pre>
-        <p style="margin-bottom: 0;">
-          Please fix the configuration issues above and refresh the page.
-        </p>
-        <details style="margin-top: 1rem;">
-          <summary style="cursor: pointer;">Diagnostic Report</summary>
-          <pre style="font-size: 10px; margin-top: 0.5rem;">${diagnostics.exportReport()}</pre>
-        </details>
-      </div>
-    `;
-  }
-  throw new Error("Environment validation failed - cannot start application");
-}
-
-// Step 2: Initialize Web Vitals tracking (with safe storage)
-diagnostic.measureSync("Web Vitals Initialization", () => {
-  try {
-    initWebVitals();
-    console.log("[Main] Web Vitals initialized");
-  } catch (error) {
-    console.warn("[Main] Web Vitals initialization failed:", error);
-    // Continue without Web Vitals - don't block the app
-    diagnostic.logBrowserBehavior("Web Vitals Failed", {
-      error: error instanceof Error ? error.message : error,
-    });
-  }
-});
-
-// Step 3: Prepare for React rendering
-diagnostic.checkpoint("Pre-React Setup");
-console.log("[Main] Environment validated - rendering React app...");
-
-const rootElement = diagnostic.measureSync("Root Element Check", () => {
-  const element = document.getElementById("root");
-  if (!element) {
+  if (!rootElement) {
     throw new Error("Root element not found - cannot mount React app");
   }
-  return element;
-});
 
-const root = diagnostic.measureSync("React Root Creation", () => {
-  return createRoot(rootElement);
-});
-
-// Add global error handler for unhandled errors
-window.addEventListener("error", (event) => {
-  console.error("[Main] Unhandled error:", event.error);
-  diagnostics.logEvent("Unhandled Error", {
-    message: event.error?.message,
-    filename: event.filename,
-    lineno: event.lineno,
-    colno: event.colno,
-  });
-});
-
-window.addEventListener("unhandledrejection", (event) => {
-  console.error("[Main] Unhandled promise rejection:", event.reason);
-  diagnostics.logEvent("Unhandled Promise Rejection", {
-    reason: event.reason instanceof Error ? event.reason.message : event.reason,
-  });
-});
-
-// Step 4: Wait for Supabase to initialize before rendering
-diagnostic
-  .measure("Supabase Initialization", async () => {
-    const { supabasePromise } = await import(
-      "@/integrations/supabase/client"
-    );
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("Supabase init timeout")), 10000),
-    );
-
-    try {
-      await Promise.race([supabasePromise, timeoutPromise]);
-      console.log("[Main] Supabase client ready - proceeding with render");
-    } catch (error) {
-      console.warn(
-        "[Main] Supabase initialization warning:",
-        error instanceof Error ? error.message : error,
-      );
-      // Continue anyway - app may work in degraded mode
-    }
-  })
-  .then(() => {
-    // Step 5: Render React application
-    diagnostic.measureSync("React Render", () => {
-      try {
-        root.render(
-      <StrictMode>
-        <AppErrorBoundary
-          onError={(error, errorInfo) => {
-            console.error("[Main] App-level error caught by boundary:", error);
-            console.error("[Main] Error info:", errorInfo);
-            diagnostics.failStep("React Error Boundary", error, { errorInfo });
-          }}
-        >
-          <App />
-        </AppErrorBoundary>
-      </StrictMode>,
-    );
-        console.log("[Main] React app render initiated successfully");
-        diagnostics.completeStep("Application Initialization");
-      } catch (error) {
-        console.error("[Main] Failed to render React app:", error);
-        diagnostics.failStep("React Render", error as Error);
-        diagnostics.printReport();
-
-    // Show error in DOM instead of blank screen
-    rootElement.innerHTML = `
-    <div style="
-      padding: 2rem;
-      max-width: 600px;
-      margin: 2rem auto;
-      font-family: system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      color: #991b1b;
-    ">
-      <h1 style="margin-top: 0;">Application Error</h1>
-      <p>The application failed to start. Please refresh the page to try again.</p>
-      <details style="margin-top: 1rem;">
-        <summary style="cursor: pointer;">Error Details</summary>
-        <pre style="
-          background: #fff;
-          padding: 1rem;
-          border-radius: 4px;
-          overflow-x: auto;
-          margin-top: 0.5rem;
-          color: #374151;
-        ">${error instanceof Error ? error.message : "Unknown error"}</pre>
-      </details>
-      <details style="margin-top: 1rem;">
-        <summary style="cursor: pointer;">Diagnostic Report</summary>
-        <pre style="font-size: 10px; margin-top: 0.5rem;">${diagnostics.exportReport()}</pre>
-      </details>
-    </div>
-  `;
-
-        throw error;
-      }
-    });
-  })
-  .catch((error) => {
+  try {
+    // Step 3: Validate environment
+    await initializeApplication();
+  } catch (error: unknown) {
     console.error("[Main] Application initialization failed:", error);
-    diagnostics.failStep("Application Initialization", error);
-    throw error;
+    return; // Stop execution - error already displayed in DOM
+  }
+
+  // Step 4: Initialize Web Vitals (non-blocking)
+  initializeWebVitals();
+
+  // Step 5: Initialize Supabase
+  diagnostic.checkpoint("Pre-React Setup");
+  console.log("[Main] Environment validated - rendering React app...");
+  await initializeSupabase();
+
+  // Step 6: Create React root
+  const root = diagnostic.measureSync("React Root Creation", () =>
+    createRoot(rootElement),
+  );
+
+  // Step 7: Render React application
+  diagnostic.measureSync("React Render", () => {
+    try {
+      root.render(
+        <StrictMode>
+          <AppErrorBoundary
+            onError={(error, errorInfo) => {
+              console.error("[Main] App-level error caught by boundary:", error);
+              console.error("[Main] Error info:", errorInfo);
+              diagnostics.failStep("React Error Boundary", error, { errorInfo });
+            }}
+          >
+            <App />
+          </AppErrorBoundary>
+        </StrictMode>,
+      );
+      console.log("[Main] React app render initiated successfully");
+      diagnostics.completeStep("Application Initialization");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      console.error("[Main] Failed to render React app:", errorMessage);
+      diagnostics.failStep("React Render", error as Error);
+      diagnostics.printReport();
+
+      renderError(
+        rootElement,
+        "Application Error",
+        "The application failed to start. Please refresh the page to try again.",
+        diagnostics.exportReport(),
+      );
+
+      throw error;
+    }
   });
 
-// Step 5: Initialize accessibility testing AFTER React mount (non-blocking)
-// Temporarily disabled for debugging
-// if (import.meta.env.DEV) {
-//   setTimeout(() => {
-//     diagnostic
-//       .measure("Accessibility Testing Setup", async () => {
-//         await initializeAccessibilityTesting();
-//       })
-//       .catch((error) => {
-//         console.warn(
-//           "[Main] Failed to initialize accessibility testing:",
-//           error,
-//         );
-//         diagnostic.logBrowserBehavior("Accessibility Testing Failed", {
-//           error: error.message,
-//         });
-//       });
-//   }, 100);
-// }
-
-// Final completion
-setTimeout(() => {
-  diagnostic.checkpoint("Initialization Complete");
-  console.log("[Main] Application initialization completed");
-
-  // Print final diagnostic report for debugging
+  // Step 8: Initialize accessibility testing (non-blocking, development only)
   if (import.meta.env.DEV) {
-    diagnostics.printReport();
+    setTimeout(async () => {
+      try {
+        await diagnostic.measure(
+          "Accessibility Testing Setup",
+          initializeAccessibilityTesting,
+        );
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        console.warn(
+          "[Main] Failed to initialize accessibility testing:",
+          errorMessage,
+        );
+        diagnostic.logBrowserBehavior("Accessibility Testing Failed", {
+          error: errorMessage,
+        });
+      }
+    }, 100);
   }
-}, 200);
+
+  // Step 9: Final completion
+  setTimeout(() => {
+    diagnostic.checkpoint("Initialization Complete");
+    console.log("[Main] Application initialization completed");
+
+    // Print diagnostic report in development only
+    if (import.meta.env.DEV) {
+      diagnostics.printReport();
+    }
+  }, 200);
+}
+
+// Start application bootstrap
+bootstrap().catch((error: unknown) => {
+  console.error("[Main] Bootstrap failed:", error);
+  diagnostics.failStep("Bootstrap", error as Error);
+  throw error;
+});

@@ -12,7 +12,7 @@ export interface LogContext {
 }
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV === "development";
+  private isDevelopment = import.meta.env.DEV;
 
   private formatMessage(
     level: LogLevel,

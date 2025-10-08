@@ -74,7 +74,7 @@ const sendToAnalytics = async (metric: Metric) => {
   }
 
   // Log in development
-  if (process.env.NODE_ENV === "development") {
+  if (import.meta.env.DEV) {
     console.log(`[Performance] ${metric.name}:`, {
       value: Math.round(metric.value),
       rating: metric.rating,
@@ -109,7 +109,7 @@ const sendToAnalytics = async (metric: Metric) => {
   }
 
   // Send to backend analytics endpoint in production
-  if (process.env.NODE_ENV === "production") {
+  if (import.meta.env.PROD) {
     fetch("/api/analytics/performance", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

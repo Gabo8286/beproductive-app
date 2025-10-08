@@ -5,7 +5,7 @@
 export const initializeAccessibilityTesting = async () => {
   // Enhanced environment checks
   if (
-    process.env.NODE_ENV === "production" ||
+    import.meta.env.PROD ||
     !import.meta.env.DEV ||
     typeof window === "undefined"
   ) {
