@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
@@ -11,8 +11,10 @@ import { initializeAccessibilityTesting } from "./utils/accessibility/testing";
 import { diagnostics, diagnostic } from "./utils/diagnostics/logger";
 import { AppErrorBoundary } from "./components/errors/AppErrorBoundary";
 
+// Diagnostic: confirm single React instance
+console.log(`[Diagnostics] React version: ${React.version}`);
+
 /**
- * Main application bootstrap function
  * Handles initialization, error handling, and React rendering
  */
 async function bootstrap() {
