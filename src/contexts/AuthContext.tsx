@@ -8,7 +8,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: Profile | null;
-  loading: boolean;
+  authLoading: boolean;
   authError: string | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (
@@ -33,13 +33,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(false); // Start false - don't block on init
+  const [authLoading, setAuthLoading] = useState(true); // Start true for initial load
   const [authError, setAuthError] = useState<string | null>(null);
 
   // Track initialization state to prevent overlapping attempts
   const isInitializing = useRef(false);
   const retryCount = useRef(0);
-  const maxRetries = 3;
+  const maxRetries = 2; // Reduced for faster recovery
 
   useEffect(() => {
     console.log("[AuthContext] Initializing auth state...");
@@ -47,18 +47,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let authSubscription: any = null;
     let retryTimeout: NodeJS.Timeout | null = null;
 
-    // Add timeout to prevent infinite loading - reduced to 5s for faster recovery
+    // Timeout to prevent infinite loading - 3s for faster recovery
     const loadingTimeout = setTimeout(() => {
-      if (isComponentMounted && isInitializing.current) {
-        console.warn(
-          "[AuthContext] Auth initialization timed out after 5 seconds",
-        );
-        setAuthError(
-          "Authentication initialization timed out. You can continue using the app.",
-        );
+      if (isComponentMounted && authLoading) {
+        console.warn("[AuthContext] Auth initialization timed out after 3 seconds");
+        toast.error("Authentication timed out. You can continue in guest mode.");
+        setAuthError("Authentication timed out.");
+        setAuthLoading(false);
         isInitializing.current = false;
       }
-    }, 5000); // 5 seconds timeout (reduced from 10s)
+    }, 3000); // 3 seconds timeout
 
     const initializeAuth = async () => {
       // Prevent multiple simultaneous initialization attempts
@@ -85,16 +83,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Check if we've exceeded max retries
           if (retryCount.current >= maxRetries) {
             console.error("[AuthContext] Max retries exceeded, giving up");
-            setAuthError(
-              "Authentication service failed to initialize. You can continue using the app.",
-            );
+            setAuthError("Authentication service unavailable.");
+            setAuthLoading(false);
             isInitializing.current = false;
             return;
           }
 
-          setAuthError(
-            "Authentication service is initializing...",
-          );
+          setAuthError("Connecting to authentication service...");
 
           // Increment retry count and retry after 1 second
           retryCount.current++;
@@ -126,10 +121,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           // Fetch profile when user logs in
           if (session?.user) {
-            setLoading(true); // Only set loading when actively fetching profile
             fetchProfile(session.user.id);
           } else {
             setProfile(null);
+            setAuthLoading(false);
             isInitializing.current = false;
           }
         });
@@ -170,9 +165,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(session?.user ?? null);
 
           if (session?.user) {
-            setLoading(true); // Only set loading when fetching profile
             await fetchProfile(session.user.id);
           } else {
+            setAuthLoading(false);
             isInitializing.current = false;
           }
         } catch (error) {
@@ -182,9 +177,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
 
           console.error("[AuthContext] Session check failed:", error);
-          setAuthError(
-            "Failed to check authentication status. You can continue using the app.",
-          );
+          setAuthError("Failed to check authentication status.");
+          setAuthLoading(false);
           isInitializing.current = false;
         }
       } catch (error) {
@@ -194,9 +188,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         console.error("[AuthContext] Auth initialization failed:", error);
-        setAuthError(
-          `Authentication initialization failed: ${error instanceof Error ? error.message : "Unknown error"}`,
-        );
+        setAuthError(`Auth failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+        setAuthLoading(false);
         isInitializing.current = false;
       }
     };
@@ -233,7 +226,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("Profile fetch timeout")), 5000);
+        setTimeout(() => reject(new Error("Profile fetch timeout")), 3000);
       });
 
       const { data, error } = (await Promise.race([
@@ -248,13 +241,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (error.message && !error.message.includes("timeout")) {
           toast.error("Failed to load profile");
         }
-        setLoading(false);
+        setAuthLoading(false);
         return;
       }
 
       console.log("[AuthContext] Profile loaded successfully");
       setProfile(data as Profile);
-      setLoading(false);
+      setAuthLoading(false);
       isInitializing.current = false;
     } catch (error) {
       console.error("[AuthContext] Profile fetch failed:", error);
@@ -267,7 +260,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         toast.error("Failed to load profile");
       }
 
-      setLoading(false);
+      setAuthLoading(false);
       isInitializing.current = false;
     }
   };
@@ -381,7 +374,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         session,
         profile,
-        loading,
+        authLoading,
         authError,
         signIn,
         signUp,

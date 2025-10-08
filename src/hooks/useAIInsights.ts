@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export const useAIInsights = (filter?: InsightFilter) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   const query = useQuery({
     queryKey: ["ai-insights", user?.id, filter],

@@ -14,7 +14,7 @@ import {
 
 export const useAutomationSuggestions = () => {
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   return useQuery({
     queryKey: ["automation-suggestions", user?.id],
@@ -241,7 +241,7 @@ export const useRejectSuggestion = () => {
 };
 
 export const useAIInsights = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   return useQuery({
     queryKey: ["ai-insights", user?.id],
@@ -297,7 +297,7 @@ export const useAIInsights = () => {
 };
 
 export const useLearningData = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   return useQuery({
     queryKey: ["learning-data", user?.id],

@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export const useAIRecommendations = (status?: AIRecommendationStatus) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   const query = useQuery({
     queryKey: ["ai-recommendations", user?.id, status],

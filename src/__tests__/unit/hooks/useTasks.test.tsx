@@ -29,7 +29,7 @@ const createWrapper = () => {
     user: mockUser,
     session: null,
     profile: null,
-    loading: false,
+    authLoading: false,
     authError: null,
     signIn: vi.fn(),
     signUp: vi.fn(),

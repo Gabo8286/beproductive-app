@@ -16,7 +16,7 @@ import {
 
 export const useIntegrations = (status?: IntegrationStatus) => {
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   return useQuery({
     queryKey: ["integrations", user?.id, status],
@@ -452,7 +452,7 @@ export const useSyncIntegration = () => {
 };
 
 export const useIntegrationAnalytics = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
 
   return useQuery({
     queryKey: ["integration-analytics", user?.id],

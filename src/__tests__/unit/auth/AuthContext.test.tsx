@@ -50,7 +50,7 @@ describe("AuthContext", () => {
   it("should initialize with loading state", () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
-    expect(result.current.loading).toBe(true);
+    expect(result.current.authLoading).toBe(true);
     expect(result.current.user).toBeNull();
     expect(result.current.session).toBeNull();
   });

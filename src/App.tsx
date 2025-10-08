@@ -10,7 +10,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -22,6 +22,8 @@ import { useKeyboardShortcutsDialog } from "@/hooks/useKeyboardShortcutsDialog";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
 import { lazy, Suspense, useEffect } from "react";
 import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 // Eagerly loaded routes (critical path)
 import Index from "@/pages/Index";
@@ -100,7 +102,23 @@ function RouteAnnouncer() {
 
 function AppContent() {
   const { isOpen, close } = useKeyboardShortcutsDialog();
+  const { authLoading, authError } = useAuth();
   useOfflineDetection();
+
+  // Show error banner if auth fails (non-blocking)
+  useEffect(() => {
+    if (authError && !authLoading) {
+      toast.error(authError, {
+        description: "Try refreshing the page or continue in guest mode.",
+        duration: 5000,
+      });
+    }
+  }, [authError, authLoading]);
+
+  // Show loading spinner only during initial auth (max 3s)
+  if (authLoading) {
+    return <Spinner message="Initializing..." size="md" />;
+  }
 
   return (
     <ErrorBoundary fallback={PageErrorFallback}>

@@ -14,7 +14,7 @@ export interface SuperAdminAccess {
  * Only users with 'super_admin' role can access API management and other creator features
  */
 export const useSuperAdminAccess = (): SuperAdminAccess => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

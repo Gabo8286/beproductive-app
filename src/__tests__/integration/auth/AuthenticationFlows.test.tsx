@@ -85,7 +85,7 @@ const TestWrapper: React.FC<{
 
 // Helper component to test auth state
 const AuthStateTestComponent = () => {
-  const { user, session, profile, loading } = useAuth();
+  const { user, session, profile, authLoading } = useAuth();
   return (
     <div data-testid="auth-state">
       <div data-testid="user">{user ? user.email : "no-user"}</div>
@@ -93,7 +93,7 @@ const AuthStateTestComponent = () => {
       <div data-testid="profile">
         {profile ? profile.full_name : "no-profile"}
       </div>
-      <div data-testid="loading">{loading ? "loading" : "loaded"}</div>
+      <div data-testid="loading">{authLoading ? "loading" : "loaded"}</div>
     </div>
   );
 };
