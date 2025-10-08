@@ -97,7 +97,6 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   define: {
     'process.env.NODE_ENV': JSON.stringify(mode),
-    'process.env': {}
   },
   resolve: {
     alias: {
