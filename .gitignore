@@ -47,3 +47,6 @@ quality-reports/
 *.pem
 *.key
 .env.backup
+
+# Documentation (not tracked in git)
+documentation/

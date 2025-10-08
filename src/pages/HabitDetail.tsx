@@ -23,6 +23,7 @@ import { HabitEditForm } from "@/components/habits/HabitEditForm";
 import { ReminderManager } from "@/components/habits/ReminderManager";
 import { NotificationPermission } from "@/components/habits/NotificationPermission";
 import { HabitGoalLinker } from "@/components/habits/HabitGoalLinker";
+import { HabitTaskManager } from "@/components/habits/HabitTaskManager";
 import {
   Dialog,
   DialogContent,
@@ -234,6 +235,7 @@ export default function HabitDetail() {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="streaks">Streaks</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="calendar">Calendar</TabsTrigger>
           <TabsTrigger value="achievements">Achievements</TabsTrigger>
@@ -250,6 +252,14 @@ export default function HabitDetail() {
 
         <TabsContent value="streaks" className="space-y-4">
           <StreakManager habit={habit} streaks={streaks || []} />
+        </TabsContent>
+
+        <TabsContent value="tasks" className="space-y-4">
+          <HabitTaskManager
+            habitId={id!}
+            habitTitle={habit.title}
+            habitFrequency={habit.frequency}
+          />
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-4">
