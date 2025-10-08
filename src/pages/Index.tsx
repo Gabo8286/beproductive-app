@@ -4,16 +4,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LandingPage } from "@/components/landing/LandingPage";
 
 const Index = () => {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
+  // Don't block on loading - render immediately and let auth happen in background
   if (user) {
     return <Navigate to="/dashboard" replace />;
   }

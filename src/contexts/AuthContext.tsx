@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start false - don't block on init
   const [authError, setAuthError] = useState<string | null>(null);
 
   // Track initialization state to prevent overlapping attempts
@@ -47,30 +47,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let authSubscription: any = null;
     let retryTimeout: NodeJS.Timeout | null = null;
 
-    // Add timeout to prevent infinite loading (critical for Safari/Brave)
+    // Add timeout to prevent infinite loading - reduced to 5s for faster recovery
     const loadingTimeout = setTimeout(() => {
-      if (isComponentMounted && loading) {
+      if (isComponentMounted && isInitializing.current) {
         console.warn(
-          "[AuthContext] Auth initialization timed out after 10 seconds",
+          "[AuthContext] Auth initialization timed out after 5 seconds",
         );
         setAuthError(
-          "Authentication initialization timed out. Please refresh the page.",
+          "Authentication initialization timed out. You can continue using the app.",
         );
-        setLoading(false);
         isInitializing.current = false;
       }
-    }, 10000); // 10 seconds timeout
-
-    // Add additional fallback timeout
-    const emergencyTimeout = setTimeout(() => {
-      if (isComponentMounted && loading) {
-        console.error(
-          "[AuthContext] Emergency timeout - forcing auth to complete",
-        );
-        setLoading(false);
-        isInitializing.current = false;
-      }
-    }, 15000); // 15 seconds emergency timeout
+    }, 5000); // 5 seconds timeout (reduced from 10s)
 
     const initializeAuth = async () => {
       // Prevent multiple simultaneous initialization attempts
@@ -98,15 +86,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (retryCount.current >= maxRetries) {
             console.error("[AuthContext] Max retries exceeded, giving up");
             setAuthError(
-              "Authentication service failed to initialize. Please refresh the page.",
+              "Authentication service failed to initialize. You can continue using the app.",
             );
-            setLoading(false);
             isInitializing.current = false;
             return;
           }
 
           setAuthError(
-            "Authentication service is initializing. Please wait a moment...",
+            "Authentication service is initializing...",
           );
 
           // Increment retry count and retry after 1 second
@@ -139,10 +126,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           // Fetch profile when user logs in
           if (session?.user) {
+            setLoading(true); // Only set loading when actively fetching profile
             fetchProfile(session.user.id);
           } else {
             setProfile(null);
-            setLoading(false);
             isInitializing.current = false;
           }
         });
@@ -151,10 +138,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         console.log("[AuthContext] Checking for existing session...");
 
-        // Check for existing session with timeout
+        // Check for existing session with timeout (reduced to 3s)
         const sessionPromise = supabase.auth.getSession();
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Session check timeout")), 8000);
+          setTimeout(() => reject(new Error("Session check timeout")), 3000);
         });
 
         try {
@@ -169,7 +156,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (sessionError) {
             console.error("[AuthContext] Session check error:", sessionError);
             setAuthError(`Failed to check session: ${sessionError.message}`);
-            setLoading(false);
             isInitializing.current = false;
             return;
           }
@@ -184,9 +170,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(session?.user ?? null);
 
           if (session?.user) {
+            setLoading(true); // Only set loading when fetching profile
             await fetchProfile(session.user.id);
           } else {
-            setLoading(false);
             isInitializing.current = false;
           }
         } catch (error) {
@@ -197,9 +183,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           console.error("[AuthContext] Session check failed:", error);
           setAuthError(
-            "Failed to check authentication status. Please refresh the page.",
+            "Failed to check authentication status. You can continue using the app.",
           );
-          setLoading(false);
           isInitializing.current = false;
         }
       } catch (error) {
@@ -212,7 +197,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setAuthError(
           `Authentication initialization failed: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
-        setLoading(false);
         isInitializing.current = false;
       }
     };
@@ -226,7 +210,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isComponentMounted = false;
       isInitializing.current = false;
       clearTimeout(loadingTimeout);
-      clearTimeout(emergencyTimeout);
 
       if (retryTimeout) {
         clearTimeout(retryTimeout);
