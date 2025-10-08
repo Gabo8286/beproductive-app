@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 export interface RecurrencePattern {
@@ -62,7 +62,10 @@ export function useHabitTaskGeneration() {
           .order('due_date', { ascending: true });
 
         if (error) throw error;
-        return data as HabitTaskRecord[];
+        return data.map(item => ({
+          ...item,
+          recurrence_pattern: item.recurrence_pattern as unknown as RecurrencePattern
+        })) as HabitTaskRecord[];
       },
       enabled: !!habitId
     });
@@ -121,13 +124,16 @@ export function useHabitTaskGeneration() {
     mutationFn: async (params: { taskId: string; updates: Partial<HabitTaskRecord> }) => {
       const { data, error } = await supabase
         .from('tasks')
-        .update(params.updates)
+        .update(params.updates as any)
         .eq('id', params.taskId)
         .select()
         .single();
 
       if (error) throw error;
-      return data as HabitTaskRecord;
+      return {
+        ...data,
+        recurrence_pattern: data.recurrence_pattern as unknown as RecurrencePattern
+      } as HabitTaskRecord;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
@@ -157,7 +163,7 @@ export function useHabitTaskGeneration() {
     }) => {
       let query = supabase
         .from('tasks')
-        .update(params.updates)
+        .update(params.updates as any)
         .eq('habit_id', params.habitId)
         .eq('auto_generated', true);
 
@@ -169,7 +175,10 @@ export function useHabitTaskGeneration() {
       const { data, error } = await query.select();
 
       if (error) throw error;
-      return data as HabitTaskRecord[];
+      return data.map(item => ({
+        ...item,
+        recurrence_pattern: item.recurrence_pattern as unknown as RecurrencePattern
+      })) as HabitTaskRecord[];
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });

@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { generateHabitSuggestions, HabitSuggestion } from '@/lib/ai-service';
 import { APIProviderType } from '@/types/api-management';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 export interface AIHabitSuggestionRecord {
@@ -60,7 +60,10 @@ export function useAIHabitSuggestions(goalId?: string) {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as AIHabitSuggestionRecord[];
+      return data.map(item => ({
+        ...item,
+        suggestion_data: item.suggestion_data as unknown as HabitSuggestion
+      })) as AIHabitSuggestionRecord[];
     },
     enabled: !!goalId
   });
@@ -85,12 +88,11 @@ export function useAIHabitSuggestions(goalId?: string) {
           throw new Error('No suggestions generated');
         }
 
-        // Save suggestions to database
         const suggestionRecords = aiSuggestions.map(suggestion => ({
           goal_id: params.goalId,
           user_id: user.id,
           workspace_id: params.workspaceId,
-          suggestion_data: suggestion,
+          suggestion_data: suggestion as any,
           status: 'pending' as const,
           ai_provider: params.provider || 'openai',
           ai_confidence: suggestion.confidence
@@ -103,7 +105,10 @@ export function useAIHabitSuggestions(goalId?: string) {
 
         if (error) throw error;
 
-        return data as AIHabitSuggestionRecord[];
+        return data.map(item => ({
+          ...item,
+          suggestion_data: item.suggestion_data as unknown as HabitSuggestion
+        })) as AIHabitSuggestionRecord[];
       } finally {
         setIsGenerating(false);
       }
@@ -140,7 +145,10 @@ export function useAIHabitSuggestions(goalId?: string) {
         .single();
 
       if (error) throw error;
-      return data as AIHabitSuggestionRecord;
+      return {
+        ...data,
+        suggestion_data: data.suggestion_data as unknown as HabitSuggestion
+      } as AIHabitSuggestionRecord;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['ai-habit-suggestions'] });

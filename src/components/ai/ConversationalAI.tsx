@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { generateInsight, AIMessage } from '@/lib/ai-service';
 import { APIProviderType } from '@/types/api-management';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';

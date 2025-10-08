@@ -117,6 +117,76 @@ export type Database = {
           },
         ]
       }
+      ai_habit_suggestions: {
+        Row: {
+          ai_confidence: number | null
+          ai_model: string | null
+          ai_provider: string
+          created_at: string
+          created_habit_id: string | null
+          goal_id: string
+          id: string
+          rejected_reason: string | null
+          status: string
+          suggestion_data: Json
+          updated_at: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_model?: string | null
+          ai_provider: string
+          created_at?: string
+          created_habit_id?: string | null
+          goal_id: string
+          id?: string
+          rejected_reason?: string | null
+          status?: string
+          suggestion_data: Json
+          updated_at?: string
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_model?: string | null
+          ai_provider?: string
+          created_at?: string
+          created_habit_id?: string | null
+          goal_id?: string
+          id?: string
+          rejected_reason?: string | null
+          status?: string
+          suggestion_data?: Json
+          updated_at?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_habit_suggestions_created_habit_id_fkey"
+            columns: ["created_habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_habit_suggestions_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_habit_suggestions_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_insights: {
         Row: {
           confidence_score: number | null
@@ -2661,12 +2731,14 @@ export type Database = {
         Row: {
           actual_duration: number | null
           assigned_to: string | null
+          auto_generated: boolean | null
           completed_at: string | null
           created_at: string | null
           created_by: string
           description: string | null
           due_date: string | null
           estimated_duration: number | null
+          habit_id: string | null
           hierarchy_level: number | null
           id: string
           instance_date: string | null
@@ -2678,6 +2750,7 @@ export type Database = {
           project_id: string | null
           recurrence_pattern: Json | null
           recurring_template_id: string | null
+          scheduled_date: string | null
           status: Database["public"]["Enums"]["task_status"] | null
           tags: string[] | null
           title: string
@@ -2687,12 +2760,14 @@ export type Database = {
         Insert: {
           actual_duration?: number | null
           assigned_to?: string | null
+          auto_generated?: boolean | null
           completed_at?: string | null
           created_at?: string | null
           created_by: string
           description?: string | null
           due_date?: string | null
           estimated_duration?: number | null
+          habit_id?: string | null
           hierarchy_level?: number | null
           id?: string
           instance_date?: string | null
@@ -2704,6 +2779,7 @@ export type Database = {
           project_id?: string | null
           recurrence_pattern?: Json | null
           recurring_template_id?: string | null
+          scheduled_date?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           tags?: string[] | null
           title: string
@@ -2713,12 +2789,14 @@ export type Database = {
         Update: {
           actual_duration?: number | null
           assigned_to?: string | null
+          auto_generated?: boolean | null
           completed_at?: string | null
           created_at?: string | null
           created_by?: string
           description?: string | null
           due_date?: string | null
           estimated_duration?: number | null
+          habit_id?: string | null
           hierarchy_level?: number | null
           id?: string
           instance_date?: string | null
@@ -2730,6 +2808,7 @@ export type Database = {
           project_id?: string | null
           recurrence_pattern?: Json | null
           recurring_template_id?: string | null
+          scheduled_date?: string | null
           status?: Database["public"]["Enums"]["task_status"] | null
           tags?: string[] | null
           title?: string
@@ -2749,6 +2828,13 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
             referencedColumns: ["id"]
           },
           {
@@ -3260,6 +3346,14 @@ export type Database = {
           instances_created: number
           template_id: string
         }[]
+      }
+      generate_recurring_tasks_from_habit: {
+        Args: {
+          p_days_ahead?: number
+          p_habit_id: string
+          p_start_date: string
+        }
+        Returns: number
       }
       get_api_key_monthly_usage: {
         Args: { key_id: string }

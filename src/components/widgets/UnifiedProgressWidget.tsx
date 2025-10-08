@@ -11,7 +11,7 @@ import { useGoals } from '@/hooks/useGoals';
 import { useHabits } from '@/hooks/useHabits';
 import { useTasks } from '@/hooks/useTasks';
 import { useHabitGoalLinks } from '@/hooks/useHabitGoalLinks';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { format, isToday, isThisWeek, isThisMonth } from 'date-fns';
 import { cn } from '@/lib/utils';
