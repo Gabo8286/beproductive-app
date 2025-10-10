@@ -16,6 +16,20 @@ export interface Category {
 export const FAB_CATEGORIES = {
   capture: [
     {
+      id: 'navigation',
+      icon: '🧭',
+      label: 'Navigation',
+      items: [
+        { id: 'dashboard', icon: '🏠', label: 'Dashboard', action: 'NAVIGATE', value: '/dashboard' },
+        { id: 'tasks', icon: '✓', label: 'Tasks', action: 'NAVIGATE', value: '/tasks' },
+        { id: 'goals', icon: '🎯', label: 'Goals', action: 'NAVIGATE', value: '/goals' },
+        { id: 'analytics', icon: '📊', label: 'Analytics', action: 'NAVIGATE', value: '/analytics' },
+        { id: 'notes', icon: '📝', label: 'Notes', action: 'NAVIGATE', value: '/notes' },
+        { id: 'projects', icon: '🚀', label: 'Projects', action: 'NAVIGATE', value: '/projects' },
+        { id: 'habits', icon: '🔄', label: 'Habits', action: 'NAVIGATE', value: '/habits' },
+      ],
+    },
+    {
       id: 'templates',
       icon: '📋',
       label: 'Templates',
@@ -60,6 +74,20 @@ export const FAB_CATEGORIES = {
   ],
 
   plan: [
+    {
+      id: 'navigation',
+      icon: '🧭',
+      label: 'Navigation',
+      items: [
+        { id: 'dashboard', icon: '🏠', label: 'Dashboard', action: 'NAVIGATE', value: '/dashboard' },
+        { id: 'tasks', icon: '✓', label: 'Tasks', action: 'NAVIGATE', value: '/tasks' },
+        { id: 'goals', icon: '🎯', label: 'Goals', action: 'NAVIGATE', value: '/goals' },
+        { id: 'analytics', icon: '📊', label: 'Analytics', action: 'NAVIGATE', value: '/analytics' },
+        { id: 'notes', icon: '📝', label: 'Notes', action: 'NAVIGATE', value: '/notes' },
+        { id: 'projects', icon: '🚀', label: 'Projects', action: 'NAVIGATE', value: '/projects' },
+        { id: 'habits', icon: '🔄', label: 'Habits', action: 'NAVIGATE', value: '/habits' },
+      ],
+    },
     {
       id: 'view-options',
       icon: '👁️',
@@ -107,6 +135,20 @@ export const FAB_CATEGORIES = {
   ],
 
   engage: [
+    {
+      id: 'navigation',
+      icon: '🧭',
+      label: 'Navigation',
+      items: [
+        { id: 'dashboard', icon: '🏠', label: 'Dashboard', action: 'NAVIGATE', value: '/dashboard' },
+        { id: 'tasks', icon: '✓', label: 'Tasks', action: 'NAVIGATE', value: '/tasks' },
+        { id: 'goals', icon: '🎯', label: 'Goals', action: 'NAVIGATE', value: '/goals' },
+        { id: 'analytics', icon: '📊', label: 'Analytics', action: 'NAVIGATE', value: '/analytics' },
+        { id: 'notes', icon: '📝', label: 'Notes', action: 'NAVIGATE', value: '/notes' },
+        { id: 'projects', icon: '🚀', label: 'Projects', action: 'NAVIGATE', value: '/projects' },
+        { id: 'habits', icon: '🔄', label: 'Habits', action: 'NAVIGATE', value: '/habits' },
+      ],
+    },
     {
       id: 'quick-actions',
       icon: '⚡',

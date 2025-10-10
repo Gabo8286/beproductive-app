@@ -5,6 +5,7 @@ import { NotificationContainer, useNotifications } from '@/components/notificati
 import { useAuth } from '@/contexts/AuthContext';
 import { LunaProvider } from '@/components/luna/context/LunaContext';
 import { LunaFloat } from '@/components/luna/float/LunaFloat';
+import { FABContainer } from '@/components/navigation/ImprovedFAB/FABContainer';
 
 export default function AppShell() {
   const { notifications, removeNotification } = useNotifications();
@@ -20,6 +21,9 @@ export default function AppShell() {
 
         {/* Unified Bottom Navigation */}
         <UnifiedBottomNav />
+
+        {/* FAB - positioned above bottom nav */}
+        <FABContainer />
 
         {/* Luna Floating Assistant - positioned above bottom nav */}
         <LunaFloat

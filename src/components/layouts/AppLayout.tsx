@@ -26,6 +26,7 @@ import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
 import GuestModeIndicator from "@/components/auth/GuestModeIndicator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { FABContainer } from "@/components/navigation/ImprovedFAB/FABContainer";
 
 type NavigationMode = 'minimal-sidebar' | 'top-navigation' | 'full-sidebar';
 
@@ -197,8 +198,8 @@ export function AppLayout() {
           <Outlet />
         </main>
 
-        {/* Floating Action Menu */}
-        <FloatingActionMenu />
+        {/* FAB - positioned above bottom nav */}
+        <FABContainer />
 
         {/* Unified Bottom Navigation */}
         <UnifiedBottomNav />
@@ -300,6 +301,7 @@ export function AppLayout() {
             <Outlet />
           </main>
         </div>
+        <FABContainer />
         <UnifiedBottomNav />
       </div>
       <Timer />

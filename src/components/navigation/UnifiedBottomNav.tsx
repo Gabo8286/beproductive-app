@@ -1,18 +1,10 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, CheckSquare, Target, BarChart3, MoreHorizontal, Plus } from 'lucide-react';
+import { Home, CheckSquare, Target, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProductivityCycle';
 import { getPhaseInfo } from '@/modules/productivity-cycle/types/cycle';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useTasks } from '@/hooks/useTasks';
 import { useGoals } from '@/hooks/useGoals';
 
@@ -145,55 +137,6 @@ export const UnifiedBottomNav: React.FC = () => {
                   </NavLink>
                 );
               })}
-
-              {/* More Menu */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex flex-col md:flex-row items-center gap-0.5 md:gap-2 min-w-[64px] md:min-w-0 px-3 md:px-4 py-2"
-                    onClick={buttonPress}
-                  >
-                    <MoreHorizontal className="h-5 w-5" />
-                    <span className="text-xs md:text-sm font-medium">More</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                    🏠 Dashboard
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/tasks')}>
-                    ✓ Tasks
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/goals')}>
-                    🎯 Goals
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/analytics')}>
-                    📊 Analytics
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/notes')}>
-                    📝 Notes
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/habits')}>
-                    🔄 Habits
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/projects')}>
-                    🚀 Projects
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/pomodoro')}>
-                    🍅 Pomodoro
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/settings/accessibility')}>
-                    ⚙️ Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    👤 Profile
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </nav>
 
             {/* Quick Stats (Right - Desktop Only) */}
@@ -210,24 +153,6 @@ export const UnifiedBottomNav: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Quick Action FAB (Positioned above bottom nav) */}
-      <button
-        onClick={handleQuickAction}
-        className={cn(
-          'fixed right-5 w-14 h-14 rounded-full shadow-xl',
-          'bg-gradient-to-r text-white',
-          'hover:scale-110 active:scale-95 transition-all duration-300',
-          'focus:outline-none focus:ring-4 focus:ring-primary/30',
-          'flex items-center justify-center',
-          'z-50',
-          getPhaseColor()
-        )}
-        style={{ bottom: 'calc(4rem + 1.25rem)' }} // 64px (nav height) + 20px spacing
-        aria-label="Quick action"
-      >
-        <Plus className="h-6 w-6" />
-      </button>
 
       {/* Spacer for content */}
       <div className="h-16 md:h-14" aria-hidden="true" />

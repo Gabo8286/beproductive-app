@@ -27,7 +27,7 @@ export const FABMenu = forwardRef<HTMLDivElement, FABMenuProps>(
           className
         )}
         style={{
-          bottom: 'calc(4rem + 6.5rem)', // Above bottom nav + quick FAB
+          bottom: 'calc(4rem + 5rem)', // Above FAB button
           right: '1.25rem',
           transformOrigin: 'bottom right',
         }}
