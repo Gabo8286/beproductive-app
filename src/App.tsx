@@ -15,6 +15,8 @@ import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
 import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
+import { LunaProvider } from "@/components/luna/context/LunaContext";
+import { LunaFrameworkProvider } from "@/components/luna/context/LunaFrameworkContext";
 import { TagFilterModal } from "@/components/filters/TagFilterModal";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
@@ -86,6 +88,7 @@ const Settings = lazy(() => import("@/pages/Settings"));
 const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
 const Billing = lazy(() => import("@/pages/Billing"));
 const PricingPlans = lazy(() => import("@/pages/PricingPlans"));
+const LunaCommandCenterPage = lazy(() => import("@/pages/LunaCommandCenter"));
 
 // AI components are exported from widgets/index.ts
 
@@ -474,6 +477,14 @@ function AppContent() {
                 </Suspense>
               }
             />
+            <Route
+              path="/luna"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <LunaCommandCenterPage />
+                </Suspense>
+              }
+            />
           </Route>
 
           <Route
@@ -513,11 +524,15 @@ function App() {
           <AccessibilityProvider>
             <ProductivityCycleProvider>
               <GlobalViewProvider>
-                <BrowserRouter>
-                  <RouteAnnouncer />
-                  <AppContent />
-                  <TagFilterModal />
-                </BrowserRouter>
+                <LunaFrameworkProvider>
+                  <LunaProvider>
+                    <BrowserRouter>
+                      <RouteAnnouncer />
+                      <AppContent />
+                      <TagFilterModal />
+                    </BrowserRouter>
+                  </LunaProvider>
+                </LunaFrameworkProvider>
               </GlobalViewProvider>
             </ProductivityCycleProvider>
           </AccessibilityProvider>

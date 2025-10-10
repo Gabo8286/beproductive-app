@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { streamChat } from '@/utils/aiStreaming';
+import { streamFrameworkChat, generateContextualSuggestions, type FrameworkContext } from '@/utils/aiFrameworkStreaming';
 import { LunaExpression } from '@/assets/luna/luna-assets';
+import { useLunaFramework } from './LunaFrameworkContext';
 
 interface Message {
   id: string;
@@ -30,6 +32,10 @@ interface LunaState {
   lunaPersonality: 'helpful' | 'enthusiastic' | 'focused';
   showProactiveSuggestions: boolean;
   reminderFrequency: 'high' | 'medium' | 'low' | 'off';
+
+  // Framework integration
+  frameworkEnabled: boolean;
+  contextualSuggestions: string[];
 }
 
 interface LunaActions {
@@ -53,8 +59,13 @@ interface LunaActions {
   setContext: (context: 'capture' | 'plan' | 'engage' | 'general') => void;
 
   // Settings actions
-  updatePreferences: (preferences: Partial<Pick<LunaState, 'lunaPersonality' | 'showProactiveSuggestions' | 'reminderFrequency'>>) => void;
+  updatePreferences: (preferences: Partial<Pick<LunaState, 'lunaPersonality' | 'showProactiveSuggestions' | 'reminderFrequency' | 'frameworkEnabled'>>) => void;
   toggleSuggestions: () => void;
+
+  // Framework actions
+  toggleFramework: () => void;
+  refreshSuggestions: () => void;
+  sendFrameworkMessage: (content: string, context?: string) => void;
 }
 
 type LunaContextType = LunaState & LunaActions;
@@ -78,6 +89,9 @@ const defaultLunaState: LunaState = {
   lunaPersonality: 'helpful',
   showProactiveSuggestions: true,
   reminderFrequency: 'medium',
+
+  frameworkEnabled: true,
+  contextualSuggestions: [],
 };
 
 interface LunaProviderProps {
@@ -86,6 +100,27 @@ interface LunaProviderProps {
 
 export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
   const [state, setState] = useState<LunaState>(defaultLunaState);
+
+  // Get framework context - we'll need to handle this carefully since it might not be available
+  let frameworkContext: FrameworkContext | undefined;
+  try {
+    const framework = useLunaFramework();
+    frameworkContext = {
+      userStage: framework.productivityProfile.currentStage,
+      weekInStage: framework.productivityProfile.weekInStage,
+      completedPrinciples: framework.productivityProfile.completedPrinciples,
+      currentMetrics: framework.productivityProfile.currentMetrics,
+      wellBeingScore: framework.productivityProfile.wellBeingScore,
+      systemHealthScore: framework.productivityProfile.systemHealthScore,
+      energyPattern: framework.productivityProfile.energyPattern,
+      isInRecoveryMode: framework.isInRecoveryMode,
+      currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
+      userPreferences: framework.userPreferences,
+    };
+  } catch (error) {
+    // Framework context not available, continue without it
+    frameworkContext = undefined;
+  }
 
   // Auto-reset expression after some time
   useEffect(() => {
@@ -118,9 +153,158 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
       showProactiveSuggestions: state.showProactiveSuggestions,
       reminderFrequency: state.reminderFrequency,
       suggestionsEnabled: state.suggestionsEnabled,
+      frameworkEnabled: state.frameworkEnabled,
     };
     localStorage.setItem('luna-preferences', JSON.stringify(preferences));
-  }, [state.lunaPersonality, state.showProactiveSuggestions, state.reminderFrequency, state.suggestionsEnabled]);
+  }, [state.lunaPersonality, state.showProactiveSuggestions, state.reminderFrequency, state.suggestionsEnabled, state.frameworkEnabled]);
+
+  // Update contextual suggestions when context or framework state changes
+  useEffect(() => {
+    if (state.frameworkEnabled && frameworkContext) {
+      const suggestions = generateContextualSuggestions(state.currentContext, frameworkContext);
+      setState(prev => ({ ...prev, contextualSuggestions: suggestions }));
+    } else {
+      setState(prev => ({ ...prev, contextualSuggestions: [] }));
+    }
+  }, [state.currentContext, state.frameworkEnabled, frameworkContext]);
+
+  // Create a function to handle message sending logic
+  const handleMessageSending = (content: string, context?: string, useFramework: boolean = true) => {
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content,
+      timestamp: new Date(),
+      context: context || state.currentContext,
+    };
+
+    setState(prev => ({
+      ...prev,
+      messages: [...prev.messages, newMessage],
+      isTyping: true,
+      currentExpression: 'thinking'
+    }));
+
+    // Create placeholder Luna message that we'll update
+    const lunaMessageId = (Date.now() + 1).toString();
+    let lunaContent = '';
+
+    // Add initial empty Luna message
+    setState(prev => ({
+      ...prev,
+      messages: [
+        ...prev.messages,
+        {
+          id: lunaMessageId,
+          role: 'luna',
+          content: '',
+          timestamp: new Date(),
+          context: context || state.currentContext,
+        }
+      ]
+    }));
+
+    // Convert messages to AI format (role: 'luna' -> 'assistant')
+    const aiMessages = [...state.messages, newMessage].map(msg => ({
+      role: msg.role === 'luna' ? 'assistant' as const : 'user' as const,
+      content: msg.content,
+    }));
+
+    // Use framework-enhanced streaming if enabled and requested
+    if (useFramework && state.frameworkEnabled) {
+      streamFrameworkChat({
+        messages: aiMessages,
+        context: context || state.currentContext,
+        personality: state.lunaPersonality,
+        frameworkContext,
+        onDelta: (chunk: string) => {
+          lunaContent += chunk;
+
+          // Update the last message's content
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === lunaMessageId
+                ? { ...msg, content: lunaContent }
+                : msg
+            ),
+            currentExpression: 'happy'
+          }));
+        },
+        onDone: () => {
+          setState(prev => ({
+            ...prev,
+            isTyping: false,
+            currentExpression: 'happy',
+            hasUnreadMessages: !prev.isOpen
+          }));
+        },
+        onError: (error: Error) => {
+          console.error('Luna Framework AI error:', error);
+
+          // Show error message to user
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === lunaMessageId
+                ? {
+                    ...msg,
+                    content: "Oops! I'm having trouble with the framework integration right now. 🦊💔 Please try again in a moment."
+                  }
+                : msg
+            ),
+            isTyping: false,
+            currentExpression: 'error'
+          }));
+        }
+      });
+    } else {
+      // Fallback to regular streaming
+      streamChat({
+        messages: aiMessages,
+        context: context || state.currentContext,
+        personality: state.lunaPersonality,
+        onDelta: (chunk: string) => {
+          lunaContent += chunk;
+
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === lunaMessageId
+                ? { ...msg, content: lunaContent }
+                : msg
+            ),
+            currentExpression: 'happy'
+          }));
+        },
+        onDone: () => {
+          setState(prev => ({
+            ...prev,
+            isTyping: false,
+            currentExpression: 'happy',
+            hasUnreadMessages: !prev.isOpen
+          }));
+        },
+        onError: (error: Error) => {
+          console.error('Luna AI error:', error);
+
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === lunaMessageId
+                ? {
+                    ...msg,
+                    content: "Oops! I'm having trouble connecting right now. 🦊💔 Please try again in a moment."
+                  }
+                : msg
+            ),
+            isTyping: false,
+            currentExpression: 'error'
+          }));
+        }
+      });
+    }
+  };
 
   const actions: LunaActions = {
     // Chat actions
@@ -142,92 +326,7 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
     },
 
     sendMessage: (content: string, context?: string) => {
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        role: 'user',
-        content,
-        timestamp: new Date(),
-        context: context || state.currentContext,
-      };
-
-      setState(prev => ({
-        ...prev,
-        messages: [...prev.messages, newMessage],
-        isTyping: true,
-        currentExpression: 'thinking'
-      }));
-
-      // Create placeholder Luna message that we'll update
-      const lunaMessageId = (Date.now() + 1).toString();
-      let lunaContent = '';
-
-      // Add initial empty Luna message
-      setState(prev => ({
-        ...prev,
-        messages: [
-          ...prev.messages,
-          {
-            id: lunaMessageId,
-            role: 'luna',
-            content: '',
-            timestamp: new Date(),
-            context: context || state.currentContext,
-          }
-        ]
-      }));
-
-      // Convert messages to AI format (role: 'luna' -> 'assistant')
-      const aiMessages = [...state.messages, newMessage].map(msg => ({
-        role: msg.role === 'luna' ? 'assistant' as const : 'user' as const,
-        content: msg.content,
-      }));
-
-      // Stream the response
-      streamChat({
-        messages: aiMessages,
-        context: context || state.currentContext,
-        personality: state.lunaPersonality,
-        onDelta: (chunk: string) => {
-          lunaContent += chunk;
-          
-          // Update the last message's content
-          setState(prev => ({
-            ...prev,
-            messages: prev.messages.map(msg =>
-              msg.id === lunaMessageId
-                ? { ...msg, content: lunaContent }
-                : msg
-            ),
-            currentExpression: 'happy'
-          }));
-        },
-        onDone: () => {
-          setState(prev => ({
-            ...prev,
-            isTyping: false,
-            currentExpression: 'happy',
-            hasUnreadMessages: !prev.isOpen
-          }));
-        },
-        onError: (error: Error) => {
-          console.error('Luna AI error:', error);
-          
-          // Show error message to user
-          setState(prev => ({
-            ...prev,
-            messages: prev.messages.map(msg =>
-              msg.id === lunaMessageId
-                ? { 
-                    ...msg, 
-                    content: "Oops! I'm having trouble connecting right now. 🦊💔 Please try again in a moment."
-                  }
-                : msg
-            ),
-            isTyping: false,
-            currentExpression: 'error'
-          }));
-        }
-      });
+      handleMessageSending(content, context, true);
     },
 
     clearMessages: () => {
@@ -272,6 +371,22 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
 
     toggleSuggestions: () => {
       setState(prev => ({ ...prev, suggestionsEnabled: !prev.suggestionsEnabled }));
+    },
+
+    // Framework actions
+    toggleFramework: () => {
+      setState(prev => ({ ...prev, frameworkEnabled: !prev.frameworkEnabled }));
+    },
+
+    refreshSuggestions: () => {
+      if (state.frameworkEnabled && frameworkContext) {
+        const suggestions = generateContextualSuggestions(state.currentContext, frameworkContext);
+        setState(prev => ({ ...prev, contextualSuggestions: suggestions }));
+      }
+    },
+
+    sendFrameworkMessage: (content: string, context?: string) => {
+      handleMessageSending(content, context, true);
     },
   };
 

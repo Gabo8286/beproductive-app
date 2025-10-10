@@ -2,8 +2,6 @@ import { Outlet } from "react-router-dom";
 import { AppSidebar } from "@/components/navigation/AppSidebar";
 import { MinimalSidebar } from "@/components/navigation/MinimalSidebar";
 import { CyclePrimaryNavigation } from "@/components/navigation/CyclePrimaryNavigation";
-import { FloatingActionMenu } from "@/components/navigation/FloatingActionMenu";
-import { PhaseContextMenu } from "@/components/navigation/PhaseContextMenu";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
