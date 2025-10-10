@@ -26,7 +26,7 @@ import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
 import GuestModeIndicator from "@/components/auth/GuestModeIndicator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { FABContainer } from "@/components/navigation/ImprovedFAB/FABContainer";
+import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext";
 
 type NavigationMode = 'minimal-sidebar' | 'top-navigation' | 'full-sidebar';
 
@@ -34,6 +34,9 @@ export function AppLayout() {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
   const [navigationMode, setNavigationMode] = useState<NavigationMode>('top-navigation');
+
+  // Auto-set Luna context based on route
+  useLunaRouteContext();
 
   // Enable global keyboard shortcuts
   useKeyboardShortcuts();
@@ -198,9 +201,6 @@ export function AppLayout() {
           <Outlet />
         </main>
 
-        {/* FAB - positioned above bottom nav */}
-        <FABContainer />
-
         {/* Unified Bottom Navigation */}
         <UnifiedBottomNav />
         <Timer />
@@ -301,7 +301,6 @@ export function AppLayout() {
             <Outlet />
           </main>
         </div>
-        <FABContainer />
         <UnifiedBottomNav />
       </div>
       <Timer />

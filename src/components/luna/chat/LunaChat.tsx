@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Send, Loader2, X, Settings, Sparkles } from 'lucide-react';
+import { Send, Loader2, X, Sparkles, FileText, Mic, Upload, Target, CheckSquare, Folder, Play, Calendar, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLuna, useLunaChat } from '../context/LunaContext';
 import { LunaAvatar } from '../core/LunaAvatar';
 import { LUNA_COLORS } from '@/assets/luna/luna-assets';
 import { LunaTypingIndicator } from '../animations/LunaAnimations';
+import { useNavigate } from 'react-router-dom';
 
 interface LunaChatProps {
   className?: string;
@@ -27,6 +28,7 @@ export const LunaChat: React.FC<LunaChatProps> = ({
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const {
     currentContext,
@@ -101,6 +103,33 @@ export const LunaChat: React.FC<LunaChatProps> = ({
         return "Hi! I'm Luna, your friendly AI productivity companion. How can I help you today? 🦊";
     }
   };
+
+  const getContextActions = (context: string) => {
+    switch (context) {
+      case 'capture':
+        return [
+          { icon: FileText, label: 'Quick Note', path: '/notes' },
+          { icon: Upload, label: 'Upload File', path: '/notes' },
+          { icon: CheckSquare, label: 'Add Task', path: '/tasks' },
+        ];
+      case 'plan':
+        return [
+          { icon: Target, label: 'New Goal', path: '/goals' },
+          { icon: CheckSquare, label: 'Add Task', path: '/tasks' },
+          { icon: Folder, label: 'New Project', path: '/projects' },
+        ];
+      case 'engage':
+        return [
+          { icon: Play, label: 'Start Timer', path: '/pomodoro' },
+          { icon: Calendar, label: 'View Calendar', path: '/calendar' },
+          { icon: BookOpen, label: 'Reflection', path: '/reflections' },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const contextActions = getContextActions(currentContext);
 
   return (
     <div
@@ -291,6 +320,30 @@ export const LunaChat: React.FC<LunaChatProps> = ({
         className="border-t p-4"
         style={{ borderTopColor: LUNA_COLORS.furLight + '20' }}
       >
+        {/* Context Quick Actions */}
+        {contextActions.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {contextActions.map((action) => {
+              const Icon = action.icon;
+              return (
+                <Button
+                  key={action.label}
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-lg text-xs"
+                  onClick={() => {
+                    navigate(action.path);
+                    onClose?.();
+                  }}
+                >
+                  <Icon className="h-3 w-3 mr-1.5" />
+                  {action.label}
+                </Button>
+              );
+            })}
+          </div>
+        )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
