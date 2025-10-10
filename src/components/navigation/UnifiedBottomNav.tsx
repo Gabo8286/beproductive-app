@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, CheckSquare, Target, Plus } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Home, CheckSquare, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProductivityCycle';
@@ -38,7 +38,6 @@ const mainTabs: NavTab[] = [
 
 export const UnifiedBottomNav: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { buttonPress } = useHapticFeedback();
   const { state } = useProductivityCycle();
   const { data: tasks } = useTasks();
@@ -62,17 +61,6 @@ export const UnifiedBottomNav: React.FC = () => {
     }
   };
 
-  const handleQuickAction = () => {
-    buttonPress();
-    // Navigate to appropriate page based on current phase
-    if (state.currentPhase === 'capture') {
-      navigate('/tasks');
-    } else if (state.currentPhase === 'execute') {
-      navigate('/tasks');
-    } else {
-      navigate('/goals/new');
-    }
-  };
 
   return (
     <>
@@ -87,27 +75,9 @@ export const UnifiedBottomNav: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center justify-between h-16 md:h-14">
-            {/* Cycle Phase Button (Left) */}
-            <button
-              onClick={() => {
-                buttonPress();
-                navigate('/app/plan');
-              }}
-              className={cn(
-                'hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full',
-                'bg-gradient-to-r text-white text-xs font-medium',
-                'hover:scale-105 active:scale-95 transition-transform',
-                getPhaseColor()
-              )}
-            >
-              <span className="text-base">{currentPhaseInfo.icon}</span>
-              <span>{currentPhaseInfo.title}</span>
-              <span className="opacity-75">{Math.round(state.phaseProgress)}%</span>
-            </button>
-
+          <div className="flex items-center justify-center md:justify-between h-16 md:h-14">
             {/* Main Navigation Tabs (Center) */}
-            <nav className="flex items-center justify-center flex-1 gap-1 md:gap-2">
+            <nav className="flex items-center justify-center flex-1 md:flex-initial gap-1 md:gap-2">
               {mainTabs.map((tab) => {
                 const isActive = location.pathname === tab.href || location.pathname.startsWith(tab.href + '/');
                 const Icon = tab.icon;
