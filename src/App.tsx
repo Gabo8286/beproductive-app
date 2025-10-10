@@ -45,6 +45,7 @@ const AppShell = lazy(() => import("@/pages/AppShell"));
 const Capture = lazy(() => import("@/pages/Capture"));
 const PlanPage = lazy(() => import("@/pages/PlanPage"));
 const Engage = lazy(() => import("@/pages/Engage"));
+const ProfileTab = lazy(() => import("@/components/tabs/ProfileTab"));
 const NewGoal = lazy(() => import("@/pages/NewGoal"));
 const GoalDetail = lazy(() => import("@/pages/GoalDetail"));
 const Tasks = lazy(() => import("@/pages/Tasks"));
@@ -196,6 +197,11 @@ function AppContent() {
             <Route path="engage" element={
               <Suspense fallback={<PageLoading />}>
                 <Engage />
+              </Suspense>
+            } />
+            <Route path="profile" element={
+              <Suspense fallback={<PageLoading />}>
+                <ProfileTab />
               </Suspense>
             } />
             {/* Redirect /app to /app/capture by default */}

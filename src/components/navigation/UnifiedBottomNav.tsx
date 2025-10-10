@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, CheckSquare, Target, Plus } from 'lucide-react';
+import { Home, CheckSquare, Target, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProductivityCycle';
@@ -33,6 +33,12 @@ const mainTabs: NavTab[] = [
     label: 'Execute',
     href: '/app/engage',
     icon: Target,
+  },
+  {
+    id: 'profile',
+    label: 'Profile',
+    href: '/app/profile',
+    icon: User,
   },
 ];
 

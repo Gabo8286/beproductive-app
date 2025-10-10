@@ -18,7 +18,6 @@ import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
 import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
-import { ProductivityProfileWidget } from '@/components/widgets/ProductivityProfileWidget';
 
 interface QuickAddItem {
   id: string;
@@ -184,11 +183,6 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
       <div className="mb-8">
         <h1 className="apple-page-title">Capture</h1>
         <p className="apple-page-subtitle">What would you like to add?</p>
-      </div>
-
-      {/* Productivity Profile Widget */}
-      <div className="mb-8">
-        <ProductivityProfileWidget />
       </div>
 
       {/* Quick Add Grid */}

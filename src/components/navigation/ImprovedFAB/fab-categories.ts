@@ -222,8 +222,50 @@ export const FAB_CATEGORIES = {
       ],
     },
   ],
+
+  profile: [
+    {
+      id: 'navigation',
+      icon: '🧭',
+      label: 'Navigation',
+      items: [
+        { id: 'dashboard', icon: '🏠', label: 'Dashboard', action: 'NAVIGATE', value: '/dashboard' },
+        { id: 'tasks', icon: '✓', label: 'Tasks', action: 'NAVIGATE', value: '/tasks' },
+        { id: 'goals', icon: '🎯', label: 'Goals', action: 'NAVIGATE', value: '/goals' },
+        { id: 'analytics', icon: '📊', label: 'Analytics', action: 'NAVIGATE', value: '/analytics' },
+      ],
+    },
+    {
+      id: 'assessment',
+      icon: '📊',
+      label: 'Assessment',
+      items: [
+        { id: 'retake', icon: '🔄', label: 'Retake Assessment', action: 'NAVIGATE', value: '/profile-assessment' },
+        { id: 'view-results', icon: '📈', label: 'Detailed Results', action: 'NAVIGATE', value: '/profile-assessment' },
+      ],
+    },
+    {
+      id: 'strategies',
+      icon: '💡',
+      label: 'Strategies',
+      items: [
+        { id: 'apply-to-tasks', icon: '✓', label: 'Apply to Tasks', action: 'SHOW_TOAST', value: 'Coming soon!' },
+        { id: 'apply-to-goals', icon: '🎯', label: 'Apply to Goals', action: 'SHOW_TOAST', value: 'Coming soon!' },
+      ],
+    },
+    {
+      id: 'ask-luna',
+      icon: '🦊',
+      label: 'Ask Luna',
+      items: [
+        { id: 'chat', icon: '💬', label: 'Open Chat', action: 'OPEN_LUNA', value: null },
+        { id: 'help', icon: '❓', label: 'Profile Help', action: 'LUNA_HELP', value: 'profile' },
+        { id: 'coaching', icon: '🎓', label: 'Coaching Tips', action: 'LUNA_SUGGEST', value: 'profile' },
+      ],
+    },
+  ],
 };
 
-export function getCategoriesForTab(tab: 'capture' | 'plan' | 'engage'): Category[] {
+export function getCategoriesForTab(tab: 'capture' | 'plan' | 'engage' | 'profile'): Category[] {
   return FAB_CATEGORIES[tab] || [];
 }
