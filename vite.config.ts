@@ -4,6 +4,10 @@ import path from "path";
 
 // Minimal Vite config for debugging
 export default defineConfig({
+  server: {
+    host: "::",
+    port: 8080,
+  },
   plugins: [react()],
   resolve: {
     alias: {
@@ -13,5 +17,8 @@ export default defineConfig({
   build: {
     sourcemap: false,
     minify: 'esbuild',
+  },
+  css: {
+    devSourcemap: true, // Inline sourcemaps to prevent separate file downloads
   },
 });
