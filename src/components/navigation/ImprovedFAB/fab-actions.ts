@@ -1,6 +1,8 @@
 import { NavigateFunction } from 'react-router-dom';
 import type { ViewMode, SortBy, SortOrder, GroupBy } from '@/contexts/GlobalViewContext';
 
+// FAB action execution and global state management
+
 // Global view actions interface for external dependency injection
 interface GlobalViewActions {
   setViewMode: (mode: ViewMode) => void;
