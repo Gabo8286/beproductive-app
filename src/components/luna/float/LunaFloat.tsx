@@ -110,7 +110,13 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    if (!isDragging) return;
+    if (!draggable) return;
+    
+    if (!isDragging) {
+      // If not dragging, treat as a click
+      handleAvatarClick();
+      return;
+    }
 
     setIsDragging(false);
 
@@ -168,6 +174,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
           top: position.y,
           transform: isDragging ? 'rotate(5deg)' : 'rotate(0deg)',
         }}
+        onClick={!draggable ? handleAvatarClick : undefined}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
