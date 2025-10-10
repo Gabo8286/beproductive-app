@@ -23,6 +23,7 @@ import { NotificationCenter } from "@/components/automation/NotificationCenter";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import GuestModeIndicator from "@/components/auth/GuestModeIndicator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -65,6 +66,9 @@ export function AppLayout() {
               <Sparkles className="h-6 w-6 text-primary" />
               <span className="hidden sm:inline text-lg font-bold">BeProductive</span>
             </div>
+
+            {/* Guest Mode Indicator */}
+            <GuestModeIndicator />
 
             {/* Primary Cycle Navigation */}
             <div className="flex-1 flex justify-center">
@@ -222,6 +226,9 @@ export function AppLayout() {
               className="md:hidden"
               aria-label="Toggle sidebar navigation"
             />
+
+            {/* Guest Mode Indicator */}
+            <GuestModeIndicator />
 
             {/* Navigation Mode Toggle */}
             <DropdownMenu>

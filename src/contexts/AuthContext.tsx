@@ -5,6 +5,18 @@ import { Profile } from "@/types/database";
 import { toast } from "sonner";
 import { localAuth, isLocalMode, LocalAuthUser, LocalAuthSession } from "@/integrations/auth/localAuthAdapter";
 import { runAuthDiagnostics, displayDiagnostics } from "@/utils/browser/authDiagnostics";
+import {
+  isGuestModeEnabled,
+  createGuestUser,
+  createGuestSession,
+  createGuestProfile,
+  isGuestUser,
+  getGuestUserType,
+  getSavedGuestModeSelection,
+  saveGuestModeSelection,
+  clearGuestModeSelection,
+  GuestUserType
+} from "@/utils/auth/guestMode";
 
 interface AuthContextType {
   user: User | null;
@@ -25,6 +37,11 @@ interface AuthContextType {
     updates: Partial<Profile>,
   ) => Promise<{ error: Error | null }>;
   clearAuthError: () => void;
+  // Guest mode functions
+  isGuestMode: boolean;
+  guestUserType: GuestUserType | null;
+  signInAsGuest: (type: GuestUserType) => void;
+  clearGuestMode: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,6 +55,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authLoading, setAuthLoading] = useState(true); // Start true for initial load
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // Guest mode state
+  const [isGuestMode, setIsGuestMode] = useState<boolean>(false);
+  const [guestUserType, setGuestUserType] = useState<GuestUserType | null>(null);
+
   // Track initialization state to prevent overlapping attempts
   const isInitializing = useRef(false);
   const retryCount = useRef(0);
@@ -49,11 +70,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       VITE_LOCAL_MODE: import.meta.env.VITE_LOCAL_MODE,
       VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
       VITE_LOCAL_AUTH_URL: import.meta.env.VITE_LOCAL_AUTH_URL,
+      VITE_ENABLE_GUEST_MODE: import.meta.env.VITE_ENABLE_GUEST_MODE,
       NODE_ENV: import.meta.env.NODE_ENV,
       MODE: import.meta.env.MODE,
     });
+
+    const guestModeEnabled = isGuestModeEnabled();
     const localMode = isLocalMode();
+    console.log(`[AuthContext] Guest mode enabled: ${guestModeEnabled}`);
     console.log(`[AuthContext] Local mode detected: ${localMode}`);
+
+    // Check for saved guest mode selection first
+    const savedGuestType = getSavedGuestModeSelection();
+    if (guestModeEnabled && savedGuestType) {
+      console.log(`[AuthContext] Found saved guest mode selection: ${savedGuestType}`);
+      initializeGuestMode(savedGuestType);
+      return;
+    }
 
     let isComponentMounted = true;
     let authSubscription: any = null;
@@ -430,6 +463,58 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const initializeGuestMode = (type: GuestUserType) => {
+    console.log(`[AuthContext] Initializing guest mode as ${type}`);
+
+    try {
+      // Create guest user and session
+      const guestUser = createGuestUser(type);
+      const guestSession = createGuestSession(type);
+      const guestProfile = createGuestProfile(type);
+
+      // Set auth state
+      setUser(guestUser);
+      setSession(guestSession);
+      setProfile(guestProfile);
+      setIsGuestMode(true);
+      setGuestUserType(type);
+      setAuthLoading(false);
+      setAuthError(null);
+
+      console.log(`[AuthContext] Guest mode initialized successfully as ${type}`);
+    } catch (error) {
+      console.error("[AuthContext] Failed to initialize guest mode:", error);
+      setAuthError("Failed to initialize guest mode");
+      setAuthLoading(false);
+    }
+  };
+
+  const signInAsGuest = (type: GuestUserType) => {
+    console.log(`[AuthContext] Signing in as guest: ${type}`);
+
+    // Save selection for future sessions
+    saveGuestModeSelection(type);
+
+    // Initialize guest mode
+    initializeGuestMode(type);
+  };
+
+  const clearGuestMode = () => {
+    console.log("[AuthContext] Clearing guest mode");
+
+    // Clear saved selection
+    clearGuestModeSelection();
+
+    // Reset auth state
+    setUser(null);
+    setSession(null);
+    setProfile(null);
+    setIsGuestMode(false);
+    setGuestUserType(null);
+    setAuthLoading(false);
+    setAuthError(null);
+  };
+
   const clearAuthError = () => {
     setAuthError(null);
   };
@@ -510,6 +595,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
+      // Handle guest mode signout
+      if (isGuestMode) {
+        clearGuestMode();
+        return;
+      }
+
+      // Handle normal auth signout
       if (isLocalMode()) {
         await localAuth.signOut();
       } else {
@@ -626,6 +718,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         resetPassword,
         updateProfile,
         clearAuthError,
+        // Guest mode values and functions
+        isGuestMode,
+        guestUserType,
+        signInAsGuest,
+        clearGuestMode,
       }}
     >
       {children}

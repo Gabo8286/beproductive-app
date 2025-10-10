@@ -1,8 +1,9 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { isGuestUser } from "@/utils/auth/guestMode";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, authLoading } = useAuth();
+  const { user, authLoading, isGuestMode } = useAuth();
   const location = useLocation();
 
   if (authLoading) {
@@ -13,7 +14,15 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user) {
+  // Allow access if:
+  // 1. User exists and it's either guest mode OR a regular authenticated user
+  // 2. In guest mode with a valid guest user
+  const hasValidAuth = user && (
+    (isGuestMode && isGuestUser(user)) ||  // Guest user in guest mode
+    (!isGuestMode && !isGuestUser(user))   // Regular user not in guest mode
+  );
+
+  if (!hasValidAuth) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
