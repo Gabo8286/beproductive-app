@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckSquare, Calendar, LayoutGrid } from 'lucide-react';
+import { CheckSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
-
-type ViewMode = 'list' | 'board' | 'calendar';
-
-interface FilterChip {
-  id: string;
-  label: string;
-  active: boolean;
-}
+import { useGlobalView } from '@/contexts/GlobalViewContext';
 
 // Gabriel's AI Entrepreneur Demo Data
 const mockProjects = gabrielPersona.projects;
@@ -34,22 +27,7 @@ interface PlanTabProps {
 
 export const PlanTab: React.FC<PlanTabProps> = ({ className }) => {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [filters, setFilters] = useState<FilterChip[]>([
-    { id: 'all', label: 'All', active: true },
-    { id: 'ai', label: 'AI & Claude', active: false },
-    { id: 'product', label: 'Product', active: false },
-    { id: 'marketing', label: 'Marketing', active: false },
-    { id: 'high-priority', label: 'High Priority', active: false },
-    { id: 'today', label: 'Due Today', active: false },
-  ]);
-
-  const handleFilterToggle = (filterId: string) => {
-    setFilters(prev => prev.map(filter => ({
-      ...filter,
-      active: filter.id === filterId ? !filter.active : filter.id === 'all' ? false : filter.active
-    })));
-  };
+  const { viewMode } = useGlobalView();
 
   const handleTaskToggle = (taskId: string) => {
     // TODO: Implement task completion toggle in state management
@@ -87,48 +65,6 @@ export const PlanTab: React.FC<PlanTabProps> = ({ className }) => {
       <div className="mb-6">
         <h1 className="apple-page-title">Plan</h1>
         <p className="apple-page-subtitle">Organize your work</p>
-      </div>
-
-      {/* View Selector */}
-      <div className="apple-card p-1 mb-5 inline-flex rounded-apple-button">
-        {[
-          { id: 'list', label: 'List', icon: LayoutGrid },
-          { id: 'board', label: 'Board', icon: LayoutGrid },
-          { id: 'calendar', label: 'Calendar', icon: Calendar },
-        ].map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setViewMode(id as ViewMode)}
-            className={cn(
-              'px-4 py-2 rounded-apple-small text-sm font-medium transition-all duration-200',
-              'flex items-center gap-2',
-              viewMode === id
-                ? 'bg-[#007aff] text-white'
-                : 'text-[#86868b] hover:text-[#1d1d1f]'
-            )}
-          >
-            <Icon className="w-4 h-4" />
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {/* Filter Bar */}
-      <div className="mb-6 overflow-x-auto apple-scrollbar">
-        <div className="flex gap-2 pb-2">
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              onClick={() => handleFilterToggle(filter.id)}
-              className={cn(
-                'apple-filter-chip',
-                filter.active && 'active'
-              )}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Content based on view mode */}

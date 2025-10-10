@@ -14,6 +14,8 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
+import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
+import { TagFilterModal } from "@/components/filters/TagFilterModal";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
@@ -504,10 +506,13 @@ function App() {
         <ModulesProvider>
           <AccessibilityProvider>
             <ProductivityCycleProvider>
-              <BrowserRouter>
-                <RouteAnnouncer />
-                <AppContent />
-              </BrowserRouter>
+              <GlobalViewProvider>
+                <BrowserRouter>
+                  <RouteAnnouncer />
+                  <AppContent />
+                  <TagFilterModal />
+                </BrowserRouter>
+              </GlobalViewProvider>
             </ProductivityCycleProvider>
           </AccessibilityProvider>
         </ModulesProvider>

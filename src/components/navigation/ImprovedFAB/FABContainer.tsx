@@ -4,9 +4,10 @@ import { FABButton } from './FABButton';
 import { FABMenu } from './FABMenu';
 import { Breadcrumbs, Breadcrumb } from './Breadcrumbs';
 import { getCategoriesForTab } from './fab-categories';
-import { executeAction, setLunaActions } from './fab-actions';
+import { executeAction, setLunaActions, setGlobalViewActions } from './fab-actions';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useLuna } from '@/components/luna/context/LunaContext';
+import { useGlobalView } from '@/contexts/GlobalViewContext';
 
 interface FABContainerProps {
   className?: string;
@@ -22,6 +23,9 @@ export const FABContainer: React.FC<FABContainerProps> = ({ className }) => {
 
   // Luna integration
   const { openChat, closeChat, setContext, showFloat, hideFloat } = useLuna();
+
+  // Global view integration
+  const globalView = useGlobalView();
 
   // Determine current tab based on route
   const currentTab = useMemo(() => {
@@ -100,6 +104,19 @@ export const FABContainer: React.FC<FABContainerProps> = ({ className }) => {
       hideFloat,
     });
   }, [openChat, closeChat, setContext, showFloat, hideFloat]);
+
+  // Set up global view actions for the FAB system
+  useEffect(() => {
+    setGlobalViewActions({
+      setViewMode: globalView.setViewMode,
+      setFilter: globalView.setFilter,
+      clearFilters: globalView.clearFilters,
+      setSort: globalView.setSort,
+      toggleSortOrder: globalView.toggleSortOrder,
+      setGroup: globalView.setGroup,
+      setCategoryFilter: globalView.setCategoryFilter,
+    });
+  }, [globalView]);
 
   const handleFABClick = () => {
     buttonPress();

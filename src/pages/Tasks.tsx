@@ -1,16 +1,5 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus } from "lucide-react";
 import { useTasks, useSortedTasks } from "@/hooks/useTasks";
 import { TaskCard } from "@/components/tasks/TaskCard";
 import { TaskListView } from "@/components/tasks/TaskListView";
@@ -18,74 +7,61 @@ import { TaskBoardView } from "@/components/tasks/TaskBoardView";
 import { TaskCalendarView } from "@/components/tasks/TaskCalendarView";
 import { ProjectGroupView } from "@/components/tasks/ProjectGroupView";
 import { StatusGroupView } from "@/components/tasks/StatusGroupView";
-import { TaskForm } from "@/components/tasks/TaskForm";
-import { ViewModeSelector } from "@/components/tasks/ViewModeSelector";
-import { TaskViewProvider, useTaskView } from "@/contexts/TaskViewContext";
-import { Database } from "@/integrations/supabase/types";
-import { CategoryFilter } from "@/components/tags/CategoryFilter";
-import { useTags } from "@/hooks/useTags";
-import { TagBadge } from "@/components/tags/TagBadge";
-import { X, Zap } from "lucide-react";
-import { FloatingTaskButton } from "@/components/tasks/FloatingTaskButton";
+import { TaskViewProvider } from "@/contexts/TaskViewContext";
 import { QuickTaskModal } from "@/components/tasks/QuickTaskModal";
 import { RecommendationsBanner } from "@/components/ai/RecommendationsBanner";
-
-type TaskStatus = Database["public"]["Enums"]["task_status"];
-type TaskPriority = Database["public"]["Enums"]["task_priority"];
+import { useGlobalView } from "@/contexts/GlobalViewContext";
+import { useState } from "react";
 
 function TasksContent() {
   const { data: tasks, isLoading, error } = useTasks();
   const { sortTasks, groupTasks } = useSortedTasks();
-  const { viewMode, sortBy, sortOrder, groupBy } = useTaskView();
+  const { viewMode, sortBy, sortOrder, groupBy, filters, searchTerm, activeTags } = useGlobalView();
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
-  const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "all">(
-    "all",
-  );
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isQuickModalOpen, setIsQuickModalOpen] = useState(false);
 
-  const { data: allTags = [] } = useTags();
-
-  // Filter tags by category
-  const categoryFilteredTags = selectedCategory
-    ? allTags.filter((tag) => tag.category === selectedCategory)
-    : allTags;
-
-  // Filter and sort tasks
+  // Filter and sort tasks based on global view state
   const filteredTasks =
     tasks?.filter((task) => {
       const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus =
-        statusFilter === "all" || task.status === statusFilter;
-      const matchesPriority =
-        priorityFilter === "all" || task.priority === priorityFilter;
+      
+      // Apply global filters
+      let matchesFilters = true;
+      for (const filter of filters) {
+        if (filter.type === 'priority' && task.priority !== filter.value) {
+          matchesFilters = false;
+          break;
+        }
+        if (filter.type === 'status' && task.status !== filter.value) {
+          matchesFilters = false;
+          break;
+        }
+        if (filter.type === 'dueDate') {
+          if (filter.value === 'today') {
+            const today = new Date().toISOString().split('T')[0];
+            const taskDue = task.due_date?.split('T')[0];
+            if (taskDue !== today) {
+              matchesFilters = false;
+              break;
+            }
+          }
+          if (filter.value === 'overdue') {
+            if (!task.due_date || new Date(task.due_date) >= new Date()) {
+              matchesFilters = false;
+              break;
+            }
+          }
+        }
+      }
+
       const matchesTags =
-        selectedTags.length === 0 ||
-        selectedTags.every((tag) => task.tags?.includes(tag));
+        activeTags.length === 0 ||
+        activeTags.every((tag) => task.tags?.includes(tag));
 
-      return matchesSearch && matchesStatus && matchesPriority && matchesTags;
+      return matchesSearch && matchesFilters && matchesTags;
     }) || [];
-
-  const handleTagToggle = (tagName: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tagName)
-        ? prev.filter((t) => t !== tagName)
-        : [...prev, tagName],
-    );
-  };
-
-  const clearAllFilters = () => {
-    setSearchTerm("");
-    setStatusFilter("all");
-    setPriorityFilter("all");
-    setSelectedTags([]);
-    setSelectedCategory(null);
-  };
 
   const sortedTasks = sortTasks(filteredTasks, sortBy, sortOrder);
   const groupedTasks = groupTasks(sortedTasks, groupBy);
@@ -176,124 +152,6 @@ function TasksContent() {
         </Card>
       </div>
 
-      {/* View Mode Selector */}
-      <ViewModeSelector />
-
-      {/* Filters */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg">Filters</CardTitle>
-          {(searchTerm ||
-            statusFilter !== "all" ||
-            priorityFilter !== "all" ||
-            selectedTags.length > 0 ||
-            selectedCategory) && (
-            <Button variant="outline" size="sm" onClick={clearAllFilters}>
-              <X className="w-4 h-4 mr-2" />
-              Clear Filters
-            </Button>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex gap-4 flex-wrap">
-            <div className="flex-1 min-w-[200px]">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search tasks..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-
-            <Select
-              value={statusFilter}
-              onValueChange={(value) =>
-                setStatusFilter(value as TaskStatus | "all")
-              }
-            >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="todo">📋 To Do</SelectItem>
-                <SelectItem value="in_progress">⚡ In Progress</SelectItem>
-                <SelectItem value="blocked">🚫 Blocked</SelectItem>
-                <SelectItem value="done">✅ Done</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={priorityFilter}
-              onValueChange={(value) =>
-                setPriorityFilter(value as TaskPriority | "all")
-              }
-            >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Priority</SelectItem>
-                <SelectItem value="low">🟢 Low</SelectItem>
-                <SelectItem value="medium">🟡 Medium</SelectItem>
-                <SelectItem value="high">🟠 High</SelectItem>
-                <SelectItem value="urgent">🔴 Urgent</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Category Filter */}
-          <CategoryFilter
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-
-          {/* Tag Filter */}
-          {categoryFilteredTags.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-sm font-medium">Filter by Tags</p>
-              <div className="flex flex-wrap gap-2">
-                {categoryFilteredTags.map((tag) => (
-                  <button
-                    key={tag.id}
-                    onClick={() => handleTagToggle(tag.name)}
-                  >
-                    <TagBadge
-                      name={tag.name}
-                      color={tag.color || undefined}
-                      className={
-                        selectedTags.includes(tag.name)
-                          ? "ring-2 ring-primary"
-                          : ""
-                      }
-                    />
-                  </button>
-                ))}
-              </div>
-              {selectedTags.length > 0 && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>Selected tags:</span>
-                  {selectedTags.map((tagName) => {
-                    const tag = allTags.find((t) => t.name === tagName);
-                    return (
-                      <TagBadge
-                        key={tagName}
-                        name={tagName}
-                        color={tag?.color || undefined}
-                        onRemove={() => handleTagToggle(tagName)}
-                      />
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
       {/* Tasks Display */}
       {sortedTasks.length === 0 ? (
         <Card>
@@ -301,24 +159,10 @@ function TasksContent() {
             <div className="text-center">
               <h3 className="text-lg font-semibold mb-2">No tasks found</h3>
               <p className="text-muted-foreground mb-4">
-                {searchTerm ||
-                statusFilter !== "all" ||
-                priorityFilter !== "all"
-                  ? "Try adjusting your filters"
+                {filters.length > 0 || searchTerm || activeTags.length > 0
+                  ? "Try adjusting your filters using the FAB menu"
                   : "Create your first task to get started"}
               </p>
-              {!searchTerm &&
-                statusFilter === "all" &&
-                priorityFilter === "all" && (
-                  <TaskForm
-                    trigger={
-                      <Button>
-                        <Plus className="w-4 h-4 mr-2" />
-                        Create First Task
-                      </Button>
-                    }
-                  />
-                )}
             </div>
           </CardContent>
         </Card>
@@ -360,15 +204,7 @@ function TasksContent() {
       <QuickTaskModal
         open={isQuickModalOpen}
         onOpenChange={setIsQuickModalOpen}
-        defaults={{
-          status: statusFilter !== "all" ? statusFilter : "todo",
-          priority: priorityFilter !== "all" ? priorityFilter : "medium",
-          tags: selectedTags,
-        }}
       />
-
-      {/* Floating Action Button (Mobile) */}
-      <FloatingTaskButton />
     </div>
   );
 }

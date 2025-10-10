@@ -1,4 +1,5 @@
 import { NavigateFunction } from 'react-router-dom';
+import type { ViewMode, SortBy, SortOrder, GroupBy } from '@/contexts/GlobalViewContext';
 
 // Luna actions interface for external dependency injection
 interface LunaActions {
@@ -9,23 +10,71 @@ interface LunaActions {
   hideFloat: () => void;
 }
 
+// Global view actions interface for external dependency injection
+interface GlobalViewActions {
+  setViewMode: (mode: ViewMode) => void;
+  setFilter: (filter: any) => void;
+  clearFilters: () => void;
+  setSort: (sortBy: SortBy, order?: SortOrder) => void;
+  toggleSortOrder: () => void;
+  setGroup: (groupBy: GroupBy) => void;
+  setCategoryFilter: (category: string | null) => void;
+}
+
 // Global Luna actions instance (will be set by FABContainer)
 let lunaActions: LunaActions | null = null;
+let globalViewActions: GlobalViewActions | null = null;
 
 export function setLunaActions(actions: LunaActions) {
   lunaActions = actions;
 }
 
+export function setGlobalViewActions(actions: GlobalViewActions) {
+  globalViewActions = actions;
+}
+
 export function executeAction(action: string, value: any, navigate: NavigateFunction, currentTab?: 'capture' | 'plan' | 'engage') {
   switch (action) {
     case 'SET_VIEW':
-      // TODO: Implement view mode changes
-      console.log('Setting view to:', value);
+      if (globalViewActions) {
+        globalViewActions.setViewMode(value);
+      }
       break;
 
     case 'SET_FILTER':
-      // TODO: Implement filter changes
-      console.log('Setting filter to:', value);
+      if (globalViewActions) {
+        globalViewActions.setFilter(value);
+      }
+      break;
+
+    case 'CLEAR_FILTERS':
+      if (globalViewActions) {
+        globalViewActions.clearFilters();
+      }
+      break;
+
+    case 'SET_SORT':
+      if (globalViewActions) {
+        globalViewActions.setSort(value.by, value.order);
+      }
+      break;
+
+    case 'TOGGLE_SORT_ORDER':
+      if (globalViewActions) {
+        globalViewActions.toggleSortOrder();
+      }
+      break;
+
+    case 'SET_GROUP':
+      if (globalViewActions) {
+        globalViewActions.setGroup(value);
+      }
+      break;
+
+    case 'SET_CATEGORY_FILTER':
+      if (globalViewActions) {
+        globalViewActions.setCategoryFilter(value);
+      }
       break;
 
     case 'CREATE':
@@ -138,18 +187,7 @@ export function executeAction(action: string, value: any, navigate: NavigateFunc
       break;
 
     case 'OPEN_TAG_FILTER':
-      // TODO: Implement tag filter
-      console.log('Opening tag filter');
-      break;
-
-    case 'OPEN_SORT':
-      // TODO: Implement sort options
-      console.log('Opening sort options');
-      break;
-
-    case 'OPEN_GROUP':
-      // TODO: Implement group by options
-      console.log('Opening group by options');
+      window.dispatchEvent(new CustomEvent('open-tag-filter-modal'));
       break;
 
     case 'EDIT_TIME':
