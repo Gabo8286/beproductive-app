@@ -40,7 +40,7 @@ interface ReflectionQuestion {
 }
 
 export const DailyReflectionView: React.FC = () => {
-  const { state, completeReflection } = useProductivityCycle();
+  const { state, addReflection, advanceToNextPhase, updatePhaseProgress } = useProductivityCycle();
   const [reflectionAnswers, setReflectionAnswers] = useState<Record<string, string>>({});
   const [currentSection, setCurrentSection] = useState<'overview' | 'questions' | 'insights'>('overview');
 
@@ -122,14 +122,23 @@ export const DailyReflectionView: React.FC = () => {
   };
 
   const handleCompleteReflection = () => {
-    const reflection = {
+    const reflection: any = {
+      id: `reflection-${Date.now()}`,
       date: new Date().toISOString().split('T')[0],
-      metrics,
-      answers: reflectionAnswers,
-      completedAt: new Date().toISOString(),
+      completedTasks: metrics.completedTasks,
+      plannedTasks: metrics.totalTasks,
+      timeAccuracy: 85, // Default value
+      energyLevel: 'medium' as const,
+      whatWentWell: reflectionAnswers['went-well'] || '',
+      whatCouldImprove: reflectionAnswers['improve'] || '',
+      insights: reflectionAnswers['key-learning'] || '',
+      tomorrowPriorities: [],
+      created_at: new Date().toISOString(),
     };
 
-    completeReflection(reflection);
+    addReflection(reflection);
+    updatePhaseProgress(100);
+    advanceToNextPhase();
   };
 
   const getCompletionScore = () => {

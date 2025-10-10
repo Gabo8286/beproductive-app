@@ -42,6 +42,9 @@ type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
 
 interface TaskCardProps {
   task: Task;
+  compact?: boolean;
+  showProject?: boolean;
+  showStatus?: boolean;
 }
 
 const priorityConfig = {

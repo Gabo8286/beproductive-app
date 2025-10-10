@@ -79,8 +79,7 @@ export const CalendarWidget: React.FC = () => {
   return (
     <BaseWidget
       title="Calendar"
-      description="View upcoming events and schedule"
-      icon={Calendar}
+      icon={<Calendar className="h-4 w-4" />}
     >
       <div className="space-y-4">
         {/* Mini Calendar Header */}
