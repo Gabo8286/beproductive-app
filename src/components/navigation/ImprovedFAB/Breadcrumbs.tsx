@@ -24,11 +24,13 @@ export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
   return (
     <nav
       className={cn(
-        'fixed bottom-5 left-5 right-20 flex items-center gap-2',
-        'bg-white/95 backdrop-blur-sm rounded-full px-4 py-3 shadow-lg z-30',
+        'fixed left-5 right-20 flex items-center gap-2',
+        'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-full px-4 py-3 shadow-lg',
         'overflow-x-auto scrollbar-none',
+        'z-30',
         className
       )}
+      style={{ bottom: 'calc(4rem + 1.25rem)' }} // Above bottom nav
       aria-label="Breadcrumb"
     >
       {items.map((item, index) => (

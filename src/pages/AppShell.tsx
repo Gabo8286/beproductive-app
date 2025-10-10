@@ -1,7 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { TabAppShell } from '@/components/navigation/TabNavigationBar';
-import { FABContainer } from '@/components/navigation/ImprovedFAB';
+import { UnifiedBottomNav } from '@/components/navigation/UnifiedBottomNav';
 import { NotificationContainer, useNotifications } from '@/components/notifications/MinimalNotification';
 import { useAuth } from '@/contexts/AuthContext';
 import { LunaProvider } from '@/components/luna/context/LunaContext';
@@ -13,16 +12,16 @@ export default function AppShell() {
 
   return (
     <LunaProvider>
-      <TabAppShell>
-        {/* Tab content area */}
-        <div className="min-h-screen">
+      <div className="min-h-screen bg-background">
+        {/* Main content area with padding for bottom nav */}
+        <main className="pb-20 md:pb-16">
           <Outlet />
-        </div>
+        </main>
 
-        {/* Improved FAB System with Luna Integration */}
-        <FABContainer />
+        {/* Unified Bottom Navigation */}
+        <UnifiedBottomNav />
 
-        {/* Luna Floating Assistant */}
+        {/* Luna Floating Assistant - positioned above bottom nav */}
         <LunaFloat
           draggable={true}
           showTooltip={true}
@@ -34,7 +33,7 @@ export default function AppShell() {
           notifications={notifications}
           onClose={removeNotification}
         />
-      </TabAppShell>
+      </div>
     </LunaProvider>
   );
 }

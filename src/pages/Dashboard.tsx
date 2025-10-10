@@ -76,9 +76,7 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-8">
-      {/* Productivity Cycle Navigation */}
-      <CycleNavigation showProgress={false} />
+    <div className="max-w-4xl mx-auto px-4 md:px-6 py-6 space-y-8">
 
       {/* Date Header */}
       <DateHeader />

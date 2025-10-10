@@ -12,13 +12,15 @@ export const FABButton: React.FC<FABButtonProps> = ({ open, onClick, className }
   return (
     <button
       className={cn(
-        'fixed bottom-5 right-5 w-14 h-14 rounded-full shadow-xl transition-all duration-300 z-50',
+        'fixed w-14 h-14 rounded-full shadow-xl transition-all duration-300',
         'bg-gradient-to-r from-primary to-blue-600 text-white',
         'hover:scale-110 active:scale-95',
         'focus:outline-none focus:ring-4 focus:ring-primary/30',
+        'z-50',
         open && 'rotate-45',
         className
       )}
+      style={{ bottom: 'calc(4rem + 5.5rem)', right: '1.25rem' }} // Above bottom nav + quick FAB
       onClick={onClick}
       aria-label={open ? 'Close menu' : 'Open menu'}
       aria-expanded={open}

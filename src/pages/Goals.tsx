@@ -142,19 +142,13 @@ export default function Goals() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Goals</h1>
-          <p className="text-muted-foreground">
-            Manage and track your personal and professional objectives
-          </p>
-        </div>
-        <Button onClick={() => navigate("/goals/new")}>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Goal
-        </Button>
+    <div className="space-y-6 px-4 md:px-6 py-6 max-w-7xl mx-auto">
+      {/* Minimal Header */}
+      <div>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Goals</h1>
+        <p className="text-sm text-muted-foreground">
+          Manage and track your personal and professional objectives
+        </p>
       </div>
 
       {/* AI Recommendations Banner */}

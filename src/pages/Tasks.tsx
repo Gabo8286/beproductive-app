@@ -113,36 +113,13 @@ function TasksContent() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Tasks</h1>
-          <p className="text-muted-foreground">
-            Manage your daily tasks and to-dos
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setIsQuickModalOpen(true)}
-            className="gap-2"
-          >
-            <Zap className="w-4 h-4" />
-            Quick Create
-            <kbd className="hidden md:inline-flex pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
-              <span className="text-xs">⌘</span>N
-            </kbd>
-          </Button>
-          <TaskForm
-            trigger={
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                New Task
-              </Button>
-            }
-          />
-        </div>
+    <div className="space-y-6 px-4 md:px-6 py-6 max-w-7xl mx-auto">
+      {/* Minimal Header */}
+      <div>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Tasks</h1>
+        <p className="text-sm text-muted-foreground">
+          Manage your daily tasks and to-dos
+        </p>
       </div>
 
       {/* AI Recommendations Banner */}

@@ -17,15 +17,18 @@ export const FABMenu = forwardRef<HTMLDivElement, FABMenuProps>(
       <div
         ref={ref}
         className={cn(
-          'fixed bottom-20 right-5 bg-white rounded-2xl shadow-2xl',
-          'overflow-hidden max-w-72 max-h-96 overflow-y-auto z-40',
+          'fixed bg-white dark:bg-gray-900 rounded-2xl shadow-2xl',
+          'overflow-hidden max-w-72 max-h-96 overflow-y-auto',
           'transform-gpu origin-bottom-right',
           'animate-in slide-in-from-bottom-2 fade-in duration-300',
           // Custom scrollbar styling
           'scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300',
+          'z-40',
           className
         )}
         style={{
+          bottom: 'calc(4rem + 6.5rem)', // Above bottom nav + quick FAB
+          right: '1.25rem',
           transformOrigin: 'bottom right',
         }}
       >
