@@ -25,6 +25,8 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [showTooltipState, setShowTooltipState] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [hasMovedDuringDrag, setHasMovedDuringDrag] = useState(false);
+  const [pointerDownPos, setPointerDownPos] = useState<{ x: number; y: number } | null>(null);
 
   const {
     currentExpression,
@@ -90,7 +92,8 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
     if (!draggable) return;
 
     e.preventDefault();
-    setIsDragging(true);
+    setHasMovedDuringDrag(false);
+    setPointerDownPos({ x: e.clientX, y: e.clientY });
     setDragStart({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
@@ -101,7 +104,19 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (!isDragging || !draggable) return;
+    if (!draggable || !pointerDownPos) return;
+
+    const dx = e.clientX - pointerDownPos.x;
+    const dy = e.clientY - pointerDownPos.y;
+    const distance = Math.hypot(dx, dy);
+    const threshold = 5; // pixels
+
+    if (!isDragging && distance > threshold) {
+      setIsDragging(true);
+      setHasMovedDuringDrag(true);
+    }
+
+    if (!isDragging) return;
 
     const newX = Math.max(0, Math.min(window.innerWidth - 60, e.clientX - dragStart.x));
     const newY = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - dragStart.y));
@@ -111,26 +126,34 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
 
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!draggable) return;
-    
-    if (!isDragging) {
-      // If not dragging, treat as a click
+
+    // Release pointer capture if held
+    const el = e.target as Element;
+    const anyEl = el as any;
+    try {
+      if (anyEl?.hasPointerCapture && anyEl.hasPointerCapture(e.pointerId)) {
+        anyEl.releasePointerCapture(e.pointerId);
+      }
+    } catch {}
+
+    if (!isDragging && !hasMovedDuringDrag) {
+      // Treat as a click
       handleAvatarClick();
+      setPointerDownPos(null);
       return;
     }
 
+    // End dragging and snap
     setIsDragging(false);
+    setHasMovedDuringDrag(false);
+    setPointerDownPos(null);
 
     // Snap to edges after dragging
     const centerX = window.innerWidth / 2;
-    const padding = 20;
-
     const newPosition = position.x < centerX ? 'bottom-left' : 'bottom-right';
 
     // Update the context position preference
     setFloatPosition(newPosition as any);
-
-    // Release pointer capture
-    (e.target as Element).releasePointerCapture(e.pointerId);
   };
 
   const handleAvatarClick = () => {
@@ -166,7 +189,6 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
         className={cn(
           'fixed z-50 select-none transition-all duration-300 ease-out',
           isDragging ? 'scale-110 cursor-grabbing' : 'cursor-pointer hover:scale-105',
-          chatOpen && 'pointer-events-none', // Disable interactions when chat is open
           className
         )}
         style={{
@@ -199,7 +221,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
             size="medium"
             expression={currentExpression}
             animated={!isDragging}
-            onClick={handleAvatarClick}
+            onClick={!draggable ? handleAvatarClick : undefined}
             className={cn(
               'shadow-lg transition-all duration-200',
               hasUnreadMessages ? 'ring-4' : 'ring-2 ring-white',
