@@ -30,7 +30,7 @@ export function CalendarTaskSync({
   selectedDate = new Date(),
   syncEnabled = true
 }: CalendarTaskSyncProps) {
-  const { tasks, isLoading: tasksLoading } = useTasks();
+  const { data: tasks, isLoading: tasksLoading } = useTasks();
   const queryClient = useQueryClient();
   const [localEvents, setLocalEvents] = useState<CalendarEvent[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);

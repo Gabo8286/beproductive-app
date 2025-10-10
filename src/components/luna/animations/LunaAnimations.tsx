@@ -288,8 +288,8 @@ export const AnimatedLunaWrapper: React.FC<AnimatedLunaWrapperProps> = ({
       initial={entranceConfig.initial}
       animate={[entranceConfig.animate, animationConfig.animate]}
       exit={entranceConfig.exit}
-      whileHover={interactive ? LUNA_INTERACTION_ANIMATIONS.hover : undefined}
-      whileTap={interactive ? LUNA_INTERACTION_ANIMATIONS.click : undefined}
+      whileHover={interactive ? { scale: 1.1, rotate: 2 } : undefined}
+      whileTap={interactive ? { scale: 0.95 } : undefined}
       transition={{
         ...entranceConfig.transition,
         ...animationConfig.transition

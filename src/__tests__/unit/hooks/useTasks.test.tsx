@@ -38,6 +38,10 @@ const createWrapper = () => {
     resetPassword: vi.fn(),
     updateProfile: vi.fn(),
     clearAuthError: vi.fn(),
+    isGuestMode: false,
+    guestUserType: null,
+    signInAsGuest: vi.fn(),
+    clearGuestMode: vi.fn(),
   };
 
   return ({ children }: { children: ReactNode }) => (

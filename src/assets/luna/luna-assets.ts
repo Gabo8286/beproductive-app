@@ -1,6 +1,6 @@
 // Luna Asset Management
 export type LunaSize = 'tiny' | 'small' | 'medium' | 'large' | 'hero';
-export type LunaExpression = 'default' | 'happy' | 'thinking' | 'confused' | 'excited' | 'success' | 'error';
+export type LunaExpression = 'default' | 'happy' | 'thinking' | 'confused' | 'excited' | 'success' | 'error' | 'focused' | 'curious';
 
 export interface LunaAssetConfig {
   size: LunaSize;

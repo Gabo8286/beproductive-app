@@ -39,11 +39,11 @@ export const DailyPlanningView: React.FC = () => {
     addDailyGoal,
     removeDailyGoal,
     updateDailyGoal,
-    completePlanning,
-    updatePhaseProgress
+    updatePhaseProgress,
+    advanceToNextPhase
   } = useProductivityCycle();
 
-  const { tasks } = useTasks();
+  const { data: tasks } = useTasks();
   const [availableTasks, setAvailableTasks] = useState<TaskSuggestion[]>([]);
   const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
   const [planningNotes, setPlanningNotes] = useState('');
@@ -51,18 +51,18 @@ export const DailyPlanningView: React.FC = () => {
   // Load available tasks (pending/incomplete tasks)
   useEffect(() => {
     const pendingTasks = tasks?.filter(task =>
-      task.status !== 'completed' &&
+      task.status !== 'done' &&
       !state.dailyGoals.some(goal => goal.task_id === task.id)
     ) || [];
 
     const taskSuggestions: TaskSuggestion[] = pendingTasks.map(task => ({
       id: task.id,
       title: task.title,
-      description: task.description,
-      priority: task.priority || 'medium',
-      estimated_time: task.estimated_time || 30,
-      project: task.project_id,
-      due_date: task.due_date,
+      description: task.description || '',
+      priority: (task.priority === 'urgent' ? 'high' : task.priority) as 'low' | 'medium' | 'high',
+      estimated_time: task.estimated_duration || 30,
+      project: task.project_id || '',
+      due_date: task.due_date || '',
     }));
 
     setAvailableTasks(taskSuggestions);
@@ -137,7 +137,8 @@ export const DailyPlanningView: React.FC = () => {
 
   const finalizePlanning = () => {
     if (state.dailyGoals.length > 0) {
-      completePlanning();
+      updatePhaseProgress(100);
+      advanceToNextPhase();
     }
   };
 

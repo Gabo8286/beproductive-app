@@ -44,7 +44,7 @@ export const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({
   // Get phase-specific actions
   const getPhaseActions = (): FloatingAction[] => {
     switch (state.currentPhase) {
-      case 'plan':
+      case 'capture':
         return [
           {
             id: 'new-goal',
@@ -92,7 +92,7 @@ export const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({
           }
         ];
 
-      case 'do':
+      case 'execute':
         return [
           {
             id: 'start-timer',
@@ -140,7 +140,7 @@ export const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({
           }
         ];
 
-      case 'reflect':
+      case 'engage':
         return [
           {
             id: 'add-reflection',
@@ -174,54 +174,6 @@ export const FloatingActionMenu: React.FC<FloatingActionMenuProps> = ({
             },
             color: 'bg-green-500 hover:bg-green-600',
             description: 'Save important information'
-          }
-        ];
-
-      case 'adjust':
-        return [
-          {
-            id: 'new-habit',
-            label: 'New Habit',
-            icon: Repeat,
-            action: () => {
-              navigate('/habits');
-              setIsOpen(false);
-            },
-            color: 'bg-green-500 hover:bg-green-600',
-            description: 'Start a new daily habit'
-          },
-          {
-            id: 'automation',
-            label: 'Add Automation',
-            icon: Zap,
-            action: () => {
-              navigate('/automation');
-              setIsOpen(false);
-            },
-            color: 'bg-purple-500 hover:bg-purple-600',
-            description: 'Create workflow automation'
-          },
-          {
-            id: 'template',
-            label: 'Save Template',
-            icon: FileText,
-            action: () => {
-              navigate('/templates');
-              setIsOpen(false);
-            },
-            color: 'bg-blue-500 hover:bg-blue-600',
-            description: 'Create reusable template'
-          },
-          {
-            id: 'settings',
-            label: 'Preferences',
-            icon: Settings,
-            action: () => {
-              navigate('/profile');
-              setIsOpen(false);
-            },
-            color: 'bg-gray-500 hover:bg-gray-600',
-            description: 'Adjust your settings'
           }
         ];
 

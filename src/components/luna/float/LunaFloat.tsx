@@ -194,13 +194,10 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
             animated={!isDragging}
             onClick={handleAvatarClick}
             className={cn(
-              'ring-2 ring-white shadow-lg transition-all duration-200',
-              hasUnreadMessages && 'ring-4',
+              'shadow-lg transition-all duration-200',
+              hasUnreadMessages ? 'ring-4' : 'ring-2 ring-white',
               chatOpen && 'pointer-events-auto', // Re-enable for click to close
             )}
-            style={{
-              ringColor: hasUnreadMessages ? LUNA_COLORS.orangePrimary : 'white',
-            }}
           />
 
           {/* Unread Messages Indicator */}
