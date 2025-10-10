@@ -1533,6 +1533,354 @@ export type Database = {
           },
         ]
       }
+      luna_framework_assessments: {
+        Row: {
+          completion_percentage: number
+          created_at: string | null
+          id: string
+          improvements: string[] | null
+          metrics: Json | null
+          next_steps: string[] | null
+          profile_id: string
+          stage: string
+          strengths: string[] | null
+          user_id: string
+        }
+        Insert: {
+          completion_percentage: number
+          created_at?: string | null
+          id?: string
+          improvements?: string[] | null
+          metrics?: Json | null
+          next_steps?: string[] | null
+          profile_id: string
+          stage: string
+          strengths?: string[] | null
+          user_id: string
+        }
+        Update: {
+          completion_percentage?: number
+          created_at?: string | null
+          id?: string
+          improvements?: string[] | null
+          metrics?: Json | null
+          next_steps?: string[] | null
+          profile_id?: string
+          stage?: string
+          strengths?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_framework_assessments_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "luna_productivity_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      luna_framework_reminders: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          description: string
+          id: string
+          metadata: Json | null
+          priority: string
+          profile_id: string
+          scheduled_for: string
+          snoozed_until: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          metadata?: Json | null
+          priority?: string
+          profile_id: string
+          scheduled_for: string
+          snoozed_until?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          metadata?: Json | null
+          priority?: string
+          profile_id?: string
+          scheduled_for?: string
+          snoozed_until?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_framework_reminders_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "luna_productivity_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      luna_proactive_insights: {
+        Row: {
+          acted_at: string | null
+          acted_upon: boolean | null
+          action_items: string[] | null
+          created_at: string | null
+          description: string
+          dismissed: boolean | null
+          dismissed_at: string | null
+          expires_at: string | null
+          id: string
+          principle: string
+          priority: string
+          profile_id: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          acted_at?: string | null
+          acted_upon?: boolean | null
+          action_items?: string[] | null
+          created_at?: string | null
+          description: string
+          dismissed?: boolean | null
+          dismissed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          principle: string
+          priority?: string
+          profile_id: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          acted_at?: string | null
+          acted_upon?: boolean | null
+          action_items?: string[] | null
+          created_at?: string | null
+          description?: string
+          dismissed?: boolean | null
+          dismissed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          principle?: string
+          priority?: string
+          profile_id?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_proactive_insights_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "luna_productivity_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      luna_productivity_metrics: {
+        Row: {
+          category: string
+          id: string
+          metadata: Json | null
+          metric_id: string
+          name: string
+          profile_id: string
+          recorded_at: string | null
+          source: string | null
+          target: string | null
+          trend: string | null
+          user_id: string
+          value: number
+        }
+        Insert: {
+          category: string
+          id?: string
+          metadata?: Json | null
+          metric_id: string
+          name: string
+          profile_id: string
+          recorded_at?: string | null
+          source?: string | null
+          target?: string | null
+          trend?: string | null
+          user_id: string
+          value: number
+        }
+        Update: {
+          category?: string
+          id?: string
+          metadata?: Json | null
+          metric_id?: string
+          name?: string
+          profile_id?: string
+          recorded_at?: string | null
+          source?: string | null
+          target?: string | null
+          trend?: string | null
+          user_id?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_productivity_metrics_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "luna_productivity_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      luna_productivity_profiles: {
+        Row: {
+          completed_principles: string[] | null
+          created_at: string | null
+          current_recovery_level: number | null
+          current_stage: string
+          energy_pattern: Json | null
+          id: string
+          is_in_recovery_mode: boolean | null
+          is_proactive_mode_enabled: boolean | null
+          last_proactive_check: string | null
+          preferences: Json | null
+          recovery_started_at: string | null
+          system_health_score: number | null
+          updated_at: string | null
+          user_id: string
+          week_in_stage: number
+          well_being_score: number | null
+          workspace_id: string
+        }
+        Insert: {
+          completed_principles?: string[] | null
+          created_at?: string | null
+          current_recovery_level?: number | null
+          current_stage?: string
+          energy_pattern?: Json | null
+          id?: string
+          is_in_recovery_mode?: boolean | null
+          is_proactive_mode_enabled?: boolean | null
+          last_proactive_check?: string | null
+          preferences?: Json | null
+          recovery_started_at?: string | null
+          system_health_score?: number | null
+          updated_at?: string | null
+          user_id: string
+          week_in_stage?: number
+          well_being_score?: number | null
+          workspace_id: string
+        }
+        Update: {
+          completed_principles?: string[] | null
+          created_at?: string | null
+          current_recovery_level?: number | null
+          current_stage?: string
+          energy_pattern?: Json | null
+          id?: string
+          is_in_recovery_mode?: boolean | null
+          is_proactive_mode_enabled?: boolean | null
+          last_proactive_check?: string | null
+          preferences?: Json | null
+          recovery_started_at?: string | null
+          system_health_score?: number | null
+          updated_at?: string | null
+          user_id?: string
+          week_in_stage?: number
+          well_being_score?: number | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_productivity_profiles_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      luna_recovery_sessions: {
+        Row: {
+          completed_at: string | null
+          completed_steps: string[] | null
+          current_step: string | null
+          effectiveness_rating: number | null
+          estimated_duration_minutes: number | null
+          id: string
+          level: number
+          level_name: string
+          notes: string | null
+          profile_id: string
+          remaining_steps: string[] | null
+          started_at: string | null
+          trigger_reason: string | null
+          user_id: string
+          was_completed: boolean | null
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_steps?: string[] | null
+          current_step?: string | null
+          effectiveness_rating?: number | null
+          estimated_duration_minutes?: number | null
+          id?: string
+          level: number
+          level_name: string
+          notes?: string | null
+          profile_id: string
+          remaining_steps?: string[] | null
+          started_at?: string | null
+          trigger_reason?: string | null
+          user_id: string
+          was_completed?: boolean | null
+        }
+        Update: {
+          completed_at?: string | null
+          completed_steps?: string[] | null
+          current_step?: string | null
+          effectiveness_rating?: number | null
+          estimated_duration_minutes?: number | null
+          id?: string
+          level?: number
+          level_name?: string
+          notes?: string | null
+          profile_id?: string
+          remaining_steps?: string[] | null
+          started_at?: string | null
+          trigger_reason?: string | null
+          user_id?: string
+          was_completed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_recovery_sessions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "luna_productivity_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       milestone_templates: {
         Row: {
           category: string | null
