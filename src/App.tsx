@@ -74,7 +74,6 @@ const APIManagementDashboard = lazy(
 const AgentDashboard = lazy(() => import("@/components/admin/AgentDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 const AIInsights = lazy(() => import("@/pages/AIInsights"));
-const ModuleTest = lazy(() => import("@/pages/ModuleTest"));
 const OnboardingFlow = lazy(() => import("@/pages/OnboardingFlow"));
 const Calendar = lazy(() => import("@/pages/Calendar"));
 const PomodoroTimer = lazy(() => import("@/pages/PomodoroTimer"));
@@ -368,14 +367,6 @@ function AppContent() {
               element={
                 <Suspense fallback={<PageLoading />}>
                   <AIInsights />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/module-test"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <ModuleTest />
                 </Suspense>
               }
             />
