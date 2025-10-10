@@ -1,10 +1,14 @@
 export const streamChat = async ({
   messages,
+  context,
+  personality,
   onDelta,
   onDone,
   onError,
 }: {
   messages: Array<{ role: 'user' | 'assistant'; content: string }>;
+  context?: string;
+  personality?: string;
   onDelta: (text: string) => void;
   onDone: () => void;
   onError?: (error: Error) => void;
@@ -18,7 +22,11 @@ export const streamChat = async ({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({ 
+        messages,
+        context: context || 'general',
+        personality: personality || 'helpful'
+      }),
     });
 
     if (!resp.ok) {

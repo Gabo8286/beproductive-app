@@ -61,16 +61,6 @@ export const FAB_CATEGORIES = {
         { id: 'clipboard', icon: '📋', label: 'From Clipboard', action: 'IMPORT', value: 'clipboard' },
       ],
     },
-    {
-      id: 'ask-luna',
-      icon: '🦊',
-      label: 'Ask Luna',
-      items: [
-        { id: 'chat', icon: '💬', label: 'Open Chat', action: 'OPEN_LUNA', value: null },
-        { id: 'help', icon: '❓', label: 'Capture Help', action: 'LUNA_HELP', value: 'capture' },
-        { id: 'suggest', icon: '💡', label: 'Smart Capture', action: 'LUNA_SUGGEST', value: 'capture' },
-      ],
-    },
   ],
 
   plan: [
@@ -154,16 +144,6 @@ export const FAB_CATEGORIES = {
         { id: 'new-task', icon: '✅', label: 'New Task', action: 'CREATE', value: 'task' },
       ],
     },
-    {
-      id: 'ask-luna',
-      icon: '🦊',
-      label: 'Ask Luna',
-      items: [
-        { id: 'chat', icon: '💬', label: 'Open Chat', action: 'OPEN_LUNA', value: null },
-        { id: 'help', icon: '❓', label: 'Planning Help', action: 'LUNA_HELP', value: 'plan' },
-        { id: 'suggest', icon: '💡', label: 'Smart Planning', action: 'LUNA_SUGGEST', value: 'plan' },
-      ],
-    },
   ],
 
   engage: [
@@ -211,16 +191,6 @@ export const FAB_CATEGORIES = {
         { id: 'goal', icon: '🎯', label: 'Set Focus Goal', action: 'SET_FOCUS_GOAL', value: null },
       ],
     },
-    {
-      id: 'ask-luna',
-      icon: '🦊',
-      label: 'Ask Luna',
-      items: [
-        { id: 'chat', icon: '💬', label: 'Open Chat', action: 'OPEN_LUNA', value: null },
-        { id: 'help', icon: '❓', label: 'Focus Help', action: 'LUNA_HELP', value: 'engage' },
-        { id: 'suggest', icon: '💡', label: 'Focus Coach', action: 'LUNA_SUGGEST', value: 'engage' },
-      ],
-    },
   ],
 
   profile: [
@@ -251,16 +221,6 @@ export const FAB_CATEGORIES = {
       items: [
         { id: 'apply-to-tasks', icon: '✓', label: 'Apply to Tasks', action: 'SHOW_TOAST', value: 'Coming soon!' },
         { id: 'apply-to-goals', icon: '🎯', label: 'Apply to Goals', action: 'SHOW_TOAST', value: 'Coming soon!' },
-      ],
-    },
-    {
-      id: 'ask-luna',
-      icon: '🦊',
-      label: 'Ask Luna',
-      items: [
-        { id: 'chat', icon: '💬', label: 'Open Chat', action: 'OPEN_LUNA', value: null },
-        { id: 'help', icon: '❓', label: 'Profile Help', action: 'LUNA_HELP', value: 'profile' },
-        { id: 'coaching', icon: '🎓', label: 'Coaching Tips', action: 'LUNA_SUGGEST', value: 'profile' },
       ],
     },
   ],

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { streamChat } from '@/utils/aiStreaming';
 import { LunaExpression } from '@/assets/luna/luna-assets';
 
 interface Message {
@@ -156,24 +157,77 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
         currentExpression: 'thinking'
       }));
 
-      // Simulate Luna response (in real app, this would call AI service)
-      setTimeout(() => {
-        const lunaResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          role: 'luna',
-          content: generateLunaResponse(content, context || state.currentContext),
-          timestamp: new Date(),
-          context: context || state.currentContext,
-        };
+      // Create placeholder Luna message that we'll update
+      const lunaMessageId = (Date.now() + 1).toString();
+      let lunaContent = '';
 
-        setState(prev => ({
-          ...prev,
-          messages: [...prev.messages, lunaResponse],
-          isTyping: false,
-          currentExpression: 'happy',
-          hasUnreadMessages: !prev.isOpen
-        }));
-      }, 1500);
+      // Add initial empty Luna message
+      setState(prev => ({
+        ...prev,
+        messages: [
+          ...prev.messages,
+          {
+            id: lunaMessageId,
+            role: 'luna',
+            content: '',
+            timestamp: new Date(),
+            context: context || state.currentContext,
+          }
+        ]
+      }));
+
+      // Convert messages to AI format (role: 'luna' -> 'assistant')
+      const aiMessages = [...state.messages, newMessage].map(msg => ({
+        role: msg.role === 'luna' ? 'assistant' as const : 'user' as const,
+        content: msg.content,
+      }));
+
+      // Stream the response
+      streamChat({
+        messages: aiMessages,
+        context: context || state.currentContext,
+        personality: state.lunaPersonality,
+        onDelta: (chunk: string) => {
+          lunaContent += chunk;
+          
+          // Update the last message's content
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === lunaMessageId
+                ? { ...msg, content: lunaContent }
+                : msg
+            ),
+            currentExpression: 'happy'
+          }));
+        },
+        onDone: () => {
+          setState(prev => ({
+            ...prev,
+            isTyping: false,
+            currentExpression: 'happy',
+            hasUnreadMessages: !prev.isOpen
+          }));
+        },
+        onError: (error: Error) => {
+          console.error('Luna AI error:', error);
+          
+          // Show error message to user
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(msg =>
+              msg.id === lunaMessageId
+                ? { 
+                    ...msg, 
+                    content: "Oops! I'm having trouble connecting right now. 🦊💔 Please try again in a moment."
+                  }
+                : msg
+            ),
+            isTyping: false,
+            currentExpression: 'error'
+          }));
+        }
+      });
     },
 
     clearMessages: () => {
@@ -232,45 +286,6 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
     </LunaContext.Provider>
   );
 };
-
-// Helper function to generate Luna responses (placeholder for actual AI integration)
-function generateLunaResponse(userMessage: string, context: string): string {
-  const lowerMessage = userMessage.toLowerCase();
-
-  // Context-aware responses
-  if (context === 'capture') {
-    if (lowerMessage.includes('help') || lowerMessage.includes('how')) {
-      return "I'd love to help you capture your ideas! 🌟 Try using the quick capture buttons above, or tell me what you'd like to add and I'll guide you through it.";
-    }
-    return "Great! I'm here to help you capture your thoughts and ideas. What would you like to add to your productivity system? 📝";
-  }
-
-  if (context === 'plan') {
-    if (lowerMessage.includes('organize') || lowerMessage.includes('plan')) {
-      return "Perfect! Let me help you organize your items. 📋 I can suggest ways to group your tasks, set priorities, or create a timeline. What would work best for you?";
-    }
-    return "I'm here to help you plan and organize! ✨ Whether it's sorting tasks, setting priorities, or creating schedules, I've got your back.";
-  }
-
-  if (context === 'engage') {
-    if (lowerMessage.includes('focus') || lowerMessage.includes('start')) {
-      return "Time to get things done! 🎯 I can help you start a focus session, set a timer, or choose what to work on first. What sounds good to you?";
-    }
-    return "Ready to engage and be productive! 🚀 I'm here to help you stay focused and motivated. What would you like to tackle today?";
-  }
-
-  // General helpful responses
-  if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-    return "Hello there! 👋 I'm Luna, your AI productivity companion. I'm here to help you capture ideas, plan your work, and stay engaged with your goals. How can I assist you today?";
-  }
-
-  if (lowerMessage.includes('thank')) {
-    return "You're so welcome! 😊 I'm always happy to help you be more productive. Is there anything else I can assist you with?";
-  }
-
-  // Default response
-  return "I'm here to help! 🦊✨ Whether you need assistance with capturing ideas, planning your work, or staying focused, just let me know what you'd like to do.";
-}
 
 // Custom hook to use Luna context
 export const useLuna = (): LunaContextType => {

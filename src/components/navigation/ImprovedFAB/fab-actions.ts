@@ -1,15 +1,6 @@
 import { NavigateFunction } from 'react-router-dom';
 import type { ViewMode, SortBy, SortOrder, GroupBy } from '@/contexts/GlobalViewContext';
 
-// Luna actions interface for external dependency injection
-interface LunaActions {
-  openChat: () => void;
-  closeChat: () => void;
-  setContext: (context: 'capture' | 'plan' | 'engage' | 'general') => void;
-  showFloat: () => void;
-  hideFloat: () => void;
-}
-
 // Global view actions interface for external dependency injection
 interface GlobalViewActions {
   setViewMode: (mode: ViewMode) => void;
@@ -21,13 +12,8 @@ interface GlobalViewActions {
   setCategoryFilter: (category: string | null) => void;
 }
 
-// Global Luna actions instance (will be set by FABContainer)
-let lunaActions: LunaActions | null = null;
+// Global view actions instance (will be set by FABContainer)
 let globalViewActions: GlobalViewActions | null = null;
-
-export function setLunaActions(actions: LunaActions) {
-  lunaActions = actions;
-}
 
 export function setGlobalViewActions(actions: GlobalViewActions) {
   globalViewActions = actions;
@@ -125,50 +111,6 @@ export function executeAction(action: string, value: any, navigate: NavigateFunc
     case 'NAVIGATE':
       // Direct navigation
       navigate(value);
-      break;
-
-    case 'OPEN_LUNA':
-      if (lunaActions) {
-        // Set the appropriate context based on current tab
-        if (currentTab) {
-          lunaActions.setContext(currentTab);
-        }
-        lunaActions.openChat();
-        lunaActions.showFloat();
-      } else {
-        console.warn('Luna actions not available');
-      }
-      break;
-
-    case 'LUNA_HELP':
-      if (lunaActions) {
-        lunaActions.setContext(currentTab || 'general');
-        lunaActions.openChat();
-        // Pre-populate with help request based on context
-        // This would require extending the Luna context to accept initial messages
-      } else {
-        console.warn('Luna actions not available');
-      }
-      break;
-
-    case 'LUNA_SUGGEST':
-      if (lunaActions) {
-        lunaActions.setContext(currentTab || 'general');
-        lunaActions.openChat();
-        // This could trigger Luna to provide proactive suggestions
-      } else {
-        console.warn('Luna actions not available');
-      }
-      break;
-
-    case 'TOGGLE_LUNA_FLOAT':
-      if (lunaActions) {
-        // This would toggle the floating Luna visibility
-        // Implementation depends on Luna context having a toggle method
-        lunaActions.showFloat();
-      } else {
-        console.warn('Luna actions not available');
-      }
       break;
 
     case 'START_TIMER':

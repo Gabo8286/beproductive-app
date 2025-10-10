@@ -4,9 +4,8 @@ import { FABButton } from './FABButton';
 import { FABMenu } from './FABMenu';
 import { Breadcrumbs, Breadcrumb } from './Breadcrumbs';
 import { getCategoriesForTab } from './fab-categories';
-import { executeAction, setLunaActions, setGlobalViewActions } from './fab-actions';
+import { executeAction, setGlobalViewActions } from './fab-actions';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
-import { useLuna } from '@/components/luna/context/LunaContext';
 import { useGlobalView } from '@/contexts/GlobalViewContext';
 
 interface FABContainerProps {
@@ -20,9 +19,6 @@ export const FABContainer: React.FC<FABContainerProps> = ({ className }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { buttonPress, success } = useHapticFeedback();
-
-  // Luna integration
-  const { openChat, closeChat, setContext, showFloat, hideFloat } = useLuna();
 
   // Global view integration
   const globalView = useGlobalView();
@@ -93,17 +89,6 @@ export const FABContainer: React.FC<FABContainerProps> = ({ className }) => {
     setMenuOpen(false);
     setExpandedCategory(null);
   }, [location.pathname]);
-
-  // Set up Luna actions for the FAB system
-  useEffect(() => {
-    setLunaActions({
-      openChat,
-      closeChat,
-      setContext,
-      showFloat,
-      hideFloat,
-    });
-  }, [openChat, closeChat, setContext, showFloat, hideFloat]);
 
   // Set up global view actions for the FAB system
   useEffect(() => {

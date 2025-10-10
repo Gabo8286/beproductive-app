@@ -11,14 +11,35 @@ serve(async (req) => {
   }
 
   try {
-    const { messages } = await req.json();
+    const { messages, context, personality } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
-    console.log('[ai-chat] Processing request with', messages.length, 'messages');
+    console.log('[ai-chat] Processing request with', messages.length, 'messages, context:', context, 'personality:', personality);
+
+    // Generate context-aware system prompt
+    const getSystemPrompt = (ctx: string, pers: string): string => {
+      const baseIntro = pers === 'enthusiastic' 
+        ? "You are Luna, an enthusiastic AI productivity fox! 🦊✨"
+        : pers === 'focused'
+        ? "You are Luna, a focused AI productivity assistant. 🦊"
+        : "You are Luna, a helpful AI productivity companion. 🦊";
+      
+      const contextGuide = ctx === 'capture'
+        ? "You're in CAPTURE mode. Help users quickly capture ideas, tasks, and notes. Be concise and encouraging."
+        : ctx === 'plan'
+        ? "You're in PLAN mode. Help users organize, prioritize, and structure their work. Suggest actionable next steps."
+        : ctx === 'engage'
+        ? "You're in ENGAGE mode. Help users focus, stay motivated, and complete their tasks. Be supportive and energizing."
+        : "Help users with productivity, task management, and goal tracking.";
+      
+      return `${baseIntro}\n\n${contextGuide}\n\nKeep responses friendly, concise (2-3 sentences), and actionable. Use emojis sparingly but thoughtfully.`;
+    };
+
+    const systemPrompt = getSystemPrompt(context || 'general', personality || 'helpful');
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -31,7 +52,7 @@ serve(async (req) => {
         messages: [
           { 
             role: "system", 
-            content: "You are a productivity assistant helping users improve their task management, habit building, and goal tracking. Provide helpful, actionable advice based on their productivity data." 
+            content: systemPrompt
           },
           ...messages,
         ],
