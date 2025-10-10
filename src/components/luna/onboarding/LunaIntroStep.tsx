@@ -26,12 +26,12 @@ export const LunaIntroStep: React.FC<LunaIntroStepProps> = ({ onNext, onBack }) 
     {
       text: "I'm here to help you capture ideas, plan your work, and stay focused on what matters most.",
       expression: 'default' as const,
-      delay: 2500
+      delay: 1500
     },
     {
       text: "I learn your workflow and provide personalized suggestions to boost your productivity!",
       expression: 'success' as const,
-      delay: 5000
+      delay: 3000
     }
   ];
 
@@ -78,6 +78,12 @@ export const LunaIntroStep: React.FC<LunaIntroStepProps> = ({ onNext, onBack }) 
   const handleNext = () => {
     setExpression('happy');
     onNext();
+  };
+
+  const handleSkip = () => {
+    setCurrentMessage(lunaMessages.length - 1);
+    setShowFeatures(true);
+    setExpression('happy');
   };
 
   return (
@@ -150,7 +156,7 @@ export const LunaIntroStep: React.FC<LunaIntroStepProps> = ({ onNext, onBack }) 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             className="max-w-4xl mx-auto"
           >
             <div className="text-center mb-6">
@@ -191,7 +197,7 @@ export const LunaIntroStep: React.FC<LunaIntroStepProps> = ({ onNext, onBack }) 
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 1.0 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
               className="mt-8 text-center"
             >
               <div
@@ -211,31 +217,43 @@ export const LunaIntroStep: React.FC<LunaIntroStepProps> = ({ onNext, onBack }) 
         )}
       </AnimatePresence>
 
-      {/* Navigation */}
-      <AnimatePresence>
-        {showFeatures && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 1.2 }}
-            className="flex justify-between max-w-4xl mx-auto"
-          >
-            <Button variant="outline" onClick={onBack}>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back
-            </Button>
+      {/* Navigation - Always visible */}
+      <div className="flex justify-between max-w-4xl mx-auto">
+        <Button variant="outline" onClick={onBack}>
+          <ArrowLeft className="w-4 h-4 mr-2" /> Back
+        </Button>
+        
+        <AnimatePresence mode="wait">
+          {!showFeatures ? (
             <Button
-              onClick={handleNext}
-              style={{
-                backgroundColor: LUNA_COLORS.furPrimary,
-                borderColor: LUNA_COLORS.furPrimary,
-              }}
-              className="text-white hover:opacity-90"
+              key="skip"
+              variant="outline"
+              onClick={handleSkip}
+              className="text-gray-600"
             >
-              Continue with Luna <ArrowRight className="w-4 h-4 ml-2" />
+              Skip intro <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          ) : (
+            <motion.div
+              key="continue"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button
+                onClick={handleNext}
+                style={{
+                  backgroundColor: LUNA_COLORS.furPrimary,
+                  borderColor: LUNA_COLORS.furPrimary,
+                }}
+                className="text-white hover:opacity-90"
+              >
+                Continue with Luna <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
