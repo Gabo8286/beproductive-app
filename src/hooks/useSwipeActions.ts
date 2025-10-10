@@ -50,7 +50,7 @@ export const useSwipeActions = (options: SwipeOptions = {}) => {
     canSwipe: false,
   });
 
-  const { selection, buttonPress, warning } = useHapticFeedback();
+  const { buttonPress, warning } = useHapticFeedback();
 
   const startX = useRef<number>(0);
   const currentX = useRef<number>(0);
@@ -151,7 +151,7 @@ export const useSwipeActions = (options: SwipeOptions = {}) => {
 
     // Trigger haptic feedback when crossing threshold
     if (absSwipeDistance > 0 && !state.isSwipeActive) {
-      selection();
+      buttonPress();
     }
 
     // Determine active action based on swipe distance
@@ -171,7 +171,7 @@ export const useSwipeActions = (options: SwipeOptions = {}) => {
       revealedActions: availableActions,
       activeAction,
     }));
-  }, [disabled, state.canSwipe, state.isSwipeActive, state.activeAction, getActionsForDirection, calculateSwipeDistance, snapThreshold, threshold, selection, buttonPress]);
+  }, [disabled, state.canSwipe, state.isSwipeActive, state.activeAction, getActionsForDirection, calculateSwipeDistance, snapThreshold, threshold, buttonPress]);
 
   // Handle touch end
   const handleTouchEnd = useCallback(async () => {

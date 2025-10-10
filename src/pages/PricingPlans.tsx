@@ -202,7 +202,7 @@ export default function PricingPlans() {
     },
   ];
 
-  const currentPlan = 'pro'; // This would come from user context/API
+  const currentPlan: string = 'pro'; // This would come from user context/API
 
   const formatPrice = (price: number, currency: string = 'USD') => {
     if (price === 0) return 'Free';
@@ -257,7 +257,7 @@ export default function PricingPlans() {
       return 'Current Plan';
     }
     if (plan.id === 'free') {
-      return currentPlan !== 'free' ? 'Downgrade' : 'Get Started';
+      return (currentPlan && currentPlan !== 'free') ? 'Downgrade' : 'Get Started';
     }
     if (plan.trial) {
       return `Start ${plan.trial}-Day Trial`;

@@ -615,7 +615,7 @@ export default function TimeBlocking() {
                               'border-2'
                             )}
                             draggable
-                            onDragStart={(e) => handleDragStart(e, currentBlock)}
+                            onDragStart={(e) => handleDragStart(e as any, currentBlock)}
                             onClick={() => {
                               setSelectedBlock(currentBlock);
                               setIsCreating(false);
