@@ -65,6 +65,16 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
             actionText: "Time tracking",
             actionUrl: "/time-tracking",
           },
+          {
+            id: "task_3",
+            title: "Discover your productivity style",
+            description:
+              "Take our assessment to get personalized task management strategies",
+            type: "learning",
+            confidence: 0.88,
+            actionText: "Take quiz",
+            actionUrl: "/profile-assessment",
+          },
         ],
         goals: [
           {
@@ -76,6 +86,16 @@ export const RecommendationsBanner: React.FC<RecommendationsBannerProps> = ({
             confidence: 0.78,
             actionText: "Set reminder",
             actionUrl: "/automation",
+          },
+          {
+            id: "goal_2",
+            title: "Optimize your goal-setting approach",
+            description:
+              "Understanding your productivity profile helps you set more achievable goals",
+            type: "learning",
+            confidence: 0.84,
+            actionText: "Take assessment",
+            actionUrl: "/profile-assessment",
           },
         ],
         habits: [

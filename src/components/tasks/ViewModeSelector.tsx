@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LayoutGrid, List, Columns, Calendar, ArrowUpDown } from "lucide-react";
+import { LayoutGrid, List, Columns, Calendar, ArrowUpDown, Folder, CheckSquare } from "lucide-react";
 import { useTaskView } from "@/contexts/TaskViewContext";
 
 const viewModeIcons = {
@@ -16,6 +16,8 @@ const viewModeIcons = {
   list: List,
   board: Columns,
   calendar: Calendar,
+  projects: Folder,
+  status: CheckSquare,
 };
 
 export function ViewModeSelector() {

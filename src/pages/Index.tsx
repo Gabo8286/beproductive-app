@@ -8,7 +8,7 @@ const Index = () => {
 
   // Don't block on loading - render immediately and let auth happen in background
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/app/capture" replace />;
   }
 
   return <LandingPage />;

@@ -47,6 +47,16 @@ const navigation = [
     voiceCommand: "dashboard",
   },
   {
+    name: "Plan",
+    displayName: "Plan",
+    href: "/app/plan",
+    icon: Target,
+    moduleId: null,
+    description: "Plan your productive day",
+    color: "text-blue-600",
+    voiceCommand: "plan",
+  },
+  {
     name: "Destinations",
     displayName: "Goals",
     href: "/goals",

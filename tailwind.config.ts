@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Open Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        heading: ['Montserrat', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
+        heading: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -104,6 +104,9 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "apple-card": "16px",
+        "apple-button": "12px",
+        "apple-small": "8px",
       },
       keyframes: {
         "accordion-down": {
@@ -126,11 +129,26 @@ export default {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        slideDown: {
+          "0%": { transform: "translateY(-100%)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        appleScale: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0.98)" },
+        },
+        fabRotate: {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(45deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "journey-float": "journeyFloat 6s ease-in-out infinite",
+        "slide-down": "slideDown 0.3s ease-out",
+        "apple-scale": "appleScale 0.1s ease-out",
+        "fab-rotate": "fabRotate 0.2s ease-out",
       },
     },
   },

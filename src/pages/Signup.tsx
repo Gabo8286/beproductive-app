@@ -24,7 +24,13 @@ export default function Signup() {
 
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      // Check if onboarding has been completed
+      const onboardingCompleted = localStorage.getItem('beproductive_onboarding_completed');
+      if (onboardingCompleted) {
+        navigate("/app/capture");
+      } else {
+        navigate("/onboarding");
+      }
     }
   }, [user, navigate]);
 
@@ -40,7 +46,8 @@ export default function Signup() {
       toast.success(
         "Account created successfully! Please check your email to verify.",
       );
-      navigate("/dashboard");
+      // Redirect new users to onboarding
+      navigate("/onboarding");
     }
 
     setLoading(false);

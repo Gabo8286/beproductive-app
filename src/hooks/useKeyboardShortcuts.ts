@@ -37,7 +37,7 @@ export function useKeyboardShortcuts() {
         case "D":
           // Cmd/Ctrl + Shift + D -> Dashboard
           event.preventDefault();
-          navigate("/dashboard");
+          navigate("/app/capture");
           break;
 
         case "G":

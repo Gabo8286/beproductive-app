@@ -4,9 +4,10 @@
  * Index Reference: CODE_INDEX.md - Widget System > Core Widget Infrastructure
  * Purpose: Main widget container with responsive layout and drag-and-drop functionality
  */
-import React from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { DraggableWidget } from "./DraggableWidget";
+import { WidgetSelector } from "./WidgetSelector";
 import { useWidgetLayout } from "@/hooks/useWidgetLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,10 +27,21 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
     maxWidgets = 6,
   } = useWidgetLayout();
 
+  const [isWidgetSelectorOpen, setIsWidgetSelectorOpen] = useState(false);
+
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     reorderWidgets(result.source.index, result.destination.index);
+  };
+
+  const handleWidgetSelect = (widget: { type: string }) => {
+    addWidget(widget.type);
+    setIsWidgetSelectorOpen(false);
+  };
+
+  const handleAddWidgetClick = () => {
+    setIsWidgetSelectorOpen(true);
   };
 
   const canAddMoreWidgets = widgets.length < maxWidgets;
@@ -40,7 +52,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
         <h2 className="text-2xl font-bold">Dashboard</h2>
         {canAddMoreWidgets && (
           <Button
-            onClick={() => addWidget()}
+            onClick={handleAddWidgetClick}
             variant="outline"
             size="sm"
             className="flex items-center gap-2"
@@ -81,7 +93,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
                   <p className="text-muted-foreground mb-4">
                     Add widgets to customize your productivity workspace
                   </p>
-                  <Button onClick={() => addWidget()}>
+                  <Button onClick={handleAddWidgetClick}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Your First Widget
                   </Button>
@@ -100,6 +112,12 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
           </p>
         </Card>
       )}
+
+      <WidgetSelector
+        isOpen={isWidgetSelectorOpen}
+        onOpenChange={setIsWidgetSelectorOpen}
+        onSelectWidget={handleWidgetSelect}
+      />
     </div>
   );
 };

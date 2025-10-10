@@ -74,7 +74,7 @@ class SafeSupabaseClient {
   private client: SupabaseClient<Database> | null = null;
   private initializationPromise: Promise<SupabaseClient<Database> | null> | null =
     null;
-  private initializationTimeout = 3000; // 3 seconds
+  private initializationTimeout = 15000; // 15 seconds for Docker environments
   private isInitialized = false;
   private initializationError: string | null = null;
 
@@ -96,7 +96,7 @@ class SafeSupabaseClient {
       // Set timeout for initialization
       const timeoutId = setTimeout(() => {
         console.warn(
-          "[SafeSupabase] Initialization timed out after 3s - continuing in offline mode"
+          "[SafeSupabase] Initialization timed out after 15s - continuing in offline mode"
         );
         this.initializationError = "Backend connection timed out";
         this.isInitialized = true;

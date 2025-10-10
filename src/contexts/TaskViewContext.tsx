@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-type ViewMode = "grid" | "list" | "board" | "calendar";
+type ViewMode = "grid" | "list" | "board" | "calendar" | "projects" | "status";
 type SortBy = "created_at" | "due_date" | "priority" | "status" | "title";
 type SortOrder = "asc" | "desc";
 type GroupBy = "none" | "status" | "priority" | "due_date";

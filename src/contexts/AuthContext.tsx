@@ -3,6 +3,8 @@ import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/types/database";
 import { toast } from "sonner";
+import { localAuth, isLocalMode, LocalAuthUser, LocalAuthSession } from "@/integrations/auth/localAuthAdapter";
+import { runAuthDiagnostics, displayDiagnostics } from "@/utils/browser/authDiagnostics";
 
 interface AuthContextType {
   user: User | null;
@@ -43,22 +45,139 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     console.log("[AuthContext] Initializing auth state...");
+    console.log("[AuthContext] Environment variables:", {
+      VITE_LOCAL_MODE: import.meta.env.VITE_LOCAL_MODE,
+      VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
+      VITE_LOCAL_AUTH_URL: import.meta.env.VITE_LOCAL_AUTH_URL,
+      NODE_ENV: import.meta.env.NODE_ENV,
+      MODE: import.meta.env.MODE,
+    });
+    const localMode = isLocalMode();
+    console.log(`[AuthContext] Local mode detected: ${localMode}`);
+
     let isComponentMounted = true;
     let authSubscription: any = null;
     let retryTimeout: NodeJS.Timeout | null = null;
 
-    // Timeout to prevent infinite loading - 3s for faster recovery
-    const loadingTimeout = setTimeout(() => {
+    // Timeout to prevent infinite loading - 10s for Docker environments
+    const loadingTimeout = setTimeout(async () => {
       if (isComponentMounted && authLoading) {
-        console.warn("[AuthContext] Auth initialization timed out after 3 seconds");
-        toast.error("Authentication timed out. You can continue in guest mode.");
+        console.warn("[AuthContext] Auth initialization timed out after 10 seconds");
+
+        // Run diagnostics to help debug the issue
+        try {
+          const diagnostics = await runAuthDiagnostics();
+          const diagnosticMessage = displayDiagnostics(diagnostics);
+          console.error("[AuthContext] Authentication timeout - Diagnostics:", diagnosticMessage);
+
+          // Show user-friendly error with specific guidance
+          if (diagnostics.browser === 'Brave' && diagnostics.isPrivateMode) {
+            toast.error("Brave private mode detected. Try using a normal window or adjust privacy settings.");
+          } else if (!diagnostics.networkConnectivity.canReachSupabase) {
+            toast.error("Cannot connect to authentication service. Check your connection.");
+          } else if (!localMode) {
+            toast.error("Authentication timed out. You can continue in guest mode.");
+          }
+        } catch (error) {
+          console.error("[AuthContext] Diagnostics failed:", error);
+          if (!localMode) {
+            toast.error("Authentication timed out. You can continue in guest mode.");
+          }
+        }
+
         setAuthError("Authentication timed out.");
         setAuthLoading(false);
         isInitializing.current = false;
       }
-    }, 3000); // 3 seconds timeout
+    }, 10000); // 10 seconds timeout for better Docker compatibility
 
-    const initializeAuth = async () => {
+    const initializeLocalAuth = async () => {
+      console.log("[AuthContext] Initializing local auth...");
+      console.log("[AuthContext] Local auth URL:", import.meta.env.VITE_LOCAL_AUTH_URL);
+      isInitializing.current = true;
+
+      try {
+        // Set up local auth state listener
+        const { data } = localAuth.onAuthStateChange((event, localSession) => {
+          if (!isComponentMounted) return;
+
+          console.log("[AuthContext] Local auth state changed:", event, localSession ? "has session" : "no session");
+
+          if (localSession) {
+            // Convert local session to Supabase-compatible format
+            const user: User = {
+              id: localSession.user.id,
+              email: localSession.user.email,
+              created_at: localSession.user.created_at,
+              email_confirmed_at: localSession.user.email_confirmed_at,
+              app_metadata: {},
+              user_metadata: localSession.user.user_metadata || {},
+              aud: 'authenticated',
+              role: 'authenticated',
+            } as User;
+
+            const session: Session = {
+              access_token: localSession.access_token,
+              refresh_token: localSession.refresh_token,
+              expires_in: localSession.expires_in,
+              token_type: localSession.token_type,
+              user,
+              expires_at: Math.floor(Date.now() / 1000) + localSession.expires_in,
+            } as Session;
+
+            setSession(session);
+            setUser(user);
+            fetchProfile(user.id);
+          } else {
+            setSession(null);
+            setUser(null);
+            setProfile(null);
+            setAuthLoading(false);
+            isInitializing.current = false;
+          }
+        });
+
+        authSubscription = data.subscription;
+
+        // Check for existing session
+        const { data: sessionData, error: sessionError } = await localAuth.getSession();
+
+        if (!isComponentMounted) {
+          isInitializing.current = false;
+          return;
+        }
+
+        if (sessionError) {
+          console.error("[AuthContext] Local session check error:", sessionError);
+          setAuthError(sessionError.message);
+          setAuthLoading(false);
+          isInitializing.current = false;
+          return;
+        }
+
+        if (sessionData?.session) {
+          console.log("[AuthContext] Found existing local session");
+          // The onAuthStateChange will handle setting the session
+        } else {
+          console.log("[AuthContext] No existing local session");
+          setAuthLoading(false);
+          isInitializing.current = false;
+        }
+
+      } catch (error) {
+        if (!isComponentMounted) {
+          isInitializing.current = false;
+          return;
+        }
+
+        console.error("[AuthContext] Local auth initialization failed:", error);
+        setAuthError(`Local auth failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+        setAuthLoading(false);
+        isInitializing.current = false;
+      }
+    };
+
+    const initializeSupabaseAuth = async () => {
       // Prevent multiple simultaneous initialization attempts
       if (isInitializing.current) {
         console.log("[AuthContext] Already initializing, skipping duplicate attempt");
@@ -68,7 +187,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isInitializing.current = true;
 
       try {
-        console.log("[AuthContext] Setting up auth state listener...");
+        console.log("[AuthContext] Setting up Supabase auth state listener...");
 
         // CRITICAL: Check if Supabase client is ready before using it
         if (
@@ -98,7 +217,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           retryTimeout = setTimeout(() => {
             if (isComponentMounted) {
               console.log(`[AuthContext] Retrying auth initialization (attempt ${retryCount.current}/${maxRetries})...`);
-              initializeAuth();
+              initializeSupabaseAuth();
             }
           }, 1000);
           return;
@@ -133,10 +252,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         console.log("[AuthContext] Checking for existing session...");
 
-        // Check for existing session with timeout (reduced to 3s)
+        // Check for existing session with timeout (increased to 15s for Docker)
         const sessionPromise = supabase.auth.getSession();
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Session check timeout")), 3000);
+          setTimeout(() => reject(new Error("Session check timeout")), 15000);
         });
 
         try {
@@ -194,8 +313,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    // Start initialization
-    initializeAuth();
+    // Start initialization based on mode
+    if (localMode) {
+      initializeLocalAuth();
+    } else {
+      initializeSupabaseAuth();
+    }
 
     // Cleanup function
     return () => {
@@ -217,26 +340,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const fetchProfile = async (userId: string) => {
     try {
       console.log("[AuthContext] Fetching profile for user:", userId);
+      const localMode = isLocalMode();
 
-      // Add timeout for profile fetch
-      const profilePromise = supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+      let data, error;
 
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("Profile fetch timeout")), 3000);
-      });
+      if (localMode) {
+        // Use direct fetch to PostgREST API for local mode
+        try {
+          // Get JWT token from session if available
+          const headers: Record<string, string> = {
+            'Accept': 'application/vnd.pgrst.object+json',
+            'Content-Type': 'application/json',
+          };
 
-      const { data, error } = (await Promise.race([
-        profilePromise,
-        timeoutPromise,
-      ])) as any;
+          // Add Authorization header if we have a session
+          if (session?.access_token) {
+            headers['Authorization'] = `Bearer ${session.access_token}`;
+          }
+
+          // Use the correct PostgREST URL for Docker or local environment
+          const dockerLocalMode = window.location.hostname === 'localhost' && window.location.port === '8080';
+          const postgrestUrl = dockerLocalMode ? 'http://localhost:8000' : 'http://localhost:8000';
+
+          const response = await fetch(`${postgrestUrl}/profiles?id=eq.${userId}&select=*`, {
+            headers,
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          data = await response.json();
+          error = null;
+          console.log("[AuthContext] Profile fetched directly from PostgREST:", data);
+        } catch (fetchError) {
+          console.error("[AuthContext] Direct profile fetch failed:", fetchError);
+          error = fetchError;
+          data = null;
+        }
+      } else {
+        // Use Supabase client for cloud mode
+        const profilePromise = supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .single();
+
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error("Profile fetch timeout")), 8000);
+        });
+
+        const result = (await Promise.race([
+          profilePromise,
+          timeoutPromise,
+        ])) as any;
+
+        data = result.data;
+        error = result.error;
+      }
 
       if (error) {
         console.error("[AuthContext] Profile fetch error:", error);
-        setAuthError(`Failed to load profile: ${error.message}`);
+        setAuthError(`Failed to load profile: ${error.message || error}`);
         // Don't show toast for network errors during initialization
         if (error.message && !error.message.includes("timeout")) {
           toast.error("Failed to load profile");
@@ -271,32 +436,73 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      return { error: null };
+      if (isLocalMode()) {
+        const { error } = await localAuth.signInWithPassword({ email, password });
+        if (error) throw new Error(error.message);
+        return { error: null };
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        return { error: null };
+      }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error("[AuthContext] Sign in failed:", errorMessage);
+
+      // Run diagnostics for network/fetch errors
+      if (errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')) {
+        try {
+          const diagnostics = await runAuthDiagnostics();
+          const diagnosticMessage = displayDiagnostics(diagnostics);
+          console.error("[AuthContext] Sign in failed - Diagnostics:", diagnosticMessage);
+
+          // Show specific guidance based on diagnostics
+          if (diagnostics.browser === 'Brave') {
+            toast.error("Sign in failed. Try disabling Brave Shields for this site or use a normal window.");
+          } else if (!diagnostics.networkConnectivity.canReachSupabase) {
+            toast.error("Cannot connect to authentication service. Check your connection.");
+          }
+        } catch (diagError) {
+          console.error("[AuthContext] Diagnostics failed:", diagError);
+        }
+      }
+
       return { error: error as Error };
     }
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            full_name: fullName,
+      if (isLocalMode()) {
+        const { error } = await localAuth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+            },
           },
-        },
-      });
-      if (error) throw error;
-      return { error: null };
+        });
+        if (error) throw new Error(error.message);
+        return { error: null };
+      } else {
+        const redirectUrl = `${window.location.origin}/`;
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: redirectUrl,
+            data: {
+              full_name: fullName,
+            },
+          },
+        });
+        if (error) throw error;
+        return { error: null };
+      }
     } catch (error) {
       return { error: error as Error };
     }
@@ -304,7 +510,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      if (isLocalMode()) {
+        await localAuth.signOut();
+      } else {
+        await supabase.auth.signOut();
+      }
       setUser(null);
       setSession(null);
       setProfile(null);
@@ -316,6 +526,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGoogle = async () => {
     try {
+      if (isLocalMode()) {
+        toast.error("Google sign-in not available in local mode");
+        return;
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -331,11 +546,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const resetPassword = async (email: string) => {
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-      if (error) throw error;
-      return { error: null };
+      if (isLocalMode()) {
+        const { error } = await localAuth.resetPasswordForEmail(email);
+        if (error) throw new Error(error.message);
+        return { error: null };
+      } else {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        return { error: null };
+      }
     } catch (error) {
       return { error: error as Error };
     }
@@ -353,12 +574,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (updates.onboarding_completed !== undefined)
         updateData.onboarding_completed = updates.onboarding_completed;
 
-      const { error } = await supabase
-        .from("profiles")
-        .update(updateData)
-        .eq("id", user.id);
+      const localMode = isLocalMode();
 
-      if (error) throw error;
+      if (localMode) {
+        // Use direct fetch to PostgREST API for local mode
+        const dockerLocalMode = window.location.hostname === 'localhost' && window.location.port === '8080';
+        const postgrestUrl = dockerLocalMode ? 'http://localhost:8000' : 'http://localhost:8000';
+
+        const response = await fetch(`${postgrestUrl}/profiles?id=eq.${user.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify(updateData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+      } else {
+        // Use Supabase client for cloud mode
+        const { error } = await supabase
+          .from("profiles")
+          .update(updateData)
+          .eq("id", user.id);
+
+        if (error) throw error;
+      }
 
       // Refresh profile
       await fetchProfile(user.id);

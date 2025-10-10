@@ -28,7 +28,9 @@ import {
   Target,
   Activity,
   CheckSquare,
-  RefreshCw
+  RefreshCw,
+  Mic,
+  MicOff
 } from 'lucide-react';
 import { generateInsight, AIMessage } from '@/lib/ai-service';
 import { APIProviderType } from '@/types/api-management';
@@ -36,19 +38,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { intentRecognitionService } from '../services/intentRecognition';
+import { ConversationMessage, ConversationState, ConversationSuggestion } from '../types/conversation';
+import { IntentProcessingResult } from '../types/intent';
 
-interface ConversationMessage extends AIMessage {
-  type: 'user' | 'assistant' | 'system';
-  suggestions?: string[];
-  actions?: ConversationAction[];
-}
-
-interface ConversationAction {
-  id: string;
-  label: string;
-  type: 'navigate' | 'create' | 'suggest';
-  data?: any;
-}
+// Remove duplicate interface since we're importing from types
 
 interface ConversationalAIProps {
   context?: {
@@ -124,8 +118,7 @@ export function ConversationalAI({ context, className, embedded = false }: Conve
       id: Date.now().toString(),
       role: 'user',
       content: content.trim(),
-      timestamp: new Date(),
-      type: 'user'
+      timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -133,10 +126,43 @@ export function ConversationalAI({ context, className, embedded = false }: Conve
     setIsLoading(true);
 
     try {
-      // Create context-aware prompt
+      // First, recognize the intent
+      const intentResult: IntentProcessingResult = await intentRecognitionService.recognizeIntent(
+        content.trim(),
+        {
+          conversationHistory: messages.map(msg => ({
+            role: msg.role,
+            content: msg.content,
+            timestamp: msg.timestamp
+          })),
+          currentWorkspace: {
+            activeModule: context?.type,
+            currentPhase: 'capture' // This would come from productivity cycle context
+          },
+          userProfile: {
+            preferences: {},
+            patterns: {},
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+          }
+        }
+      );
+
+      // Handle high-confidence intents with direct actions
+      if (intentResult.confidence > 0.8 && !intentResult.needsClarification) {
+        // Execute suggested actions automatically for high-confidence intents
+        if (intentResult.suggestedActions.length > 0) {
+          const action = intentResult.suggestedActions[0];
+          // TODO: Execute action through module system
+          console.log('Executing action:', action);
+        }
+      }
+
+      // Generate AI response
       let contextPrompt = content;
       if (context?.type) {
         contextPrompt = `Context: User is working with ${context.type}${context.data ? ` (${JSON.stringify(context.data)})` : ''}.
+Intent recognized: ${intentResult.intent.type} (confidence: ${intentResult.confidence})
+Entities extracted: ${JSON.stringify(intentResult.intent.entities)}
 
 User question: ${content}
 
@@ -145,16 +171,41 @@ Please provide helpful, actionable advice for productivity, goal achievement, an
 
       const response = await generateInsight(contextPrompt, aiProvider, user.id);
 
+      // Create suggestions from intent recognition and AI response
+      const suggestions = [
+        ...intentResult.suggestedActions.map(action => action.description),
+        ...(response.suggestedActions?.slice(0, 2) || [])
+      ].slice(0, 3);
+
       const assistantMessage: ConversationMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: response.description,
         timestamp: new Date(),
-        type: 'assistant',
-        suggestions: response.suggestedActions?.slice(0, 3) || []
+        metadata: {
+          intent: intentResult.intent.type,
+          confidence: intentResult.confidence,
+          processingTime: intentResult.processingTime,
+          suggestedActions: intentResult.suggestedActions
+        }
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+
+      // Show clarification questions if needed
+      if (intentResult.needsClarification && intentResult.clarificationQuestions.length > 0) {
+        const clarificationMessage: ConversationMessage = {
+          id: (Date.now() + 2).toString(),
+          role: 'assistant',
+          content: `I need a bit more information: ${intentResult.clarificationQuestions.join(' ')}`,
+          timestamp: new Date()
+        };
+
+        setTimeout(() => {
+          setMessages(prev => [...prev, clarificationMessage]);
+        }, 500);
+      }
+
     } catch (error) {
       console.error('Error sending message:', error);
 
@@ -162,8 +213,7 @@ Please provide helpful, actionable advice for productivity, goal achievement, an
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: "I'm sorry, I'm having trouble responding right now. Please try again in a moment.",
-        timestamp: new Date(),
-        type: 'assistant'
+        timestamp: new Date()
       };
 
       setMessages(prev => [...prev, errorMessage]);

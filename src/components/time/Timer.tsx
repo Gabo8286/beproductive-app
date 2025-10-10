@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Clock, Pause, Play, Square } from "lucide-react";
 import { formatTime } from "@/lib/utils";
+import { Z_INDEX } from "@/lib/z-index";
 
 export function Timer() {
   const { data: activeTimer } = useActiveTimer();
@@ -56,7 +57,15 @@ export function Timer() {
   }
 
   return (
-    <Card className="fixed bottom-4 right-4 p-4 shadow-lg border-primary/20 bg-card/95 backdrop-blur z-50">
+    <Card
+      className="fixed p-4 shadow-lg border-primary/20 bg-card/95 backdrop-blur"
+      style={{
+        zIndex: Z_INDEX.FLOATING_TIMER,
+        // Position above other floating elements but with offset
+        bottom: '5.5rem',
+        right: '1.5rem'
+      }}
+    >
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <Clock className="h-5 w-5 text-primary" />

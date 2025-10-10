@@ -16,6 +16,8 @@ import { TaskCard } from "@/components/tasks/TaskCard";
 import { TaskListView } from "@/components/tasks/TaskListView";
 import { TaskBoardView } from "@/components/tasks/TaskBoardView";
 import { TaskCalendarView } from "@/components/tasks/TaskCalendarView";
+import { ProjectGroupView } from "@/components/tasks/ProjectGroupView";
+import { StatusGroupView } from "@/components/tasks/StatusGroupView";
 import { TaskForm } from "@/components/tasks/TaskForm";
 import { ViewModeSelector } from "@/components/tasks/ViewModeSelector";
 import { TaskViewProvider, useTaskView } from "@/contexts/TaskViewContext";
@@ -348,6 +350,8 @@ function TasksContent() {
           {viewMode === "list" && <TaskListView tasks={sortedTasks} />}
           {viewMode === "board" && <TaskBoardView tasks={sortedTasks} />}
           {viewMode === "calendar" && <TaskCalendarView tasks={sortedTasks} />}
+          {viewMode === "projects" && <ProjectGroupView tasks={sortedTasks} />}
+          {viewMode === "status" && <StatusGroupView tasks={sortedTasks} />}
           {viewMode === "grid" &&
             (groupBy === "none" ? (
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

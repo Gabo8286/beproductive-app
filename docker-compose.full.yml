@@ -1,0 +1,146 @@
+services:
+  # BeProductive v2 Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENV_FILE: .env.local-supabase
+    container_name: beproductive-v2-app-full
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    env_file:
+      - .env.local-supabase
+    networks:
+      - beproductive-network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+      supabase-rest:
+        condition: service_started
+      local-auth:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Supabase Database
+  supabase-db:
+    image: postgres:15-alpine
+    container_name: beproductive-supabase-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - supabase_db_data:/var/lib/postgresql/data
+      - ./supabase/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - beproductive-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  # Local Auth Service
+  local-auth:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: beproductive-local-auth
+    restart: unless-stopped
+    ports:
+      - "9999:9999"
+    environment:
+      - PORT=9999
+      - JWT_SECRET=super-secret-jwt-token-with-at-least-32-characters-long
+      - DB_HOST=supabase-db
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    networks:
+      - beproductive-network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # PostgREST API
+  supabase-rest:
+    image: postgrest/postgrest:latest
+    container_name: beproductive-supabase-rest
+    restart: unless-stopped
+    ports:
+      - "8000:3000"
+    environment:
+      PGRST_DB_URI: postgresql://postgres:postgres@supabase-db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+    networks:
+      - beproductive-network
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: beproductive-redis-full
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - beproductive-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Adminer for database management
+  adminer:
+    image: adminer:latest
+    container_name: beproductive-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    networks:
+      - beproductive-network
+    profiles:
+      - tools
+
+# Networks
+networks:
+  beproductive-network:
+    driver: bridge
+    name: beproductive-network-full
+
+# Volumes
+volumes:
+  supabase_db_data:
+    driver: local
+    name: beproductive-supabase-data
+  redis_data:
+    driver: local
+    name: beproductive-redis-data-full

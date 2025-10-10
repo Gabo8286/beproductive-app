@@ -46,6 +46,10 @@ const WIDGET_TYPES = {
       () => import("@/components/widgets/SmartRecommendationsWidget").then(m => ({ default: m.SmartRecommendationsWidget })),
     ),
   },
+  calendar: {
+    title: "Calendar",
+    component: React.lazy(() => import("@/components/widgets/CalendarWidget").then(m => ({ default: m.CalendarWidget }))),
+  },
 };
 
 const DEFAULT_WIDGETS: Widget[] = [

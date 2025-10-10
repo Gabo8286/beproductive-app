@@ -4,6 +4,8 @@ import { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { useGamification } from "@/hooks/useGamification";
+import { useIsDemoMode } from "@/hooks/useIsDemoMode";
+import { gabrielPersona } from "@/data/demo/gabriel-persona-data";
 
 type Task = Database["public"]["Tables"]["tasks"]["Row"];
 type TaskInsert = Database["public"]["Tables"]["tasks"]["Insert"];
@@ -34,11 +36,56 @@ export const useDefaultWorkspace = () => {
 
 // Get single task by ID
 export const useTask = (taskId: string | undefined) => {
+  const isDemoMode = useIsDemoMode();
+
   return useQuery({
-    queryKey: ["task", taskId],
+    queryKey: ["task", taskId, isDemoMode],
     queryFn: async () => {
       if (!taskId) throw new Error("Task ID is required");
 
+      // Return demo data if in demo mode
+      if (isDemoMode) {
+        const demoTask = gabrielPersona.tasks.find(task => task.id === taskId);
+        if (!demoTask) {
+          throw new Error(`Demo task with ID ${taskId} not found`);
+        }
+
+        // Transform demo task to match database structure
+        return {
+          id: demoTask.id,
+          title: demoTask.title,
+          description: demoTask.description,
+          status: demoTask.status as any,
+          priority: demoTask.priority as any,
+          due_date: demoTask.due_date,
+          completed: demoTask.completed,
+          estimated_hours: demoTask.estimated_hours,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          created_by: gabrielPersona.user.id,
+          assigned_to: gabrielPersona.user.id,
+          workspace_id: "demo-workspace",
+          assigned_to_profile: {
+            full_name: gabrielPersona.user.full_name,
+            avatar_url: gabrielPersona.user.avatar_url,
+          },
+          created_by_profile: {
+            full_name: gabrielPersona.user.full_name,
+            avatar_url: gabrielPersona.user.avatar_url,
+          },
+        } as Task & {
+          assigned_to_profile?: {
+            full_name: string | null;
+            avatar_url: string | null;
+          };
+          created_by_profile?: {
+            full_name: string | null;
+            avatar_url: string | null;
+          };
+        };
+      }
+
+      // Regular database query for non-demo users
       const { data, error } = await supabase
         .from("tasks")
         .select(

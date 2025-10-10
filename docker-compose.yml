@@ -1,0 +1,97 @@
+services:
+  # BeProductive v2 Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beproductive-v2-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    env_file:
+      - .env.docker
+    environment:
+      - NODE_ENV=production
+      - VITE_APP_ENVIRONMENT=docker
+      - VITE_ENABLE_MODULE_SYSTEM=true
+      - VITE_ENABLE_MODULE_TEST_PAGE=true
+      - VITE_ENABLE_MODULE_COMMUNICATION=true
+      # Force disable local mode for Docker Supabase authentication
+      - VITE_LOCAL_MODE=false
+      - VITE_SUPABASE_URL=https://rymixmuunfjxwryucvxt.supabase.co
+      - VITE_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5bWl4bXV1bmZqeHdyeXVjdnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyNzA4NjUsImV4cCI6MjA3NDg0Njg2NX0.TENbnWnRA8Ik5aKmgit4d8-CYjlD1uNNNZwzEPclPlU
+    volumes:
+      # For development: mount source code for hot reload
+      # Uncomment the line below for development mode
+      # - .:/app
+      - /app/node_modules
+    networks:
+      - beproductive-network
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -f http://localhost:80/health && curl -f http://localhost:80/api/modules/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.beproductive.rule=Host(`localhost`)"
+      - "traefik.http.services.beproductive.loadbalancer.server.port=80"
+      - "app.version=1.0.0"
+      - "app.architecture=modular"
+      - "app.modules=ai-assistant,productivity-cycle,task-management,automation-engine,voice-interface"
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: beproductive-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - beproductive-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Development mode service (alternative to production build)
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: beproductive-v2-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - docker.env
+    environment:
+      - NODE_ENV=development
+      - VITE_APP_ENVIRONMENT=docker-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - beproductive-network
+    profiles:
+      - dev
+    command: npm run dev
+
+# Networks
+networks:
+  beproductive-network:
+    driver: bridge
+    name: beproductive-network
+
+# Volumes
+volumes:
+  redis_data:
+    driver: local
+    name: beproductive-redis-data

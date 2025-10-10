@@ -31,8 +31,8 @@ export function validateEnvironment(): ValidationResult {
     errors.push("VITE_SUPABASE_URL must be a string");
   } else if (!supabaseUrl.startsWith("http")) {
     errors.push("VITE_SUPABASE_URL must be a valid HTTP/HTTPS URL");
-  } else if (!supabaseUrl.includes("supabase")) {
-    warnings.push("VITE_SUPABASE_URL does not appear to be a Supabase URL");
+  } else if (!supabaseUrl.includes("supabase") && !supabaseUrl.includes("localhost")) {
+    warnings.push("VITE_SUPABASE_URL does not appear to be a Supabase or localhost URL");
   } else {
     config.VITE_SUPABASE_URL = supabaseUrl;
   }
@@ -45,7 +45,7 @@ export function validateEnvironment(): ValidationResult {
     errors.push("VITE_SUPABASE_PUBLISHABLE_KEY must be a string");
   } else if (supabaseKey.length < 20) {
     errors.push("VITE_SUPABASE_PUBLISHABLE_KEY appears to be too short");
-  } else if (!supabaseKey.startsWith("eyJ")) {
+  } else if (!supabaseKey.startsWith("eyJ") && supabaseKey !== "demo-key") {
     warnings.push(
       "VITE_SUPABASE_PUBLISHABLE_KEY does not appear to be a valid JWT token",
     );
@@ -171,6 +171,16 @@ export function createEnvironmentErrorMessage(
 export function isEnvironmentReady(): boolean {
   try {
     const result = validateEnvironment();
+
+    // For local development, be more lenient
+    const isLocalhost = window.location.hostname === 'localhost';
+    const hasBasicConfig = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY);
+
+    if (isLocalhost && hasBasicConfig) {
+      console.log("[Environment] Local development mode - accepting basic configuration");
+      return true;
+    }
+
     return result.isValid;
   } catch (error) {
     console.error("[Environment] Validation check failed:", error);
