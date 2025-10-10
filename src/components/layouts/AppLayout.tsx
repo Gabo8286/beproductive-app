@@ -22,7 +22,7 @@ import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
-import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
 import GuestModeIndicator from "@/components/auth/GuestModeIndicator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -70,10 +70,7 @@ export function AppLayout() {
             {/* Guest Mode Indicator */}
             <GuestModeIndicator />
 
-            {/* Primary Cycle Navigation */}
-            <div className="flex-1 flex justify-center">
-              <CyclePrimaryNavigation />
-            </div>
+            <div className="flex-1" />
 
             {/* Secondary Navigation */}
             <div className="flex items-center gap-2">
@@ -193,7 +190,7 @@ export function AppLayout() {
         {/* Main Content */}
         <main
           id="main-content"
-          className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand"
+          className="flex-1 space-y-4 p-4 md:p-8 pb-20 md:pb-16 scrollbar-brand"
           role="main"
           aria-label="Main content"
         >
@@ -203,8 +200,8 @@ export function AppLayout() {
         {/* Floating Action Menu */}
         <FloatingActionMenu />
 
-        {/* Mobile Navigation */}
-        <MobileNavigation />
+        {/* Unified Bottom Navigation */}
+        <UnifiedBottomNav />
         <Timer />
       </div>
     );
@@ -296,14 +293,14 @@ export function AppLayout() {
           </header>
           <main
             id="main-content"
-            className="flex-1 space-y-4 p-4 md:p-8 scrollbar-brand"
+            className="flex-1 space-y-4 p-4 md:p-8 pb-20 md:pb-16 scrollbar-brand"
             role="main"
             aria-label="Main content"
           >
             <Outlet />
           </main>
         </div>
-        <MobileNavigation />
+        <UnifiedBottomNav />
       </div>
       <Timer />
     </SidebarProvider>

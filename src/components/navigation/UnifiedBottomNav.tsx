@@ -25,28 +25,22 @@ interface NavTab {
 
 const mainTabs: NavTab[] = [
   {
-    id: 'dashboard',
-    label: 'Home',
-    href: '/dashboard',
+    id: 'capture',
+    label: 'Capture',
+    href: '/app/capture',
     icon: Home,
   },
   {
-    id: 'tasks',
-    label: 'Tasks',
-    href: '/tasks',
+    id: 'plan',
+    label: 'Plan',
+    href: '/app/plan',
     icon: CheckSquare,
   },
   {
-    id: 'goals',
-    label: 'Goals',
-    href: '/goals',
+    id: 'execute',
+    label: 'Execute',
+    href: '/app/engage',
     icon: Target,
-  },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    href: '/analytics',
-    icon: BarChart3,
   },
 ];
 
@@ -166,6 +160,19 @@ export const UnifiedBottomNav: React.FC = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                    🏠 Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/tasks')}>
+                    ✓ Tasks
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/goals')}>
+                    🎯 Goals
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/analytics')}>
+                    📊 Analytics
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate('/notes')}>
                     📝 Notes
                   </DropdownMenuItem>
