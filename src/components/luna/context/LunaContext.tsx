@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { streamChat } from '@/utils/aiStreaming';
 import { streamFrameworkChat, generateContextualSuggestions, type FrameworkContext } from '@/utils/aiFrameworkStreaming';
 import { LunaExpression } from '@/assets/luna/luna-assets';
@@ -101,26 +101,27 @@ interface LunaProviderProps {
 export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
   const [state, setState] = useState<LunaState>(defaultLunaState);
 
-  // Get framework context - we'll need to handle this carefully since it might not be available
-  let frameworkContext: FrameworkContext | undefined;
-  try {
-    const framework = useLunaFramework();
-    frameworkContext = {
-      userStage: framework.productivityProfile.currentStage,
-      weekInStage: framework.productivityProfile.weekInStage,
-      completedPrinciples: framework.productivityProfile.completedPrinciples,
-      currentMetrics: framework.productivityProfile.currentMetrics,
-      wellBeingScore: framework.productivityProfile.wellBeingScore,
-      systemHealthScore: framework.productivityProfile.systemHealthScore,
-      energyPattern: framework.productivityProfile.energyPattern,
-      isInRecoveryMode: framework.isInRecoveryMode,
-      currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
-      userPreferences: framework.userPreferences,
-    };
-  } catch (error) {
-    // Framework context not available, continue without it
-    frameworkContext = undefined;
-  }
+  // Get framework context - memoized to prevent infinite loops
+  const frameworkContext = useMemo<FrameworkContext | undefined>(() => {
+    try {
+      const framework = useLunaFramework();
+      return {
+        userStage: framework.productivityProfile.currentStage,
+        weekInStage: framework.productivityProfile.weekInStage,
+        completedPrinciples: framework.productivityProfile.completedPrinciples,
+        currentMetrics: framework.productivityProfile.currentMetrics,
+        wellBeingScore: framework.productivityProfile.wellBeingScore,
+        systemHealthScore: framework.productivityProfile.systemHealthScore,
+        energyPattern: framework.productivityProfile.energyPattern,
+        isInRecoveryMode: framework.isInRecoveryMode,
+        currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
+        userPreferences: framework.userPreferences,
+      };
+    } catch (error) {
+      // Framework context not available, continue without it
+      return undefined;
+    }
+  }, []); // Empty dependency array since we want this to be stable
 
   // Auto-reset expression after some time
   useEffect(() => {
