@@ -335,7 +335,7 @@ export const defaultConfig: AppConfig = {
     },
   },
   api: {
-    baseUrl: process.env.VITE_API_BASE_URL || '',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || '',
     timeout: 10000,
     retryAttempts: 3,
     cacheDuration: 300000,
