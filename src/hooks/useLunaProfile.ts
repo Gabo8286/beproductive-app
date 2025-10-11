@@ -23,12 +23,14 @@ export function useLunaProfile(workspaceId?: string) {
       const { data, error } = await monitorLunaQuery(
         'select-profile',
         'luna_productivity_profiles',
-        () => supabase
-          .from('luna_productivity_profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .eq('workspace_id', workspaceId)
-          .single()
+        async () => {
+          return await supabase
+            .from('luna_productivity_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('workspace_id', workspaceId)
+            .single();
+        }
       );
 
       if (error) {
