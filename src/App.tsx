@@ -34,6 +34,10 @@ import { toast } from "sonner";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
+import DashboardMinimal from "@/pages/Dashboard-Minimal";
+import DashboardContextTester from "@/pages/Dashboard-ContextTester";
+import DashboardPerformanceComparison from "@/pages/Dashboard-PerformanceComparison";
+import LunaLocalIntelligenceDemo from "@/pages/LunaLocalIntelligenceDemo";
 
 // Lazy loaded routes (code splitting)
 const Signup = lazy(() => import("@/pages/Signup"));
@@ -220,6 +224,10 @@ function AppContent() {
             }
           >
             <Route path="/dashboard" element={<Navigate to="/app/capture" replace />} />
+            <Route path="/dashboard-minimal" element={<DashboardMinimal />} />
+            <Route path="/dashboard-context-test" element={<DashboardContextTester />} />
+            <Route path="/dashboard-performance" element={<DashboardPerformanceComparison />} />
+            <Route path="/luna-local-demo" element={<LunaLocalIntelligenceDemo />} />
             <Route path="/plan" element={<Navigate to="/app/plan" replace />} />
             <Route
               path="/profile"

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { monitorLunaQuery } from '@/utils/supabaseMonitor';
 import type { Database } from '@/integrations/supabase/types';
 
 type LunaProfile = Database['public']['Tables']['luna_productivity_profiles']['Row'];
@@ -19,12 +20,16 @@ export function useLunaProfile(workspaceId?: string) {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('luna_productivity_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('workspace_id', workspaceId)
-        .single();
+      const { data, error } = await monitorLunaQuery(
+        'select-profile',
+        'luna_productivity_profiles',
+        () => supabase
+          .from('luna_productivity_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('workspace_id', workspaceId)
+          .single()
+      );
 
       if (error) {
         if (error.code === 'PGRST116') {
