@@ -58,7 +58,7 @@ describe("useTasks Hook", () => {
     vi.clearAllMocks();
 
     // Mock workspace query
-    vi.mocked(supabase.from).mockImplementation((table) => {
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
       if (table === "workspaces") {
         return {
           select: vi.fn().mockReturnThis(),

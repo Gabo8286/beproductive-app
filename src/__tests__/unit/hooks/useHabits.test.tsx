@@ -38,7 +38,7 @@ describe("useHabits Hook", () => {
       { habit_id: mockHabit.id, status: "completed", date: "2025-01-01" },
     ];
 
-    vi.mocked(supabase.from).mockImplementation((table) => {
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
       if (table === "habits") {
         return {
           select: vi.fn().mockReturnThis(),
@@ -136,7 +136,7 @@ describe("useHabits Hook", () => {
       date: `2025-01-${String(i + 1).padStart(2, "0")}`,
     }));
 
-    vi.mocked(supabase.from).mockImplementation((table) => {
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
       if (table === "habits") {
         return {
           select: vi.fn().mockReturnThis(),
