@@ -17,6 +17,7 @@ import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts
 import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
 import { LunaProvider } from "@/components/luna/context/LunaContext";
 import { LunaFrameworkProvider } from "@/components/luna/context/LunaFrameworkContext";
+import { ConfigProvider } from "@/contexts/ConfigContext";
 import { TagFilterModal } from "@/components/filters/TagFilterModal";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
@@ -527,25 +528,27 @@ function AppContent() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ModulesProvider>
-          <AccessibilityProvider>
-            <ProductivityCycleProvider>
-              <GlobalViewProvider>
-                <LunaFrameworkProvider>
-                  <LunaProvider>
-                    <BrowserRouter>
-                      <RouteAnnouncer />
-                      <AppContent />
-                      <TagFilterModal />
-                    </BrowserRouter>
-                  </LunaProvider>
-                </LunaFrameworkProvider>
-              </GlobalViewProvider>
-            </ProductivityCycleProvider>
-          </AccessibilityProvider>
-        </ModulesProvider>
-      </AuthProvider>
+      <ConfigProvider>
+        <AuthProvider>
+          <ModulesProvider>
+            <AccessibilityProvider>
+              <ProductivityCycleProvider>
+                <GlobalViewProvider>
+                  <LunaFrameworkProvider>
+                    <LunaProvider>
+                      <BrowserRouter>
+                        <RouteAnnouncer />
+                        <AppContent />
+                        <TagFilterModal />
+                      </BrowserRouter>
+                    </LunaProvider>
+                  </LunaFrameworkProvider>
+                </GlobalViewProvider>
+              </ProductivityCycleProvider>
+            </AccessibilityProvider>
+          </ModulesProvider>
+        </AuthProvider>
+      </ConfigProvider>
     </QueryClientProvider>
   );
 }

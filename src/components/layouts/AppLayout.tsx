@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Sparkles, Home, CheckSquare, Settings as SettingsIcon, Calendar, CreditCard, Shield, Crown, Brain } from "lucide-react";
+import { LogOut, User, Sparkles, Home, CheckSquare, Settings as SettingsIcon, Calendar, CreditCard, Shield, Crown, Brain, Palette } from "lucide-react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
@@ -25,6 +25,8 @@ import GuestModeIndicator from "@/components/auth/GuestModeIndicator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext";
+import { ConfigPanel } from "@/components/config/ConfigPanel";
+import { useConfigPanel } from "@/hooks/useConfigPanel";
 
 type NavigationMode = 'minimal-sidebar' | 'top-navigation' | 'full-sidebar';
 
@@ -32,6 +34,7 @@ export function AppLayout() {
   const { profile, signOut } = useAuth();
   const navigate = useNavigate();
   const [navigationMode, setNavigationMode] = useState<NavigationMode>('top-navigation');
+  const configPanel = useConfigPanel();
 
   // Auto-set Luna context based on route
   useLunaRouteContext();
@@ -146,6 +149,10 @@ export function AppLayout() {
                     <SettingsIcon className="mr-2 h-4 w-4" />
                     Settings
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={configPanel.open}>
+                    <Palette className="mr-2 h-4 w-4" />
+                    App Configuration
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/account-settings')}>
                     <Shield className="mr-2 h-4 w-4" />
                     Account & Security
@@ -202,6 +209,9 @@ export function AppLayout() {
         {/* Unified Bottom Navigation */}
         <UnifiedBottomNav />
         <Timer />
+
+        {/* Configuration Panel */}
+        <ConfigPanel isOpen={configPanel.isOpen} onClose={configPanel.close} />
       </div>
     );
   }
@@ -302,6 +312,9 @@ export function AppLayout() {
         <UnifiedBottomNav />
       </div>
       <Timer />
+
+      {/* Configuration Panel */}
+      <ConfigPanel isOpen={configPanel.isOpen} onClose={configPanel.close} />
     </SidebarProvider>
   );
 }

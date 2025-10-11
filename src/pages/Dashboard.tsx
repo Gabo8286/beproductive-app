@@ -6,12 +6,18 @@ import {
 import { DateHeader } from "@/components/dashboard/DateHeader";
 import { FeaturedTaskCard } from "@/components/dashboard/FeaturedTaskCard";
 import { TodayTasksList } from "@/components/dashboard/TodayTasksList";
+import { ProductivityStateIndicator } from "@/components/dashboard/ProductivityStateIndicator";
+import { AdaptiveInsightsPanel } from "@/components/dashboard/AdaptiveInsightsPanel";
+import { AdaptiveTaskRecommendations } from "@/components/dashboard/AdaptiveTaskRecommendations";
+import { EnergyLevelWidget } from "@/components/dashboard/EnergyLevelWidget";
 import { CycleNavigation } from "@/components/productivity/CycleNavigation";
 import { usePerformanceTracking } from "@/hooks/usePerformanceTracking";
+import { useAdaptiveInterface } from "@/hooks/useAdaptiveInterface";
 
 const Dashboard: React.FC = () => {
   const commandPalette = useCommandPalette();
-  
+  const { adaptiveUI, isInFocusMode, shouldShowWidget } = useAdaptiveInterface();
+
   // Track dashboard performance
   usePerformanceTracking('Dashboard');
 
@@ -81,15 +87,55 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-6 py-6 space-y-8">
-
       {/* Date Header */}
       <DateHeader />
 
-      {/* Featured Task Card */}
-      <FeaturedTaskCard task={featuredTask} />
+      {/* Context-Aware Intelligence Section */}
+      <div className={`grid gap-6 ${isInFocusMode ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'}`}>
+        {/* Productivity State Indicator - Always visible */}
+        <ProductivityStateIndicator />
 
-      {/* Today's Tasks List */}
-      <TodayTasksList categories={taskCategories} />
+        {/* Energy Level Widget - High priority for wellness */}
+        {shouldShowWidget('energy-widget') && (
+          <EnergyLevelWidget />
+        )}
+
+        {/* Adaptive Insights Panel - Hidden in deep focus mode */}
+        {shouldShowWidget('insights-panel') && (
+          <AdaptiveInsightsPanel />
+        )}
+      </div>
+
+      {/* Adaptive Task Recommendations - High priority widget */}
+      {shouldShowWidget('task-recommendations') && (
+        <AdaptiveTaskRecommendations />
+      )}
+
+      {/* Traditional Dashboard Content */}
+      {!isInFocusMode && (
+        <>
+          {/* Featured Task Card */}
+          <FeaturedTaskCard task={featuredTask} />
+
+          {/* Today's Tasks List */}
+          <TodayTasksList categories={taskCategories} />
+        </>
+      )}
+
+      {/* Simplified view for focus mode */}
+      {isInFocusMode && shouldShowWidget('essential-tasks') && (
+        <div className="bg-card rounded-2xl p-6 border border-border/50">
+          <h3 className="font-medium text-card-foreground mb-4">Essential Tasks Only</h3>
+          <div className="space-y-2">
+            <div className="p-3 rounded-lg border border-border/30">
+              <div className="font-medium text-sm">Current Priority Task</div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {featuredTask.title}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Command Palette */}
       <CommandPalette
