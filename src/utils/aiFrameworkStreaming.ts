@@ -241,6 +241,9 @@ export const streamFrameworkChat = async (options: FrameworkStreamOptions) => {
     onError
   } = options;
 
+  const startTime = performance.now();
+  let handledLocally = false;
+
   try {
     // Detect if this is a framework-specific command
     const lastUserMessage = messages[messages.length - 1];
@@ -342,13 +345,61 @@ Please provide framework-specific guidance for this type of request.`;
     }
 
     onDone();
+    
+    // Track Luna framework request performance
+    const executionTime = performance.now() - startTime;
+    const confidence = frameworkContext ? calculateFrameworkConfidence(frameworkContext) : undefined;
+    trackLunaUsage('framework-chat', handledLocally, executionTime, confidence);
   } catch (error) {
     console.error('Framework stream error:', error);
     if (onError) {
       onError(error instanceof Error ? error : new Error('Unknown error'));
     }
+    
+    // Track failed request
+    const executionTime = performance.now() - startTime;
+    trackLunaUsage('framework-chat-error', false, executionTime);
   }
 };
+
+// Calculate confidence score based on framework context completeness
+function calculateFrameworkConfidence(context: FrameworkContext): number {
+  let score = 0.5; // Base confidence
+  
+  if (context.completedPrinciples.length > 0) score += 0.1;
+  if (context.currentMetrics.length > 0) score += 0.1;
+  if (context.wellBeingScore > 0) score += 0.1;
+  if (context.systemHealthScore > 0) score += 0.1;
+  if (context.energyPattern && context.energyPattern.length > 0) score += 0.1;
+  
+  return Math.min(score, 1.0);
+}
+
+// Helper to track Luna usage
+async function trackLunaUsage(
+  requestType: string,
+  handledLocally: boolean,
+  executionTimeMs: number,
+  confidence?: number
+) {
+  try {
+    const { supabase } = await import('@/integrations/supabase/client');
+    const user = (await supabase.auth.getUser()).data.user;
+    
+    if (user) {
+      await supabase.rpc('log_luna_local_usage', {
+        user_id_param: user.id,
+        request_type_param: requestType,
+        handled_locally_param: handledLocally,
+        execution_time_param: executionTimeMs,
+        confidence_param: confidence || null,
+      });
+    }
+  } catch (err) {
+    // Silent fail - don't block the main flow
+    console.debug('Luna tracking failed:', err);
+  }
+}
 
 // Utility function to generate contextual suggestions
 export function generateContextualSuggestions(

@@ -13,6 +13,9 @@ export const streamChat = async ({
   onDone: () => void;
   onError?: (error: Error) => void;
 }) => {
+  const startTime = performance.now();
+  let handledLocally = false;
+  
   try {
     const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
     
@@ -96,10 +99,35 @@ export const streamChat = async ({
     }
 
     onDone();
+    
+    // Track Luna request performance
+    const executionTime = performance.now() - startTime;
+    trackLunaUsage('ai-chat', handledLocally, executionTime);
   } catch (error) {
     console.error('Stream error:', error);
     if (onError) {
       onError(error instanceof Error ? error : new Error('Unknown error'));
     }
+    
+    // Track failed request
+    const executionTime = performance.now() - startTime;
+    trackLunaUsage('ai-chat-error', false, executionTime);
   }
 };
+
+// Helper to track Luna usage (imported dynamically to avoid circular deps)
+async function trackLunaUsage(requestType: string, handledLocally: boolean, executionTimeMs: number) {
+  try {
+    const { supabase } = await import('@/integrations/supabase/client');
+    await supabase.rpc('log_luna_local_usage', {
+      user_id_param: (await supabase.auth.getUser()).data.user?.id,
+      request_type_param: requestType,
+      handled_locally_param: handledLocally,
+      execution_time_param: executionTimeMs,
+      confidence_param: null,
+    });
+  } catch (err) {
+    // Silent fail - don't block the main flow
+    console.debug('Luna tracking failed:', err);
+  }
+}

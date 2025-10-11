@@ -7,9 +7,13 @@ import { DateHeader } from "@/components/dashboard/DateHeader";
 import { FeaturedTaskCard } from "@/components/dashboard/FeaturedTaskCard";
 import { TodayTasksList } from "@/components/dashboard/TodayTasksList";
 import { CycleNavigation } from "@/components/productivity/CycleNavigation";
+import { usePerformanceTracking } from "@/hooks/usePerformanceTracking";
 
 const Dashboard: React.FC = () => {
   const commandPalette = useCommandPalette();
+  
+  // Track dashboard performance
+  usePerformanceTracking('Dashboard');
 
   // Mock data for featured task - in real app this would come from API/state
   const featuredTask = {

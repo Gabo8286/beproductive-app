@@ -16,10 +16,14 @@ import { useNavigate } from 'react-router-dom';
 import LunaCommandCenter from '@/components/luna/features/LunaCommandCenter';
 import LunaProactiveGuidance from '@/components/luna/features/LunaProactiveGuidance';
 import { useLunaFramework } from '@/components/luna/context/LunaFrameworkContext';
+import { usePerformanceTracking } from '@/hooks/usePerformanceTracking';
 
 export default function LunaCommandCenterPage() {
   const navigate = useNavigate();
   const { productivityProfile } = useLunaFramework();
+  
+  // Track Luna Command Center performance
+  usePerformanceTracking('LunaCommandCenter');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">

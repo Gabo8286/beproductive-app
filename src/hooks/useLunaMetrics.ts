@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { monitorLunaQuery } from '@/utils/supabaseMonitor';
 import type { Database } from '@/integrations/supabase/types';
 
 type LunaMetric = Database['public']['Tables']['luna_productivity_metrics']['Row'];
@@ -46,20 +47,28 @@ export function useLunaMetrics() {
     if (!user) return [];
 
     try {
-      let query = supabase
-        .from('luna_productivity_metrics')
-        .select('*')
-        .eq('profile_id', profileId)
-        .order('recorded_at', { ascending: false })
-        .limit(limit);
+      // Wrap query with performance monitoring
+      const result = await monitorLunaQuery(
+        'select-metrics-history',
+        'luna_productivity_metrics',
+        async () => {
+          let query = supabase
+            .from('luna_productivity_metrics')
+            .select('*')
+            .eq('profile_id', profileId)
+            .order('recorded_at', { ascending: false })
+            .limit(limit);
 
-      if (category) {
-        query = query.eq('category', category);
-      }
+          if (category) {
+            query = query.eq('category', category);
+          }
 
-      const { data, error } = await query;
-      if (error) throw error;
-      return data || [];
+          return await query;
+        }
+      );
+
+      if (result.error) throw result.error;
+      return result.data || [];
     } catch (error) {
       console.error('Error fetching metrics:', error);
       return [];

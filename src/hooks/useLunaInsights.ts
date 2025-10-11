@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { monitorLunaQuery } from '@/utils/supabaseMonitor';
 import type { Database } from '@/integrations/supabase/types';
 
 type LunaInsight = Database['public']['Tables']['luna_proactive_insights']['Row'];
@@ -17,14 +18,21 @@ export function useLunaInsights(profileId?: string) {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('luna_proactive_insights')
-        .select('*')
-        .eq('profile_id', profileId)
-        .eq('dismissed', false)
-        .gt('expires_at', new Date().toISOString())
-        .order('priority', { ascending: true })
-        .order('created_at', { ascending: false });
+      // Wrap query with performance monitoring
+      const { data, error } = await monitorLunaQuery(
+        'select-insights',
+        'luna_proactive_insights',
+        async () => {
+          return await supabase
+            .from('luna_proactive_insights')
+            .select('*')
+            .eq('profile_id', profileId)
+            .eq('dismissed', false)
+            .gt('expires_at', new Date().toISOString())
+            .order('priority', { ascending: true })
+            .order('created_at', { ascending: false });
+        }
+      );
 
       if (error) throw error;
       setInsights(data || []);
