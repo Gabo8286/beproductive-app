@@ -1636,6 +1636,36 @@ export type Database = {
           },
         ]
       }
+      luna_local_usage: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          execution_time_ms: number
+          handled_locally: boolean
+          id: string
+          request_type: string
+          user_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          execution_time_ms: number
+          handled_locally: boolean
+          id?: string
+          request_type: string
+          user_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          execution_time_ms?: number
+          handled_locally?: boolean
+          id?: string
+          request_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       luna_proactive_insights: {
         Row: {
           acted_at: string | null
@@ -2142,6 +2172,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      performance_metrics: {
+        Row: {
+          component_name: string
+          duration_ms: number
+          id: string
+          metadata: Json | null
+          metric_type: string
+          recorded_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          component_name: string
+          duration_ms: number
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          recorded_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          component_name?: string
+          duration_ms?: number
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          recorded_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       productivity_assessments: {
         Row: {
@@ -3557,7 +3617,26 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      luna_user_dashboard_summary: {
+        Row: {
+          active_insights_count: number | null
+          avg_productivity_score: number | null
+          current_stage: string | null
+          system_health_score: number | null
+          user_id: string | null
+          well_being_score: number | null
+          workspace_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "luna_productivity_profiles_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       analyze_reflection_patterns: {
@@ -3715,6 +3794,10 @@ export type Database = {
         Args: { total_xp: number }
         Returns: number
       }
+      get_luna_dashboard_data: {
+        Args: { user_id_param: string; workspace_id_param: string }
+        Returns: Json
+      }
       get_note_backlinks: {
         Args: { note_uuid: string }
         Returns: {
@@ -3727,6 +3810,10 @@ export type Database = {
           updated_at: string
           user_id: string
         }[]
+      }
+      get_performance_insights: {
+        Args: { user_id_param: string }
+        Returns: Json
       }
       get_progress_suggestions: {
         Args: { goal_id: string }
@@ -3771,6 +3858,16 @@ export type Database = {
         Args: { _user_id: string; _workspace_id: string }
         Returns: boolean
       }
+      log_luna_local_usage: {
+        Args: {
+          confidence_param?: number
+          execution_time_param: number
+          handled_locally_param: boolean
+          request_type_param: string
+          user_id_param: string
+        }
+        Returns: undefined
+      }
       move_task_to_status: {
         Args: {
           new_position: number
@@ -3782,6 +3879,10 @@ export type Database = {
       process_automation_rules: {
         Args: Record<PropertyKey, never>
         Returns: number
+      }
+      refresh_luna_dashboard_summary: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       reorder_tasks_in_status: {
         Args: {
