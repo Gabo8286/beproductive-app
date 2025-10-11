@@ -48,18 +48,7 @@ export interface BehaviorPattern {
   discoveredAt: Date;
 }
 
-export interface ProductivityInsight {
-  id: string;
-  title: string;
-  description: string;
-  type: 'energy' | 'focus' | 'timing' | 'habits' | 'performance';
-  importance: 'low' | 'medium' | 'high';
-  actionable: boolean;
-  dataSource: string;
-  generatedAt: Date;
-  confidence: number;
-  impact: string; // Expected impact of acting on this insight
-}
+import type { ProductivityInsight } from '@/types/ai';
 
 export interface PersonalRecommendation {
   id: string;
@@ -930,9 +919,8 @@ export const useClientAnalytics = () => {
 
   const getTodayStats = async (): Promise<DailyProductivityStats | null> => {
     try {
-      const today = new Date().toISOString().split('T')[0];
       const data = clientAnalyticsEngine.getAnalyticsData();
-      return Array.from(data.dailyStats.values()).find(stat => stat.date === today) || null;
+      return data.dailyStats;
     } catch (error) {
       console.warn('Failed to get today stats:', error);
       return null;
@@ -945,14 +933,16 @@ export const useClientAnalytics = () => {
       const insights = {
         focus: {
           id: Date.now().toString(),
-          type: 'pattern' as const,
           title: 'Focus Pattern Detected',
           description: 'You tend to be most focused in the morning hours',
-          category: 'focus',
-          impact: 'medium' as const,
-          confidence: 0.8,
+          type: 'focus' as const,
+          importance: 'medium' as const,
           actionable: true,
+          dataSource: 'client-analytics',
           generatedAt: new Date(),
+          confidence: 0.8,
+          impact: 'Improved focus during peak hours',
+          category: 'focus',
           relevantTimeframe: 'week'
         }
       };

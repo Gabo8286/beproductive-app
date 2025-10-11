@@ -286,7 +286,7 @@ function applyConfigToCSSVariables(config: AppConfig) {
       root.style.setProperty(`--color-${key}`, value);
     } else if (typeof value === 'object') {
       Object.entries(value).forEach(([subKey, subValue]) => {
-        root.style.setProperty(`--color-${key}-${subKey}`, subValue);
+        root.style.setProperty(`--color-${key}-${subKey}`, String(subValue));
       });
     }
   });
@@ -333,10 +333,10 @@ function applyConfigToCSSVariables(config: AppConfig) {
     Object.entries(componentConfig).forEach(([property, value]) => {
       if (typeof value === 'object') {
         Object.entries(value).forEach(([subKey, subValue]) => {
-          root.style.setProperty(`--${component}-${property}-${subKey}`, subValue);
+          root.style.setProperty(`--${component}-${property}-${subKey}`, String(subValue));
         });
       } else {
-        root.style.setProperty(`--${component}-${property}`, value);
+        root.style.setProperty(`--${component}-${property}`, String(value));
       }
     });
   });

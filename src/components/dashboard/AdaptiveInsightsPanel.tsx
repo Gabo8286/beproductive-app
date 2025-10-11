@@ -61,7 +61,7 @@ export const AdaptiveInsightsPanel: React.FC<AdaptiveInsightsPanelProps> = ({
 
         // Add recent analytical insights
         recentInsights.forEach(insight => {
-          if (insight.category === 'focus' && productivityState.focusLevel < 60) {
+          if ((insight.type === 'focus' || insight.type === 'energy') && productivityState.focusLevel < 60) {
             contextualInsights.push({
               id: `insight-${insight.id}`,
               type: 'tip',
@@ -69,7 +69,7 @@ export const AdaptiveInsightsPanel: React.FC<AdaptiveInsightsPanelProps> = ({
               description: insight.description,
               action: insight.actionable ? 'Learn more' : undefined,
               icon: <Lightbulb className="h-4 w-4" />,
-              priority: insight.impact === 'high' ? 3 : insight.impact === 'medium' ? 2 : 1,
+              priority: insight.importance === 'high' ? 3 : insight.importance === 'medium' ? 2 : 1,
               relevanceScore: insight.confidence
             });
           }

@@ -23,17 +23,7 @@ export interface TaskExtractionResult {
   confidence: number;
 }
 
-export interface ProductivityInsight {
-  id: string;
-  type: string;
-  title: string;
-  description: string;
-  impact: string;
-  actionable: boolean;
-  confidence?: number;
-  suggestedActions?: string[];
-  data?: any;
-}
+import type { ProductivityInsight } from '@/types/ai';
 
 export interface HabitSuggestion {
   id: string;
@@ -78,24 +68,30 @@ export const generateInsight = async (
       const parsed = JSON.parse(response.content);
       return {
         id: Math.random().toString(36).substr(2, 9),
-        type: parsed.type || 'general',
         title: parsed.title || 'AI Generated Insight',
         description: parsed.description || response.content,
-        impact: parsed.impact || 'medium',
+        type: (parsed.type === 'general' ? 'performance' : parsed.type) || 'performance',
+        importance: parsed.importance || 'medium',
         actionable: parsed.actionable || true,
+        dataSource: 'ai-service',
+        generatedAt: new Date(),
         confidence: parsed.confidence || 0.5,
+        impact: parsed.impact || 'medium',
         suggestedActions: parsed.suggestedActions || []
       };
     } catch (parseError) {
       // Fallback if JSON parsing fails
       return {
         id: Math.random().toString(36).substr(2, 9),
-        type: 'general',
         title: 'AI Generated Insight',
         description: response.content,
-        impact: 'medium',
+        type: 'performance',
+        importance: 'medium',
         actionable: true,
+        dataSource: 'ai-service',
+        generatedAt: new Date(),
         confidence: 0.5,
+        impact: 'medium',
         suggestedActions: []
       };
     }
@@ -103,11 +99,14 @@ export const generateInsight = async (
     console.error('Error generating insight:', error);
     return {
       id: Math.random().toString(36).substr(2, 9),
-      type: 'error',
       title: 'Unable to Generate Insight',
       description: 'The AI service is currently unavailable. Please try again later.',
-      impact: 'low',
+      type: 'performance',
+      importance: 'low',
       actionable: false,
+      dataSource: 'ai-service',
+      generatedAt: new Date(),
+      impact: 'low',
       confidence: 0
     };
   }

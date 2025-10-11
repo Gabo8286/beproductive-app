@@ -25,7 +25,7 @@ export interface AdaptationConfig {
 
 export function useAdaptiveInterface(config?: Partial<AdaptationConfig>) {
   const { getCurrentState, trackAction } = useProductivityState();
-  const { updateThemeColors, colors, features } = useAppConfig();
+  const { updateColors, colors, features } = useAppConfig();
 
   const [productivityState, setProductivityState] = useState<ProductivityState | null>(null);
   const [adaptiveUI, setAdaptiveUI] = useState<AdaptiveUIState>(getDefaultUIState());
@@ -86,7 +86,7 @@ export function useAdaptiveInterface(config?: Partial<AdaptationConfig>) {
     } finally {
       setIsAdapting(false);
     }
-  }, [adaptationConfig, userOverrides, trackAction, updateThemeColors]);
+  }, [adaptationConfig, userOverrides, trackAction, updateColors]);
 
   // Calculate what the UI should look like based on productivity state
   const calculateAdaptiveUIState = (state: ProductivityState, config: AdaptationConfig): AdaptiveUIState => {
@@ -194,7 +194,7 @@ export function useAdaptiveInterface(config?: Partial<AdaptationConfig>) {
       // Apply color scheme changes
       const colorUpdates = getColorUpdatesForScheme(uiState.colorScheme);
       if (Object.keys(colorUpdates).length > 0) {
-        updateThemeColors(colorUpdates);
+        updateColors(colorUpdates);
       }
 
       // Apply CSS classes for animations and layout

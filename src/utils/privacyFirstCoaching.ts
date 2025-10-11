@@ -293,7 +293,7 @@ class PrivacyFirstCoach {
         actionable: true,
         recommendations: [{
           id: `rec-consistency-${Date.now()}`,
-          type: 'habit',
+          type: 'behavior-change',
           title: 'Build Morning Routine',
           description: 'Establish a consistent morning routine to create stable foundation for productive days',
           effort: 'medium',
@@ -350,7 +350,7 @@ class PrivacyFirstCoach {
         actionable: true,
         recommendations: [{
           id: `rec-energy-boost-${Date.now()}`,
-          type: 'wellness',
+          type: 'mindset',
           title: 'Energy Restoration Program',
           description: 'Implement strategies to naturally boost and sustain your energy levels',
           effort: 'medium',
@@ -520,7 +520,7 @@ class PrivacyFirstCoach {
         actionable: true,
         recommendations: [{
           id: `rec-balance-restore-${Date.now()}`,
-          type: 'wellness',
+          type: 'schedule',
           title: 'Implement Sustainable Work Rhythm',
           description: 'Create boundaries and recovery periods to maintain long-term productivity',
           effort: 'medium',
@@ -579,7 +579,7 @@ class PrivacyFirstCoach {
         actionable: true,
         recommendations: [{
           id: `rec-habit-expand-${Date.now()}`,
-          type: 'habit',
+          type: 'behavior-change',
           title: 'Leverage Habit-Building Strengths',
           description: 'Use your proven habit-building ability to tackle new areas of improvement',
           effort: 'low',

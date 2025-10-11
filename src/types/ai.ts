@@ -26,13 +26,20 @@ export interface TaskExtractionResult {
 }
 
 export interface ProductivityInsight {
-  type: "pattern" | "recommendation" | "warning" | "achievement";
+  id: string;
   title: string;
   description: string;
-  data: Record<string, any>;
+  type: 'energy' | 'focus' | 'timing' | 'habits' | 'performance';
+  importance: 'low' | 'medium' | 'high';
+  actionable: boolean;
+  dataSource: string;
+  generatedAt: Date;
   confidence: number;
-  actionable?: boolean;
+  impact: string;
+  category?: string;
+  data?: Record<string, any>;
   suggestedActions?: string[];
+  relevantTimeframe?: string;
 }
 
 // NLP Types
