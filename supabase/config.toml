@@ -1,7 +1,7 @@
 project_id = "rymixmuunfjxwryucvxt"
 
 [functions.ai-chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-insights]
 verify_jwt = true
