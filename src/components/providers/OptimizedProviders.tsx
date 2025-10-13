@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
-import { OptimizedAuthProvider } from "@/contexts/OptimizedAuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
@@ -27,9 +27,9 @@ const CoreProviders = memo(({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider>
-        <OptimizedAuthProvider>
+        <AuthProvider>
           {children}
-        </OptimizedAuthProvider>
+        </AuthProvider>
       </ConfigProvider>
     </QueryClientProvider>
   );

@@ -110,6 +110,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         avatar_url: null,
         created_at: mockUser.created_at,
         updated_at: new Date().toISOString(),
+        role: 'user',
+        subscription_tier: 'free',
+        preferences: {},
+        onboarding_completed: false,
       };
 
       setUser(mockUser);
