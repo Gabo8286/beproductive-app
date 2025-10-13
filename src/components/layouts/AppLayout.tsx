@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Sparkles, CreditCard, Shield, Crown, Brain, Palette } from "lucide-react";
+import { LogOut, User, Sparkles, CreditCard, Shield, Crown, Brain, Palette, Settings } from "lucide-react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
@@ -145,7 +145,7 @@ export function AppLayout() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm">
-                  <SettingsIcon className="h-4 w-4 mr-2" />
+                  <Settings className="h-4 w-4 mr-2" />
                   Navigation
                 </Button>
               </DropdownMenuTrigger>

@@ -4,8 +4,6 @@ import { Database } from "@/integrations/supabase/types";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { useGamification } from "@/hooks/useGamification";
-import { useIsDemoMode } from "@/hooks/useIsDemoMode";
-import { gabrielPersona } from "@/data/demo/gabriel-persona-data";
 
 type Task = Database["public"]["Tables"]["tasks"]["Row"];
 type TaskInsert = Database["public"]["Tables"]["tasks"]["Insert"];
@@ -36,72 +34,11 @@ export const useDefaultWorkspace = () => {
 
 // Get single task by ID
 export const useTask = (taskId: string | undefined) => {
-  const isDemoMode = useIsDemoMode();
-
   return useQuery({
-    queryKey: ["task", taskId, isDemoMode],
+    queryKey: ["task", taskId],
     queryFn: async () => {
       if (!taskId) throw new Error("Task ID is required");
 
-      // Return demo data if in demo mode
-      if (isDemoMode) {
-        const demoTask = gabrielPersona.tasks.find(task => task.id === taskId);
-        if (!demoTask) {
-          throw new Error(`Demo task with ID ${taskId} not found`);
-        }
-
-        // Transform demo task to match database structure
-        return {
-          id: demoTask.id,
-          title: demoTask.title,
-          description: demoTask.description || "",
-          status: demoTask.status as any,
-          priority: demoTask.priority as any,
-          due_date: demoTask.due_date || null,
-          completed: demoTask.completed,
-          estimated_hours: demoTask.estimated_hours || null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          created_by: gabrielPersona.user.id,
-          assigned_to: gabrielPersona.user.id,
-          workspace_id: "demo-workspace",
-          actual_duration: null,
-          auto_generated: false,
-          completed_at: demoTask.completed ? new Date().toISOString() : null,
-          estimated_duration: demoTask.estimated_hours ? demoTask.estimated_hours * 60 : null,
-          is_recurring: false,
-          metadata: {},
-          parent_task_id: null,
-          position: 0,
-          project_id: null,
-          recurrence_pattern: null,
-          tags: [],
-          habit_id: null,
-          hierarchy_level: null,
-          instance_date: null,
-          recurring_template_id: null,
-          scheduled_date: null,
-          assigned_to_profile: {
-            full_name: gabrielPersona.user.full_name,
-            avatar_url: gabrielPersona.user.avatar_url,
-          },
-          created_by_profile: {
-            full_name: gabrielPersona.user.full_name,
-            avatar_url: gabrielPersona.user.avatar_url,
-          },
-        } as Task & {
-          assigned_to_profile?: {
-            full_name: string | null;
-            avatar_url: string | null;
-          };
-          created_by_profile?: {
-            full_name: string | null;
-            avatar_url: string | null;
-          };
-        };
-      }
-
-      // Regular database query for non-demo users
       const { data, error } = await supabase
         .from("tasks")
         .select(

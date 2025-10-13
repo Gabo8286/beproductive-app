@@ -2,12 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
 
-// Gabriel's AI Entrepreneur Demo Data
-const todayStats = gabrielPersona.todayStats;
-const todayFocus = gabrielPersona.todayFocus;
-const weeklyOverview = gabrielPersona.weeklyOverview;
+// Empty initial state - will load from database
+const todayStats: any[] = [];
+const todayFocus: any[] = [];
+const weeklyOverview = {
+  tasksCompleted: { current: 0, total: 0 },
+  habitStreak: 0,
+  goalsProgress: '0%',
+  aiInteractions: 0,
+  automationWorkflows: 0,
+};
 
 interface EngageTabProps {
   className?: string;

@@ -17,7 +17,6 @@ import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
-import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
 
 interface QuickAddItem {
   id: string;
@@ -86,8 +85,8 @@ const quickAddItems: QuickAddItem[] = [
   },
 ];
 
-// Gabriel's AI Entrepreneur Demo Data
-const recentCaptures = gabrielPersona.recentCaptures;
+// Empty initial state - will load from database
+const recentCaptures: any[] = [];
 
 interface CaptureTabProps {
   className?: string;

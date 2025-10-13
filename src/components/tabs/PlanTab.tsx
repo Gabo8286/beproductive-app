@@ -2,24 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
 import { useGlobalView } from '@/contexts/GlobalViewContext';
 
-// Gabriel's AI Entrepreneur Demo Data
-const mockProjects = gabrielPersona.projects;
-
-// Transform tasks for display
-const mockTasks = gabrielPersona.tasks.map(task => ({
-  id: task.id,
-  title: task.title,
-  project: task.category.charAt(0).toUpperCase() + task.category.slice(1),
-  priority: task.priority,
-  dueDate: new Date(task.due_date).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric'
-  }),
-  completed: task.completed,
-}));
+// Empty initial state - will load from database
+const mockProjects: any[] = [];
+const mockTasks: any[] = [];
 
 interface PlanTabProps {
   className?: string;

@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle, Code, Zap, Brain, Calendar, Users, Rocket } from "lucide-react";
 import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
 import { BuildStory } from "./BuildStory";
-import { DemoContainer } from "./demo/DemoContainer";
 import { useConversionTracking } from "@/hooks/useConversionTracking";
 import { ConversionEventType } from "@/types/conversion";
 import { useState, useEffect } from "react";
@@ -190,25 +189,32 @@ export const LandingPage = () => {
           </div>
         </div>
         <div className="relative">
-          <div className="absolute -top-4 right-8 z-10">
-            <Badge className="bg-gradient-to-r from-primary to-secondary text-white border-0 shadow-lg animate-pulse px-4 py-2 text-sm font-semibold">
-              ✨ Built by Non-Developer
-            </Badge>
+          <div className="max-w-4xl mx-auto">
+            <Card className="glass-card p-8 text-center">
+              <div className="text-4xl mb-4">🚀</div>
+              <h3 className="font-semibold text-xl mb-2">Ready to Experience BeProductive?</h3>
+              <p className="text-muted-foreground mb-6">
+                Sign up now to access the full productivity platform with enterprise monitoring.
+              </p>
+              <div className="flex gap-4 justify-center">
+                <Button
+                  size="lg"
+                  className="apple-button shadow-lg hover:shadow-xl"
+                  asChild
+                >
+                  <Link to="/signup">Create Free Account</Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="apple-button glass-card"
+                  asChild
+                >
+                  <Link to="/login">Sign In</Link>
+                </Button>
+              </div>
+            </Card>
           </div>
-          <DemoContainer
-          onDemoStart={() => {
-            trackEvent(
-              ConversionEventType.DEMO_START,
-              { source: "landing-demo-section" },
-              8,
-            );
-            trackBehavior("demo_start", "interactive-demo");
-          }}
-          onComplete={() => {
-            trackEvent(ConversionEventType.DEMO_COMPLETE, {}, 15);
-            scrollToSection("interactive-builder");
-          }}
-        />
         </div>
       </section>
 

@@ -101,9 +101,9 @@ export default function GuestModeIndicator() {
               <div className="flex items-start gap-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
                 <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-orange-800">Demo Data</h4>
+                  <h4 className="font-medium text-orange-800">Demo Mode</h4>
                   <p className="text-sm text-orange-700">
-                    All data shown is simulated for demonstration purposes.
+                    You are using demo mode for testing purposes.
                     Changes will not be saved when you exit demo mode.
                   </p>
                 </div>
