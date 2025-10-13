@@ -38,14 +38,11 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Dynamic chunking based on module path for better optimization
+          // Simplified chunking strategy to prevent React initialization race conditions
           if (id.includes('node_modules')) {
-            // React ecosystem
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (id.includes('react-router')) {
-              return 'router-vendor';
+            // Consolidate ALL React-related libraries into one chunk to prevent race conditions
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-core';
             }
             // UI components and styling
             if (id.includes('@radix-ui') || id.includes('radix-ui')) {
@@ -80,22 +77,8 @@ export default defineConfig(({ mode }) => ({
             return 'vendor';
           }
 
-          // Application chunks based on feature areas
-          if (id.includes('/components/luna/')) {
-            return 'luna-framework';
-          }
-          if (id.includes('/components/widgets/')) {
-            return 'widgets';
-          }
-          if (id.includes('/components/admin/')) {
-            return 'admin';
-          }
-          if (id.includes('/pages/')) {
-            return 'pages';
-          }
-          if (id.includes('/contexts/') || id.includes('/hooks/')) {
-            return 'app-core';
-          }
+          // Let Vite handle app code chunking automatically to prevent dependency issues
+          // Removed manual app-specific chunking to avoid interfering with React context initialization
         },
         // Optimize chunk naming for caching
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -106,11 +89,12 @@ export default defineConfig(({ mode }) => ({
     // Tree shaking and dead code elimination
     cssCodeSplit: true,
   },
-  // Optimize dependencies
+  // Optimize dependencies for better pre-bundling
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
+      'react-dom/client',
       'react-router-dom',
       '@tanstack/react-query',
       'framer-motion',

@@ -151,10 +151,8 @@ class BuildOptimizer {
     const startTime = Date.now();
 
     try {
-      // Use enhanced vite config if available
-      const configFile = fs.existsSync(path.join(projectRoot, 'vite.config.enhanced.ts'))
-        ? 'vite.config.enhanced.ts'
-        : 'vite.config.ts';
+      // Use standard optimized vite config
+      const configFile = 'vite.config.ts';
 
       const buildCommand = `npm run build -- --config ${configFile} --mode ${this.options.mode}`;
 
