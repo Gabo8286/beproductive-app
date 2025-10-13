@@ -1,6 +1,6 @@
 // Guest mode utilities for development and testing
 import { User, Session } from "@supabase/supabase-js";
-import { Profile } from "@/types/database";
+import { ProfileWithRole } from "@/types/database";
 
 export type GuestUserType = 'admin' | 'user';
 
@@ -86,7 +86,7 @@ export const createGuestSession = (type: GuestUserType): Session => {
 /**
  * Create a mock guest profile
  */
-export const createGuestProfile = (type: GuestUserType): Profile => {
+export const createGuestProfile = (type: GuestUserType): ProfileWithRole => {
   const user = createGuestUser(type);
 
   return {
@@ -101,7 +101,7 @@ export const createGuestProfile = (type: GuestUserType): Profile => {
     role: type === 'admin' ? 'super_admin' : 'user',
     guest_mode: true,
     guest_type: type,
-  } as Profile & {
+  } as ProfileWithRole & {
     role: string;
     guest_mode: boolean;
     guest_type: GuestUserType;

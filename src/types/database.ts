@@ -10,17 +10,22 @@ export type SubscriptionStatus =
   | "past_due"
   | "trialing";
 
+// Base profile interface matching actual database schema (no role field)
 export interface Profile {
   id: string;
   email: string;
   full_name: string | null;
   avatar_url: string | null;
-  role: UserRole;
   subscription_tier: string;
   preferences: Record<string, any>;
   onboarding_completed: boolean;
   created_at: string;
   updated_at: string;
+}
+
+// Enhanced profile interface with role data (from get_user_profile_with_role function)
+export interface ProfileWithRole extends Profile {
+  role: UserRole;
 }
 
 export interface Workspace {

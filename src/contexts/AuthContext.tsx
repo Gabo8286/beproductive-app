@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { Profile } from "@/types/database";
+import { Profile, ProfileWithRole } from "@/types/database";
 import { toast } from "sonner";
 import { localAuth, isLocalMode, LocalAuthUser, LocalAuthSession } from "@/integrations/auth/localAuthAdapter";
 import { runAuthDiagnostics, displayDiagnostics } from "@/utils/browser/authDiagnostics";
@@ -21,7 +21,7 @@ import {
 interface AuthContextType {
   user: User | null;
   session: Session | null;
-  profile: Profile | null;
+  profile: ProfileWithRole | null;
   authLoading: boolean;
   authError: string | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -34,7 +34,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
   updateProfile: (
-    updates: Partial<Profile>,
+    updates: Partial<ProfileWithRole>,
   ) => Promise<{ error: Error | null }>;
   clearAuthError: () => void;
   // Guest mode functions
@@ -51,7 +51,7 @@ export { AuthContext };
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<ProfileWithRole | null>(null);
   const [authLoading, setAuthLoading] = useState(true); // Start true for initial load
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -422,7 +422,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     try {
-      console.log("[AuthContext] Fetching profile for user:", userId);
+      console.log("[AuthContext] Fetching profile with role for user:", userId);
       const localMode = isLocalMode();
 
       let data, error;
@@ -445,29 +445,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const dockerLocalMode = window.location.hostname === 'localhost' && window.location.port === '8080';
           const postgrestUrl = dockerLocalMode ? 'http://localhost:8000' : 'http://localhost:8000';
 
-          const response = await fetch(`${postgrestUrl}/profiles?id=eq.${userId}&select=*`, {
+          // Call the get_user_profile_with_role function
+          const response = await fetch(`${postgrestUrl}/rpc/get_user_profile_with_role`, {
+            method: 'POST',
             headers,
+            body: JSON.stringify({ p_user_id: userId }),
           });
 
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
 
-          data = await response.json();
+          const result = await response.json();
+          // The function returns an array, get the first (and only) result
+          data = Array.isArray(result) ? result[0] : result;
           error = null;
-          console.log("[AuthContext] Profile fetched directly from PostgREST:", data);
+          console.log("[AuthContext] Profile with role fetched from PostgREST function:", data);
         } catch (fetchError) {
-          console.error("[AuthContext] Direct profile fetch failed:", fetchError);
+          console.error("[AuthContext] Profile+role fetch failed:", fetchError);
           error = fetchError;
           data = null;
         }
       } else {
-        // Use Supabase client for cloud mode
-        const profilePromise = supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", userId)
-          .single();
+        // Use Supabase client for cloud mode - call the SQL function
+        const profilePromise = supabase.rpc('get_user_profile_with_role', {
+          p_user_id: userId
+        }).single();
 
         const timeoutPromise = new Promise((_, reject) => {
           setTimeout(() => reject(new Error("Profile fetch timeout")), 8000);
@@ -483,7 +486,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (error) {
-        console.error("[AuthContext] Profile fetch error:", error);
+        console.error("[AuthContext] Profile+role fetch error:", error);
         setAuthError(`Failed to load profile: ${error.message || error}`);
         // Don't show toast for network errors during initialization
         if (error.message && !error.message.includes("timeout")) {
@@ -493,12 +496,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      console.log("[AuthContext] Profile loaded successfully");
-      setProfile(data as Profile);
+      console.log("[AuthContext] Profile with role loaded successfully");
+      setProfile(data as ProfileWithRole);
       setAuthLoading(false);
       isInitializing.current = false;
     } catch (error) {
-      console.error("[AuthContext] Profile fetch failed:", error);
+      console.error("[AuthContext] Profile+role fetch failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
       setAuthError(`Failed to load profile: ${errorMessage}`);
