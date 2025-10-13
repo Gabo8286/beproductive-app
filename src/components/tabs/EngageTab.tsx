@@ -2,12 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
-
-// Gabriel's AI Entrepreneur Demo Data
-const todayStats = gabrielPersona.todayStats;
-const todayFocus = gabrielPersona.todayFocus;
-const weeklyOverview = gabrielPersona.weeklyOverview;
+// Empty state data - real data should be fetched from API
+const todayStats: any[] = [];
+const todayFocus: any[] = [];
+const weeklyOverview = {
+  tasksCompleted: { current: 0, total: 0 },
+  habitStreak: 0,
+  goalsProgress: "0%",
+  aiInteractions: 0,
+  automationWorkflows: 0,
+};
 
 interface EngageTabProps {
   className?: string;
@@ -16,7 +20,7 @@ interface EngageTabProps {
 export const EngageTab: React.FC<EngageTabProps> = ({ className }) => {
   const navigate = useNavigate();
 
-  const handleFocusItemClick = (item: typeof todayFocus[0]) => {
+  const handleFocusItemClick = (item: any) => {
     switch (item.type.toLowerCase()) {
       case 'habit':
         navigate('/habits');
@@ -142,82 +146,24 @@ export const EngageTab: React.FC<EngageTabProps> = ({ className }) => {
         </div>
       </div>
 
-      {/* Weekly Overview */}
-      <div className="apple-card p-6">
-        <h3 className="font-semibold text-base text-[#1d1d1f] mb-4 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-[#007aff]" />
-          Weekly Overview
+      {/* Empty State */}
+      <div className="apple-card p-8 text-center">
+        <div className="text-4xl mb-4">📊</div>
+        <h3 className="font-semibold text-[#1d1d1f] mb-2">
+          No activity data yet
         </h3>
-
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-[#86868b] text-sm">Tasks completed</span>
-            <span className="font-semibold text-[#1d1d1f]">
-              {weeklyOverview.tasksCompleted.current}/{weeklyOverview.tasksCompleted.total}
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-[#86868b] text-sm">Habit streak</span>
-            <span className="font-semibold text-[#1d1d1f]">
-              🔥 {weeklyOverview.habitStreak} days
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-[#86868b] text-sm">Goals progress</span>
-            <span className="font-semibold text-[#34c759]">
-              {weeklyOverview.goalsProgress}
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-[#86868b] text-sm">AI interactions</span>
-            <span className="font-semibold text-[#007aff]">
-              🤖 {weeklyOverview.aiInteractions} this week
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-[#86868b] text-sm">Automation workflows</span>
-            <span className="font-semibold text-[#ff9500]">
-              ⚡ {weeklyOverview.automationWorkflows} created
-            </span>
-          </div>
-        </div>
-
-        {/* Progress bar for task completion */}
-        <div className="mt-4">
-          <div className="flex justify-between text-xs text-[#86868b] mb-2">
-            <span>Weekly Progress</span>
-            <span>
-              {Math.round((weeklyOverview.tasksCompleted.current / weeklyOverview.tasksCompleted.total) * 100)}%
-            </span>
-          </div>
-          <div className="w-full bg-[#f5f5f7] h-2 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#007aff] transition-all duration-500"
-              style={{
-                width: `${(weeklyOverview.tasksCompleted.current / weeklyOverview.tasksCompleted.total) * 100}%`
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mt-6 grid grid-cols-2 gap-3">
+        <p className="text-[#86868b] text-sm mb-6">
+          Start using the app to see your daily focus items, stats, and weekly progress here.
+        </p>
+        <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={() => navigate('/analytics')}
+            onClick={() => navigate('/tasks')}
             className="apple-button-primary py-3 text-sm"
-          >
-            View Analytics
-          </button>
+          >Add Tasks</button>
           <button
             onClick={() => navigate('/goals')}
             className="apple-button-secondary py-3 text-sm"
-          >
-            Adjust Goals
-          </button>
+          >Set Goals</button>
         </div>
       </div>
     </div>

@@ -15,8 +15,7 @@ import {
   calculateValueFromProgress,
 } from "@/utils/goalStatus";
 import { useGamification } from "@/hooks/useGamification";
-import { useIsDemoMode } from "@/hooks/useIsDemoMode";
-import { gabrielPersona } from "@/data/demo/gabriel-persona-data";
+// Removed demo mode dependencies
 
 export function useGoals() {
   const queryClient = useQueryClient();
@@ -171,44 +170,9 @@ export function useGoalsByStatus(status?: Goal["status"]) {
 }
 
 export function useGoal(id: string) {
-  const isDemoMode = useIsDemoMode();
-
   return useQuery({
-    queryKey: ["goals", id, isDemoMode],
+    queryKey: ["goals", id],
     queryFn: async () => {
-      // Return demo data if in demo mode
-      if (isDemoMode) {
-        const demoGoal = gabrielPersona.goals.find(goal => goal.id === id);
-        if (!demoGoal) {
-          throw new Error(`Demo goal with ID ${id} not found`);
-        }
-
-        // Transform demo goal to match database structure
-        return {
-          id: demoGoal.id,
-          title: demoGoal.title,
-          description: demoGoal.description,
-          category: demoGoal.category,
-          status: demoGoal.status as any,
-          priority: demoGoal.priority,
-          progress: demoGoal.progress,
-          target_value: demoGoal.target_value,
-          created_by: gabrielPersona.user.id,
-          tags: [],
-          metadata: {},
-          position: 0,
-          current_value: demoGoal.current_value,
-          unit: demoGoal.unit,
-          start_date: demoGoal.start_date,
-          target_date: demoGoal.target_date,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          user_id: gabrielPersona.user.id,
-          workspace_id: "demo-workspace",
-        } as Goal;
-      }
-
-      // Regular database query for non-demo users
       const { data, error } = await supabase
         .from("goals")
         .select("*")

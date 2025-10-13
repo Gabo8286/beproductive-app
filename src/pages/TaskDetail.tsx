@@ -40,7 +40,7 @@ import { SaveAsTemplateDialog } from "@/components/templates/SaveAsTemplateDialo
 import { TimerButton } from "@/components/time/TimerButton";
 import { TimeEntriesList } from "@/components/time/TimeEntriesList";
 import { TimeEntryForm } from "@/components/time/TimeEntryForm";
-import { useIsDemoMode } from "@/hooks/useIsDemoMode";
+// Removed demo mode import
 
 const priorityConfig = {
   low: {
@@ -92,7 +92,7 @@ export default function TaskDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
-  const isDemoMode = useIsDemoMode();
+  // Demo mode removed
 
   const { data: task, isLoading, error } = useTask(id);
   const deleteTask = useDeleteTask();
@@ -101,14 +101,6 @@ export default function TaskDetail() {
   const { data: subtaskProgress } = useSubtaskProgress(id);
 
   const handleDelete = () => {
-    if (isDemoMode) {
-      toast.info("Demo Mode: Task deletion simulated", {
-        description: "In the real app, this task would be permanently deleted."
-      });
-      navigate("/tasks");
-      return;
-    }
-
     if (confirm("Are you sure you want to delete this task?")) {
       deleteTask.mutate(id!, {
         onSuccess: () => navigate("/tasks"),
@@ -117,13 +109,6 @@ export default function TaskDetail() {
   };
 
   const handleToggleCompletion = () => {
-    if (isDemoMode) {
-      toast.success("Demo Mode: Task completion simulated", {
-        description: "In the real app, this change would be saved to your workspace."
-      });
-      return;
-    }
-
     if (task) {
       toggleCompletion.mutate(task);
     }
@@ -159,19 +144,7 @@ export default function TaskDetail() {
 
   return (
     <div className="space-y-6">
-      {/* Demo Mode Banner */}
-      {isDemoMode && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center gap-2">
-            <div className="text-blue-600 text-sm font-medium">
-              🎭 Demo Mode
-            </div>
-            <div className="text-blue-700 text-sm">
-              You're viewing demo data. Actions are simulated and won't affect real data.
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Demo mode banner removed */}
 
       {/* Hierarchy Breadcrumb */}
       {id && <HierarchyBreadcrumb taskId={id} />}

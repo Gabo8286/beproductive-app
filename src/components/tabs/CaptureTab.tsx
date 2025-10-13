@@ -17,8 +17,6 @@ import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
-import { gabrielPersona } from '@/data/demo/gabriel-persona-data';
-
 interface QuickAddItem {
   id: string;
   label: string;
@@ -86,8 +84,8 @@ const quickAddItems: QuickAddItem[] = [
   },
 ];
 
-// Gabriel's AI Entrepreneur Demo Data
-const recentCaptures = gabrielPersona.recentCaptures;
+// Recent captures will be fetched from real data
+const recentCaptures: any[] = [];
 
 interface CaptureTabProps {
   className?: string;
@@ -97,14 +95,14 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
   const navigate = useNavigate();
   const { taskCreate, buttonPress, loadingComplete, success, warning } = useHapticFeedback();
   const [refreshKey, setRefreshKey] = useState(0);
-  const [captures, setCaptures] = useState(recentCaptures);
+  const [captures, setCaptures] = useState<any[]>([]);
 
   const handleQuickAddClick = (href: string) => {
     taskCreate();
     navigate(href);
   };
 
-  const handleRecentItemClick = (item: typeof recentCaptures[0]) => {
+  const handleRecentItemClick = (item: any) => {
     buttonPress();
     // Navigate to appropriate detail view based on type
     switch (item.type) {
@@ -136,7 +134,7 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
     setRefreshKey(prev => prev + 1);
   };
 
-  const handleEditCapture = (item: typeof recentCaptures[0]) => {
+  const handleEditCapture = (item: any) => {
     success();
     // Navigate to edit view
     switch (item.type) {
@@ -155,19 +153,19 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
     }
   };
 
-  const handleArchiveCapture = (item: typeof recentCaptures[0]) => {
+  const handleArchiveCapture = (item: any) => {
     warning();
     // Remove from recent captures
     setCaptures(prev => prev.filter(capture => capture.id !== item.id));
   };
 
-  const handleDeleteCapture = (item: typeof recentCaptures[0]) => {
+  const handleDeleteCapture = (item: any) => {
     warning();
     // Remove from recent captures
     setCaptures(prev => prev.filter(capture => capture.id !== item.id));
   };
 
-  const handleCompleteCapture = (item: typeof recentCaptures[0]) => {
+  const handleCompleteCapture = (item: any) => {
     success();
     // Mark as completed and remove from recent
     setCaptures(prev => prev.filter(capture => capture.id !== item.id));

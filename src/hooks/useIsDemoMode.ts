@@ -1,26 +1,19 @@
-import { useAuth } from '@/contexts/AuthContext';
-
 /**
  * Hook to detect if the current user is in demo mode
- * Demo mode is active when logged in as demo@beproductive.com
+ * Demo mode has been disabled for production - always returns false
  */
 export const useIsDemoMode = (): boolean => {
-  const { user } = useAuth();
-
-  // Check if user is the demo user
-  return user?.email === 'demo@beproductive.com';
+  return false;
 };
 
 /**
  * Hook to get demo user information
+ * Demo mode has been disabled for production
  */
 export const useDemoUser = () => {
-  const isDemoMode = useIsDemoMode();
-  const { user } = useAuth();
-
   return {
-    isDemoMode,
-    demoEmail: 'demo@beproductive.com',
-    isCurrentUserDemo: isDemoMode && user?.email === 'demo@beproductive.com'
+    isDemoMode: false,
+    demoEmail: '',
+    isCurrentUserDemo: false
   };
 };

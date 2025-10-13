@@ -71,9 +71,55 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
       VITE_LOCAL_AUTH_URL: import.meta.env.VITE_LOCAL_AUTH_URL,
       VITE_ENABLE_GUEST_MODE: import.meta.env.VITE_ENABLE_GUEST_MODE,
+      VITE_SKIP_LOGIN: import.meta.env.VITE_SKIP_LOGIN,
       NODE_ENV: import.meta.env.NODE_ENV,
       MODE: import.meta.env.MODE,
     });
+
+    // Development skip login - auto-authenticate with mock user
+    const skipLogin = import.meta.env.VITE_SKIP_LOGIN === 'true' && import.meta.env.DEV;
+    if (skipLogin) {
+      console.log("[AuthContext] Skip login enabled - auto-authenticating with mock user");
+      const mockUser: User = {
+        id: 'dev-user-' + Date.now(),
+        email: 'developer@beproductive.local',
+        created_at: new Date().toISOString(),
+        email_confirmed_at: new Date().toISOString(),
+        user_metadata: {
+          full_name: 'Development User',
+          avatar_url: null,
+        },
+        app_metadata: {},
+        aud: 'authenticated',
+        role: 'authenticated',
+      } as User;
+
+      const mockSession: Session = {
+        access_token: 'dev-access-token',
+        token_type: 'bearer',
+        expires_in: 3600,
+        refresh_token: 'dev-refresh-token',
+        user: mockUser,
+        expires_at: Math.floor(Date.now() / 1000) + 3600,
+      } as Session;
+
+      const mockProfile: Profile = {
+        id: mockUser.id,
+        full_name: 'Development User',
+        email: mockUser.email || '',
+        avatar_url: null,
+        created_at: mockUser.created_at,
+        updated_at: new Date().toISOString(),
+      };
+
+      setUser(mockUser);
+      setSession(mockSession);
+      setProfile(mockProfile);
+      setAuthLoading(false);
+      setAuthError(null);
+      console.log("[AuthContext] ✅ Auto-authentication complete - ready for development");
+      return;
+    }
 
     const guestModeEnabled = isGuestModeEnabled();
     const localMode = isLocalMode();
