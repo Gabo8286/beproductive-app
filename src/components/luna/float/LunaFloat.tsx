@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useLuna, useLunaFloat } from '../context/LunaContext';
 import { LunaAvatar } from '../core/LunaAvatar';
-import { LunaChat } from '../chat/LunaChat';
+import { LunaContextualMenu } from '../context/LunaContextualMenu';
 import { LUNA_COLORS } from '@/assets/luna/luna-assets';
 
 interface LunaFloatProps {
@@ -24,16 +24,12 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [showTooltipState, setShowTooltipState] = useState(false);
-  const [chatOpen, setChatOpen] = useState(false);
   const [hasMovedDuringDrag, setHasMovedDuringDrag] = useState(false);
   const [pointerDownPos, setPointerDownPos] = useState<{ x: number; y: number } | null>(null);
 
   const {
     currentExpression,
     hasUnreadMessages,
-    openChat,
-    closeChat,
-    isOpen: lunaIsOpen,
     currentContext,
   } = useLuna();
 
@@ -47,14 +43,14 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
 
   // Auto-hide functionality
   useEffect(() => {
-    if (autoHide && isFloating && !chatOpen && !hasUnreadMessages) {
+    if (autoHide && isFloating && !hasUnreadMessages) {
       const timer = setTimeout(() => {
         hideFloat();
       }, autoHideDelay);
 
       return () => clearTimeout(timer);
     }
-  }, [autoHide, autoHideDelay, isFloating, chatOpen, hasUnreadMessages, hideFloat]);
+  }, [autoHide, autoHideDelay, isFloating, hasUnreadMessages, hideFloat]);
 
   // Position the float based on floatPosition setting
   useEffect(() => {
@@ -137,8 +133,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
     } catch {}
 
     if (!isDragging && !hasMovedDuringDrag) {
-      // Treat as a click
-      handleAvatarClick();
+      // Clicking is now handled by the contextual menu
       setPointerDownPos(null);
       return;
     }
@@ -156,17 +151,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
     setFloatPosition(newPosition as any);
   };
 
-  const handleAvatarClick = () => {
-    if (isDragging) return;
-
-    if (chatOpen) {
-      setChatOpen(false);
-      closeChat();
-    } else {
-      setChatOpen(true);
-      openChat();
-    }
-  };
+  // Avatar click is now handled by the contextual menu
 
   const handleTooltipShow = () => {
     if (!isDragging && showTooltip) {
@@ -196,7 +181,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
           top: position.y,
           transform: isDragging ? 'rotate(5deg)' : 'rotate(0deg)',
         }}
-        onClick={!draggable ? handleAvatarClick : undefined}
+        // Click handling is now managed by the contextual menu
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -215,41 +200,43 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
           }}
         />
 
-        {/* Main Avatar */}
+        {/* Main Avatar with Contextual Menu */}
         <div className="relative">
-          <LunaAvatar
-            size="medium"
-            expression={currentExpression}
-            animated={!isDragging}
-            onClick={!draggable ? handleAvatarClick : undefined}
-            className={cn(
-              'shadow-lg transition-all duration-200',
-              hasUnreadMessages ? 'ring-4' : 'ring-2 ring-white',
-              chatOpen && 'pointer-events-auto', // Re-enable for click to close
-            )}
-          />
+          <LunaContextualMenu>
+            <div className="relative">
+              <LunaAvatar
+                size="medium"
+                expression={currentExpression}
+                animated={!isDragging}
+                className={cn(
+                  'shadow-lg transition-all duration-200 cursor-pointer',
+                  hasUnreadMessages ? 'ring-4' : 'ring-2 ring-white',
+                )}
+              />
 
-          {/* Unread Messages Indicator */}
-          {hasUnreadMessages && (
-            <div
-              className={cn(
-                'absolute -top-1 -right-1 w-4 h-4 rounded-full',
-                'flex items-center justify-center text-white text-xs font-bold',
-                'animate-pulse'
+              {/* Unread Messages Indicator */}
+              {hasUnreadMessages && (
+                <div
+                  className={cn(
+                    'absolute -top-1 -right-1 w-4 h-4 rounded-full',
+                    'flex items-center justify-center text-white text-xs font-bold',
+                    'animate-pulse pointer-events-none'
+                  )}
+                  style={{ backgroundColor: LUNA_COLORS.orangePrimary }}
+                >
+                  !
+                </div>
               )}
-              style={{ backgroundColor: LUNA_COLORS.orangePrimary }}
-            >
-              !
-            </div>
-          )}
 
-          {/* Typing Indicator */}
-          {lunaIsOpen && (
-            <div
-              className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: LUNA_COLORS.lanternGlow }}
-            />
-          )}
+              {/* Typing Indicator */}
+              {lunaIsOpen && (
+                <div
+                  className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full animate-pulse pointer-events-none"
+                  style={{ backgroundColor: LUNA_COLORS.lanternGlow }}
+                />
+              )}
+            </div>
+          </LunaContextualMenu>
         </div>
 
         {/* Tooltip */}
@@ -270,7 +257,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
           >
             {hasUnreadMessages
               ? 'You have unread messages from Luna!'
-              : `Chat with Luna • ${currentContext} mode`
+              : `Click for navigation & chat • ${currentContext} mode`
             }
 
             {/* Tooltip Arrow */}
@@ -286,41 +273,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
         )}
       </div>
 
-      {/* Chat Window */}
-      {chatOpen && (
-        <div
-          className={cn(
-            'fixed z-40 transition-all duration-300 ease-out',
-            'animate-in slide-in-from-bottom-4 fade-in-0'
-          )}
-          style={{
-            left: Math.min(position.x - 150, window.innerWidth - 380),
-            top: Math.max(20, position.y - 520),
-            width: '360px',
-          }}
-        >
-          <LunaChat
-            onClose={() => {
-              setChatOpen(false);
-              closeChat();
-            }}
-            autoFocus={true}
-            compact={true}
-            className="shadow-2xl"
-          />
-        </div>
-      )}
-
-      {/* Backdrop for chat (mobile) */}
-      {chatOpen && (
-        <div
-          className="fixed inset-0 bg-black/20 z-30 md:hidden"
-          onClick={() => {
-            setChatOpen(false);
-            closeChat();
-          }}
-        />
-      )}
+      {/* Chat is now accessed through the contextual menu */}
     </>
   );
 };

@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Sparkles, Home, CheckSquare, Settings as SettingsIcon, Calendar, CreditCard, Shield, Crown, Brain, Palette } from "lucide-react";
+import { LogOut, User, Sparkles, CreditCard, Shield, Crown, Brain, Palette } from "lucide-react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
 import { NotificationCenter } from "@/components/automation/NotificationCenter";
@@ -77,105 +77,10 @@ export function AppLayout() {
 
             <div className="flex-1" />
 
-            {/* Secondary Navigation */}
+            {/* Navigation moved to Luna contextual menu */}
             <div className="flex items-center gap-2">
-              <NavLink
-                to="/dashboard"
-                className={({ isActive }) =>
-                  cn(
-                    "p-2 rounded-lg transition-colors hover:bg-accent",
-                    isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                  )
-                }
-              >
-                <Home className="h-5 w-5" />
-              </NavLink>
 
-              <NavLink
-                to="/tasks"
-                className={({ isActive }) =>
-                  cn(
-                    "p-2 rounded-lg transition-colors hover:bg-accent",
-                    isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                  )
-                }
-              >
-                <CheckSquare className="h-5 w-5" />
-              </NavLink>
-
-              <NavLink
-                to="/calendar"
-                className={({ isActive }) =>
-                  cn(
-                    "p-2 rounded-lg transition-colors hover:bg-accent",
-                    isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                  )
-                }
-              >
-                <Calendar className="h-5 w-5" />
-              </NavLink>
-
-              {/* Settings Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-2 text-muted-foreground hover:text-foreground"
-                  >
-                    <SettingsIcon className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Navigation</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => setNavigationMode('top-navigation')}>
-                    Top Navigation
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setNavigationMode('minimal-sidebar')}>
-                    Minimal Sidebar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setNavigationMode('full-sidebar')}>
-                    Full Sidebar
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel>Settings & Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/settings')}>
-                    <SettingsIcon className="mr-2 h-4 w-4" />
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={configPanel.open}>
-                    <Palette className="mr-2 h-4 w-4" />
-                    App Configuration
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/account-settings')}>
-                    <Shield className="mr-2 h-4 w-4" />
-                    Account & Security
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/profile-assessment')}>
-                    <Brain className="mr-2 h-4 w-4" />
-                    Productivity Quiz
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/billing')}>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    Billing & Usage
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/pricing')}>
-                    <Crown className="mr-2 h-4 w-4" />
-                    Upgrade Plan
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* Settings moved to Luna contextual menu */}
 
               <NotificationCenter />
 

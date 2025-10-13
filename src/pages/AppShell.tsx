@@ -5,6 +5,7 @@ import { NotificationContainer, useNotifications } from '@/components/notificati
 import { useAuth } from '@/contexts/AuthContext';
 import { LunaProvider } from '@/components/luna/context/LunaContext';
 import { LunaFloat } from '@/components/luna/float/LunaFloat';
+import { LunaChatModal } from '@/components/luna/modal/LunaChatModal';
 import { useLunaRouteContext } from '@/components/luna/hooks/useLunaRouteContext';
 
 function AppShellContent() {
@@ -30,6 +31,9 @@ function AppShellContent() {
           showTooltip={true}
           autoHide={false}
         />
+
+        {/* Luna Chat Modal */}
+        <LunaChatModal />
 
         {/* Notification System */}
         <NotificationContainer
