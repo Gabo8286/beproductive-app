@@ -101,32 +101,25 @@ interface LunaProviderProps {
 export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
   const [state, setState] = useState<LunaState>(defaultLunaState);
 
-  // Get framework context safely - avoid conditional hook calls
-  let frameworkContext: FrameworkContext | undefined = undefined;
-  let frameworkAvailable = false;
+  // ALWAYS call hook at top level (React Rules of Hooks)
+  const framework = useLunaFramework();
 
-  // Always call the hook, but handle errors gracefully
-  try {
-    const framework = useLunaFramework();
-    frameworkAvailable = true;
-    frameworkContext = {
-      userStage: framework.productivityProfile.currentStage,
-      weekInStage: framework.productivityProfile.weekInStage,
-      completedPrinciples: framework.productivityProfile.completedPrinciples,
-      currentMetrics: framework.productivityProfile.currentMetrics,
-      wellBeingScore: framework.productivityProfile.wellBeingScore,
-      systemHealthScore: framework.productivityProfile.systemHealthScore,
-      energyPattern: framework.productivityProfile.energyPattern,
-      isInRecoveryMode: framework.isInRecoveryMode,
-      currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
-      userPreferences: framework.userPreferences,
-    };
-  } catch (error) {
-    // Framework context not available, continue without it
-    console.log('[LunaContext] Framework provider not available, continuing without framework features');
-    frameworkAvailable = false;
-    frameworkContext = undefined;
-  }
+  // Check if framework is available AFTER calling the hook
+  const frameworkAvailable = framework?.productivityProfile?.currentStage !== undefined;
+  
+  // Build framework context if available
+  const frameworkContext: FrameworkContext | undefined = frameworkAvailable ? {
+    userStage: framework.productivityProfile.currentStage,
+    weekInStage: framework.productivityProfile.weekInStage,
+    completedPrinciples: framework.productivityProfile.completedPrinciples,
+    currentMetrics: framework.productivityProfile.currentMetrics,
+    wellBeingScore: framework.productivityProfile.wellBeingScore,
+    systemHealthScore: framework.productivityProfile.systemHealthScore,
+    energyPattern: framework.productivityProfile.energyPattern,
+    isInRecoveryMode: framework.isInRecoveryMode,
+    currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
+    userPreferences: framework.userPreferences,
+  } : undefined;
 
   // Auto-reset expression after some time
   useEffect(() => {
