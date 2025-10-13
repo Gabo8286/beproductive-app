@@ -107,19 +107,23 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
   // Check if framework is available AFTER calling the hook
   const frameworkAvailable = framework?.productivityProfile?.currentStage !== undefined;
   
-  // Build framework context if available
-  const frameworkContext: FrameworkContext | undefined = frameworkAvailable ? {
-    userStage: framework.productivityProfile.currentStage,
-    weekInStage: framework.productivityProfile.weekInStage,
-    completedPrinciples: framework.productivityProfile.completedPrinciples,
-    currentMetrics: framework.productivityProfile.currentMetrics,
-    wellBeingScore: framework.productivityProfile.wellBeingScore,
-    systemHealthScore: framework.productivityProfile.systemHealthScore,
-    energyPattern: framework.productivityProfile.energyPattern,
-    isInRecoveryMode: framework.isInRecoveryMode,
-    currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
-    userPreferences: framework.userPreferences,
-  } : undefined;
+  // MEMOIZE framework context to prevent infinite re-renders
+  const frameworkContext: FrameworkContext | undefined = useMemo(() => {
+    if (!frameworkAvailable || !framework) return undefined;
+    
+    return {
+      userStage: framework.productivityProfile.currentStage,
+      weekInStage: framework.productivityProfile.weekInStage,
+      completedPrinciples: framework.productivityProfile.completedPrinciples,
+      currentMetrics: framework.productivityProfile.currentMetrics,
+      wellBeingScore: framework.productivityProfile.wellBeingScore,
+      systemHealthScore: framework.productivityProfile.systemHealthScore,
+      energyPattern: framework.productivityProfile.energyPattern,
+      isInRecoveryMode: framework.isInRecoveryMode,
+      currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
+      userPreferences: framework.userPreferences,
+    };
+  }, [frameworkAvailable, framework]);
 
   // Auto-reset expression after some time
   useEffect(() => {
