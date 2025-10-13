@@ -54,21 +54,23 @@ export const LunaContextualMenu: React.FC<LunaContextualMenuProps> = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {children || (
-          <div className={cn(
-            'cursor-pointer transition-all duration-200 hover:scale-105',
-            className
-          )}>
+          <button 
+            className={cn(
+              'cursor-pointer transition-all duration-200 hover:scale-105 border-0 bg-transparent p-0',
+              className
+            )}
+            aria-label="Open Luna navigation menu"
+          >
             <LunaAvatar
               size="medium"
               expression={currentExpression}
               animated={true}
-              aria-label="Open Luna navigation menu"
               className="ring-2 ring-white shadow-lg"
             />
             {showLabel && (
               <span className="text-xs text-muted-foreground mt-1">Luna</span>
             )}
-          </div>
+          </button>
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent

@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (skipLogin) {
       console.log("[AuthContext] Skip login enabled - auto-authenticating with mock user");
       const mockUser: User = {
-        id: 'dev-user-' + Date.now(),
+        id: crypto.randomUUID(),
         email: 'developer@beproductive.local',
         created_at: new Date().toISOString(),
         email_confirmed_at: new Date().toISOString(),

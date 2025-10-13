@@ -3,10 +3,10 @@ import { Outlet } from 'react-router-dom';
 import { UnifiedBottomNav } from '@/components/navigation/UnifiedBottomNav';
 import { NotificationContainer, useNotifications } from '@/components/notifications/MinimalNotification';
 import { useAuth } from '@/contexts/AuthContext';
-import { LunaProvider } from '@/components/luna/context/LunaContext';
 import { LunaFloat } from '@/components/luna/float/LunaFloat';
 import { LunaChatModal } from '@/components/luna/modal/LunaChatModal';
 import { useLunaRouteContext } from '@/components/luna/hooks/useLunaRouteContext';
+import { PageErrorBoundary } from '@/components/errors/CascadingErrorBoundary';
 
 function AppShellContent() {
   const { notifications, removeNotification } = useNotifications();
@@ -16,6 +16,7 @@ function AppShellContent() {
   useLunaRouteContext();
 
   return (
+    <PageErrorBoundary pageName="AppShell">
       <div className="min-h-screen bg-background">
         {/* Main content area with padding for bottom nav */}
         <main className="pb-20 md:pb-16">
@@ -41,13 +42,10 @@ function AppShellContent() {
           onClose={removeNotification}
         />
       </div>
+    </PageErrorBoundary>
   );
 }
 
 export default function AppShell() {
-  return (
-    <LunaProvider>
-      <AppShellContent />
-    </LunaProvider>
-  );
+  return <AppShellContent />;
 }
