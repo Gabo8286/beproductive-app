@@ -190,24 +190,31 @@ export const LandingPage = () => {
           </div>
         </div>
         <div className="relative">
-          <div className="absolute -top-4 right-8 z-10">
-            <Badge className="bg-gradient-to-r from-primary to-secondary text-white border-0 shadow-lg animate-pulse px-4 py-2 text-sm font-semibold">
-              ✨ Built by Non-Developer
-            </Badge>
-          </div>
-          {/* Demo section removed */}
-          <div className="bg-gray-50 rounded-lg p-8 text-center">
-            <h3 className="text-xl font-semibold mb-4">Ready to Get Started?</h3>
-            <p className="text-gray-600 mb-6">Start building your productivity system today.</p>
-            <Button
-              onClick={() => {
-                trackEvent(ConversionEventType.SIGNUP_START, { source: "landing-cta" }, 10);
-                navigate("/signup");
-              }}
-              className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90"
-            >
-              Get Started Free
-            </Button>
+          <div className="max-w-4xl mx-auto">
+            <Card className="glass-card p-8 text-center">
+              <div className="text-4xl mb-4">🚀</div>
+              <h3 className="font-semibold text-xl mb-2">Ready to Experience BeProductive?</h3>
+              <p className="text-muted-foreground mb-6">
+                Sign up now to access the full productivity platform with enterprise monitoring.
+              </p>
+              <div className="flex gap-4 justify-center">
+                <Button
+                  size="lg"
+                  className="apple-button shadow-lg hover:shadow-xl"
+                  asChild
+                >
+                  <Link to="/signup">Create Free Account</Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="apple-button glass-card"
+                  asChild
+                >
+                  <Link to="/login">Sign In</Link>
+                </Button>
+              </div>
+            </Card>
           </div>
         </div>
       </section>

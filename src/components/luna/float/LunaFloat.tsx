@@ -31,6 +31,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
     currentExpression,
     hasUnreadMessages,
     currentContext,
+    isOpen,
   } = useLuna();
 
   const {
@@ -229,7 +230,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
               )}
 
               {/* Typing Indicator */}
-              {lunaIsOpen && (
+              {isOpen && (
                 <div
                   className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full animate-pulse pointer-events-none"
                   style={{ backgroundColor: LUNA_COLORS.lanternGlow }}
@@ -240,7 +241,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
         </div>
 
         {/* Tooltip */}
-        {showTooltipState && !chatOpen && !isDragging && (
+        {showTooltipState && !isOpen && !isDragging && (
           <div
             className={cn(
               'absolute mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg',

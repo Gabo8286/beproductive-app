@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
+
 interface QuickAddItem {
   id: string;
   label: string;
@@ -84,7 +85,7 @@ const quickAddItems: QuickAddItem[] = [
   },
 ];
 
-// Recent captures will be fetched from real data
+// Empty initial state - will load from database
 const recentCaptures: any[] = [];
 
 interface CaptureTabProps {
