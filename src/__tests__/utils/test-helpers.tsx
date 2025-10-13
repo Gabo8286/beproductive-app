@@ -6,8 +6,9 @@ import { render, RenderOptions, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { vi, MockedFunction } from 'vitest';
+import { vi, MockedFunction, expect } from 'vitest';
 import { OptimizedProviders } from '@/components/providers/OptimizedProviders';
+import * as axeCore from 'axe-core';
 
 // Types
 export interface TestUser {
@@ -385,9 +386,7 @@ export class PerformanceTestHelper {
 
 // Accessibility testing utilities
 export const checkAccessibility = async (container: HTMLElement) => {
-  const { axe } = await import('axe-core');
-
-  const results = await axe.run(container, {
+  const results = await axeCore.run(container, {
     rules: {
       'color-contrast': { enabled: true },
       'keyboard-navigation': { enabled: true },

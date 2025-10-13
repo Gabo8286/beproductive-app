@@ -7,7 +7,7 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useState } from 'react';
 import { MemoizationProvider, withRenderTracking } from '@/components/optimization/MemoizationProvider';
-import { OptimizedCaptureTab } from '@/components/tabs/OptimizedCaptureTab';
+// OptimizedCaptureTab removed - component deleted
 import { MemoizedWidgetSystem } from '@/components/widgets/MemoizedWidgetSystem';
 import {
   useStableMemo,
