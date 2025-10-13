@@ -21,7 +21,6 @@ import { NotificationCenter } from "@/components/automation/NotificationCenter";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
 import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
-import GuestModeIndicator from "@/components/auth/GuestModeIndicator";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext";
@@ -72,8 +71,6 @@ export function AppLayout() {
               <span className="hidden sm:inline text-lg font-bold">BeProductive</span>
             </div>
 
-            {/* Guest Mode Indicator */}
-            <GuestModeIndicator />
 
             <div className="flex-1" />
 
@@ -138,8 +135,6 @@ export function AppLayout() {
               aria-label="Toggle sidebar navigation"
             />
 
-            {/* Guest Mode Indicator */}
-            <GuestModeIndicator />
 
             {/* Navigation Mode Toggle */}
             <DropdownMenu>

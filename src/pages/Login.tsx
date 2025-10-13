@@ -18,7 +18,6 @@ import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff, Mail, AlertCircle, Shield, Sparkles } from "lucide-react";
-import GuestModeSelector from "@/components/auth/GuestModeSelector";
 import { isGuestModeEnabled } from "@/utils/auth/guestMode";
 
 interface LoginAttempt {
@@ -420,7 +419,6 @@ export default function Login() {
               {isGuestModeEnabled() && (
                 <>
                   <Separator />
-                  <GuestModeSelector />
                 </>
               )}
             </>

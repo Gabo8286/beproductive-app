@@ -1,18 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle, Code, Zap, Brain, Calendar, Users, Rocket } from "lucide-react";
 import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
 import { BuildStory } from "./BuildStory";
-import { DemoContainer } from "./demo/DemoContainer";
 import { useConversionTracking } from "@/hooks/useConversionTracking";
 import { ConversionEventType } from "@/types/conversion";
 import { useState, useEffect } from "react";
 
 export const LandingPage = () => {
   const { trackEvent, trackBehavior } = useConversionTracking();
+  const navigate = useNavigate();
 
   const handleCTAClick = (location: string) => {
     trackEvent(ConversionEventType.CTA_CLICK, { location }, 5);
@@ -195,20 +195,20 @@ export const LandingPage = () => {
               ✨ Built by Non-Developer
             </Badge>
           </div>
-          <DemoContainer
-          onDemoStart={() => {
-            trackEvent(
-              ConversionEventType.DEMO_START,
-              { source: "landing-demo-section" },
-              8,
-            );
-            trackBehavior("demo_start", "interactive-demo");
-          }}
-          onComplete={() => {
-            trackEvent(ConversionEventType.DEMO_COMPLETE, {}, 15);
-            scrollToSection("interactive-builder");
-          }}
-        />
+          {/* Demo section removed */}
+          <div className="bg-gray-50 rounded-lg p-8 text-center">
+            <h3 className="text-xl font-semibold mb-4">Ready to Get Started?</h3>
+            <p className="text-gray-600 mb-6">Start building your productivity system today.</p>
+            <Button
+              onClick={() => {
+                trackEvent(ConversionEventType.SIGNUP_START, { source: "landing-cta" }, 10);
+                navigate("/signup");
+              }}
+              className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90"
+            >
+              Get Started Free
+            </Button>
+          </div>
         </div>
       </section>
 

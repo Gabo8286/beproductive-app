@@ -101,27 +101,32 @@ interface LunaProviderProps {
 export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
   const [state, setState] = useState<LunaState>(defaultLunaState);
 
-  // Get framework context - memoized to prevent infinite loops
-  const frameworkContext = useMemo<FrameworkContext | undefined>(() => {
-    try {
-      const framework = useLunaFramework();
-      return {
-        userStage: framework.productivityProfile.currentStage,
-        weekInStage: framework.productivityProfile.weekInStage,
-        completedPrinciples: framework.productivityProfile.completedPrinciples,
-        currentMetrics: framework.productivityProfile.currentMetrics,
-        wellBeingScore: framework.productivityProfile.wellBeingScore,
-        systemHealthScore: framework.productivityProfile.systemHealthScore,
-        energyPattern: framework.productivityProfile.energyPattern,
-        isInRecoveryMode: framework.isInRecoveryMode,
-        currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
-        userPreferences: framework.userPreferences,
-      };
-    } catch (error) {
-      // Framework context not available, continue without it
-      return undefined;
-    }
-  }, []); // Empty dependency array since we want this to be stable
+  // Get framework context safely - avoid conditional hook calls
+  let frameworkContext: FrameworkContext | undefined = undefined;
+  let frameworkAvailable = false;
+
+  // Always call the hook, but handle errors gracefully
+  try {
+    const framework = useLunaFramework();
+    frameworkAvailable = true;
+    frameworkContext = {
+      userStage: framework.productivityProfile.currentStage,
+      weekInStage: framework.productivityProfile.weekInStage,
+      completedPrinciples: framework.productivityProfile.completedPrinciples,
+      currentMetrics: framework.productivityProfile.currentMetrics,
+      wellBeingScore: framework.productivityProfile.wellBeingScore,
+      systemHealthScore: framework.productivityProfile.systemHealthScore,
+      energyPattern: framework.productivityProfile.energyPattern,
+      isInRecoveryMode: framework.isInRecoveryMode,
+      currentRecoveryLevel: framework.currentRecoveryLevel || undefined,
+      userPreferences: framework.userPreferences,
+    };
+  } catch (error) {
+    // Framework context not available, continue without it
+    console.log('[LunaContext] Framework provider not available, continuing without framework features');
+    frameworkAvailable = false;
+    frameworkContext = undefined;
+  }
 
   // Auto-reset expression after some time
   useEffect(() => {
@@ -161,13 +166,13 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
 
   // Update contextual suggestions when context or framework state changes
   useEffect(() => {
-    if (state.frameworkEnabled && frameworkContext) {
+    if (state.frameworkEnabled && frameworkAvailable && frameworkContext) {
       const suggestions = generateContextualSuggestions(state.currentContext, frameworkContext);
       setState(prev => ({ ...prev, contextualSuggestions: suggestions }));
     } else {
       setState(prev => ({ ...prev, contextualSuggestions: [] }));
     }
-  }, [state.currentContext, state.frameworkEnabled, frameworkContext]);
+  }, [state.currentContext, state.frameworkEnabled, frameworkAvailable, frameworkContext]);
 
   // Create a function to handle message sending logic
   const handleMessageSending = (content: string, context?: string, useFramework: boolean = true) => {
@@ -380,7 +385,7 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
     },
 
     refreshSuggestions: () => {
-      if (state.frameworkEnabled && frameworkContext) {
+      if (state.frameworkEnabled && frameworkAvailable && frameworkContext) {
         const suggestions = generateContextualSuggestions(state.currentContext, frameworkContext);
         setState(prev => ({ ...prev, contextualSuggestions: suggestions }));
       }
