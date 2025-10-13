@@ -3827,6 +3827,21 @@ export type Database = {
         Args: { p_days?: number; p_user_id: string }
         Returns: Json
       }
+      get_user_profile_with_role: {
+        Args: { p_user_id?: string }
+        Returns: {
+          avatar_url: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          onboarding_completed: boolean
+          preferences: Json
+          role: string
+          subscription_tier: string
+          updated_at: string
+        }[]
+      }
       get_xp_required_for_level: {
         Args: { target_level: number }
         Returns: number

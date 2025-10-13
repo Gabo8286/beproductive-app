@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         expires_at: Math.floor(Date.now() / 1000) + 3600,
       } as Session;
 
-      const mockProfile: Profile = {
+      const mockProfile: ProfileWithRole = {
         id: mockUser.id,
         full_name: 'Development User',
         email: mockUser.email || '',
