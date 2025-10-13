@@ -12,8 +12,13 @@ export interface GuestModeConfig {
 
 /**
  * Check if guest mode is enabled
+ * SECURITY: Guest mode is disabled in production to prevent privilege escalation
  */
 export const isGuestModeEnabled = (): boolean => {
+  // Prevent guest mode in production builds
+  if (import.meta.env.PROD) {
+    return false;
+  }
   return import.meta.env.VITE_ENABLE_GUEST_MODE === 'true';
 };
 
@@ -30,8 +35,14 @@ export const getGuestModeConfig = (): GuestModeConfig => {
 
 /**
  * Create a mock guest user
+ * SECURITY: This function is for development/testing only
  */
 export const createGuestUser = (type: GuestUserType): User => {
+  // Prevent guest user creation in production
+  if (import.meta.env.PROD) {
+    throw new Error('Guest mode is disabled in production');
+  }
+  
   const config = getGuestModeConfig();
   const email = type === 'admin' ? config.adminEmail : config.userEmail;
   const userId = type === 'admin' ? 'guest-admin-id' : 'guest-user-id';

@@ -21,10 +21,7 @@ export default defineConfig(({ mode }) => ({
     }),
   },
   plugins: [
-    react({
-      // Fast refresh configuration for better HMR
-      fastRefresh: true,
-    }),
+    react(),
     mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
