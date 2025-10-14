@@ -1,4 +1,3 @@
-import React from 'react';
 import { CaptureTab } from '@/components/tabs/CaptureTab';
 import { PageErrorBoundary } from '@/components/errors/CascadingErrorBoundary';
 

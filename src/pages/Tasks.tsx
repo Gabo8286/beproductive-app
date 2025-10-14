@@ -1,17 +1,18 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useTasks, useSortedTasks } from "@/hooks/useTasks";
+import { Spinner } from "@/components/ui/spinner";
 import { TaskCard } from "@/components/tasks/TaskCard";
 import { TaskListView } from "@/components/tasks/TaskListView";
 import { TaskBoardView } from "@/components/tasks/TaskBoardView";
 import { TaskCalendarView } from "@/components/tasks/TaskCalendarView";
 import { ProjectGroupView } from "@/components/tasks/ProjectGroupView";
 import { StatusGroupView } from "@/components/tasks/StatusGroupView";
-import { TaskViewProvider } from "@/contexts/TaskViewContext";
 import { QuickTaskModal } from "@/components/tasks/QuickTaskModal";
 import { RecommendationsBanner } from "@/components/ai/RecommendationsBanner";
+import { TaskViewProvider } from "@/contexts/TaskViewContext";
 import { useGlobalView } from "@/contexts/GlobalViewContext";
-import { useState } from "react";
+import { useTasks, useSortedTasks } from "@/hooks/useTasks";
 
 function TasksContent() {
   const { data: tasks, isLoading, error } = useTasks();
@@ -73,11 +74,7 @@ function TasksContent() {
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <Spinner variant="inline" size="md" />;
   }
 
   if (error) {

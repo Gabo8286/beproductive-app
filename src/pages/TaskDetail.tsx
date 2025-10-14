@@ -31,6 +31,7 @@ import { SaveAsTemplateDialog } from "@/components/templates/SaveAsTemplateDialo
 import { TimerButton } from "@/components/time/TimerButton";
 import { TimeEntriesList } from "@/components/time/TimeEntriesList";
 import { TimeEntryForm } from "@/components/time/TimeEntryForm";
+import { Spinner } from "@/components/ui/spinner";
 // Removed demo mode import
 
 const priorityConfig = {
@@ -106,11 +107,7 @@ export default function TaskDetail() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <Spinner variant="inline" size="md" />;
   }
 
   if (error || !task) {
