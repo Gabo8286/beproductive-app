@@ -23,18 +23,9 @@ import {
   useToggleTaskCompletion,
 } from "@/hooks/useTasks";
 import { TaskForm } from "@/components/tasks/TaskForm";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { TagBadge } from "@/components/tags/TagBadge";
 import { useTags } from "@/hooks/useTags";
 import { SubtaskList } from "@/components/tasks/SubtaskList";
-import { HierarchyBreadcrumb } from "@/components/tasks/HierarchyBreadcrumb";
 import { useSubtaskProgress } from "@/hooks/useSubtasks";
 import { SaveAsTemplateDialog } from "@/components/templates/SaveAsTemplateDialog";
 import { TimerButton } from "@/components/time/TimerButton";
@@ -145,9 +136,6 @@ export default function TaskDetail() {
   return (
     <div className="space-y-6">
       {/* Demo mode banner removed */}
-
-      {/* Hierarchy Breadcrumb */}
-      {id && <HierarchyBreadcrumb taskId={id} />}
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

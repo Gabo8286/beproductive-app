@@ -15,8 +15,9 @@ import { ModulesProvider } from "@/contexts/ModulesContext";
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
 import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
-import { LunaProvider } from "@/components/luna/context/LunaContext";
+import { LunaProvider, useLunaUnifiedMenu } from "@/components/luna/context/LunaContext";
 import { LunaFrameworkProvider } from "@/components/luna/context/LunaFrameworkContext";
+import { UnifiedLunaMenu } from "@/components/luna/UnifiedLunaMenu";
 import { ConfigProvider } from "@/contexts/ConfigContext";
 import { TagFilterModal } from "@/components/filters/TagFilterModal";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
@@ -130,6 +131,7 @@ function RouteAnnouncer() {
 function AppContent() {
   const { isOpen, close } = useKeyboardShortcutsDialog();
   const { authLoading, authError } = useAuth();
+  const { isUnifiedMenuOpen, closeUnifiedMenu } = useLunaUnifiedMenu();
   useOfflineDetection();
 
   // Show error banner if auth fails (non-blocking)
@@ -515,6 +517,10 @@ function AppContent() {
         <KeyboardShortcutsDialog
           open={isOpen}
           onOpenChange={(open) => (open ? undefined : close())}
+        />
+        <UnifiedLunaMenu
+          isOpen={isUnifiedMenuOpen}
+          onClose={closeUnifiedMenu}
         />
         <Toaster />
         <Sonner />

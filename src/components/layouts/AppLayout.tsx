@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext";
 import { ConfigPanel } from "@/components/config/ConfigPanel";
 import { useConfigPanel } from "@/hooks/useConfigPanel";
+import { UniversalBreadcrumbs } from "@/components/navigation/UniversalBreadcrumbs";
 
 type NavigationMode = 'minimal-sidebar' | 'top-navigation' | 'full-sidebar';
 
@@ -97,6 +98,9 @@ export function AppLayout() {
               </Button>
             </div>
         </header>
+
+        {/* Universal Breadcrumbs - Below Header */}
+        <UniversalBreadcrumbs />
 
         {/* Main Content */}
         <main
@@ -200,6 +204,10 @@ export function AppLayout() {
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
+
+          {/* Universal Breadcrumbs - Below Header */}
+          <UniversalBreadcrumbs />
+
           <main
             id="main-content"
             className="flex-1 space-y-4 p-4 md:p-8 pb-20 md:pb-16 scrollbar-brand"

@@ -19,9 +19,8 @@ interface LunaState {
   isTyping: boolean;
   currentExpression: LunaExpression;
 
-  // Floating avatar state
-  isFloating: boolean;
-  floatPosition: 'top-right' | 'bottom-right' | 'hidden';
+  // Unified menu state
+  isUnifiedMenuOpen: boolean;
 
   // Contextual state
   currentContext: 'capture' | 'plan' | 'engage' | 'general';
@@ -50,10 +49,10 @@ interface LunaActions {
   setExpression: (expression: LunaExpression) => void;
   resetExpression: () => void;
 
-  // Float actions
-  showFloat: () => void;
-  hideFloat: () => void;
-  setFloatPosition: (position: 'top-right' | 'bottom-right' | 'hidden') => void;
+  // Unified menu actions
+  openUnifiedMenu: () => void;
+  closeUnifiedMenu: () => void;
+  toggleUnifiedMenu: () => void;
 
   // Context actions
   setContext: (context: 'capture' | 'plan' | 'engage' | 'general') => void;
@@ -79,8 +78,7 @@ const defaultLunaState: LunaState = {
   isTyping: false,
   currentExpression: 'default',
 
-  isFloating: true,
-  floatPosition: 'top-right',
+  isUnifiedMenuOpen: false,
 
   currentContext: 'general',
   hasUnreadMessages: false,
@@ -188,6 +186,19 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
       setState(prev => ({ ...prev, contextualSuggestions: [] }));
     }
   }, [initializationState, state.currentContext, state.frameworkEnabled, frameworkAvailable, frameworkContext]);
+
+  // Listen for unified menu open events from bottom navigation
+  useEffect(() => {
+    const handleUnifiedMenuEvent = (e: CustomEvent) => {
+      setState(prev => ({ ...prev, isUnifiedMenuOpen: true }));
+    };
+
+    window.addEventListener('open-luna-unified-menu' as any, handleUnifiedMenuEvent as EventListener);
+
+    return () => {
+      window.removeEventListener('open-luna-unified-menu' as any, handleUnifiedMenuEvent as EventListener);
+    };
+  }, []);
 
   // Create a function to handle message sending logic
   const handleMessageSending = (content: string, context?: string, useFramework: boolean = true) => {
@@ -367,17 +378,17 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
       setState(prev => ({ ...prev, currentExpression: 'default' }));
     },
 
-    // Float actions
-    showFloat: () => {
-      setState(prev => ({ ...prev, isFloating: true }));
+    // Unified menu actions
+    openUnifiedMenu: () => {
+      setState(prev => ({ ...prev, isUnifiedMenuOpen: true }));
     },
 
-    hideFloat: () => {
-      setState(prev => ({ ...prev, isFloating: false }));
+    closeUnifiedMenu: () => {
+      setState(prev => ({ ...prev, isUnifiedMenuOpen: false }));
     },
 
-    setFloatPosition: (position) => {
-      setState(prev => ({ ...prev, floatPosition: position }));
+    toggleUnifiedMenu: () => {
+      setState(prev => ({ ...prev, isUnifiedMenuOpen: !prev.isUnifiedMenuOpen }));
     },
 
     // Context actions
@@ -443,7 +454,7 @@ export const useLunaExpression = () => {
   return { currentExpression, setExpression, resetExpression };
 };
 
-export const useLunaFloat = () => {
-  const { isFloating, floatPosition, showFloat, hideFloat, setFloatPosition } = useLuna();
-  return { isFloating, floatPosition, showFloat, hideFloat, setFloatPosition };
+export const useLunaUnifiedMenu = () => {
+  const { isUnifiedMenuOpen, openUnifiedMenu, closeUnifiedMenu, toggleUnifiedMenu } = useLuna();
+  return { isUnifiedMenuOpen, openUnifiedMenu, closeUnifiedMenu, toggleUnifiedMenu };
 };

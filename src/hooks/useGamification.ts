@@ -77,12 +77,9 @@ export function useGamification() {
       setProfile(existingProfile);
       return existingProfile;
     } catch (error) {
-      console.error("Error initializing gamification profile:", error);
-      toast({
-        title: "Error",
-        description: "Failed to initialize gamification profile",
-        variant: "destructive",
-      });
+      console.warn("Gamification profile initialization failed (non-critical):", error);
+      // Don't show disruptive toast - gamification is optional
+      // User can still use the app without gamification features
       return null;
     }
   }, [user, toast]);
@@ -131,13 +128,10 @@ export function useGamification() {
 
         return data;
       } catch (error) {
-        console.error("Error awarding points:", error);
-        toast({
-          title: "Error",
-          description: "Failed to award points",
-          variant: "destructive",
-        });
-        throw error;
+        console.warn("Points award failed (non-critical):", error);
+        // Don't show toast or throw error - points are optional
+        // User action (task completion, etc.) should still succeed
+        return null;
       }
     },
     [user, toast],

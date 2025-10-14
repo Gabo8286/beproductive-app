@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Home, CheckSquare, Target, User } from 'lucide-react';
+import { Home, CheckSquare, Target, User, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProductivityCycle';
@@ -17,10 +17,10 @@ interface NavTab {
 
 const mainTabs: NavTab[] = [
   {
-    id: 'capture',
-    label: 'Capture',
-    href: '/app/capture',
-    icon: Home,
+    id: 'luna',
+    label: 'Luna',
+    href: '/app/capture', // Keep href for fallback, but will be overridden
+    icon: Bot,
   },
   {
     id: 'plan',
@@ -117,7 +117,42 @@ export const UnifiedBottomNav: React.FC = () => {
               {mainTabs.map((tab) => {
                 const isActive = location.pathname === tab.href || location.pathname.startsWith(tab.href + '/');
                 const Icon = tab.icon;
-                
+
+                // Special handling for Luna tab
+                if (tab.id === 'luna') {
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        buttonPress();
+                        // Emit event to open Luna unified menu
+                        window.dispatchEvent(new CustomEvent('open-luna-unified-menu', {
+                          detail: { fromBottomNav: true }
+                        }));
+                      }}
+                      className={cn(
+                        'flex flex-col md:flex-row items-center gap-0.5 md:gap-2',
+                        'px-3 md:px-4 py-2 rounded-lg transition-all duration-200',
+                        'min-w-[64px] md:min-w-0',
+                        'active:scale-95 touch-manipulation',
+                        isActive
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="text-xs md:text-sm font-medium">
+                        {tab.label}
+                      </span>
+                      {isActive && (
+                        <div className="w-1 h-1 md:hidden bg-primary rounded-full" />
+                      )}
+                    </button>
+                  );
+                }
+
+                // Regular NavLink for other tabs
                 return (
                   <NavLink
                     key={tab.id}

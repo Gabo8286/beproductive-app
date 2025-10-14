@@ -182,6 +182,21 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
       <div className="mb-8">
         <h1 className="apple-page-title">Capture</h1>
         <p className="apple-page-subtitle">What would you like to add?</p>
+
+        {/* New Luna Navigation Info Banner */}
+        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">🤖</div>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-blue-900">
+                New! Access captures via Luna
+              </h3>
+              <p className="text-sm text-blue-700 mt-1">
+                Tap the <strong>Luna</strong> button in the bottom navigation for quick access to all capture options plus AI assistance.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Add Grid */}
