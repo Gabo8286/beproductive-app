@@ -13,11 +13,13 @@ import { RecommendationsBanner } from "@/components/ai/RecommendationsBanner";
 import { TaskViewProvider } from "@/contexts/TaskViewContext";
 import { useGlobalView } from "@/contexts/GlobalViewContext";
 import { useTasks, useSortedTasks } from "@/hooks/useTasks";
+import { useTranslation } from "react-i18next";
 
 function TasksContent() {
   const { data: tasks, isLoading, error } = useTasks();
   const { sortTasks, groupTasks } = useSortedTasks();
   const { viewMode, sortBy, sortOrder, groupBy, filters, searchTerm, activeTags } = useGlobalView();
+  const { t } = useTranslation('tasks');
 
   const [isQuickModalOpen, setIsQuickModalOpen] = useState(false);
 
@@ -89,9 +91,9 @@ function TasksContent() {
     <div className="space-y-6 px-4 md:px-6 py-6 max-w-7xl mx-auto">
       {/* Minimal Header */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Tasks</h1>
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t('title')}</h1>
         <p className="text-sm text-muted-foreground">
-          Manage your daily tasks and to-dos
+          {t('subtitle')}
         </p>
       </div>
 
@@ -102,7 +104,7 @@ function TasksContent() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Tasks</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('stats.total')}</CardTitle>
             <Badge variant="secondary">{totalTasks}</Badge>
           </CardHeader>
           <CardContent>
@@ -112,7 +114,7 @@ function TasksContent() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('stats.completed')}</CardTitle>
             <Badge variant="secondary">{completedTasks}</Badge>
           </CardHeader>
           <CardContent>
@@ -124,7 +126,7 @@ function TasksContent() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('stats.inProgress')}</CardTitle>
             <Badge variant="secondary">
               {sortedTasks.filter((t) => t.status === "in_progress").length}
             </Badge>
@@ -139,7 +141,7 @@ function TasksContent() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Completion Rate
+              {t('stats.completionRate')}
             </CardTitle>
             <Badge variant="secondary">{completionRate}%</Badge>
           </CardHeader>
@@ -154,11 +156,11 @@ function TasksContent() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-16">
             <div className="text-center">
-              <h3 className="text-lg font-semibold mb-2">No tasks found</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('noTasksFound')}</h3>
               <p className="text-muted-foreground mb-4">
                 {filters.length > 0 || searchTerm || activeTags.length > 0
-                  ? "Try adjusting your filters using the FAB menu"
-                  : "Create your first task to get started"}
+                  ? t('noTasksWithFilters')
+                  : t('noTasksDescription')}
               </p>
             </div>
           </CardContent>

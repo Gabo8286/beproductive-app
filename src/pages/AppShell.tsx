@@ -5,6 +5,7 @@ import { LunaChatModal } from '@/components/luna/modal/LunaChatModal';
 import { useLunaRouteContext } from '@/components/luna/hooks/useLunaRouteContext';
 import { PageErrorBoundary } from '@/components/errors/CascadingErrorBoundary';
 import { UniversalBreadcrumbs } from '@/components/navigation/UniversalBreadcrumbs';
+import { CompactLanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 
 function AppShellContent() {
   const { notifications, removeNotification } = useNotifications();
@@ -22,6 +23,11 @@ function AppShellContent() {
 
         {/* Universal Breadcrumbs - Above Bottom Navigation */}
         <UniversalBreadcrumbs />
+
+        {/* Floating Language Switcher */}
+        <div className="fixed top-4 right-4 z-30">
+          <CompactLanguageSwitcher />
+        </div>
 
         {/* Unified Bottom Navigation */}
         <UnifiedBottomNav />

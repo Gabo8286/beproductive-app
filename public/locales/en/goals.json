@@ -1,0 +1,42 @@
+{
+  "title": "Goals",
+  "subtitle": "Track your long-term objectives",
+  "newGoal": "New Goal",
+  "addGoal": "Add Goal",
+  "editGoal": "Edit Goal",
+  "deleteGoal": "Delete Goal",
+  "goalDetails": "Goal Details",
+  "noGoals": "No goals found",
+  "noGoalsDescription": "Create your first goal to get started",
+  "createFirstGoal": "Create your first goal",
+  "status": {
+    "notStarted": "Not Started",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "onHold": "On Hold",
+    "cancelled": "Cancelled"
+  },
+  "priority": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+  "fields": {
+    "title": "Goal Title",
+    "description": "Description",
+    "targetDate": "Target Date",
+    "category": "Category",
+    "priority": "Priority",
+    "status": "Status",
+    "progress": "Progress",
+    "milestones": "Milestones",
+    "notes": "Notes"
+  },
+  "progress": {
+    "title": "Progress",
+    "percentage": "{{percent}}% Complete",
+    "milestones": "Milestones",
+    "tasks": "Related Tasks"
+  }
+}

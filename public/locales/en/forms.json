@@ -1,0 +1,64 @@
+{
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "minLength": "Must be at least {{min}} characters",
+    "maxLength": "Must be no more than {{max}} characters",
+    "invalidFormat": "Invalid format",
+    "passwordMismatch": "Passwords do not match"
+  },
+  "placeholders": {
+    "email": "Enter your email",
+    "password": "Enter your password",
+    "confirmPassword": "Confirm your password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "fullName": "Full name",
+    "title": "Enter title",
+    "description": "Enter description",
+    "search": "Search...",
+    "selectOption": "Select an option"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "clear": "Clear",
+    "reset": "Reset",
+    "upload": "Upload",
+    "download": "Download",
+    "copy": "Copy",
+    "paste": "Paste"
+  },
+  "labels": {
+    "title": "Title",
+    "description": "Description",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "dueDate": "Due Date",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "priority": "Priority",
+    "status": "Status",
+    "category": "Category",
+    "tags": "Tags",
+    "notes": "Notes",
+    "reminder": "Reminder",
+    "recurring": "Recurring"
+  },
+  "messages": {
+    "saved": "Changes saved successfully",
+    "deleted": "Item deleted successfully",
+    "created": "Item created successfully",
+    "updated": "Item updated successfully",
+    "error": "An error occurred. Please try again.",
+    "confirm": "Are you sure?",
+    "unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
+  }
+}

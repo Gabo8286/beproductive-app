@@ -31,6 +31,8 @@ import { lazy, Suspense, useEffect } from "react";
 import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import { I18nextProvider } from 'react-i18next';
+import i18n from '@/lib/i18n';
 
 // Eagerly loaded routes (critical path)
 import Index from "@/pages/Index";
@@ -532,36 +534,38 @@ function AppContent() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider>
-        <AuthProvider>
-          <ModulesProvider>
-            <AccessibilityProvider>
-              <ProductivityCycleProvider>
-                <GlobalViewProvider>
-                  <LunaFrameworkProvider>
-                    <ErrorBoundary
-                      fallback={
-                        <div className="fixed bottom-4 right-4 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm border rounded-lg px-3 py-2">
-                          Luna Assistant loading...
-                        </div>
-                      }
-                      onError={(error) => console.warn('Luna initialization error:', error)}
-                    >
-                      <LunaProvider>
-                        <BrowserRouter>
-                          <RouteAnnouncer />
-                          <AppContent />
-                          <TagFilterModal />
-                        </BrowserRouter>
-                      </LunaProvider>
-                    </ErrorBoundary>
-                  </LunaFrameworkProvider>
-                </GlobalViewProvider>
-              </ProductivityCycleProvider>
-            </AccessibilityProvider>
-          </ModulesProvider>
-        </AuthProvider>
-      </ConfigProvider>
+      <I18nextProvider i18n={i18n}>
+        <ConfigProvider>
+          <AuthProvider>
+            <ModulesProvider>
+              <AccessibilityProvider>
+                <ProductivityCycleProvider>
+                  <GlobalViewProvider>
+                    <LunaFrameworkProvider>
+                      <ErrorBoundary
+                        fallback={
+                          <div className="fixed bottom-4 right-4 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm border rounded-lg px-3 py-2">
+                            Luna Assistant loading...
+                          </div>
+                        }
+                        onError={(error) => console.warn('Luna initialization error:', error)}
+                      >
+                        <LunaProvider>
+                          <BrowserRouter>
+                            <RouteAnnouncer />
+                            <AppContent />
+                            <TagFilterModal />
+                          </BrowserRouter>
+                        </LunaProvider>
+                      </ErrorBoundary>
+                    </LunaFrameworkProvider>
+                  </GlobalViewProvider>
+                </ProductivityCycleProvider>
+              </AccessibilityProvider>
+            </ModulesProvider>
+          </AuthProvider>
+        </ConfigProvider>
+      </I18nextProvider>
     </QueryClientProvider>
   );
 }

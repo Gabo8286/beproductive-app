@@ -1,0 +1,35 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Your productivity overview",
+  "welcome": "Welcome back!",
+  "welcomeMessage": "Here's what's happening today",
+  "quickActions": "Quick Actions",
+  "recentActivity": "Recent Activity",
+  "upcomingTasks": "Upcoming Tasks",
+  "statistics": "Statistics",
+  "productivity": "Productivity",
+  "insights": "Insights",
+  "widgets": {
+    "tasks": "Tasks",
+    "goals": "Goals",
+    "habits": "Habits",
+    "time": "Time Tracking",
+    "calendar": "Calendar",
+    "notes": "Notes",
+    "weather": "Weather",
+    "quotes": "Inspirational Quotes"
+  },
+  "stats": {
+    "totalTasks": "Total Tasks",
+    "completedTasks": "Completed Tasks",
+    "inProgressTasks": "In Progress",
+    "upcomingDeadlines": "Upcoming Deadlines",
+    "completionRate": "Completion Rate",
+    "productivity": "Productivity Score",
+    "timeTracked": "Time Tracked",
+    "activeGoals": "Active Goals"
+  },
+  "noData": "No data available",
+  "loading": "Loading dashboard...",
+  "error": "Failed to load dashboard data"
+}

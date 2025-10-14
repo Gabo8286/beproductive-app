@@ -7,40 +7,14 @@ import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProd
 import { getPhaseInfo } from '@/modules/productivity-cycle/types/cycle';
 import { useTasks } from '@/hooks/useTasks';
 import { useGoals } from '@/hooks/useGoals';
+import { useTranslation } from 'react-i18next';
 
 interface NavTab {
   id: string;
-  label: string;
+  labelKey: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
 }
-
-const mainTabs: NavTab[] = [
-  {
-    id: 'luna',
-    label: 'Luna',
-    href: '/app/capture', // Keep href for fallback, but will be overridden
-    icon: Bot,
-  },
-  {
-    id: 'plan',
-    label: 'Plan',
-    href: '/app/plan',
-    icon: CheckSquare,
-  },
-  {
-    id: 'execute',
-    label: 'Execute',
-    href: '/app/engage',
-    icon: Target,
-  },
-  {
-    id: 'profile',
-    label: 'Profile',
-    href: '/app/profile',
-    icon: User,
-  },
-];
 
 export const UnifiedBottomNav: React.FC = () => {
   const location = useLocation();
@@ -49,6 +23,34 @@ export const UnifiedBottomNav: React.FC = () => {
   const { state } = useProductivityCycle();
   const { data: tasks } = useTasks();
   const { goals } = useGoals();
+  const { t } = useTranslation('navigation');
+
+  const mainTabs: NavTab[] = [
+    {
+      id: 'luna',
+      labelKey: 'luna',
+      href: '/app/capture', // Keep href for fallback, but will be overridden
+      icon: Bot,
+    },
+    {
+      id: 'plan',
+      labelKey: 'plan',
+      href: '/app/plan',
+      icon: CheckSquare,
+    },
+    {
+      id: 'execute',
+      labelKey: 'engage',
+      href: '/app/engage',
+      icon: Target,
+    },
+    {
+      id: 'profile',
+      labelKey: 'profile',
+      href: '/app/profile',
+      icon: User,
+    },
+  ];
 
   const currentPhaseInfo = getPhaseInfo(state.currentPhase);
   
@@ -143,7 +145,7 @@ export const UnifiedBottomNav: React.FC = () => {
                     >
                       <Icon className="h-5 w-5" />
                       <span className="text-xs md:text-sm font-medium">
-                        {tab.label}
+                        {t(tab.labelKey)}
                       </span>
                       {isActive && (
                         <div className="w-1 h-1 md:hidden bg-primary rounded-full" />
@@ -170,7 +172,7 @@ export const UnifiedBottomNav: React.FC = () => {
                   >
                     <Icon className="h-5 w-5" />
                     <span className="text-xs md:text-sm font-medium">
-                      {tab.label}
+                      {t(tab.labelKey)}
                     </span>
                     {isActive && (
                       <div className="w-1 h-1 md:hidden bg-primary rounded-full" />
@@ -184,11 +186,11 @@ export const UnifiedBottomNav: React.FC = () => {
             <div className="hidden lg:flex items-center gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <CheckSquare className="h-3.5 w-3.5" />
-                <span>{activeTasks} tasks</span>
+                <span>{activeTasks} {t('tasks')}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Target className="h-3.5 w-3.5" />
-                <span>{activeGoals} goals</span>
+                <span>{activeGoals} {t('goals')}</span>
               </div>
             </div>
           </div>

@@ -27,6 +27,7 @@ import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext
 import { ConfigPanel } from "@/components/config/ConfigPanel";
 import { useConfigPanel } from "@/hooks/useConfigPanel";
 import { UniversalBreadcrumbs } from "@/components/navigation/UniversalBreadcrumbs";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 type NavigationMode = 'minimal-sidebar' | 'top-navigation' | 'full-sidebar';
 
@@ -79,6 +80,7 @@ export function AppLayout() {
             <div className="flex items-center gap-2">
 
               {/* Settings moved to Luna contextual menu */}
+              <LanguageSwitcher />
 
               <NotificationCenter />
 

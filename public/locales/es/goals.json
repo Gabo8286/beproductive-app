@@ -1,0 +1,42 @@
+{
+  "title": "Metas",
+  "subtitle": "Rastrea tus objetivos a largo plazo",
+  "newGoal": "Nueva Meta",
+  "addGoal": "Añadir Meta",
+  "editGoal": "Editar Meta",
+  "deleteGoal": "Eliminar Meta",
+  "goalDetails": "Detalles de Meta",
+  "noGoals": "No se encontraron metas",
+  "noGoalsDescription": "Crea tu primera meta para comenzar",
+  "createFirstGoal": "Crear tu primera meta",
+  "status": {
+    "notStarted": "No Iniciada",
+    "inProgress": "En Progreso",
+    "completed": "Completada",
+    "onHold": "En Espera",
+    "cancelled": "Cancelada"
+  },
+  "priority": {
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "critical": "Crítica"
+  },
+  "fields": {
+    "title": "Título de Meta",
+    "description": "Descripción",
+    "targetDate": "Fecha Objetivo",
+    "category": "Categoría",
+    "priority": "Prioridad",
+    "status": "Estado",
+    "progress": "Progreso",
+    "milestones": "Hitos",
+    "notes": "Notas"
+  },
+  "progress": {
+    "title": "Progreso",
+    "percentage": "{{percent}}% Completado",
+    "milestones": "Hitos",
+    "tasks": "Tareas Relacionadas"
+  }
+}

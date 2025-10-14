@@ -1,0 +1,35 @@
+{
+  "title": "Tablero",
+  "subtitle": "Tu resumen de productividad",
+  "welcome": "¡Bienvenido de vuelta!",
+  "welcomeMessage": "Esto es lo que está pasando hoy",
+  "quickActions": "Acciones Rápidas",
+  "recentActivity": "Actividad Reciente",
+  "upcomingTasks": "Tareas Próximas",
+  "statistics": "Estadísticas",
+  "productivity": "Productividad",
+  "insights": "Perspectivas",
+  "widgets": {
+    "tasks": "Tareas",
+    "goals": "Metas",
+    "habits": "Hábitos",
+    "time": "Seguimiento de Tiempo",
+    "calendar": "Calendario",
+    "notes": "Notas",
+    "weather": "Clima",
+    "quotes": "Citas Inspiradoras"
+  },
+  "stats": {
+    "totalTasks": "Total de Tareas",
+    "completedTasks": "Tareas Completadas",
+    "inProgressTasks": "En Progreso",
+    "upcomingDeadlines": "Fechas Límite Próximas",
+    "completionRate": "Tasa de Finalización",
+    "productivity": "Puntuación de Productividad",
+    "timeTracked": "Tiempo Rastreado",
+    "activeGoals": "Metas Activas"
+  },
+  "noData": "No hay datos disponibles",
+  "loading": "Cargando tablero...",
+  "error": "Error al cargar los datos del tablero"
+}

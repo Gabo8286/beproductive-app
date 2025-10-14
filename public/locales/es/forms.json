@@ -1,0 +1,64 @@
+{
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "email": "Por favor ingresa una dirección de correo válida",
+    "minLength": "Debe tener al menos {{min}} caracteres",
+    "maxLength": "No debe tener más de {{max}} caracteres",
+    "invalidFormat": "Formato inválido",
+    "passwordMismatch": "Las contraseñas no coinciden"
+  },
+  "placeholders": {
+    "email": "Ingresa tu correo electrónico",
+    "password": "Ingresa tu contraseña",
+    "confirmPassword": "Confirma tu contraseña",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "fullName": "Nombre completo",
+    "title": "Ingresa título",
+    "description": "Ingresa descripción",
+    "search": "Buscar...",
+    "selectOption": "Selecciona una opción"
+  },
+  "buttons": {
+    "submit": "Enviar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Añadir",
+    "remove": "Quitar",
+    "clear": "Limpiar",
+    "reset": "Restablecer",
+    "upload": "Subir",
+    "download": "Descargar",
+    "copy": "Copiar",
+    "paste": "Pegar"
+  },
+  "labels": {
+    "title": "Título",
+    "description": "Descripción",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "dueDate": "Fecha de vencimiento",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "priority": "Prioridad",
+    "status": "Estado",
+    "category": "Categoría",
+    "tags": "Etiquetas",
+    "notes": "Notas",
+    "reminder": "Recordatorio",
+    "recurring": "Recurrente"
+  },
+  "messages": {
+    "saved": "Cambios guardados exitosamente",
+    "deleted": "Elemento eliminado exitosamente",
+    "created": "Elemento creado exitosamente",
+    "updated": "Elemento actualizado exitosamente",
+    "error": "Ocurrió un error. Por favor inténtalo de nuevo.",
+    "confirm": "¿Estás seguro?",
+    "unsavedChanges": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?"
+  }
+}

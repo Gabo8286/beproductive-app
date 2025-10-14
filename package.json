@@ -170,6 +170,8 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^12.23.22",
     "i18next": "^25.5.3",
+    "i18next-browser-languagedetector": "^8.2.0",
+    "i18next-http-backend": "^3.0.2",
     "jsdom": "^27.0.0",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",

@@ -1,0 +1,110 @@
+{
+  "title": "Tareas",
+  "subtitle": "Gestiona tus tareas diarias y pendientes",
+  "organizeWork": "Organiza tu trabajo",
+  "noTasksFound": "No se encontraron tareas",
+  "noTasksDescription": "Crea tu primera tarea para comenzar",
+  "noTasksWithFilters": "Intenta ajustar tus filtros usando el menú FAB",
+  "createFirstTask": "Crea tu primera tarea para comenzar",
+  "newTask": "Nueva Tarea",
+  "addTask": "Añadir Tarea",
+  "editTask": "Editar Tarea",
+  "deleteTask": "Eliminar Tarea",
+  "taskDetails": "Detalles de Tarea",
+  "taskNotFound": "Tarea No Encontrada",
+  "taskNotFoundDescription": "La tarea que buscas no existe o no tienes acceso a ella.",
+  "backToTasks": "Volver a Tareas",
+  "markComplete": "Marcar Completada",
+  "markIncomplete": "Marcar Incompleta",
+  "deleteConfirm": "¿Estás seguro de que quieres eliminar esta tarea?",
+  "status": {
+    "todo": "Por Hacer",
+    "inProgress": "En Progreso",
+    "blocked": "Bloqueada",
+    "done": "Completada"
+  },
+  "priority": {
+    "low": "Baja",
+    "medium": "Media",
+    "high": "Alta",
+    "urgent": "Urgente"
+  },
+  "stats": {
+    "total": "Total de Tareas",
+    "completed": "Completadas",
+    "inProgress": "En Progreso",
+    "completionRate": "Tasa de Finalización"
+  },
+  "filters": {
+    "priority": "Prioridad",
+    "status": "Estado",
+    "dueDate": "Fecha de Vencimiento",
+    "today": "Hoy",
+    "overdue": "Vencidas",
+    "thisWeek": "Esta Semana",
+    "nextWeek": "Próxima Semana"
+  },
+  "sort": {
+    "dueDate": "Fecha de Vencimiento",
+    "priority": "Prioridad",
+    "title": "Título",
+    "created": "Creada",
+    "updated": "Actualizada",
+    "ascending": "Ascendente",
+    "descending": "Descendente"
+  },
+  "view": {
+    "list": "Lista",
+    "grid": "Cuadrícula",
+    "board": "Tablero",
+    "calendar": "Calendario",
+    "projects": "Proyectos",
+    "status": "Estado"
+  },
+  "fields": {
+    "title": "Título",
+    "description": "Descripción",
+    "dueDate": "Fecha de Vencimiento",
+    "priority": "Prioridad",
+    "status": "Estado",
+    "assignedTo": "Asignado a",
+    "createdBy": "Creado por",
+    "tags": "Etiquetas",
+    "project": "Proyecto",
+    "estimatedDuration": "Duración Estimada",
+    "actualDuration": "Duración Real",
+    "position": "Posición",
+    "created": "Creada",
+    "completed": "Completada"
+  },
+  "placeholders": {
+    "title": "Ingresa el título de la tarea...",
+    "description": "Ingresa la descripción de la tarea...",
+    "search": "Buscar tareas..."
+  },
+  "progress": {
+    "title": "Progreso de Tarea",
+    "completed": "¡Tarea completada exitosamente!",
+    "inProgress": "El trabajo está actualmente en progreso.",
+    "blocked": "La tarea está actualmente bloqueada.",
+    "todo": "La tarea está lista para iniciarse."
+  },
+  "activity": {
+    "title": "Cronología de Actividad",
+    "created": "Tarea creada",
+    "completed": "Tarea completada",
+    "fullTracking": "El seguimiento completo de actividad estará disponible pronto..."
+  },
+  "subtasks": {
+    "title": "Subtareas",
+    "description": "Divide esta tarea en piezas más pequeñas y manejables"
+  },
+  "timeTracking": {
+    "title": "Seguimiento de Tiempo",
+    "estimatedTime": "Tiempo Estimado",
+    "actualTime": "Tiempo Real",
+    "variance": "Variación",
+    "notSet": "No establecido",
+    "notTracked": "No rastreado"
+  }
+}
