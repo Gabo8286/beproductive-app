@@ -100,6 +100,7 @@ interface LunaProviderProps {
 
 export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
   const [state, setState] = useState<LunaState>(defaultLunaState);
+  const [initializationState, setInitializationState] = useState<'loading' | 'ready'>('loading');
 
   // ALWAYS call hook at top level (React Rules of Hooks)
   const framework = useLunaFramework();
@@ -136,17 +137,32 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
     }
   }, [state.currentExpression]);
 
-  // Load Luna preferences from localStorage
+  // Single initialization effect to prevent cascading renders
   useEffect(() => {
-    const savedPreferences = localStorage.getItem('luna-preferences');
-    if (savedPreferences) {
+    let mounted = true;
+
+    const initialize = async () => {
       try {
-        const preferences = JSON.parse(savedPreferences);
-        setState(prev => ({ ...prev, ...preferences }));
+        // Load preferences synchronously
+        const savedPreferences = localStorage.getItem('luna-preferences');
+        if (savedPreferences && mounted) {
+          const preferences = JSON.parse(savedPreferences);
+          setState(prev => ({ ...prev, ...preferences }));
+        }
+
+        if (mounted) {
+          setInitializationState('ready');
+        }
       } catch (error) {
-        console.warn('Failed to load Luna preferences:', error);
+        console.warn('Luna initialization error:', error);
+        if (mounted) {
+          setInitializationState('ready'); // Continue anyway
+        }
       }
-    }
+    };
+
+    initialize();
+    return () => { mounted = false; };
   }, []);
 
   // Save preferences to localStorage when they change
@@ -161,15 +177,17 @@ export const LunaProvider: React.FC<LunaProviderProps> = ({ children }) => {
     localStorage.setItem('luna-preferences', JSON.stringify(preferences));
   }, [state.lunaPersonality, state.showProactiveSuggestions, state.reminderFrequency, state.suggestionsEnabled, state.frameworkEnabled]);
 
-  // Update contextual suggestions when context or framework state changes
+  // Update contextual suggestions when context or framework state changes (after initialization)
   useEffect(() => {
+    if (initializationState !== 'ready') return;
+
     if (state.frameworkEnabled && frameworkAvailable && frameworkContext) {
       const suggestions = generateContextualSuggestions(state.currentContext, frameworkContext);
       setState(prev => ({ ...prev, contextualSuggestions: suggestions }));
     } else {
       setState(prev => ({ ...prev, contextualSuggestions: [] }));
     }
-  }, [state.currentContext, state.frameworkEnabled, frameworkAvailable, frameworkContext]);
+  }, [initializationState, state.currentContext, state.frameworkEnabled, frameworkAvailable, frameworkContext]);
 
   // Create a function to handle message sending logic
   const handleMessageSending = (content: string, context?: string, useFramework: boolean = true) => {

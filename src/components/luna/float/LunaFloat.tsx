@@ -26,6 +26,7 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
   const [showTooltipState, setShowTooltipState] = useState(false);
   const [hasMovedDuringDrag, setHasMovedDuringDrag] = useState(false);
   const [pointerDownPos, setPointerDownPos] = useState<{ x: number; y: number } | null>(null);
+  const [radixReady, setRadixReady] = useState(false);
 
   const {
     currentExpression,
@@ -41,6 +42,12 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
     hideFloat,
     setFloatPosition,
   } = useLunaFloat();
+
+  // Ensure React context is stable before showing Radix components
+  useEffect(() => {
+    const timer = setTimeout(() => setRadixReady(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Auto-hide functionality
   useEffect(() => {
@@ -203,8 +210,9 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
 
         {/* Main Avatar with Contextual Menu */}
         <div className="relative">
-          <LunaContextualMenu>
-            <div className="relative">
+          {radixReady && (
+            <LunaContextualMenu>
+              <div className="relative">
               <LunaAvatar
                 size="medium"
                 expression={currentExpression}
@@ -236,8 +244,20 @@ export const LunaFloat: React.FC<LunaFloatProps> = ({
                   style={{ backgroundColor: LUNA_COLORS.lanternGlow }}
                 />
               )}
+              </div>
+            </LunaContextualMenu>
+          )}
+
+          {/* Fallback when Radix isn't ready yet */}
+          {!radixReady && (
+            <div className="relative">
+              <LunaAvatar
+                size="medium"
+                expression={currentExpression}
+                animated={!isDragging}
+              />
             </div>
-          </LunaContextualMenu>
+          )}
         </div>
 
         {/* Tooltip */}

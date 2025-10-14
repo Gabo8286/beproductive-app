@@ -40,13 +40,13 @@ export default defineConfig(({ mode }) => ({
         manualChunks: (id) => {
           // Simplified chunking strategy to prevent React initialization race conditions
           if (id.includes('node_modules')) {
-            // Consolidate ALL React-related libraries into one chunk to prevent race conditions
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+            // Consolidate ALL React ecosystem libraries into one chunk to prevent race conditions
+            if (id.includes('react') ||
+                id.includes('react-dom') ||
+                id.includes('react-router') ||
+                id.includes('@radix-ui') ||
+                id.includes('radix-ui')) {
               return 'react-core';
-            }
-            // UI components and styling
-            if (id.includes('@radix-ui') || id.includes('radix-ui')) {
-              return 'radix-vendor';
             }
             if (id.includes('framer-motion')) {
               return 'animation-vendor';

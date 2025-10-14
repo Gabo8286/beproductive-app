@@ -533,13 +533,22 @@ function App() {
               <ProductivityCycleProvider>
                 <GlobalViewProvider>
                   <LunaFrameworkProvider>
-                    <LunaProvider>
-                      <BrowserRouter>
-                        <RouteAnnouncer />
-                        <AppContent />
-                        <TagFilterModal />
-                      </BrowserRouter>
-                    </LunaProvider>
+                    <ErrorBoundary
+                      fallback={
+                        <div className="fixed bottom-4 right-4 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm border rounded-lg px-3 py-2">
+                          Luna Assistant loading...
+                        </div>
+                      }
+                      onError={(error) => console.warn('Luna initialization error:', error)}
+                    >
+                      <LunaProvider>
+                        <BrowserRouter>
+                          <RouteAnnouncer />
+                          <AppContent />
+                          <TagFilterModal />
+                        </BrowserRouter>
+                      </LunaProvider>
+                    </ErrorBoundary>
                   </LunaFrameworkProvider>
                 </GlobalViewProvider>
               </ProductivityCycleProvider>
