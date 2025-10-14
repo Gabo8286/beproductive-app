@@ -1,11 +1,18 @@
+import { LogOut, User, Sparkles, Settings } from "lucide-react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
+import { NotificationCenter } from "@/components/automation/NotificationCenter";
+import { ConfigPanel } from "@/components/config/ConfigPanel";
+import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext";
 import { AppSidebar } from "@/components/navigation/AppSidebar";
 import { MinimalSidebar } from "@/components/navigation/MinimalSidebar";
-import { CyclePrimaryNavigation } from "@/components/navigation/CyclePrimaryNavigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,18 +21,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Sparkles, CreditCard, Shield, Crown, Brain, Palette, Settings } from "lucide-react";
-import { useNavigate, NavLink } from "react-router-dom";
 import { Timer } from "@/components/time/Timer";
-import { NotificationCenter } from "@/components/automation/NotificationCenter";
-import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { SkipNavigation } from "@/components/accessibility/SkipNavigation";
-import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { useLunaRouteContext } from "@/components/luna/hooks/useLunaRouteContext";
-import { ConfigPanel } from "@/components/config/ConfigPanel";
 import { useConfigPanel } from "@/hooks/useConfigPanel";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
 import { UniversalBreadcrumbs } from "@/components/navigation/UniversalBreadcrumbs";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
@@ -45,7 +44,11 @@ export function AppLayout() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/login");
+    // Use setTimeout to ensure navigation happens after auth state fully clears
+    // and use replace: true to bypass ProtectedRoute redirect logic
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 250);
   };
 
   const initials =
@@ -84,20 +87,46 @@ export function AppLayout() {
 
               <NotificationCenter />
 
-              {/* User Avatar */}
-              <Button
-                variant="ghost"
-                className="relative h-10 w-10 rounded-full"
-                onClick={() => navigate('/profile')}
-              >
-                <Avatar className="h-10 w-10">
-                  <AvatarImage
-                    src={profile?.avatar_url || ""}
-                    alt={profile?.full_name || ""}
-                  />
-                  <AvatarFallback>{initials}</AvatarFallback>
-                </Avatar>
-              </Button>
+              {/* User Avatar with Dropdown Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-10 w-10 rounded-full"
+                    aria-label="User menu"
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={profile?.avatar_url || ""}
+                        alt={profile?.full_name || ""}
+                      />
+                      <AvatarFallback>{initials}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {profile?.full_name || "User"}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {profile?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/profile")}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
         </header>
 

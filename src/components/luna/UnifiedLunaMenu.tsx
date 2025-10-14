@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   FileText,
   Target,
@@ -20,9 +18,13 @@ import {
   Palette,
   X,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useAuth } from '@/contexts/AuthContext';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { cn } from '@/lib/utils';
+
 import { useLuna } from './context/LunaContext';
 import { LunaAvatar } from './core/LunaAvatar';
 
@@ -245,7 +247,11 @@ export const UnifiedLunaMenu: React.FC<UnifiedLunaMenuProps> = ({ isOpen, onClos
   const handleSignOut = async () => {
     success();
     await signOut();
-    navigate("/login");
+    // Use setTimeout to ensure navigation happens after auth state fully clears
+    // and use replace: true to bypass ProtectedRoute redirect logic
+    setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 250);
     onClose();
   };
 

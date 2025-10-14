@@ -651,6 +651,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Handle guest mode signout
       if (isGuestMode) {
         clearGuestMode();
+        // Small delay to ensure state is fully cleared
+        await new Promise(resolve => setTimeout(resolve, 200));
         return;
       }
 
@@ -660,12 +662,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         await supabase.auth.signOut();
       }
+
+      // Clear state immediately
       setUser(null);
       setSession(null);
       setProfile(null);
+      setAuthLoading(false);
+      setAuthError(null);
+
+      // Small delay to ensure state is fully cleared
+      await new Promise(resolve => setTimeout(resolve, 200));
     } catch (error) {
       console.error("Error signing out:", error);
       toast.error("Failed to sign out");
+
+      // Even if signout fails, clear local state
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      setAuthLoading(false);
+      setAuthError(null);
     }
   };
 
