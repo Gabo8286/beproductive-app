@@ -30,6 +30,7 @@ i18n
   .init({
     fallbackLng: defaultLanguage,
     lng: defaultLanguage,
+    supportedLngs: supportedLanguageCodes,
 
     // Language detection options
     detection: {
@@ -37,6 +38,7 @@ i18n
       lookupLocalStorage: 'i18nextLng',
       caches: ['localStorage'],
       excludeCacheFor: ['cimode'],
+      checkWhitelist: true, // Only allow supported languages
     },
 
     // Namespace and resource configuration
@@ -46,6 +48,9 @@ i18n
     // Resource loading
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
+      requestOptions: {
+        cache: 'no-cache', // Ensure fresh translation files
+      },
     },
 
     // Interpolation options
@@ -59,13 +64,13 @@ i18n
     // Additional options
     load: 'languageOnly', // Don't load country-specific variants
     cleanCode: true,
-    nonExplicitSupportedLngs: true,
+    nonExplicitSupportedLngs: false, // Only use explicitly supported languages
 
     // React options
     react: {
       useSuspense: false, // Avoid suspense for better UX
-      bindI18n: 'languageChanged',
-      bindI18nStore: false,
+      bindI18n: 'languageChanged loaded',
+      bindI18nStore: 'added removed',
       transEmptyNodeValue: '', // Return empty string for missing translations
       transSupportBasicHtmlNodes: true,
       transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'em', 'span'],

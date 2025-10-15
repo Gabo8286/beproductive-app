@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle, Code, Zap, Brain, Calendar, Users, Rocket } from "lucide-react";
 import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
 import { BuildStory } from "./BuildStory";
+import { EditableTeamSection } from "./EditableTeamSection";
 import { useConversionTracking } from "@/hooks/useConversionTracking";
 import { ConversionEventType } from "@/types/conversion";
 import { useState, useEffect } from "react";
@@ -402,6 +403,61 @@ export const LandingPage = () => {
           </Card>
         </div>
       </section>
+
+      {/* Productivity Assessment CTA Section */}
+      <section className="container mx-auto px-4 py-24 bg-gradient-to-br from-primary/10 to-secondary/10">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <div className="space-y-4">
+            <Badge className="px-4 py-2 text-sm bg-primary/10 text-primary border-primary/20">
+              <Brain className="h-4 w-4 mr-2" />
+              Discover Your Productivity Type
+            </Badge>
+
+            <h2 className="text-4xl md:text-5xl font-bold">
+              Find Your Productivity Superpower
+            </h2>
+
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Take our science-based assessment to discover your unique productivity style and get personalized strategies that actually work for your brain.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-primary" />
+              <span>10,000+ assessed</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Target className="h-4 w-4 text-green-500" />
+              <span>8 personality types</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="h-4 w-4 text-blue-500" />
+              <span>5-minute assessment</span>
+            </div>
+          </div>
+
+          <div className="pt-4">
+            <Button
+              size="lg"
+              className="text-lg h-14 px-8 shadow-lg hover:shadow-xl"
+              onClick={() => {
+                trackEvent(ConversionEventType.CTA_CLICK, { location: 'assessment-cta' }, 10);
+                navigate('/assessment');
+              }}
+            >
+              <Brain className="h-5 w-5 mr-2" />
+              Discover My Productivity Type
+            </Button>
+            <p className="text-sm text-muted-foreground mt-3">
+              Free assessment • Instant results • Personalized insights
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Editable Team Section */}
+      <EditableTeamSection showEditControls={false} />
 
       {/* Footer */}
       <footer className="container mx-auto px-4 py-12 text-center border-t border-border/50">

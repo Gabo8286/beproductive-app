@@ -97,6 +97,11 @@ const Billing = lazy(() => import("@/pages/Billing"));
 const PricingPlans = lazy(() => import("@/pages/PricingPlans"));
 const LunaCommandCenterPage = lazy(() => import("@/pages/LunaCommandCenter"));
 
+// Lead Generation pages
+const LeadGenerationAssessment = lazy(() => import("@/pages/LeadGenerationAssessment"));
+const PersonalizedResults = lazy(() => import("@/pages/PersonalizedResults"));
+const LeadManagement = lazy(() => import("@/pages/admin/LeadManagement"));
+
 // AI components are exported from widgets/index.ts
 
 const queryClient = new QueryClient({
@@ -170,6 +175,24 @@ function AppContent() {
             element={
               <Suspense fallback={<PageLoading />}>
                 <ForgotPassword />
+              </Suspense>
+            }
+          />
+
+          {/* Lead Generation Assessment - Public Route */}
+          <Route
+            path="/assessment"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <LeadGenerationAssessment />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/assessment/results"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <PersonalizedResults />
               </Suspense>
             }
           />
@@ -485,6 +508,14 @@ function AppContent() {
               element={
                 <Suspense fallback={<PageLoading />}>
                   <AgentDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/admin/leads"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <LeadManagement />
                 </Suspense>
               }
             />
