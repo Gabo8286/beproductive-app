@@ -33,52 +33,70 @@ export default defineConfig(({ mode }) => ({
     target: 'es2020',
     sourcemap: false,
     minify: 'esbuild',
-    // Performance budgets to prevent bundle bloat
-    chunkSizeWarningLimit: 400, // Stricter size limit
+    // Optimized performance budgets
+    chunkSizeWarningLimit: 500, // Adjusted limit for vendor chunks
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Simplified chunking strategy to prevent React initialization race conditions
+          // Optimized chunking strategy based on actual usage patterns and load priorities
           if (id.includes('node_modules')) {
-            // Consolidate ALL React ecosystem libraries into one chunk to prevent race conditions
-            if (id.includes('react') ||
-                id.includes('react-dom') ||
-                id.includes('react-router') ||
-                id.includes('@radix-ui') ||
-                id.includes('radix-ui')) {
-              return 'react-core';
+            // Core React libraries - split for better caching and loading
+            if (id.includes('react/') || id.includes('react-dom/client')) {
+              return 'react-runtime';
             }
-            if (id.includes('framer-motion')) {
-              return 'animation-vendor';
+            if (id.includes('react-dom') && !id.includes('client')) {
+              return 'react-dom';
+            }
+            if (id.includes('react-router')) {
+              return 'react-router';
+            }
+
+            // UI Component libraries - frequently used, cache separately
+            if (id.includes('@radix-ui') || id.includes('radix-ui')) {
+              return 'ui-components';
             }
             if (id.includes('lucide-react')) {
-              return 'icons-vendor';
+              return 'icons';
             }
-            // Data and backend
+            if (id.includes('framer-motion')) {
+              return 'animations';
+            }
+
+            // Data & Backend - heavy but essential
             if (id.includes('@supabase') || id.includes('supabase')) {
-              return 'supabase-vendor';
+              return 'supabase';
             }
             if (id.includes('@tanstack/react-query')) {
-              return 'query-vendor';
+              return 'query';
             }
-            // Charts and visualization
+
+            // Charts - large but only used in specific pages
             if (id.includes('recharts') || id.includes('d3')) {
-              return 'chart-vendor';
+              return 'charts';
             }
-            // Utilities and validation
-            if (id.includes('zod') || id.includes('date-fns') || id.includes('lodash')) {
-              return 'utils-vendor';
+
+            // Utilities - small, frequently used
+            if (id.includes('zod') || id.includes('date-fns') || id.includes('clsx') || id.includes('class-variance-authority')) {
+              return 'utils';
             }
-            // AI and ML libraries
+
+            // AI libraries - feature-specific, can be lazy loaded
             if (id.includes('openai') || id.includes('anthropic')) {
-              return 'ai-vendor';
+              return 'ai-services';
             }
+
             // Everything else from node_modules
-            return 'vendor';
+            return 'vendor-misc';
           }
 
-          // Let Vite handle app code chunking automatically to prevent dependency issues
-          // Removed manual app-specific chunking to avoid interfering with React context initialization
+          // App code chunking for better code splitting
+          if (id.includes('src/pages/')) {
+            // Group admin pages together (lower priority)
+            if (id.includes('src/pages/admin/')) {
+              return 'pages-admin';
+            }
+            // Let Vite handle other pages automatically for optimal splitting
+          }
         },
         // Optimize chunk naming for caching
         chunkFileNames: 'assets/[name]-[hash].js',

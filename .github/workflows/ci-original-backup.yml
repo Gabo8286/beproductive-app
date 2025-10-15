@@ -1,0 +1,434 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+jobs:
+  # Fast feedback jobs
+  lint-and-typecheck:
+    name: Lint and Type Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript check
+        run: npx tsc --noEmit
+
+      - name: 🔍 FMEW Validation - Dependency Check
+        run: node scripts/validate-dependencies.js
+
+      - name: 🔍 FMEW Validation - Import Paths
+        run: node scripts/validate-imports.js
+
+      - name: 🔍 FMEW Validation - CSS Classes
+        run: node scripts/validate-css-classes.js
+
+      - name: Check for unused dependencies
+        run: npx depcheck --ignores="@types/*,eslint-*"
+
+  # Unit and Integration Tests
+  unit-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: ['18', '20']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:run
+
+      - name: Generate test coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: matrix.node-version == '20'
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-node-${{ matrix.node-version }}
+          path: |
+            coverage/
+            test-results/
+
+  # Security Testing
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+
+      - name: 🛡️ FMEW Security - Dependency Validation
+        run: node scripts/validate-dependencies.js
+
+      - name: 🛡️ FMEW Security - Lock File Integrity
+        run: |
+          if [ ! -f package-lock.json ]; then
+            echo "❌ package-lock.json is missing!"
+            exit 1
+          fi
+
+          # Check if lock file is up to date
+          npm ci --dry-run
+
+          echo "✅ Lock file integrity verified"
+
+      - name: Run security tests
+        run: npm run test:run -- src/test/security/ || echo "⚠️ Security tests directory not found, skipping..."
+
+      - name: Check for known vulnerabilities
+        run: npx audit-ci --moderate
+
+  # Build Testing
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        build-mode: ['development', 'production']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: 🔍 Pre-build FMEW Validation
+        run: |
+          echo "🔍 Running comprehensive pre-build validation..."
+          node scripts/validate-dependencies.js
+          node scripts/validate-imports.js
+          node scripts/validate-css-classes.js
+          echo "✅ All pre-build validations passed!"
+
+      - name: Build application (${{ matrix.build-mode }})
+        run: |
+          if [ "${{ matrix.build-mode }}" = "development" ]; then
+            npm run build:dev
+          else
+            npm run build
+          fi
+
+      - name: Check build output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "Build failed: dist directory not found"
+            exit 1
+          fi
+
+          if [ ! -f "dist/index.html" ]; then
+            echo "Build failed: index.html not found"
+            exit 1
+          fi
+
+      - name: Analyze bundle size
+        run: |
+          du -sh dist/
+          find dist -name "*.js" -exec du -h {} \; | sort -hr | head -10
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.build-mode }}
+          path: dist/
+          retention-days: 7
+
+  # Cross-browser E2E Tests
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [build-test]
+
+    strategy:
+      matrix:
+        browser: ['chromium', 'firefox', 'webkit']
+        shard: [1, 2]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install ${{ matrix.browser }} --with-deps
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-production
+          path: dist/
+
+      - name: Start preview server
+        run: |
+          npm run preview &
+          npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Run E2E tests
+        run: npx playwright test --project=${{ matrix.browser }} --shard=${{ matrix.shard }}/2
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-results-${{ matrix.browser }}-shard-${{ matrix.shard }}
+          path: |
+            test-results/
+            playwright-report/
+
+  # Visual Regression Tests
+  visual-tests:
+    name: Visual Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [build-test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-production
+          path: dist/
+
+      - name: Start preview server
+        run: |
+          npm run preview &
+          npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Run visual regression tests
+        run: npx playwright test tests/e2e/visual-regression.spec.ts
+
+      - name: Upload visual test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-test-results
+          path: |
+            test-results/
+            playwright-report/
+
+  # Performance Tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run performance tests
+        run: npm run test:run -- src/test/performance/
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+          npm run build
+          npm run preview &
+          npx wait-on http://localhost:4173
+          lhci autorun --upload.target=temporary-public-storage
+
+  # Accessibility Tests
+  accessibility-tests:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run accessibility tests
+        run: npm run test:run -- src/test/accessibility/
+
+      - name: Run axe-core E2E accessibility tests
+        run: |
+          npx playwright install chromium --with-deps
+          npm run build
+          npm run preview &
+          npx wait-on http://localhost:4173
+          npx playwright test tests/e2e/accessibility.spec.ts
+
+  # Test Summary
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, unit-tests, security-tests, build-test, e2e-tests, visual-tests, performance-tests, accessibility-tests]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all test artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Generate test summary
+        run: |
+          echo "# Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Job Results" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint & Type Check | ${{ needs.lint-and-typecheck.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Unit Tests | ${{ needs.unit-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Tests | ${{ needs.security-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build Test | ${{ needs.build-test.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| E2E Tests | ${{ needs.e2e-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Visual Tests | ${{ needs.visual-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Performance Tests | ${{ needs.performance-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Accessibility Tests | ${{ needs.accessibility-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const success = '${{ needs.lint-and-typecheck.result == 'success' && needs.unit-tests.result == 'success' && needs.security-tests.result == 'success' && needs.build-test.result == 'success' && needs.e2e-tests.result == 'success' && needs.visual-tests.result == 'success' && needs.performance-tests.result == 'success' && needs.accessibility-tests.result == 'success' }}' === 'true';
+
+            const body = success
+              ? '✅ All tests passed! This PR is ready for review.'
+              : '❌ Some tests failed. Please check the workflow results and fix any issues.';
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: number,
+              body
+            });
+
+  # Dependency Check
+  dependency-check:
+    name: Dependency Security Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
