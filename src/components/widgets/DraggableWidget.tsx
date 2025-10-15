@@ -1,5 +1,6 @@
 import React from "react";
-import { Draggable } from "react-beautiful-dnd";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { GripVertical, X, ExternalLink } from "lucide-react";
@@ -16,44 +17,56 @@ interface Widget {
 
 interface DraggableWidgetProps {
   widget: Widget;
-  index: number;
   onRemove: () => void;
 }
 
 export const DraggableWidget: React.FC<DraggableWidgetProps> = ({
   widget,
-  index,
   onRemove,
 }) => {
   const [isHovering, setIsHovering] = React.useState(false);
   const { component: WidgetComponent } = widget;
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: widget.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
-    <Draggable draggableId={widget.id} index={index}>
-      {(provided, snapshot) => (
-        <motion.div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          layout
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          className={cn(
-            "relative group",
-            snapshot.isDragging && "rotate-3 shadow-2xl ring-2 ring-primary/20",
-          )}
-        >
-          <Card
-            className={cn(
-              "h-full transition-all duration-200",
-              "hover:shadow-lg hover:border-primary/20",
-              snapshot.isDragging && "shadow-2xl",
-            )}
-          >
+    <motion.div
+      ref={setNodeRef}
+      style={style}
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className={cn(
+        "relative group",
+        isDragging && "rotate-3 shadow-2xl ring-2 ring-primary/20",
+      )}
+    >
+      <Card
+        className={cn(
+          "h-full transition-all duration-200",
+          "hover:shadow-lg hover:border-primary/20",
+          isDragging && "shadow-2xl",
+        )}
+      >
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-sm">{widget.title}</h3>
@@ -86,7 +99,7 @@ export const DraggableWidget: React.FC<DraggableWidgetProps> = ({
                     </motion.div>
                   )}
                   <div
-                    {...provided.dragHandleProps}
+                    {...listeners}
                     className="cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded"
                   >
                     <GripVertical className="h-3 w-3 text-muted-foreground" />
@@ -94,12 +107,10 @@ export const DraggableWidget: React.FC<DraggableWidgetProps> = ({
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="pt-0">
-              <WidgetComponent {...widget.config} />
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
-    </Draggable>
+        <CardContent className="pt-0">
+          <WidgetComponent {...widget.config} />
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };

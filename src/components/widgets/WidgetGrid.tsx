@@ -5,7 +5,21 @@
  * Purpose: Main widget container with responsive layout and drag-and-drop functionality
  */
 import React, { useState } from "react";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { DraggableWidget } from "./DraggableWidget";
 import { WidgetSelector } from "./WidgetSelector";
 import { useWidgetLayout } from "@/hooks/useWidgetLayout";
@@ -29,10 +43,22 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
 
   const [isWidgetSelectorOpen, setIsWidgetSelectorOpen] = useState(false);
 
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
-    reorderWidgets(result.source.index, result.destination.index);
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      const oldIndex = widgets.findIndex((widget) => widget.id === active.id);
+      const newIndex = widgets.findIndex((widget) => widget.id === over?.id);
+
+      reorderWidgets(oldIndex, newIndex);
+    }
   };
 
   const handleWidgetSelect = (widget: { type: string }) => {
@@ -63,46 +89,43 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
         )}
       </div>
 
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="widget-grid">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className={cn(
-                "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
-                "min-h-[200px] transition-colors duration-200",
-                snapshot.isDraggingOver && "bg-muted/50 rounded-lg p-2",
-              )}
-            >
-              {widgets.map((widget, index) => (
-                <DraggableWidget
-                  key={widget.id}
-                  widget={widget}
-                  index={index}
-                  onRemove={() => removeWidget(widget.id)}
-                />
-              ))}
-              {provided.placeholder}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={widgets.map(w => w.id)} strategy={verticalListSortingStrategy}>
+          <div
+            className={cn(
+              "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
+              "min-h-[200px] transition-colors duration-200",
+            )}
+          >
+            {widgets.map((widget) => (
+              <DraggableWidget
+                key={widget.id}
+                widget={widget}
+                onRemove={() => removeWidget(widget.id)}
+              />
+            ))}
 
-              {widgets.length === 0 && (
-                <Card className="col-span-full p-8 text-center border-dashed">
-                  <h3 className="text-lg font-medium mb-2">
-                    Welcome to Your Dashboard
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Add widgets to customize your productivity workspace
-                  </p>
-                  <Button onClick={handleAddWidgetClick}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Your First Widget
-                  </Button>
-                </Card>
-              )}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+            {widgets.length === 0 && (
+              <Card className="col-span-full p-8 text-center border-dashed">
+                <h3 className="text-lg font-medium mb-2">
+                  Welcome to Your Dashboard
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  Add widgets to customize your productivity workspace
+                </p>
+                <Button onClick={handleAddWidgetClick}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Your First Widget
+                </Button>
+              </Card>
+            )}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       {widgets.length >= maxWidgets && (
         <Card className="p-4 bg-amber-50 border-amber-200 dark:bg-amber-900/20">

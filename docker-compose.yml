@@ -18,8 +18,7 @@ services:
       - VITE_ENABLE_MODULE_COMMUNICATION=true
       # Force disable local mode for Docker Supabase authentication
       - VITE_LOCAL_MODE=false
-      - VITE_SUPABASE_URL=https://rymixmuunfjxwryucvxt.supabase.co
-      - VITE_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5bWl4bXV1bmZqeHdyeXVjdnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyNzA4NjUsImV4cCI6MjA3NDg0Njg2NX0.TENbnWnRA8Ik5aKmgit4d8-CYjlD1uNNNZwzEPclPlU
+      # Supabase configuration is now sourced from .env.docker file
     volumes:
       # For development: mount source code for hot reload
       # Uncomment the line below for development mode

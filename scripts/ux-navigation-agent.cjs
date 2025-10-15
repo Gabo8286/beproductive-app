@@ -257,7 +257,7 @@ class UXNavigationAgent {
 
   async createWidgetGrid() {
     const widgetGridContent = `import React from 'react';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+// import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'; // REMOVED: Library uninstalled
 import { DraggableWidget } from './DraggableWidget';
 import { useWidgetLayout } from '../hooks/useWidgetLayout';
 import { Card } from '@/components/ui/card';
@@ -359,7 +359,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className }) => {
 
   async createDraggableWidget() {
     const draggableWidgetContent = `import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+// import { Draggable } from 'react-beautiful-dnd'; // REMOVED: Library uninstalled
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { GripVertical, X, ExternalLink } from 'lucide-react';
@@ -1228,7 +1228,7 @@ export default Dashboard;`;
         ]
       },
       nextSteps: [
-        'Install required dependencies (react-beautiful-dnd, framer-motion)',
+        'Install required dependencies (@dnd-kit/core, @dnd-kit/sortable, framer-motion)',
         'Update routing to support widget navigation',
         'Create individual widget components',
         'Test widget drag-and-drop functionality',

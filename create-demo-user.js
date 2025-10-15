@@ -1,8 +1,14 @@
 // Create Demo User Script
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = 'https://rymixmuunfjxwryucvxt.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5bWl4bXV1bmZqeHdyeXVjdnh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyNzA4NjUsImV4cCI6MjA3NDg0Njg2NX0.TENbnWnRA8Ik5aKmgit4d8-CYjlD1uNNNZwzEPclPlU';
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || 'https://rymixmuunfjxwryucvxt.supabase.co';
+const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
+
+if (!SUPABASE_KEY) {
+  console.error('❌ VITE_SUPABASE_PUBLISHABLE_KEY environment variable is required');
+  console.error('Please set this in your .env file or environment');
+  process.exit(1);
+}
 
 // Demo user credentials
 const DEMO_EMAIL = 'demo@beproductive.com';
