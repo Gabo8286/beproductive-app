@@ -3647,6 +3647,14 @@ export type Database = {
         Args: { goal_id: string; start_date?: string; template_id: string }
         Returns: undefined
       }
+      assign_initial_super_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      assign_super_admin_role: {
+        Args: { target_user_id: string }
+        Returns: Json
+      }
       award_habit_points: {
         Args: { entry_id_param: string; habit_id_param: string }
         Returns: boolean
@@ -3840,6 +3848,14 @@ export type Database = {
           role: string
           subscription_tier: string
           updated_at: string
+        }[]
+      }
+      get_user_roles: {
+        Args: { check_user_id?: string }
+        Returns: {
+          assigned_at: string
+          assigned_by: string
+          role_name: string
         }[]
       }
       get_xp_required_for_level: {
