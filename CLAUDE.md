@@ -25,6 +25,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run quality:full` - Complete quality check (lint + coverage + analysis)
 - `npm run production:ready` - Full production readiness check
 
+### Database & Admin Management
+- `npm run db:connect` - Test Supabase database connection
+- `npm run db:health` - Perform comprehensive database health check
+- `npm run db:super-admins` - List all current super administrators
+- `npm run db:admin` - Interactive super admin management console
+- `npm run db:setup` - Guided setup for initial super admin assignment
+- `npm run db:status` - Show complete system and user role status
+- `npm run db:migrate` - Apply database migrations (may require manual execution)
+- `npm run db:verify` - Verify migration functions are available
+- `npm run db:migrate-manual` - Show manual migration instructions for Supabase Dashboard
+
 ## Architecture Overview
 
 ### Core Stack
