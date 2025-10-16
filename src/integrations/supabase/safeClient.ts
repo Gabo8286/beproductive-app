@@ -93,15 +93,15 @@ class SafeSupabaseClient {
 
   private async createClientWithTimeout(): Promise<SupabaseClient<Database> | null> {
     return new Promise((resolve) => {
-      // Set timeout for initialization
+      // Set timeout for initialization - reduced to 5 seconds
       const timeoutId = setTimeout(() => {
         console.warn(
-          "[SafeSupabase] Initialization timed out after 15s - continuing in offline mode"
+          "[SafeSupabase] Initialization timed out after 5s - continuing in offline mode"
         );
         this.initializationError = "Backend connection timed out";
         this.isInitialized = true;
         resolve(null);
-      }, this.initializationTimeout);
+      }, 5000);
 
       try {
         // Validate environment variables first
@@ -132,21 +132,32 @@ class SafeSupabaseClient {
           // Add connection timeout
           global: {
             headers: {
-              "x-client-timeout": "10000",
+              "x-client-timeout": "5000",
             },
           },
         });
 
-        // Test the client connection
-        client.auth.onAuthStateChange((event, session) => {
-          console.log(
-            "[SafeSupabase] Auth state changed:",
-            event,
-            session ? "session exists" : "no session",
-          );
-        });
+        // Set client immediately and mark as initialized
+        this.client = client;
+        this.isInitialized = true;
+        clearTimeout(timeoutId);
 
-        // Try to get initial session to test connectivity
+        console.log("[SafeSupabase] Client created successfully");
+
+        // Set up auth state listener (but don't wait for it)
+        try {
+          client.auth.onAuthStateChange((event, session) => {
+            console.log(
+              "[SafeSupabase] Auth state changed:",
+              event,
+              session ? "session exists" : "no session",
+            );
+          });
+        } catch (error) {
+          console.warn("[SafeSupabase] Failed to set up auth listener:", error);
+        }
+
+        // Test connectivity in background (don't block initialization)
         client.auth
           .getSession()
           .then(({ data, error }) => {
@@ -155,24 +166,18 @@ class SafeSupabaseClient {
                 "[SafeSupabase] Initial session check warning:",
                 error.message,
               );
-              // Don't fail initialization for session errors - they might not be logged in
+            } else {
+              console.log("[SafeSupabase] Session check completed successfully");
             }
-            console.log("[SafeSupabase] Client initialized successfully");
-            this.client = client;
-            this.isInitialized = true;
-            clearTimeout(timeoutId);
-            resolve(client);
           })
           .catch((error) => {
-            console.error(
-              "[SafeSupabase] Failed to get initial session:",
+            console.warn(
+              "[SafeSupabase] Background session check failed:",
               error,
             );
-            this.initializationError = `Failed to connect to Supabase: ${error.message}`;
-            this.isInitialized = true;
-            clearTimeout(timeoutId);
-            resolve(null);
           });
+
+        resolve(client);
       } catch (error) {
         console.error("[SafeSupabase] Failed to create client:", error);
         this.initializationError = `Failed to create Supabase client: ${error instanceof Error ? error.message : "Unknown error"}`;
@@ -247,31 +252,47 @@ export const supabase = new Proxy({} as SupabaseClient<Database>, {
   get(target, prop) {
     const client = safeSupabaseClient.getClientSync();
     if (!client) {
+      // For auth property, return a proxy that handles auth methods
+      if (prop === 'auth') {
+        return new Proxy(
+          {},
+          {
+            get: (nestedTarget, nestedProp) => {
+              // For onAuthStateChange specifically, return a function that does nothing
+              if (nestedProp === 'onAuthStateChange') {
+                return () => {
+                  console.warn('[SafeSupabase] onAuthStateChange called but client not ready');
+                  return { data: { subscription: { unsubscribe: () => {} } } };
+                };
+              }
+              // For other auth methods, return a function that throws a meaningful error
+              return (...args: any[]) => {
+                const error =
+                  safeSupabaseClient.getInitializationError() ||
+                  "Supabase client not ready";
+                throw new Error(
+                  `[SafeSupabase] Cannot access auth.${String(nestedProp)}: ${error}`,
+                );
+              };
+            },
+            // Handle property existence checks (like 'in' operator)
+            has: () => false,
+          },
+        );
+      }
+
       console.warn(
         `[SafeSupabase] Client not ready, accessed property: ${String(prop)}`,
       );
-      // Return a nested Proxy that can handle further property access
-      return new Proxy(
-        {},
-        {
-          get: (nestedTarget, nestedProp) => {
-            console.warn(
-              `[SafeSupabase] Nested access attempted: ${String(prop)}.${String(nestedProp)}`,
-            );
-            // Return a function that throws a meaningful error
-            return (...args: any[]) => {
-              const error =
-                safeSupabaseClient.getInitializationError() ||
-                "Supabase client not ready";
-              throw new Error(
-                `[SafeSupabase] Cannot access ${String(prop)}.${String(nestedProp)}: ${error}`,
-              );
-            };
-          },
-          // Handle property existence checks (like 'in' operator)
-          has: () => false,
-        },
-      );
+      // Return a function that throws a meaningful error for other properties
+      return (...args: any[]) => {
+        const error =
+          safeSupabaseClient.getInitializationError() ||
+          "Supabase client not ready";
+        throw new Error(
+          `[SafeSupabase] Cannot access ${String(prop)}: ${error}`,
+        );
+      };
     }
 
     const value = (client as any)[prop];
