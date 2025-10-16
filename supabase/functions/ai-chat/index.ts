@@ -44,10 +44,10 @@ serve(async (req) => {
     }
 
     const { messages, context, personality } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const GOOGLE_AI_KEY = Deno.env.get('GOOGLE_AI_API_KEY');
     
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+    if (!GOOGLE_AI_KEY) {
+      throw new Error('GOOGLE_AI_API_KEY is not configured');
     }
 
     console.log('[ai-chat] Processing request for user:', user.id, 'with', messages.length, 'messages, context:', context, 'personality:', personality);
@@ -73,50 +73,35 @@ serve(async (req) => {
 
     const systemPrompt = getSystemPrompt(context || 'general', personality || 'helpful');
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { 
-            role: "system", 
-            content: systemPrompt
-          },
-          ...messages,
-        ],
-        stream: true,
-      }),
-    });
+    // Convert messages to Gemini format
+    const geminiMessages = [
+      { role: "user", parts: [{ text: systemPrompt }] },
+      ...messages.map((msg: any) => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }]
+      }))
+    ];
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:streamGenerateContent?alt=sse&key=${GOOGLE_AI_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: geminiMessages,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2048,
+          }
+        }),
+      }
+    );
 
     if (!response.ok) {
-      if (response.status === 429) {
-        console.error('[ai-chat] Rate limit exceeded');
-        return new Response(
-          JSON.stringify({ error: "Rate limits exceeded. Please try again later." }), 
-          {
-            status: 429,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
-      }
-      if (response.status === 402) {
-        console.error('[ai-chat] Payment required');
-        return new Response(
-          JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }), 
-          {
-            status: 402,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          }
-        );
-      }
       const errorText = await response.text();
-      console.error('[ai-chat] AI gateway error:', response.status, errorText);
+      console.error('[ai-chat] Google AI error:', response.status, errorText);
       return new Response(
-        JSON.stringify({ error: "AI service error" }), 
+        JSON.stringify({ error: "AI service temporarily unavailable" }), 
         {
           status: 500,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -125,7 +110,52 @@ serve(async (req) => {
     }
 
     console.log('[ai-chat] Streaming response started');
-    return new Response(response.body, {
+
+    // Transform Google's streaming format to match expected format
+    const transformedStream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body!.getReader();
+        const decoder = new TextDecoder();
+        
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split('\n').filter(line => line.trim());
+            
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const jsonStr = line.slice(6);
+                if (jsonStr === '[DONE]') continue;
+                
+                try {
+                  const data = JSON.parse(jsonStr);
+                  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                  if (text) {
+                    // Transform to OpenAI-compatible format for client compatibility
+                    const sse = `data: ${JSON.stringify({
+                      choices: [{ delta: { content: text } }]
+                    })}\n\n`;
+                    controller.enqueue(new TextEncoder().encode(sse));
+                  }
+                } catch (e) {
+                  console.error('[ai-chat] Parse error:', e);
+                }
+              }
+            }
+          }
+          controller.enqueue(new TextEncoder().encode('data: [DONE]\n\n'));
+          controller.close();
+        } catch (error) {
+          console.error('[ai-chat] Stream error:', error);
+          controller.error(error);
+        }
+      }
+    });
+
+    return new Response(transformedStream, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (error) {
