@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "title": {
+      "line1": "Desbloquea Tu Máximo Potencial:",
+      "line2": "Logra Más, Estrésate Menos con "
+    },
+    "subtitle": "Nuestra aplicación impulsada por IA te ayuda a identificar tus cuellos de botella de productividad únicos y te proporciona un plan de acción personalizado para superarlos.",
+    "cta": "Comienza Tu Viaje de Productividad",
+    "showcase": {
+      "title": "BeProductive App",
+      "description": "Transforma tu productividad con insights potenciados por IA"
+    }
+  },
+  "features": {
+    "title": "Cómo BeProductive Transforma Tu Día",
+    "personalized": {
+      "title": "Análisis Personalizados",
+      "description": "Comprende tus patrones de trabajo únicos y descubre qué impulsa realmente tu productividad."
+    },
+    "habits": {
+      "title": "Seguimiento Inteligente de Hábitos",
+      "description": "Construye rutinas poderosas con recordatorios inteligentes y visualización del progreso."
+    },
+    "goals": {
+      "title": "Alineación de Metas",
+      "description": "Divide grandes metas en pasos manejables y mantente enfocado en lo más importante."
+    },
+    "progress": {
+      "title": "Visualización del Progreso",
+      "description": "Observa tus logros, sigue tu crecimiento y mantente motivado con informes visuales claros."
+    }
+  },
+  "howItWorks": {
+    "title": "¿Listo para Impulsar tu Productividad?",
+    "description": "Realiza nuestra rápida evaluación impulsada por IA para identificar tus desafíos de productividad y obtener tu plan de acción personalizado. ¡Solo toma 3 minutos!",
+    "cta": "Realizar la Evaluación Gratuita"
+  },
+  "pricing": {
+    "title": "Elige Tu Plan",
+    "choosePlan": "Elegir Plan",
+    "mostPopular": "Más Popular",
+    "basic": {
+      "name": "Básico",
+      "price": "$9.99",
+      "period": "mes",
+      "features": [
+        "Funciones principales de IA",
+        "Datos privados y seguros",
+        "Hasta 10 proyectos",
+        "Soporte básico"
+      ]
+    },
+    "professional": {
+      "name": "Profesional",
+      "price": "$19.99",
+      "period": "mes",
+      "features": [
+        "Todo en Básico",
+        "Capacidades avanzadas de IA",
+        "Proyectos ilimitados",
+        "Acceso al marco 5P-35",
+        "Soporte prioritario"
+      ]
+    },
+    "teams": {
+      "name": "Equipos",
+      "price": "$24.99",
+      "period": "usuario/mes",
+      "features": [
+        "Todo en Profesional",
+        "Funciones de colaboración en equipo",
+        "Facturación centralizada",
+        "Controles de administrador",
+        "Soporte dedicado"
+      ]
+    }
+  },
+  "beta": {
+    "title": "Únete a Nuestro Programa de Acceso Anticipado",
+    "description": "Sé de los primeros en experimentar BeProductive. Regístrate para acceso anticipado exclusivo y ayuda a dar forma al futuro de la productividad.",
+    "emailPlaceholder": "Tu Correo Electrónico",
+    "namePlaceholder": "Tu Nombre (Opcional)",
+    "commentsPlaceholder": "¿Algún comentario o necesidad específica? (Opcional)",
+    "submitButton": "Obtener Acceso Anticipado",
+    "successMessage": "¡Gracias por tu interés! Estaremos en contacto pronto.",
+    "errorMessage": "Algo salió mal. Por favor intenta de nuevo."
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "description": "¿Tienes preguntas sobre BeProductive? ¿Necesitas ayuda para comenzar? Estamos aquí para ayudarte.",
+    "emailTitle": "Envíanos un Correo Directamente",
+    "copyEmail": "Copiar Correo",
+    "emailCopied": "¡Correo copiado al portapapeles!",
+    "sendEmail": "Enviar Correo",
+    "scheduleCall": "Agendar una Llamada",
+    "responseTime": "Normalmente respondemos en 24 horas"
+  }
+}

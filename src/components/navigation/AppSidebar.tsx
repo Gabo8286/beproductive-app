@@ -32,6 +32,9 @@ import {
   Timer,
 } from "lucide-react";
 import { useModules } from "@/contexts/ModulesContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { modulesConfig } from "@/config/modules";
+import { canAccessModule } from "@/utils/roleAccess";
 import { cn } from "@/lib/utils";
 import { brandConfig, getMotivationalMessage } from "@/lib/brand";
 
@@ -242,10 +245,22 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
   const { isModuleEnabled } = useModules();
+  const { user, profile } = useAuth();
 
-  const visibleNavigation = navigation.filter(
-    (item) => !item.moduleId || isModuleEnabled(item.moduleId),
-  );
+  const visibleNavigation = navigation.filter((item) => {
+    // Always show items without module IDs (like Dashboard)
+    if (!item.moduleId) {
+      return true;
+    }
+
+    // Check if module is enabled
+    if (!isModuleEnabled(item.moduleId)) {
+      return false;
+    }
+
+    // Check if user has role-based access to the module
+    return canAccessModule(user, profile, item.moduleId, modulesConfig);
+  });
 
   const isCollapsed = state === "collapsed";
 

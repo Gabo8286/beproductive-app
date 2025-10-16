@@ -1,0 +1,99 @@
+{
+  "invitation": {
+    "subject": "¡Bienvenido al Beta de BeProductive - Tu Invitación Aquí! 🚀",
+    "greeting": "¡Hola {{name}}!",
+    "intro": "¡Excelentes noticias! Tu solicitud para unirte al beta de BeProductive ha sido aprobada. Estamos emocionados de tenerte en este viaje para transformar la productividad y alcanzar tus metas.",
+    "about": "BeProductive es una plataforma revolucionaria de productividad que se adapta a tu flujo de trabajo único. Con Luna, nuestra asistente de IA, experimentarás un enfoque personalizado para la gestión de tareas, seguimiento de objetivos y colaboración en equipo.",
+    "features": {
+      "title": "Lo que te espera en BeProductive:",
+      "ai_assistant": "🤖 **Asistente IA Luna** - Tu compañera inteligente de productividad",
+      "goal_tracking": "🎯 **Seguimiento Inteligente de Objetivos** - Convierte aspiraciones en logros",
+      "team_collaboration": "👥 **Colaboración en Equipo** - Trabajen mejor juntos",
+      "multilingual": "🌍 **Soporte Multiidioma** - Disponible en 7 idiomas",
+      "integrations": "🔗 **Integraciones Poderosas** - Conecta tus herramientas favoritas"
+    },
+    "cta": {
+      "text": "Crear Tu Cuenta",
+      "description": "Haz clic en el botón de abajo para configurar tu cuenta e iniciar tu prueba profesional de 14 días:"
+    },
+    "trial_info": "Tu invitación incluye una **prueba gratuita Profesional de 14 días** con acceso completo a todas las funciones premium. ¡No se requiere tarjeta de crédito!",
+    "expiry_notice": "Este enlace de invitación expira en **7 días**, así que no esperes demasiado para comenzar.",
+    "support": {
+      "title": "¿Necesitas ayuda para comenzar?",
+      "text": "¡Estoy aquí para ayudar! No dudes en contactarme con cualquier pregunta o comentario."
+    },
+    "footer": {
+      "signature": "Saludos cordiales,",
+      "name": "Gabo Soto",
+      "title": "Fundador y CEO",
+      "email": "gabosoto@be-productive.app",
+      "company": "Equipo BeProductive"
+    },
+    "luna_welcome": "¡Hola! Soy Luna 🌙 No puedo esperar a ayudarte a ser tu versión más productiva. ¡Nos vemos adentro!"
+  },
+  "reminder": {
+    "subject": "No Te Lo Pierdas - Tu Acceso Beta a BeProductive Expira Pronto ⏰",
+    "greeting": "¡Hola {{name}}!",
+    "intro": "Este es un recordatorio amistoso de que tu invitación beta de BeProductive te está esperando, pero expira pronto.",
+    "urgency": "Tu invitación expira en **{{days}} días** ({{expiry_date}}). No pierdas esta oportunidad de estar entre los primeros en experimentar el futuro de la productividad.",
+    "benefits": {
+      "title": "Por qué deberías reclamar tu lugar hoy:",
+      "early_access": "🎯 **Acceso Temprano** - Sé el primero en probar funciones de vanguardia",
+      "feedback": "💬 **Impacto Directo** - Tus comentarios moldean el producto",
+      "community": "👥 **Comunidad Exclusiva** - Conecta con otros usuarios beta",
+      "pricing": "💰 **Precios Especiales** - Asegura los beneficios de usuario beta"
+    },
+    "cta": {
+      "text": "Reclama Tu Lugar Ahora",
+      "description": "No dejes que esta oportunidad se escape:"
+    },
+    "footer": {
+      "signature": "Esperando verte adentro,",
+      "name": "Gabo Soto",
+      "title": "Fundador y CEO",
+      "email": "gabosoto@be-productive.app",
+      "company": "Equipo BeProductive"
+    }
+  },
+  "welcome": {
+    "subject": "¡Bienvenido a BeProductive! Tu Viaje de Productividad Comienza Ahora 🎉",
+    "greeting": "¡Bienvenido a BeProductive, {{name}}!",
+    "intro": "¡Felicitaciones! Has creado exitosamente tu cuenta de BeProductive. Ahora eres parte de un grupo exclusivo de usuarios beta que están moldeando el futuro de la productividad.",
+    "next_steps": {
+      "title": "Así es como comenzar:",
+      "step1": "1. **Completa tu perfil** - Ayuda a Luna a entender tu estilo de productividad",
+      "step2": "2. **Establece tu primer objetivo** - Comienza con algo significativo para ti",
+      "step3": "3. **Crea tu primera tarea** - Divide tu objetivo en pasos accionables",
+      "step4": "4. **Conoce a Luna** - Tu asistente IA está lista para ayudarte a tener éxito"
+    },
+    "trial_info": "¡Tu **prueba Profesional de 14 días** está ahora activa! Explora todas las funciones premium y ve cómo BeProductive puede transformar tu flujo de trabajo.",
+    "resources": {
+      "title": "Recursos útiles:",
+      "quick_start": "📚 **Guía de Inicio Rápido** - Ponte en marcha en 5 minutos",
+      "video_tours": "🎥 **Tours en Video** - Ve BeProductive en acción",
+      "community": "👥 **Comunidad Beta** - Conecta con otros usuarios beta",
+      "support": "💬 **Soporte Directo** - Contacta en cualquier momento para ayuda"
+    },
+    "cta": {
+      "text": "Comienza Tu Viaje",
+      "description": "¿Listo para convertirte en tu versión más productiva?"
+    },
+    "footer": {
+      "signature": "Emocionado de ver lo que lograrás,",
+      "name": "Gabo Soto",
+      "title": "Fundador y CEO",
+      "email": "gabosoto@be-productive.app",
+      "company": "Equipo BeProductive"
+    },
+    "luna_message": "¡Hola {{name}}! Soy Luna 🌙 Estoy tan emocionada de ser tu compañera de productividad. ¡Hagamos grandes cosas juntos!"
+  },
+  "common": {
+    "powered_by": "Impulsado por BeProductive",
+    "unsubscribe": "Si ya no deseas recibir estos emails, puedes [cancelar suscripción aquí]({{unsubscribe_url}}).",
+    "beta_notice": "Estás recibiendo este email porque te registraste en el programa beta de BeProductive.",
+    "questions": "¿Preguntas? Responde a este email o contáctanos en",
+    "website": "Visita nuestro sitio web",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio"
+  }
+}

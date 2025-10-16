@@ -6,6 +6,12 @@ import "@/integrations/supabase/client";
 
 console.log('[Main] BeProductive app starting with simplified bootstrap...');
 console.log(`[Main] React version: ${React.version}`);
+console.log('[Main] Environment variables:', {
+  SKIP_LOGIN: import.meta.env.VITE_SKIP_LOGIN,
+  LOCAL_MODE: import.meta.env.VITE_LOCAL_MODE,
+  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL ? 'SET' : 'MISSING',
+  NODE_ENV: import.meta.env.NODE_ENV
+});
 
 // Simple, reliable bootstrap
 function bootstrap() {

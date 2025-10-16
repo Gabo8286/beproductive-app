@@ -21,7 +21,14 @@ export const useSuperAdminAccess = (): SuperAdminAccess => {
 
   useEffect(() => {
     const checkSuperAdminRole = async () => {
+      console.log('🔍 [SuperAdmin] Checking super admin role...', {
+        userId: user?.id,
+        userEmail: user?.email,
+        authLoading
+      });
+
       if (!user?.id) {
+        console.log('❌ [SuperAdmin] No user found');
         setIsSuperAdmin(false);
         setLoading(false);
         setError("No user found");
@@ -29,21 +36,34 @@ export const useSuperAdminAccess = (): SuperAdminAccess => {
       }
 
       try {
+        console.log('🔄 [SuperAdmin] Calling has_role RPC function...', {
+          userId: user.id,
+          role: 'super_admin'
+        });
+
         const { data, error: rpcError } = await supabase.rpc('has_role', {
           _user_id: user.id,
           _role: 'super_admin'
         });
 
+        console.log('📡 [SuperAdmin] RPC response:', {
+          data,
+          error: rpcError,
+          hasAccess: data || false
+        });
+
         if (rpcError) {
-          console.error('Error checking super admin role:', rpcError);
+          console.error('❌ [SuperAdmin] Error checking super admin role:', rpcError);
           setError(rpcError.message);
           setIsSuperAdmin(false);
         } else {
-          setIsSuperAdmin(data || false);
-          setError(data ? null : "Super admin access required");
+          const hasAccess = data || false;
+          console.log(hasAccess ? '✅ [SuperAdmin] Access granted!' : '🚫 [SuperAdmin] Access denied');
+          setIsSuperAdmin(hasAccess);
+          setError(hasAccess ? null : "Super admin access required");
         }
       } catch (err) {
-        console.error('Error in super admin check:', err);
+        console.error('💥 [SuperAdmin] Exception in super admin check:', err);
         setError(err instanceof Error ? err.message : "Unknown error");
         setIsSuperAdmin(false);
       } finally {
@@ -52,7 +72,10 @@ export const useSuperAdminAccess = (): SuperAdminAccess => {
     };
 
     if (!authLoading) {
+      console.log('🚀 [SuperAdmin] Auth loaded, starting role check...');
       checkSuperAdminRole();
+    } else {
+      console.log('⏳ [SuperAdmin] Waiting for auth to load...');
     }
   }, [user?.id, authLoading]);
 

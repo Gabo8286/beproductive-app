@@ -17,6 +17,9 @@ import { cn } from '@/lib/utils';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
+import { useSuperAdminAccess } from '@/hooks/useSupeRadminAccess';
+import { SuperAdminCaptureTab } from './SuperAdminCaptureTab';
+import { SuperAdminSetup } from '@/components/debug/SuperAdminSetup';
 
 interface QuickAddItem {
   id: string;
@@ -97,6 +100,23 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
   const { taskCreate, buttonPress, loadingComplete, success, warning } = useHapticFeedback();
   const [refreshKey, setRefreshKey] = useState(0);
   const [captures, setCaptures] = useState<any[]>([]);
+
+  // Check if user has super admin access
+  const { isSuperAdmin, loading: adminLoading } = useSuperAdminAccess();
+
+  // Show loading while checking admin access
+  if (adminLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // If user is super admin, show the admin dashboard instead
+  if (isSuperAdmin) {
+    return <SuperAdminCaptureTab className={className} />;
+  }
 
   const handleQuickAddClick = (href: string) => {
     taskCreate();
@@ -196,6 +216,11 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Temporary Super Admin Setup - Remove after testing */}
+        <div className="mt-4">
+          <SuperAdminSetup />
         </div>
       </div>
 

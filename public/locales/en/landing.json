@@ -1,0 +1,98 @@
+{
+  "hero": {
+    "title": {
+      "line1": "Unlock Your Full Potential:",
+      "line2": "Achieve More, Stress Less with "
+    },
+    "subtitle": "Our AI-powered app helps you identify your unique productivity bottlenecks and provides a personalized action plan to conquer them.",
+    "cta": "Start Your Productivity Journey",
+    "showcase": {
+      "title": "BeProductive App",
+      "description": "Transform your productivity with AI-powered insights"
+    }
+  },
+  "features": {
+    "title": "How BeProductive Transforms Your Day",
+    "personalized": {
+      "title": "Personalized Insights",
+      "description": "Understand your unique work patterns and discover what truly drives your productivity."
+    },
+    "habits": {
+      "title": "Smart Habit Tracking",
+      "description": "Build powerful routines with intelligent reminders and progress visualization."
+    },
+    "goals": {
+      "title": "Goal Alignment",
+      "description": "Break down big goals into manageable steps and stay focused on what matters most."
+    },
+    "progress": {
+      "title": "Progress Visualization",
+      "description": "See your achievements, track your growth, and stay motivated with clear visual reports."
+    }
+  },
+  "howItWorks": {
+    "title": "Ready to Boost Your Productivity?",
+    "description": "Take our quick, AI-driven assessment to pinpoint your productivity challenges and get your custom action plan. It takes just 3 minutes!",
+    "cta": "Take the Free Assessment"
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "choosePlan": "Choose Plan",
+    "mostPopular": "Most Popular",
+    "basic": {
+      "name": "Basic",
+      "price": "$9.99",
+      "period": "month",
+      "features": [
+        "Core AI features",
+        "Private & secure data",
+        "Up to 10 projects",
+        "Basic support"
+      ]
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "$19.99",
+      "period": "month",
+      "features": [
+        "Everything in Basic",
+        "Advanced AI capabilities",
+        "Unlimited projects",
+        "5P-35 framework access",
+        "Priority support"
+      ]
+    },
+    "teams": {
+      "name": "Teams",
+      "price": "$24.99",
+      "period": "user/month",
+      "features": [
+        "Everything in Professional",
+        "Team collaboration features",
+        "Centralized billing",
+        "Admin controls",
+        "Dedicated support"
+      ]
+    }
+  },
+  "beta": {
+    "title": "Join Our Early Access Program",
+    "description": "Be among the first to experience BeProductive. Sign up for exclusive early access and shape the future of productivity.",
+    "emailPlaceholder": "Your Email",
+    "namePlaceholder": "Your Name (Optional)",
+    "commentsPlaceholder": "Any comments or specific needs? (Optional)",
+    "submitButton": "Get Early Access",
+    "successMessage": "Thank you for your interest! We'll be in touch soon.",
+    "errorMessage": "Something went wrong. Please try again."
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "description": "Have questions about BeProductive? Need help getting started? We're here to assist you.",
+    "emailTitle": "Email Us Directly",
+    "copyEmail": "Copy Email",
+    "emailCopied": "Email copied to clipboard!",
+    "sendEmail": "Send Email",
+    "scheduleCall": "Schedule a Call",
+    "responseTime": "We typically respond within 24 hours"
+  }
+}

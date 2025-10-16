@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle, Code, Zap, Brain, Calendar, Users, Rocket } from "lucide-react";
 import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
 import { BuildStory } from "./BuildStory";
-import { EditableTeamSection } from "./EditableTeamSection";
+// import { EditableTeamSection } from "./EditableTeamSection"; // TEMPORARILY COMMENTED OUT FOR DEBUGGING
 import { useConversionTracking } from "@/hooks/useConversionTracking";
 import { ConversionEventType } from "@/types/conversion";
 import { useState, useEffect } from "react";
@@ -456,8 +456,8 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Editable Team Section */}
-      <EditableTeamSection showEditControls={false} />
+      {/* Editable Team Section - TEMPORARILY COMMENTED OUT FOR DEBUGGING */}
+      {/* <EditableTeamSection showEditControls={false} /> */}
 
       {/* Footer */}
       <footer className="container mx-auto px-4 py-12 text-center border-t border-border/50">

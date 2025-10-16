@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -19,10 +20,13 @@ import {
   Lightbulb,
   TrendingUp,
   RefreshCw,
+  Sparkles,
+  Crown,
 } from "lucide-react";
 import { useProductivityProfile } from "@/hooks/useProductivityProfile";
 
 export default function ProfileAssessment() {
+  const navigate = useNavigate();
   const {
     currentAssessment,
     isLoading,
@@ -75,6 +79,11 @@ export default function ProfileAssessment() {
     setCurrentQuestionIndex(0);
     setResponses({});
     setShowResults(false);
+  };
+
+  const handleStartProfessionalTrial = () => {
+    // Navigate to signup with professional trial parameters
+    navigate("/signup?plan=professional&trial=14&source=assessment");
   };
 
   if (isLoading) {
@@ -243,6 +252,55 @@ export default function ProfileAssessment() {
                   <span className="text-gray-700">{characteristic}</span>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Professional Trial CTA */}
+        <Card className="bg-gradient-to-r from-primary to-blue-600 text-white border-0">
+          <CardContent className="p-8">
+            <div className="text-center space-y-6">
+              <div className="flex justify-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                  <Crown className="h-8 w-8 text-white" />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold mb-2">
+                  Unlock Your Full Potential
+                </h3>
+                <p className="text-white/90 text-lg">
+                  Get personalized strategies, advanced analytics, and premium tools to maximize your {dominantProfile.name} productivity style.
+                </p>
+              </div>
+
+              <div className="flex items-center justify-center gap-8 text-sm">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4" />
+                  <span>14 Days Free</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4" />
+                  <span>Advanced AI Features</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span>Unlimited Projects</span>
+                </div>
+              </div>
+
+              <Button
+                onClick={handleStartProfessionalTrial}
+                size="lg"
+                className="bg-white text-primary hover:bg-white/90 font-bold text-lg px-8 py-6 shadow-xl"
+              >
+                Start 14-Day Professional Trial
+              </Button>
+
+              <p className="text-xs text-white/70">
+                No credit card required • Cancel anytime • Upgrade based on your assessment results
+              </p>
             </div>
           </CardContent>
         </Card>

@@ -6,6 +6,13 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, authLoading, isGuestMode } = useAuth();
   const location = useLocation();
 
+  // TEMPORARY: Bypass authentication in development mode
+  // Toggle this to easily enable/disable login requirement during development
+  const BYPASS_AUTH_IN_DEV = true;
+  if (process.env.NODE_ENV === 'development' && BYPASS_AUTH_IN_DEV) {
+    return <>{children}</>;
+  }
+
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">

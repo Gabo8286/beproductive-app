@@ -36,7 +36,6 @@
     "validate:db": "node scripts/validate-database.js",
     "build:optimized": "npm run build && node scripts/optimize-assets.js",
     "backup:setup": "node scripts/backup-recovery.js",
-    "production:ready": "npm run production:validate && npm run backup:setup",
     "type-check": "tsc --noEmit",
     "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\"",

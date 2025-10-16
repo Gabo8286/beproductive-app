@@ -39,6 +39,8 @@ export function NotificationCenter() {
         return "⏱️";
       case "weekly_summary":
         return "📊";
+      case "beta_signup":
+        return "👤";
       default:
         return "📬";
     }
@@ -114,6 +116,15 @@ export function NotificationCenter() {
                           onClick={() => setOpen(false)}
                         >
                           View Task: {notification.tasks.title}
+                        </Link>
+                      )}
+                      {notification.type === "beta_signup" && (
+                        <Link
+                          to="/admin/beta-signups?tab=pending"
+                          className="text-xs text-primary hover:underline"
+                          onClick={() => setOpen(false)}
+                        >
+                          Review Beta Signups
                         </Link>
                       )}
                       <p className="text-xs text-muted-foreground mt-1">

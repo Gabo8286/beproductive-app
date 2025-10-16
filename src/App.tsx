@@ -1,3 +1,25 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════════
+ *
+ *                    ✨ DEDICATED WITH LOVE ✨
+ *
+ *     This application is lovingly dedicated to my beautiful wife
+ *
+ *     Like the verses of "Mexicana" by Cafe Quijano that speak of
+ *     love that transcends time and distance, this work is created
+ *     with the same devotion and hope for our shared tomorrow.
+ *
+ *     "Tal vez no sea nostalgia, es amor con un después"
+ *
+ *     Every line of code carries the memory of your smile,
+ *     every feature built with dreams of our future together.
+ *
+ *     Con todo mi amor,
+ *     Gabriel 💝
+ *
+ * ═══════════════════════════════════════════════════════════════════════════════
+ */
+
 // Main App component - Force rebuild
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -37,6 +59,7 @@ import i18n from '@/lib/i18n';
 // Eagerly loaded routes (critical path)
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
+import { RedesignedLandingPage } from "@/components/landing/RedesignedLandingPage";
 import Dashboard from "@/pages/Dashboard";
 import DashboardMinimal from "@/pages/Dashboard-Minimal";
 import DashboardContextTester from "@/pages/Dashboard-ContextTester";
@@ -44,6 +67,7 @@ import DashboardPerformanceComparison from "@/pages/Dashboard-PerformanceCompari
 
 // Lazy loaded routes (code splitting)
 const Signup = lazy(() => import("@/pages/Signup"));
+const InvitationSignup = lazy(() => import("@/pages/InvitationSignup"));
 const ForgotPassword = lazy(() => import("@/pages/ForgotPassword"));
 const Profile = lazy(() => import("@/pages/Profile"));
 // Legacy Plan component removed - now redirects to /app/plan
@@ -84,6 +108,7 @@ const APIManagementDashboard = lazy(
   () => import("@/components/admin/APIManagement/APIManagementDashboard"),
 );
 const AgentDashboard = lazy(() => import("@/components/admin/AgentDashboard"));
+const BetaSignupManagement = lazy(() => import("@/components/admin/BetaSignupManagement/BetaSignupManagement"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 const AIInsights = lazy(() => import("@/pages/AIInsights"));
 const OnboardingFlow = lazy(() => import("@/pages/OnboardingFlow"));
@@ -97,10 +122,10 @@ const Billing = lazy(() => import("@/pages/Billing"));
 const PricingPlans = lazy(() => import("@/pages/PricingPlans"));
 const LunaCommandCenterPage = lazy(() => import("@/pages/LunaCommandCenter"));
 
-// Lead Generation pages
-const LeadGenerationAssessment = lazy(() => import("@/pages/LeadGenerationAssessment"));
-const PersonalizedResults = lazy(() => import("@/pages/PersonalizedResults"));
-const LeadManagement = lazy(() => import("@/pages/admin/LeadManagement"));
+// Lead Generation pages - TEMPORARILY COMMENTED OUT FOR DEBUGGING
+// const LeadGenerationAssessment = lazy(() => import("@/pages/LeadGenerationAssessment"));
+// const PersonalizedResults = lazy(() => import("@/pages/PersonalizedResults"));
+// const LeadManagement = lazy(() => import("@/pages/admin/LeadManagement"));
 
 // AI components are exported from widgets/index.ts
 
@@ -136,9 +161,14 @@ function RouteAnnouncer() {
 }
 
 function AppContent() {
+  console.log('[AppContent] AppContent component rendering...');
+
   const { isOpen, close } = useKeyboardShortcutsDialog();
   const { authLoading, authError } = useAuth();
   const { isUnifiedMenuOpen, closeUnifiedMenu } = useLunaUnifiedMenu();
+
+  console.log('[AppContent] Auth state:', { authLoading, authError: authError ? 'ERROR' : 'OK' });
+
   useOfflineDetection();
 
   // Show error banner if auth fails (non-blocking)
@@ -171,6 +201,14 @@ function AppContent() {
             }
           />
           <Route
+            path="/signup/invite/:token"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <InvitationSignup />
+              </Suspense>
+            }
+          />
+          <Route
             path="/forgot-password"
             element={
               <Suspense fallback={<PageLoading />}>
@@ -179,7 +217,8 @@ function AppContent() {
             }
           />
 
-          {/* Lead Generation Assessment - Public Route */}
+          {/* Lead Generation Assessment - TEMPORARILY COMMENTED OUT FOR DEBUGGING */}
+          {/*
           <Route
             path="/assessment"
             element={
@@ -196,6 +235,7 @@ function AppContent() {
               </Suspense>
             }
           />
+          */}
           <Route
             path="/onboarding"
             element={
@@ -512,6 +552,16 @@ function AppContent() {
               }
             />
             <Route
+              path="/admin/beta-signups"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <BetaSignupManagement />
+                </Suspense>
+              }
+            />
+            {/* TEMPORARILY COMMENTED OUT FOR DEBUGGING */}
+            {/*
+            <Route
               path="/admin/leads"
               element={
                 <Suspense fallback={<PageLoading />}>
@@ -519,6 +569,7 @@ function AppContent() {
                 </Suspense>
               }
             />
+            */}
             <Route
               path="/luna"
               element={
@@ -563,6 +614,9 @@ function AppContent() {
 }
 
 function App() {
+  console.log('[App] App component rendering...');
+
+  // Temporary minimal test - bypass all complex providers
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>

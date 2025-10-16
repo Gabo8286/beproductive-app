@@ -2,12 +2,14 @@
 import { User, Session } from "@supabase/supabase-js";
 import { ProfileWithRole } from "@/types/database";
 
-export type GuestUserType = 'admin' | 'user';
+export type GuestUserType = 'admin' | 'user' | 'professional' | 'team';
 
 export interface GuestModeConfig {
   enabled: boolean;
   adminEmail: string;
   userEmail: string;
+  professionalEmail: string;
+  teamEmail: string;
 }
 
 /**
@@ -30,6 +32,8 @@ export const getGuestModeConfig = (): GuestModeConfig => {
     enabled: isGuestModeEnabled(),
     adminEmail: import.meta.env.VITE_GUEST_ADMIN_EMAIL || 'admin@guest.local',
     userEmail: import.meta.env.VITE_GUEST_USER_EMAIL || 'user@guest.local',
+    professionalEmail: import.meta.env.VITE_GUEST_PROFESSIONAL_EMAIL || 'professional@guest.local',
+    teamEmail: import.meta.env.VITE_GUEST_TEAM_EMAIL || 'team@guest.local',
   };
 };
 
@@ -42,10 +46,35 @@ export const createGuestUser = (type: GuestUserType): User => {
   if (import.meta.env.PROD) {
     throw new Error('Guest mode is disabled in production');
   }
-  
+
   const config = getGuestModeConfig();
-  const email = type === 'admin' ? config.adminEmail : config.userEmail;
-  const userId = type === 'admin' ? 'guest-admin-id' : 'guest-user-id';
+  let email: string;
+  let userId: string;
+  let fullName: string;
+
+  switch (type) {
+    case 'admin':
+      email = config.adminEmail;
+      userId = 'guest-admin-id';
+      fullName = 'Guest Admin';
+      break;
+    case 'professional':
+      email = config.professionalEmail;
+      userId = 'guest-professional-id';
+      fullName = 'Guest Professional';
+      break;
+    case 'team':
+      email = config.teamEmail;
+      userId = 'guest-team-id';
+      fullName = 'Guest Team Lead';
+      break;
+    case 'user':
+    default:
+      email = config.userEmail;
+      userId = 'guest-user-id';
+      fullName = 'Guest User';
+      break;
+  }
 
   return {
     id: userId,
@@ -57,7 +86,7 @@ export const createGuestUser = (type: GuestUserType): User => {
       providers: ['guest']
     },
     user_metadata: {
-      full_name: type === 'admin' ? 'Guest Admin' : 'Guest User',
+      full_name: fullName,
       avatar_url: null,
       guest_mode: true,
       guest_type: type
@@ -89,16 +118,41 @@ export const createGuestSession = (type: GuestUserType): Session => {
 export const createGuestProfile = (type: GuestUserType): ProfileWithRole => {
   const user = createGuestUser(type);
 
+  let role: string;
+  let subscriptionTier: string;
+
+  switch (type) {
+    case 'admin':
+      role = 'super_admin';
+      subscriptionTier = 'enterprise';
+      break;
+    case 'professional':
+      role = 'user';
+      subscriptionTier = 'pro';
+      break;
+    case 'team':
+      role = 'team_lead';
+      subscriptionTier = 'team';
+      break;
+    case 'user':
+    default:
+      role = 'user';
+      subscriptionTier = 'free';
+      break;
+  }
+
   return {
     id: user.id,
     email: user.email!,
     full_name: user.user_metadata.full_name,
     avatar_url: null,
+    subscription_tier: subscriptionTier,
+    preferences: {},
     onboarding_completed: true,
     created_at: user.created_at,
     updated_at: user.created_at,
     // Additional fields for guest mode
-    role: type === 'admin' ? 'super_admin' : 'user',
+    role: role,
     guest_mode: true,
     guest_type: type,
   } as ProfileWithRole & {
@@ -183,9 +237,13 @@ export const guestHasRole = (user: User | null, role: string): boolean => {
     case 'admin':
       return guestType === 'admin';
     case 'team_lead':
-      return guestType === 'admin'; // Admin can also be team lead
+      return guestType === 'admin' || guestType === 'team'; // Admin and team have team lead access
     case 'user':
-      return true; // Both admin and user have user role
+      return true; // All guest types have at least user role
+    case 'enterprise':
+      // Enterprise access for guest users is subscription-based
+      // Admin guest users have enterprise subscription
+      return guestType === 'admin';
     default:
       return false;
   }
