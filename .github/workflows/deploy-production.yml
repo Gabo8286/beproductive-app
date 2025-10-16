@@ -82,6 +82,19 @@ jobs:
           VITE_APP_VERSION: ${{ github.ref_name }}
           VITE_COMMIT_HASH: ${{ github.sha }}
           VITE_BUILD_TIME: ${{ github.run_id }}
+          # Production environment variables
+          VITE_APP_ENVIRONMENT: "production"
+          VITE_APP_URL: "https://be-productive.app"
+          VITE_AUTH_REDIRECT_URL: "https://be-productive.app"
+          VITE_AUTH_SITE_URL: "https://be-productive.app"
+          # Supabase configuration
+          VITE_SUPABASE_PROJECT_ID: ${{ secrets.VITE_SUPABASE_PROJECT_ID }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          # Feature flags
+          VITE_ENABLE_ANALYTICS: "true"
+          VITE_ENABLE_AI_FEATURES: "true"
+          VITE_LOCAL_MODE: "false"
         run: npm run build
 
       - name: Generate build report
@@ -181,22 +194,58 @@ jobs:
           echo "Running pre-deployment health checks..."
           # Add health check commands here
 
-      - name: Deploy to production
+      - name: Deploy to IONOS
         env:
-          PRODUCTION_DEPLOY_KEY: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
-          PRODUCTION_HOST: ${{ secrets.PRODUCTION_HOST }}
-          CDN_DISTRIBUTION_ID: ${{ secrets.CDN_DISTRIBUTION_ID }}
+          IONOS_FTP_HOST: ${{ secrets.IONOS_FTP_HOST }}
+          IONOS_FTP_USER: ${{ secrets.IONOS_FTP_USER }}
+          IONOS_FTP_PASS: ${{ secrets.IONOS_FTP_PASS }}
+          IONOS_DEPLOY_PATH: ${{ secrets.IONOS_DEPLOY_PATH }}
         run: |
-          echo "Deploying to production environment..."
-          # Add your production deployment commands here
-          # Example for AWS S3 + CloudFront:
-          # aws s3 sync dist/ s3://your-bucket --delete
-          # aws cloudfront create-invalidation --distribution-id $CDN_DISTRIBUTION_ID --paths "/*"
+          echo "Deploying to IONOS hosting..."
+
+          # Install lftp for secure FTP deployment
+          sudo apt-get update && sudo apt-get install -y lftp
+
+          # Create deployment script
+          cat > deploy.lftp << EOF
+          set ftp:ssl-allow no
+          set ftp:ssl-force no
+          set net:timeout 30
+          set net:max-retries 3
+          open -u $IONOS_FTP_USER,$IONOS_FTP_PASS $IONOS_FTP_HOST
+          lcd dist
+          cd $IONOS_DEPLOY_PATH
+          mirror --reverse --delete --verbose --exclude-glob .git* --exclude-glob .env*
+          bye
+          EOF
+
+          # Execute deployment
+          lftp -f deploy.lftp
+
+          echo "✅ Deployment to IONOS completed successfully!"
 
       - name: Post-deployment health check
         run: |
           echo "Running post-deployment health checks..."
-          curl -f https://app.beproductive.com/api/health || exit 1
+
+          # Wait for deployment to propagate
+          sleep 30
+
+          # Basic connectivity check
+          echo "Checking main site..."
+          curl -f -L https://be-productive.app/ || exit 1
+
+          # Check if app loads properly (look for React app indicators)
+          echo "Checking if React app loads..."
+          response=$(curl -s https://be-productive.app/)
+          if [[ $response == *"<div id=\"root\">"* ]]; then
+            echo "✅ React app container found"
+          else
+            echo "❌ React app container not found"
+            exit 1
+          fi
+
+          echo "✅ Post-deployment health checks passed!"
 
       - name: Update monitoring
         env:
