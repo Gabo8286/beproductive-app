@@ -122,7 +122,7 @@ export const SuperAdminCaptureTab: React.FC<SuperAdminCaptureTabProps> = ({ clas
   const { isSuperAdmin, loading: adminLoading, error: adminError } = useSuperAdminAccess();
 
   // Get beta signup stats and admin metrics for the dashboard
-  const { stats, pendingSignups, isLoadingStats, error: statsError } = useBetaSignupManagement();
+  const { stats, pendingSignups, isLoadingStats, signupsError, statsError } = useBetaSignupManagement();
   const {
     metrics,
     isLoading: isLoadingMetrics,

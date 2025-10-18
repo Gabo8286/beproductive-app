@@ -106,13 +106,13 @@ export default function LeadManagement() {
   const fetchLeads = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from('leads')
-        .select('*')
+    const { data, error } = await (supabase
+      .from('leads' as any) as any)
+      .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setLeads(data || []);
+      setLeads(data as any || []);
     } catch (error) {
       console.error('Error fetching leads:', error);
       toast({
@@ -127,12 +127,12 @@ export default function LeadManagement() {
 
   const fetchAnalytics = async () => {
     try {
-      const { data, error } = await supabase
-        .from('lead_analytics')
+      const { data, error } = await (supabase
+        .from('lead_analytics' as any) as any)
         .select('*');
 
       if (error) throw error;
-      setAnalytics(data || []);
+      setAnalytics(data as any || []);
     } catch (error) {
       console.error('Error fetching analytics:', error);
     }
@@ -168,8 +168,8 @@ export default function LeadManagement() {
 
   const updateLeadStatus = async (leadId: string, status: string) => {
     try {
-      const { error } = await supabase
-        .from('leads')
+      const { error } = await (supabase
+        .from('leads' as any) as any)
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', leadId);
 
@@ -195,8 +195,8 @@ export default function LeadManagement() {
 
   const updateLeadNotes = async (leadId: string, notes: string) => {
     try {
-      const { error } = await supabase
-        .from('leads')
+      const { error } = await (supabase
+        .from('leads' as any) as any)
         .update({
           notes,
           last_contacted_at: new Date().toISOString(),

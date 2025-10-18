@@ -223,9 +223,9 @@ export default function LeadGenerationAssessment() {
         created_at: new Date().toISOString(),
       };
 
-      const { error } = await supabase
-        .from('leads')
-        .insert(leadRecord);
+      const { error } = await (supabase
+        .from('leads' as any) as any)
+        .insert([leadRecord] as any);
 
       if (error) throw error;
 

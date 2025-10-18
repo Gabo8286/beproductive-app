@@ -13,13 +13,13 @@ export class SupabaseTaskRepository
 
   // Override to include profile joins
   async findUserItemById(userId: string, id: string): Promise<Task | null> {
-    const { data, error } = await this.client
+    const { data, error } = await (this.client
       .from('tasks')
       .select(`
         *,
         assigned_to_profile:profiles!tasks_assigned_to_fkey(full_name, avatar_url),
         created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
-      `)
+      `) as any)
       .eq('id', id)
       .eq('user_id', userId)
       .single();
@@ -33,7 +33,7 @@ export class SupabaseTaskRepository
   }
 
   async findByUserId(userId: string, filters: Record<string, any> = {}): Promise<Task[]> {
-    let query = this.client
+    let query: any = (this.client as any)
       .from('tasks')
       .select(`
         *,
@@ -104,7 +104,7 @@ export class SupabaseTaskRepository
       `)
       .eq('user_id', userId)
       .lte('due_date', beforeDate)
-      .neq('status', 'completed');
+      .neq('status', 'done');
 
     if (error) {
       throw new Error(`Failed to find due tasks: ${error.message}`);
@@ -127,7 +127,7 @@ export class SupabaseTaskRepository
         created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
       `)
       .eq('user_id', userId)
-      .eq('status', 'completed')
+      .eq('status', 'done')
       .order('completed_at', { ascending: false });
 
     if (limit) {
@@ -145,9 +145,9 @@ export class SupabaseTaskRepository
 
   async markAsCompleted(userId: string, taskId: string): Promise<Task> {
     return this.updateUserItem(userId, taskId, {
-      status: 'completed',
+      status: 'done',
       completed_at: new Date().toISOString(),
-    });
+    } as any);
   }
 
   async markAsIncomplete(userId: string, taskId: string): Promise<Task> {
@@ -175,7 +175,7 @@ export class SupabaseTaskRepository
 
     const { error } = await this.client
       .from('tasks')
-      .upsert(updates);
+      .upsert(updates as any);
 
     if (error) {
       throw new Error(`Failed to update task positions: ${error.message}`);
@@ -200,10 +200,10 @@ export class SupabaseTaskRepository
     // Apply filters
     if (filters) {
       if (filters.status) {
-        dbQuery = dbQuery.eq('status', filters.status);
+        dbQuery = dbQuery.eq('status', filters.status as any);
       }
       if (filters.priority) {
-        dbQuery = dbQuery.eq('priority', filters.priority);
+        dbQuery = dbQuery.eq('priority', filters.priority as any);
       }
       if (filters.assignedTo) {
         dbQuery = dbQuery.eq('assigned_to', filters.assignedTo);
@@ -255,18 +255,18 @@ export class SupabaseTaskRepository
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .eq('status', 'completed'),
+        .eq('status', 'done'),
       this.client
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
-        .neq('status', 'completed'),
+        .neq('status', 'done'),
       this.client
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
         .lt('due_date', now)
-        .neq('status', 'completed'),
+        .neq('status', 'done'),
     ].map(async (promise) => {
       const { count, error } = await promise;
       if (error) throw new Error(`Failed to get task stats: ${error.message}`);

@@ -247,8 +247,8 @@ export const RedesignedLandingPage = () => {
     e.preventDefault();
 
     try {
-      const { error } = await supabase
-        .from("beta_signups")
+      const { error } = await (supabase
+        .from("beta_signups" as any) as any)
         .insert([
           {
             email: betaForm.email,

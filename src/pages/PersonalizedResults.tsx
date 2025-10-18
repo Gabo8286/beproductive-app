@@ -294,7 +294,7 @@ export default function PersonalizedResults() {
 
   const handleStartTrial = () => {
     // Track conversion event
-    window.gtag?.('event', 'start_trial_from_assessment', {
+    (window as any).gtag?.('event', 'start_trial_from_assessment', {
       personality_type: dominant,
       lead_score: leadScore,
       urgency: qualificationResponses.urgency,

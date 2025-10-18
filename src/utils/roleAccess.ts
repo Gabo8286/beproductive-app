@@ -58,14 +58,8 @@ export const hasModuleAccess = (
 
   // Handle enterprise subscription requirement
   if (hasEnterpriseRequirement) {
-    // Enterprise access can be granted by:
-    // 1. Having enterprise subscription tier
+    // Enterprise access can be granted by having enterprise subscription tier
     if (subscriptionTier === 'enterprise') {
-      return true;
-    }
-
-    // 2. Being admin or super_admin (they get enterprise access by role)
-    if (userRole === 'admin' || userRole === 'super_admin') {
       return true;
     }
   }

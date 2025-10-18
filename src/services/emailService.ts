@@ -260,8 +260,8 @@ export class EmailService {
    */
   private async trackEmail(betaSignupId: string, emailData: EmailData, emailId: string): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('beta_invitations')
+      const { error } = await (supabase
+        .from('beta_invitations' as any) as any)
         .insert({
           beta_signup_id: betaSignupId,
           email_type: emailData.type,

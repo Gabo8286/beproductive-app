@@ -47,14 +47,15 @@ const useEntityName = (type: 'task' | 'goal' | 'project' | 'user' | null, id: st
           return null;
       }
 
-      const { data, error } = await supabase
-        .from(table)
+      const { data, error } = await (supabase
+        .from(table as any) as any)
         .select(`id, ${nameField}`)
         .eq('id', id)
         .maybeSingle();
 
       if (error || !data) return null;
-      return (data as EntityData)[nameField as keyof EntityData] || `${type} ${id}`;
+      const entityData = data as EntityData;
+      return entityData[nameField as keyof EntityData] || `${type} ${id}`;
     },
     enabled: !!(type && id),
     staleTime: 5 * 60 * 1000, // 5 minutes
