@@ -77,7 +77,7 @@ export class SupabaseTaskRepository
   async findByTags(userId: string, tags: string[]): Promise<Task[]> {
     if (tags.length === 0) return [];
 
-    const { data, error } = await this.client
+    const { data, error } = await ((this.client as any)
       .from('tasks')
       .select(`
         *,
@@ -85,7 +85,7 @@ export class SupabaseTaskRepository
         created_by_profile:profiles!tasks_created_by_fkey(full_name, avatar_url)
       `)
       .eq('user_id', userId)
-      .overlaps('tags', tags);
+      .overlaps('tags', tags));
 
     if (error) {
       throw new Error(`Failed to find tasks by tags: ${error.message}`);
@@ -95,7 +95,7 @@ export class SupabaseTaskRepository
   }
 
   async findDueTasks(userId: string, beforeDate: string): Promise<Task[]> {
-    const { data, error } = await this.client
+    const { data, error } = await ((this.client as any)
       .from('tasks')
       .select(`
         *,
@@ -104,7 +104,7 @@ export class SupabaseTaskRepository
       `)
       .eq('user_id', userId)
       .lte('due_date', beforeDate)
-      .neq('status', 'done');
+      .neq('status', 'done'));
 
     if (error) {
       throw new Error(`Failed to find due tasks: ${error.message}`);
@@ -119,7 +119,7 @@ export class SupabaseTaskRepository
   }
 
   async findCompletedTasks(userId: string, limit?: number): Promise<Task[]> {
-    let query = this.client
+    let query: any = (this.client as any)
       .from('tasks')
       .select(`
         *,
@@ -183,7 +183,7 @@ export class SupabaseTaskRepository
   }
 
   async searchTasks(userId: string, query: string, filters?: TaskFilters): Promise<Task[]> {
-    let dbQuery = this.client
+    let dbQuery: any = (this.client as any)
       .from('tasks')
       .select(`
         *,
@@ -247,27 +247,27 @@ export class SupabaseTaskRepository
       { count: pending },
       { count: overdue },
     ] = await Promise.all([
-      this.client
+      (this.client as any)
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId),
-      this.client
+      (this.client as any)
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
         .eq('status', 'done'),
-      this.client
+      (this.client as any)
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
         .neq('status', 'done'),
-      this.client
+      (this.client as any)
         .from('tasks')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', userId)
         .lt('due_date', now)
         .neq('status', 'done'),
-    ].map(async (promise) => {
+    ].map(async (promise: any) => {
       const { count, error } = await promise;
       if (error) throw new Error(`Failed to get task stats: ${error.message}`);
       return { count: count || 0 };
