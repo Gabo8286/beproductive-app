@@ -30,7 +30,7 @@ interface InvitationData {
   expires_at: string;
 }
 
-export const InvitationSignup: React.FC = () => {
+const InvitationSignup: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -115,8 +115,8 @@ export const InvitationSignup: React.FC = () => {
         setAccountCreated(true);
 
         // Optional: Mark invitation as used in the database
-        await supabase
-          .from('beta_signups')
+        await (supabase
+          .from('beta_signups' as any) as any)
           .update({
             account_created_at: new Date().toISOString(),
             user_id: data.user.id
@@ -395,3 +395,5 @@ export const InvitationSignup: React.FC = () => {
     </div>
   );
 };
+
+export default InvitationSignup;

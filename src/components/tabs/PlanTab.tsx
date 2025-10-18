@@ -95,20 +95,20 @@ export const PlanTab: React.FC<PlanTabProps> = ({ className }) => {
                       <div className="flex items-center gap-3">
                         <span className="text-xl">{project.icon || '📁'}</span>
                         <span className="font-semibold text-[#1d1d1f]">
-                          {project.name || project.title}
+                          {project.title}
                         </span>
                       </div>
                       <span className="apple-stat-value text-sm">
-                        {project.progress || 0}%
+                        {project.progress_percentage || 0}%
                       </span>
                     </div>
                     <div className="text-sm text-[#86868b] mb-3">
-                      {project.tasks || 0} tasks • Due {project.due_date || 'TBD'}
+                      {project.tasks_count || 0} tasks • Due {project.target_date || 'TBD'}
                     </div>
                     <div className="w-full bg-[#f5f5f7] h-1 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-[#007aff] transition-all duration-300"
-                        style={{ width: `${project.progress || 0}%` }}
+                        style={{ width: `${project.progress_percentage || 0}%` }}
                       />
                     </div>
                   </button>

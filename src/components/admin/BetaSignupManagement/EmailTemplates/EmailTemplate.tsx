@@ -4,7 +4,7 @@ import { brandConfig } from "@/lib/brand";
 interface EmailTemplateProps {
   children: React.ReactNode;
   preheader?: string;
-  language?: 'en' | 'es';
+  language?: 'en' | 'es' | 'ar' | 'he';
 }
 
 export const EmailTemplate: React.FC<EmailTemplateProps> = ({
@@ -33,7 +33,7 @@ export const EmailTemplate: React.FC<EmailTemplateProps> = ({
       backgroundColor: brandColors.background,
       margin: 0,
       padding: 0,
-      direction: isRTL ? 'rtl' : 'ltr',
+      direction: (isRTL ? 'rtl' : 'ltr') as 'rtl' | 'ltr',
     },
     wrapper: {
       width: '100%',

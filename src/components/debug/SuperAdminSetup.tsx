@@ -20,19 +20,19 @@ export const SuperAdminSetup: React.FC = () => {
     setStatus('Assigning super admin role...');
 
     try {
-      const { data, error } = await supabase.rpc('assign_initial_super_admin');
+      const { data, error } = await supabase.rpc('assign_initial_super_admin') as any;
 
       if (error) {
         console.error('Error assigning super admin:', error);
         setStatus(`Error: ${error.message}`);
       } else {
         console.log('Super admin assignment result:', data);
-        setStatus(data.success ?
+        setStatus(data?.success ?
           `✅ ${data.message}` :
-          `❌ ${data.error}`
+          `❌ ${data.error || 'Unknown error'}`
         );
 
-        if (data.success) {
+        if (data?.success) {
           // Refresh user roles after successful assignment
           await getUserRoles();
         }
@@ -50,8 +50,8 @@ export const SuperAdminSetup: React.FC = () => {
 
     try {
       const { data, error } = await supabase.rpc('get_user_roles', {
-        user_id: user.id
-      });
+        check_user_id: user.id
+      } as any) as any;
 
       if (error) {
         console.error('Error fetching user roles:', error);

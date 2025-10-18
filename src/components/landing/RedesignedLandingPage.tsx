@@ -706,7 +706,7 @@ export const RedesignedLandingPage = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
                   >
-                    {t(`pricing.${selectedPlan}.features`, { returnObjects: true }).map((feature, index) => (
+                    {(t(`pricing.${selectedPlan}.features`, { returnObjects: true }) as any)?.map?.((feature: string, index: number) => (
                       <motion.li
                         key={index}
                         className="flex items-start gap-3 text-sm"
@@ -723,7 +723,7 @@ export const RedesignedLandingPage = () => {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: 0.2 + (t(`pricing.${selectedPlan}.features`, { returnObjects: true }).length * 0.1) + 0.1 }}
+                    transition={{ duration: 0.3, delay: 0.2 + ((t(`pricing.${selectedPlan}.features`, { returnObjects: true }) as any)?.length || 0) * 0.1 + 0.1 }}
                   >
                     <Button
                       className="w-full"

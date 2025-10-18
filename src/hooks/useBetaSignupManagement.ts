@@ -45,8 +45,8 @@ export const useBetaSignupManagement = () => {
   } = useQuery({
     queryKey: ['betaSignups'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('beta_signups')
+      const { data, error } = await (supabase
+        .from('beta_signups' as any) as any)
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -64,7 +64,7 @@ export const useBetaSignupManagement = () => {
   } = useQuery({
     queryKey: ['betaSignupStats'],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('get_beta_signup_stats');
+      const { data, error } = await (supabase.rpc as any)('get_beta_signup_stats');
       if (error) throw error;
       return data as BetaSignupStats;
     },
@@ -83,17 +83,17 @@ export const useBetaSignupManagement = () => {
       if (!user?.id) throw new Error('User not authenticated');
 
       // Call the approval function
-      const { data, error } = await supabase.rpc('approve_beta_signup', {
+      const { data, error } = await (supabase.rpc as any)('approve_beta_signup', {
         signup_id: signupId,
         admin_id: user.id
       });
 
       if (error) throw error;
-      if (!data.success) throw new Error(data.error);
+      if (!data?.success) throw new Error(data?.error || 'Approval failed');
 
       // Get the signup details for email
-      const { data: signup, error: signupError } = await supabase
-        .from('beta_signups')
+      const { data: signup, error: signupError } = await (supabase
+        .from('beta_signups' as any) as any)
         .select('*')
         .eq('id', signupId)
         .single();
@@ -102,9 +102,9 @@ export const useBetaSignupManagement = () => {
 
       // Send invitation email
       const emailResult = await emailService.sendInvitationEmail(
-        signup.email,
-        signup.name,
-        data.invitation_token,
+        signup?.email,
+        signup?.name,
+        data?.invitation_token,
         language,
         signupId
       );
@@ -133,14 +133,14 @@ export const useBetaSignupManagement = () => {
     }) => {
       if (!user?.id) throw new Error('User not authenticated');
 
-      const { data, error } = await supabase.rpc('reject_beta_signup', {
+      const { data, error } = await (supabase.rpc as any)('reject_beta_signup', {
         signup_id: signupId,
         admin_id: user.id,
         reason: reason || null
       });
 
       if (error) throw error;
-      if (!data.success) throw new Error(data.error);
+      if (!data?.success) throw new Error(data?.error || 'Rejection failed');
 
       return data;
     },
@@ -166,17 +166,17 @@ export const useBetaSignupManagement = () => {
       for (const signupId of signupIds) {
         try {
           // Approve each signup
-          const { data, error } = await supabase.rpc('approve_beta_signup', {
+          const { data, error } = await (supabase.rpc as any)('approve_beta_signup', {
             signup_id: signupId,
             admin_id: user.id
           });
 
           if (error) throw error;
-          if (!data.success) throw new Error(data.error);
+          if (!data?.success) throw new Error(data?.error || 'Approval failed');
 
           // Get signup details
-          const { data: signup, error: signupError } = await supabase
-            .from('beta_signups')
+          const { data: signup, error: signupError } = await (supabase
+            .from('beta_signups' as any) as any)
             .select('*')
             .eq('id', signupId)
             .single();
@@ -185,9 +185,9 @@ export const useBetaSignupManagement = () => {
 
           // Send email
           const emailResult = await emailService.sendInvitationEmail(
-            signup.email,
-            signup.name,
-            data.invitation_token,
+            signup?.email,
+            signup?.name,
+            data?.invitation_token,
             language,
             signupId
           );
@@ -226,21 +226,21 @@ export const useBetaSignupManagement = () => {
       language?: 'en' | 'es'
     }) => {
       // Get signup details
-      const { data: signup, error } = await supabase
-        .from('beta_signups')
+      const { data: signup, error } = await (supabase
+        .from('beta_signups' as any) as any)
         .select('*')
         .eq('id', signupId)
         .eq('status', 'approved')
         .single();
 
       if (error) throw error;
-      if (!signup.invitation_token) throw new Error('No invitation token found');
+      if (!signup?.invitation_token) throw new Error('No invitation token found');
 
       // Send email
       const emailResult = await emailService.sendInvitationEmail(
-        signup.email,
-        signup.name,
-        signup.invitation_token,
+        signup?.email,
+        signup?.name,
+        signup?.invitation_token,
         language,
         signupId
       );
@@ -309,12 +309,12 @@ export const useBetaSignupManagement = () => {
 export const useInvitationValidation = () => {
   const validateToken = useMutation({
     mutationFn: async (token: string) => {
-      const { data, error } = await supabase.rpc('validate_invitation_token', {
+      const { data, error } = await (supabase.rpc as any)('validate_invitation_token', {
         token
       });
 
       if (error) throw error;
-      if (!data.valid) throw new Error(data.error || 'Invalid token');
+      if (!data?.valid) throw new Error(data?.error || 'Invalid token');
 
       return data;
     }

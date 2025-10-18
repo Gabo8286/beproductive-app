@@ -77,8 +77,8 @@ export const EditableTeamSection: React.FC<EditableTeamSectionProps> = ({
   const fetchContent = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from('landing_page_content')
+      const { data, error } = await (supabase
+        .from('landing_page_content' as any) as any)
         .select('*')
         .eq('section_key', 'team-section')
         .eq('is_active', true)
@@ -88,15 +88,15 @@ export const EditableTeamSection: React.FC<EditableTeamSectionProps> = ({
         throw error;
       }
 
-      if (data && data.content) {
+      if (data && data?.content) {
         const parsedContent = typeof data.content === 'string'
           ? JSON.parse(data.content)
           : data.content;
 
         setContent({
-          id: data.id,
-          title: data.title || DEFAULT_CONTENT.title,
-          subtitle: data.subtitle || DEFAULT_CONTENT.subtitle,
+          id: data?.id,
+          title: data?.title || DEFAULT_CONTENT.title,
+          subtitle: data?.subtitle || DEFAULT_CONTENT.subtitle,
           leftColumn: {
             title: parsedContent.left_column?.title || DEFAULT_CONTENT.leftColumn.title,
             content: parsedContent.left_column?.content || DEFAULT_CONTENT.leftColumn.content
@@ -150,12 +150,12 @@ export const EditableTeamSection: React.FC<EditableTeamSectionProps> = ({
       };
 
       const { error } = content.id
-        ? await supabase
-            .from('landing_page_content')
+        ? await (supabase
+            .from('landing_page_content' as any) as any)
             .update(updateData)
             .eq('id', content.id)
-        : await supabase
-            .from('landing_page_content')
+        : await (supabase
+            .from('landing_page_content' as any) as any)
             .insert({
               ...updateData,
               section_key: 'team-section',

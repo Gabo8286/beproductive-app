@@ -628,11 +628,11 @@ function App() {
                   <GlobalViewProvider>
                     <LunaFrameworkProvider>
                       <ErrorBoundary
-                        fallback={
+                        fallback={({ error, resetError }) => (
                           <div className="fixed bottom-4 right-4 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm border rounded-lg px-3 py-2">
                             Luna Assistant loading...
                           </div>
-                        }
+                        )}
                         onError={(error) => console.warn('Luna initialization error:', error)}
                       >
                         <LunaProvider>
