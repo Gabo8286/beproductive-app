@@ -101,6 +101,7 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [captures, setCaptures] = useState<any[]>([]);
 
+
   // Check if user has super admin access
   const { isSuperAdmin, loading: adminLoading } = useSuperAdminAccess();
 
@@ -224,25 +225,6 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
         </div>
       </div>
 
-      {/* Quick Add Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8 stagger-children">
-        {quickAddItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleQuickAddClick(item.href)}
-              className="apple-quick-add-btn group haptic-medium apple-lift-on-hover"
-              aria-label={`Add new ${item.label.toLowerCase()}: ${item.description}`}
-            >
-              <div className="apple-quick-add-icon text-[#007aff] group-hover:scale-110 transition-transform duration-200">
-                <Icon className="w-8 h-8 mx-auto" />
-              </div>
-              <div className="apple-quick-add-label">{item.label}</div>
-            </button>
-          );
-        })}
-      </div>
 
       {/* Recent Captures */}
       <div>

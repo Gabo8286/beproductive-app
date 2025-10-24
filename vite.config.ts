@@ -7,7 +7,7 @@ import * as path from "path";
 // Use 'npm run dev:mobile' for mobile-sized floating window development
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "::",
+    host: true,
     port: 8080,
     // Note: Browser opening is controlled by mobile development scripts for device simulation
     // Development performance optimizations

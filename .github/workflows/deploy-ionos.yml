@@ -1,0 +1,91 @@
+name: Deploy to IONOS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run type check
+      run: npm run type-check
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run tests
+      run: npm run test:run
+
+    - name: Copy production environment file
+      run: cp .env.production .env
+
+    - name: Validate production environment
+      run: |
+        echo "🔍 Validating production environment configuration..."
+        if grep -q "https://be-productive.app" .env; then
+          echo "✅ Production URLs configured correctly"
+        else
+          echo "❌ Production URLs not found in environment"
+          exit 1
+        fi
+        if grep -q "VITE_APP_ENVIRONMENT=production" .env; then
+          echo "✅ Production environment flag set"
+        else
+          echo "❌ Production environment flag not set"
+          exit 1
+        fi
+        echo "✅ Environment validation passed"
+
+    - name: Build production
+      run: npm run build
+
+    - name: Deploy to IONOS via SFTP
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        server: ${{ secrets.IONOS_SFTP_HOST }}
+        username: ${{ secrets.IONOS_SFTP_USER }}
+        password: ${{ secrets.IONOS_SFTP_PASSWORD }}
+        port: 22
+        local_path: './dist/*'
+        remote_path: '/'
+        sftp_only: true
+
+    - name: Verify Deployment
+      run: |
+        echo "🚀 Deployment completed to https://be-productive.app"
+        echo "⏳ Waiting 30 seconds for server to process files..."
+        sleep 30
+        echo "🔍 Testing main site response..."
+        if curl -f -s -o /dev/null https://be-productive.app; then
+          echo "✅ Main site responding"
+        else
+          echo "❌ Main site not responding"
+        fi
+        echo "🔍 Testing login page response..."
+        if curl -f -s -o /dev/null https://be-productive.app/login; then
+          echo "✅ Login page responding"
+        else
+          echo "❌ Login page not responding"
+        fi
+        echo "🔍 Testing authentication redirect configuration..."
+        if curl -s https://be-productive.app | grep -q "be-productive.app"; then
+          echo "✅ Production domain properly configured"
+        else
+          echo "❌ Production domain configuration may be incorrect"
+        fi
+        echo "✅ Deployment verification complete"

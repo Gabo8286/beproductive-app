@@ -1,0 +1,104 @@
+{
+  "timestamp": "2025-10-17T21:00:58.501Z",
+  "overallScore": 18,
+  "components": {
+    "AISettingsDashboard": {
+      "exists": true,
+      "size": 32398,
+      "hasUseEffect": true,
+      "hasErrorBoundary": true,
+      "hasTypeScript": true,
+      "hasAccessibility": false,
+      "hasTestId": false,
+      "score": 60
+    },
+    "AISystemValidator": {
+      "exists": false,
+      "score": 0
+    },
+    "SmartRecommendations": {
+      "exists": true,
+      "size": 30414,
+      "hasUseEffect": true,
+      "hasErrorBoundary": false,
+      "hasTypeScript": true,
+      "hasAccessibility": false,
+      "hasTestId": false,
+      "score": 40
+    },
+    "ProductivityCoachAssistant": {
+      "exists": false,
+      "score": 0
+    },
+    "SmartRecommendationsWidget": {
+      "exists": true,
+      "size": 10636,
+      "hasUseEffect": true,
+      "hasErrorBoundary": false,
+      "hasTypeScript": true,
+      "hasAccessibility": false,
+      "hasTestId": false,
+      "score": 40
+    }
+  },
+  "services": {
+    "aiServiceManager": {
+      "exists": true,
+      "size": 12395,
+      "hasErrorHandling": true,
+      "hasTypeDefinitions": true,
+      "hasLogging": true,
+      "hasValidation": true,
+      "score": 100
+    },
+    "smartTaskPrioritizer": {
+      "exists": false,
+      "score": 0
+    },
+    "productivityInsightsGenerator": {
+      "exists": false,
+      "score": 0
+    },
+    "aiSystemValidator": {
+      "exists": false,
+      "score": 0
+    }
+  },
+  "tests": {
+    "integration": {
+      "passed": 0,
+      "failed": 0,
+      "total": 0
+    },
+    "component": {
+      "passed": 0,
+      "failed": 0,
+      "total": 0
+    },
+    "overall": {
+      "passed": 0,
+      "failed": 0,
+      "total": 0
+    }
+  },
+  "recommendations": [
+    {
+      "category": "Services",
+      "priority": "High",
+      "description": "AI services need improved error handling and validation",
+      "action": "Add comprehensive try-catch blocks and input validation to all AI services"
+    },
+    {
+      "category": "Components",
+      "priority": "Medium",
+      "description": "AI components need better accessibility and error boundaries",
+      "action": "Add aria labels, error boundaries, and test IDs to AI components"
+    },
+    {
+      "category": "Testing",
+      "priority": "High",
+      "description": "AI test coverage is insufficient",
+      "action": "Fix failing tests and add missing test scenarios for AI services"
+    }
+  ]
+}

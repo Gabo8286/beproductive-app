@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-10-23T06:25:04.909Z",
+  "reportName": "comprehensive-test-failed",
+  "environment": {
+    "platform": "darwin",
+    "nodeVersion": "v22.19.0",
+    "workingDirectory": "/Users/gabrielsotomorales/projects/spark-bloom-flow"
+  },
+  "results": {
+    "url": "http://localhost:8080/app",
+    "startTime": "2025-10-23T06:24:33.238Z",
+    "tests": {
+      "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('body') to be visible\u001b[22m\n\u001b[2m    65 × locator resolved to hidden <body>…</body>\u001b[22m\n"
+    }
+  }
+}

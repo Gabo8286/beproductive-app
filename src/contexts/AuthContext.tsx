@@ -142,10 +142,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let authSubscription: any = null;
     let retryTimeout: NodeJS.Timeout | null = null;
 
-    // Timeout to prevent infinite loading - 10s for Docker environments
+    // Timeout to prevent infinite loading - 20s for improved reliability
     const loadingTimeout = setTimeout(async () => {
       if (isComponentMounted && authLoading) {
-        console.warn("[AuthContext] Auth initialization timed out after 10 seconds");
+        console.warn("[AuthContext] Auth initialization timed out after 20 seconds");
 
         // Run diagnostics to help debug the issue
         try {
@@ -172,7 +172,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setAuthLoading(false);
         isInitializing.current = false;
       }
-    }, 10000); // 10 seconds timeout for better Docker compatibility
+    }, 20000); // 20 seconds timeout for better Docker compatibility
 
     const initializeLocalAuth = async () => {
       console.log("[AuthContext] Initializing local auth...");
@@ -335,10 +335,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         console.log("[AuthContext] Checking for existing session...");
 
-        // Check for existing session with timeout (increased to 15s for Docker)
+        // Check for existing session with timeout (increased to 18s for better reliability)
         const sessionPromise = supabase.auth.getSession();
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Session check timeout")), 15000);
+          setTimeout(() => reject(new Error("Session check timeout")), 18000);
         });
 
         try {

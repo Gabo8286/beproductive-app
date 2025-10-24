@@ -4,23 +4,52 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
+import { isGuestUser, getGuestUserType } from '@/utils/auth/guestMode';
 
 /**
  * Debug component to set up super admin access
  * This component should only be used during development/setup
  */
 export const SuperAdminSetup: React.FC = () => {
-  const { user } = useAuth();
+  const { user, isGuestMode } = useAuth();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string>('');
   const [userRoles, setUserRoles] = useState<any[]>([]);
+
+  const isGuestModeUser = isGuestMode && user && isGuestUser(user);
+  const guestUserType = isGuestModeUser ? getGuestUserType(user) : null;
 
   const assignInitialSuperAdmin = async () => {
     setLoading(true);
     setStatus('Assigning super admin role...');
 
     try {
+<<<<<<< HEAD
       const { data, error } = await supabase.rpc('assign_initial_super_admin') as any;
+=======
+      // Handle guest mode users differently
+      if (isGuestModeUser && guestUserType === 'admin') {
+        console.log('Guest mode admin detected, simulating super admin assignment...');
+
+        // Simulate successful assignment for guest admin
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+
+        const mockRole = { role_name: 'super_admin', assigned_at: new Date().toISOString() };
+        setUserRoles([mockRole]);
+        setStatus('✅ Guest admin successfully assigned super admin role (simulated)');
+        setLoading(false);
+        return;
+      }
+
+      // For non-guest users, use the real database function
+      if (!user?.id) {
+        setStatus('❌ No authenticated user');
+        setLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase.rpc('assign_initial_super_admin');
+>>>>>>> 74aa79e (🔧 CRITICAL FIX: Resolve login authentication issue on be-productive.app)
 
       if (error) {
         console.error('Error assigning super admin:', error);
@@ -49,6 +78,14 @@ export const SuperAdminSetup: React.FC = () => {
     if (!user?.id) return;
 
     try {
+      // Handle guest mode users differently
+      if (isGuestModeUser && guestUserType === 'admin') {
+        console.log('Guest mode admin detected, returning mock super admin role...');
+        const mockRole = { role_name: 'super_admin', assigned_at: new Date().toISOString() };
+        setUserRoles([mockRole]);
+        return;
+      }
+
       const { data, error } = await supabase.rpc('get_user_roles', {
         check_user_id: user.id
       } as any) as any;
@@ -69,6 +106,15 @@ export const SuperAdminSetup: React.FC = () => {
 
     setLoading(true);
     try {
+      // Handle guest mode users differently
+      if (isGuestModeUser && guestUserType === 'admin') {
+        console.log('Guest mode admin detected, simulating has_role test...');
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
+        setStatus(`has_role result: TRUE (Super Admin) - Guest Mode Simulation`);
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.rpc('has_role', {
         _user_id: user.id,
         _role: 'super_admin'
@@ -106,6 +152,11 @@ export const SuperAdminSetup: React.FC = () => {
           <p className="text-sm text-gray-600 mb-2">
             <strong>User ID:</strong> {user?.id || 'N/A'}
           </p>
+          {isGuestModeUser && (
+            <p className="text-sm text-blue-600 mb-2">
+              <strong>Mode:</strong> Guest Mode ({guestUserType}) - Database functions simulated
+            </p>
+          )}
         </div>
 
         <div>

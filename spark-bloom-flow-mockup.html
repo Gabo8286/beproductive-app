@@ -1,0 +1,3899 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Bloom Flow - Interactive Mockup</title>
+
+    <style>
+        /* ===========================================
+           SPARK BLOOM FLOW - COMPLETE DESIGN SYSTEM
+           Interactive HTML Mockup
+           =========================================== */
+
+        /* Reset and Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            transition: background-color 200ms ease, color 200ms ease;
+        }
+
+        /* Design System Variables */
+        :root {
+            /* Core Brand Colors - Deep blue primary with purple accents */
+            --background: 0 0% 100%;
+            --foreground: 222 47% 11%;
+
+            --primary: 221 83% 53%;
+            --primary-foreground: 0 0% 100%;
+            --primary-hover: 221 83% 48%;
+            --primary-light: 221 83% 96%;
+
+            --secondary: 262 52% 47%;
+            --secondary-foreground: 0 0% 100%;
+            --secondary-hover: 262 52% 42%;
+            --secondary-light: 262 52% 96%;
+
+            /* Surface Colors */
+            --card: 0 0% 100%;
+            --card-foreground: 222 47% 11%;
+
+            --popover: 0 0% 100%;
+            --popover-foreground: 222 47% 11%;
+
+            /* Neutral Colors */
+            --muted: 220 14% 96%;
+            --muted-foreground: 220 9% 46%;
+
+            --accent: 221 83% 96%;
+            --accent-foreground: 221 83% 53%;
+
+            /* Status Colors */
+            --destructive: 0 84% 60%;
+            --destructive-foreground: 0 0% 100%;
+
+            --success: 142 71% 45%;
+            --success-foreground: 0 0% 100%;
+
+            --warning: 38 92% 50%;
+            --warning-foreground: 0 0% 100%;
+
+            /* UI Elements */
+            --border: 220 13% 91%;
+            --input: 220 13% 91%;
+            --ring: 221 83% 53%;
+
+            --radius: 0.75rem;
+
+            /* Sidebar */
+            --sidebar-background: 222 47% 11%;
+            --sidebar-foreground: 220 9% 90%;
+            --sidebar-primary: 221 83% 53%;
+            --sidebar-primary-foreground: 0 0% 100%;
+            --sidebar-accent: 222 47% 15%;
+            --sidebar-accent-foreground: 220 9% 90%;
+            --sidebar-border: 222 47% 18%;
+            --sidebar-ring: 221 83% 53%;
+
+            /* Apple-Inspired Glass Morphism */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-blur: blur(20px);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 52% 47%) 100%);
+            --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(220 14% 99%) 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsl(221 83% 96%) 0, transparent 50%),
+                             radial-gradient(at 80% 0%, hsl(262 52% 96%) 0, transparent 50%),
+                             radial-gradient(at 0% 50%, hsl(221 83% 98%) 0, transparent 50%);
+            --gradient-hero: linear-gradient(135deg, hsl(221 83% 98%) 0%, hsl(262 52% 98%) 50%, hsl(142 71% 98%) 100%);
+
+            /* Apple Shadow System */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            --shadow-xl: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.30);
+            --shadow-glow: 0 0 40px hsl(221 83% 53% / 0.2);
+            --shadow-glow-strong: 0 0 60px hsl(221 83% 53% / 0.4);
+
+            /* Spring Animation Curves */
+            --spring-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --spring-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --spring-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+            /* Transitions */
+            --transition-fast: 150ms var(--spring-ease);
+            --transition-base: 200ms var(--spring-ease);
+            --transition-slow: 300ms var(--spring-ease);
+            --transition-bounce: 400ms var(--spring-bounce);
+
+            /* Z-Index Hierarchy */
+            --z-base: 0;
+            --z-content: 1;
+            --z-dropdown: 10;
+            --z-tooltip: 15;
+            --z-navigation: 20;
+            --z-sidebar: 25;
+            --z-header: 30;
+            --z-backdrop: 40;
+            --z-modal: 50;
+            --z-toast: 55;
+            --z-floating-button: 60;
+            --z-floating-timer: 65;
+            --z-floating-notification: 70;
+            --z-loading-spinner: 80;
+            --z-error-overlay: 90;
+            --z-critical-alert: 99;
+
+            /* Floating Element Spacing */
+            --floating-gap: 1.5rem;
+            --floating-offset-primary: 1.5rem;
+            --floating-offset-secondary: 6rem;
+            --floating-offset-tertiary: 10rem;
+        }
+
+        /* Dark Theme */
+        .dark {
+            --background: 222 47% 11%;
+            --foreground: 220 9% 90%;
+
+            --primary: 221 83% 53%;
+            --primary-foreground: 0 0% 100%;
+            --primary-hover: 221 83% 58%;
+            --primary-light: 221 83% 20%;
+
+            --secondary: 262 52% 47%;
+            --secondary-foreground: 0 0% 100%;
+            --secondary-hover: 262 52% 52%;
+            --secondary-light: 262 52% 20%;
+
+            --card: 222 47% 14%;
+            --card-foreground: 220 9% 90%;
+
+            --popover: 222 47% 14%;
+            --popover-foreground: 220 9% 90%;
+
+            --muted: 222 47% 18%;
+            --muted-foreground: 220 9% 60%;
+
+            --accent: 221 83% 20%;
+            --accent-foreground: 221 83% 70%;
+
+            --destructive: 0 84% 60%;
+            --destructive-foreground: 0 0% 100%;
+
+            --success: 142 71% 45%;
+            --success-foreground: 0 0% 100%;
+
+            --warning: 38 92% 50%;
+            --warning-foreground: 0 0% 100%;
+
+            --border: 222 47% 18%;
+            --input: 222 47% 18%;
+            --ring: 221 83% 53%;
+
+            --sidebar-background: 222 47% 8%;
+            --sidebar-foreground: 220 9% 90%;
+            --sidebar-primary: 221 83% 53%;
+            --sidebar-primary-foreground: 0 0% 100%;
+            --sidebar-accent: 222 47% 12%;
+            --sidebar-accent-foreground: 220 9% 90%;
+            --sidebar-border: 222 47% 15%;
+            --sidebar-ring: 221 83% 53%;
+
+            /* Apple-Inspired Glass Morphism (Dark) */
+            --glass-bg: rgba(34, 39, 46, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(20px);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+            --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 52% 47%) 100%);
+            --gradient-subtle: linear-gradient(180deg, hsl(222 47% 11%) 0%, hsl(222 47% 14%) 100%);
+            --gradient-mesh: radial-gradient(at 40% 20%, hsl(221 83% 15%) 0, transparent 50%),
+                             radial-gradient(at 80% 0%, hsl(262 52% 15%) 0, transparent 50%),
+                             radial-gradient(at 0% 50%, hsl(221 83% 12%) 0, transparent 50%);
+            --gradient-hero: linear-gradient(135deg, hsl(221 83% 15%) 0%, hsl(262 52% 15%) 50%, hsl(142 71% 15%) 100%);
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.6);
+            --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(0, 0, 0, 0.7);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.7), 0 6px 6px rgba(0, 0, 0, 0.8);
+            --shadow-xl: 0 14px 28px rgba(0, 0, 0, 0.8), 0 10px 10px rgba(0, 0, 0, 0.9);
+            --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.9);
+            --shadow-glow: 0 0 40px hsl(221 83% 53% / 0.4);
+            --shadow-glow-strong: 0 0 60px hsl(221 83% 53% / 0.6);
+        }
+
+        /* Component Styles */
+
+        /* Button Component */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            ring-offset-color: hsl(var(--background));
+            transition: all var(--transition-base);
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid hsl(var(--ring));
+            outline-offset: 2px;
+        }
+
+        .btn:disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .btn-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .btn-primary:hover {
+            background-color: hsl(var(--primary-hover));
+        }
+
+        .btn-secondary {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .btn-secondary:hover {
+            background-color: hsl(var(--secondary-hover));
+        }
+
+        .btn-outline {
+            border: 1px solid hsl(var(--border));
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .btn-outline:hover {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            color: hsl(var(--foreground));
+        }
+
+        .btn-ghost:hover {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+
+        .btn-sm {
+            height: 2.75rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .btn-md {
+            height: 2.75rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .btn-lg {
+            height: 3rem;
+            padding: 0.5rem 2rem;
+        }
+
+        .btn-icon {
+            height: 2.75rem;
+            width: 2.75rem;
+            padding: 0;
+        }
+
+        /* Card Component */
+        .card {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            color: hsl(var(--card-foreground));
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-footer {
+            padding: 1.5rem;
+            border-top: 1px solid hsl(var(--border));
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Navigation Components */
+        .nav-breadcrumbs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-navigation);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-top: 1px solid hsl(var(--border));
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            color: hsl(var(--muted-foreground));
+            text-decoration: none;
+            transition: all var(--transition-base);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+
+        .nav-tab.active {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        /* Layout Components */
+        .page {
+            min-height: 100vh;
+            padding-bottom: 5rem; /* Space for navigation */
+        }
+
+        .page-header {
+            padding: 2rem 1rem 1rem;
+            border-bottom: 1px solid hsl(var(--border));
+            background: var(--gradient-subtle);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--foreground));
+        }
+
+        .page-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 1rem;
+        }
+
+        .page-content {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (max-width: 768px) {
+            .grid-cols-2,
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        /* Luna FAB System */
+        .luna-fab {
+            position: fixed;
+            bottom: 6rem;
+            right: 1.5rem;
+            z-index: var(--z-floating-button);
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: 2px solid white;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-bounce);
+            color: white;
+        }
+
+        .luna-fab:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .luna-fab:active {
+            transform: scale(0.95);
+        }
+
+        .luna-fab svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .orbital-buttons {
+            position: fixed;
+            z-index: calc(var(--z-floating-button) + 10);
+            pointer-events: none;
+        }
+
+        .orbital-button {
+            position: absolute;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all var(--transition-bounce);
+            color: white;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbital-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .orbital-button svg {
+            width: 1.125rem;
+            height: 1.125rem;
+        }
+
+        .orbital-button-label {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            white-space: nowrap;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all var(--transition-base);
+        }
+
+        .orbital-button:hover .orbital-button-label {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .orbital-button-shortcut {
+            color: #9CA3AF;
+            font-size: 0.625rem;
+            margin-top: 0.125rem;
+            text-align: center;
+        }
+
+        /* Backdrop */
+        .backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: var(--z-backdrop);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            cursor: grab;
+            opacity: 0;
+            animation: fadeIn var(--transition-slow) forwards;
+        }
+
+        .backdrop.dragging {
+            cursor: grabbing;
+        }
+
+        /* Quick Add Items */
+        .quick-add-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .quick-add-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .quick-add-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            background: hsl(var(--card));
+            text-decoration: none;
+            color: hsl(var(--foreground));
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .quick-add-item:hover {
+            border-color: hsl(var(--primary));
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .quick-add-icon {
+            width: 2rem;
+            height: 2rem;
+            margin-bottom: 0.75rem;
+            color: hsl(var(--primary));
+        }
+
+        .quick-add-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            text-align: center;
+        }
+
+        .quick-add-description {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(-180deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.1) rotate(0deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .animate-bounce-in {
+            animation: bounceIn var(--transition-bounce) forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp var(--transition-base) forwards;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .p-4 { padding: 1rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .text-center { text-align: center; }
+        .rounded-lg { border-radius: var(--radius); }
+        .shadow-sm { box-shadow: var(--shadow-sm); }
+        .shadow-md { box-shadow: var(--shadow-md); }
+        .shadow-lg { box-shadow: var(--shadow-lg); }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: var(--z-floating-button);
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--shadow-md);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle svg {
+            width: 1rem;
+            height: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        /* Landing Page & Authentication Styles */
+
+        /* Landing Container */
+        .landing-container {
+            min-height: 100vh;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Landing Hero Section */
+        .landing-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            width: 100%;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+
+        .hero-text {
+            animation: slideUp var(--transition-slow) forwards;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-features {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-features {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+        }
+
+        .hero-feature-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: hsl(var(--primary));
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .hero-cta {
+            animation-delay: 0.2s;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        /* Floating Cards Animation */
+        .hero-visual {
+            position: relative;
+            height: 400px;
+            animation: slideUp var(--transition-slow) 0.3s forwards;
+        }
+
+        .floating-cards {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 200px;
+            animation: float var(--transition-bounce) infinite alternate;
+        }
+
+        .floating-card.card-1 {
+            top: 20%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-card.card-2 {
+            top: 50%;
+            left: 20%;
+            animation-delay: 1s;
+        }
+
+        .floating-card.card-3 {
+            bottom: 20%;
+            right: 20%;
+            animation-delay: 2s;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: hsl(var(--primary));
+            border-radius: 50%;
+        }
+
+        .card-text {
+            flex: 1;
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
+        }
+
+        .card-progress {
+            height: 4px;
+            background: hsl(var(--muted));
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-progress::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 70%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: progress-fill 2s ease-out infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-10px); }
+        }
+
+        @keyframes progress-fill {
+            0% { width: 0%; }
+            100% { width: 70%; }
+        }
+
+        /* Authentication Container */
+        .auth-container {
+            position: fixed;
+            inset: 0;
+            z-index: var(--z-modal);
+            background: var(--gradient-hero);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-container.hidden {
+            display: none;
+        }
+
+        /* Modern Login Panel System */
+        .auth-panel {
+            background: hsl(var(--background));
+            border-radius: 2rem;
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px;
+            min-height: 500px;
+            display: flex;
+        }
+
+        .auth-form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transition: all var(--transition-slow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-form-container.sign-in {
+            left: 0;
+            z-index: 2;
+        }
+
+        .auth-panel.active .auth-form-container.sign-in {
+            transform: translateX(100%);
+        }
+
+        .auth-form-container.sign-up {
+            left: 0;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .auth-panel.active .auth-form-container.sign-up {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: slideInAuth var(--transition-slow) forwards;
+        }
+
+        @keyframes slideInAuth {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        .auth-form {
+            background: hsl(var(--card));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 3rem 2.5rem;
+            height: 100%;
+            width: 100%;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-social-icons {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icon {
+            width: 3rem;
+            height: 3rem;
+            border: 1px solid hsl(var(--border));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: hsl(var(--background));
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .social-icon:hover {
+            background: hsl(var(--accent));
+            border-color: hsl(var(--primary));
+            transform: scale(1.05);
+        }
+
+        .auth-divider {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-input {
+            background: hsl(var(--input));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: all var(--transition-base);
+            color: hsl(var(--foreground));
+        }
+
+        .auth-input:focus {
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+        }
+
+        .auth-input::placeholder {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .auth-forgot {
+            color: hsl(var(--primary));
+            font-size: 0.875rem;
+            text-decoration: none;
+            margin: 0.5rem 0 1.5rem;
+            transition: all var(--transition-base);
+        }
+
+        .auth-forgot:hover {
+            text-decoration: underline;
+        }
+
+        .auth-submit {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Auth Toggle Panel */
+        .auth-toggle-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: all var(--transition-slow);
+            border-radius: 0 2rem 2rem 0;
+            z-index: 1000;
+        }
+
+        .auth-panel.active .auth-toggle-container {
+            transform: translateX(-100%);
+            border-radius: 2rem 0 0 2rem;
+        }
+
+        .auth-toggle {
+            background: var(--gradient-primary);
+            height: 100%;
+            color: white;
+            position: relative;
+            left: -100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: all var(--transition-slow);
+        }
+
+        .auth-panel.active .auth-toggle {
+            transform: translateX(50%);
+        }
+
+        .auth-toggle-panel {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 2rem;
+            text-align: center;
+            top: 0;
+            transform: translateX(0);
+            transition: all var(--transition-slow);
+        }
+
+        .auth-toggle-left {
+            transform: translateX(-200%);
+        }
+
+        .auth-panel.active .auth-toggle-left {
+            transform: translateX(0);
+        }
+
+        .auth-toggle-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .auth-panel.active .auth-toggle-right {
+            transform: translateX(200%);
+        }
+
+        .auth-toggle-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .auth-toggle-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .auth-toggle-btn {
+            border: 2px solid white;
+            color: white;
+            padding: 0.75rem 2rem;
+            background: transparent;
+        }
+
+        .auth-toggle-btn:hover {
+            background: white;
+            color: hsl(var(--primary));
+        }
+
+        /* App Transition */
+        .app-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .app-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all var(--transition-slow);
+        }
+
+        /* Success Animation */
+        .auth-success {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .success-icon {
+            width: 4rem;
+            height: 4rem;
+            color: hsl(var(--success));
+            margin-bottom: 1.5rem;
+            animation: successBounce var(--transition-bounce) forwards;
+        }
+
+        @keyframes successBounce {
+            0% { transform: scale(0); }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
+        }
+
+        .success-description {
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 2rem;
+        }
+
+        /* Loading States */
+        .auth-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .loading-spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid hsl(var(--primary) / 0.3);
+            border-top: 2px solid hsl(var(--primary));
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive Auth */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 400px;
+                min-height: 600px;
+            }
+
+            .auth-form-container,
+            .auth-toggle-container {
+                position: relative;
+                width: 100%;
+                height: 50%;
+            }
+
+            .auth-form-container.sign-in {
+                order: 2;
+            }
+
+            .auth-form-container.sign-up {
+                order: 1;
+            }
+
+            .auth-toggle-container {
+                order: 3;
+                left: 0;
+                border-radius: 0 0 2rem 2rem;
+            }
+
+            .auth-panel.active .auth-form-container.sign-in {
+                transform: translateY(-100%);
+            }
+
+            .auth-panel.active .auth-form-container.sign-up {
+                transform: translateY(-100%);
+            }
+
+            .auth-panel.active .auth-toggle-container {
+                transform: translateY(-100%);
+            }
+
+            .auth-toggle {
+                left: 0;
+                width: 100%;
+                height: 200%;
+            }
+
+            .auth-toggle-panel {
+                width: 100%;
+                height: 50%;
+            }
+
+            .auth-toggle-left {
+                transform: translateY(-200%);
+            }
+
+            .auth-panel.active .auth-toggle-left {
+                transform: translateY(0);
+            }
+
+            .auth-toggle-right {
+                bottom: 0;
+                transform: translateY(0);
+            }
+
+            .auth-panel.active .auth-toggle-right {
+                transform: translateY(200%);
+            }
+        }
+
+        /* BeProductive Landing Page Styles - Clean Modern Design */
+
+        /* Animated Logo */
+        .animated-logo {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoGlow 3s ease-in-out infinite;
+            font-weight: 700;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 8px hsl(221 83% 53% / 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 16px hsl(221 83% 53% / 0.7));
+            }
+        }
+
+        /* Hero Section */
+        .landing-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted) / 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title-line1, .hero-title-line2 {
+            color: hsl(var(--foreground));
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: hsl(var(--muted-foreground));
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        /* Hero Benefits */
+        .hero-benefits {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-benefit {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: hsl(var(--background));
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            min-width: 200px;
+        }
+
+        .hero-benefit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: hsl(var(--primary) / 0.5);
+        }
+
+        .hero-benefit-icon {
+            color: hsl(var(--primary));
+            width: 1.25rem;
+            height: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-title {
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            display: block;
+        }
+
+        .benefit-desc {
+            font-size: 0.85rem;
+            color: hsl(var(--muted-foreground));
+            display: block;
+        }
+
+        /* Floating Cards */
+        .floating-cards {
+            display: flex;
+            gap: 2rem;
+            margin-top: 4rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .floating-card {
+            background: hsl(var(--background));
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            min-width: 280px;
+            max-width: 320px;
+        }
+
+        .floating-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-color: hsl(var(--primary) / 0.4);
+        }
+
+        .card-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon.ai-insights {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .card-icon.habits {
+            background: linear-gradient(135deg, #10b981, #047857);
+            color: white;
+        }
+
+        .card-icon.goals {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--foreground));
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 1rem;
+        }
+
+        .card-progress {
+            height: 6px;
+            background: hsl(var(--muted));
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-progress::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            border-radius: 3px;
+            animation: progressFill 2s ease-out forwards;
+        }
+
+        .ai-progress::after {
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            width: 85%;
+        }
+
+        .habits-progress::after {
+            background: linear-gradient(90deg, #10b981, #047857);
+            width: 75%;
+        }
+
+        .goals-progress::after {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            width: 70%;
+        }
+
+        @keyframes progressFill {
+            from { width: 0; }
+            to { width: inherit; }
+        }
+
+        /* Content Sections */
+        .content-section {
+            padding: 5rem 0;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .content-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: hsl(var(--muted-foreground));
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 2.5rem;
+            background: hsl(var(--background));
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-color: hsl(var(--primary) / 0.4);
+        }
+
+        .feature-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: hsl(var(--primary) / 0.1);
+            border: 2px solid hsl(var(--primary) / 0.2);
+            border-radius: var(--radius-lg);
+            color: hsl(var(--primary));
+        }
+
+        .feature-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        .feature-description {
+            color: hsl(var(--muted-foreground));
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Assessment CTA */
+        .assessment-cta {
+            background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .assessment-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .assessment-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .assessment-description {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.6;
+        }
+
+        .assessment-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: hsl(var(--primary));
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 2px solid transparent;
+        }
+
+        .assessment-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+            background: hsl(var(--background));
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            padding: 2.5rem 2rem;
+            background: hsl(var(--background));
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .pricing-card.featured {
+            border-color: hsl(var(--primary));
+            box-shadow: 0 8px 30px hsl(var(--primary) / 0.15);
+            transform: scale(1.02);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+            border-color: hsl(var(--primary) / 0.4);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 15px 40px hsl(var(--primary) / 0.2);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.25rem 1rem;
+            background: hsl(var(--primary));
+            color: white;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .pricing-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--primary));
+        }
+
+        .pricing-period {
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-features li svg {
+            color: hsl(var(--primary));
+            width: 1rem;
+            height: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Beta Signup */
+        .beta-signup {
+            background: hsl(var(--muted) / 0.3);
+            padding: 4rem 2rem;
+        }
+
+        .beta-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .beta-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1rem 1.25rem;
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .beta-input:focus {
+            outline: none;
+            border-color: hsl(var(--primary));
+            box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 2.5rem;
+            background: hsl(var(--background));
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            border-color: hsl(var(--primary) / 0.3);
+        }
+
+        .contact-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            margin: 0 auto 1.5rem;
+            padding: 1rem;
+            background: hsl(var(--primary) / 0.1);
+            border: 2px solid hsl(var(--primary) / 0.2);
+            border-radius: var(--radius-lg);
+            color: hsl(var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: hsl(var(--foreground));
+        }
+
+        .contact-details {
+            color: hsl(var(--muted-foreground));
+            line-height: 1.5;
+        }
+
+        .contact-link {
+            color: hsl(var(--primary));
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: hsl(var(--primary) / 0.8);
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer, .landing-footer {
+            background: hsl(var(--muted) / 0.2);
+            border-top: 2px solid hsl(var(--border));
+            padding: 3rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: hsl(var(--foreground));
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: hsl(var(--muted-foreground));
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: hsl(var(--primary));
+        }
+
+        .footer-bottom, .footer-text {
+            padding-top: 2rem;
+            border-top: 1px solid hsl(var(--border));
+            text-align: center;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .footer-brand {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        /* Luna Assistant Fab */
+        .luna-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 25px hsl(var(--primary) / 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .luna-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px hsl(var(--primary) / 0.4);
+        }
+
+        .luna-fab svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+
+        /* Landing Page Layout */
+        .landing-container {
+            background: hsl(var(--background));
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content {
+                padding: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 6vw, 2.5rem);
+            }
+
+            .hero-benefits {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+
+            .hero-benefit {
+                width: 100%;
+                max-width: 320px;
+                justify-content: flex-start;
+            }
+
+            .floating-cards {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 3rem;
+            }
+
+            .floating-card {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .assessment-title {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .pricing-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .beta-form {
+                flex-direction: column;
+            }
+
+            .beta-input {
+                min-width: auto;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+
+            .luna-fab {
+                bottom: 1rem;
+                right: 1rem;
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+
+            .luna-fab svg {
+                width: 1.25rem;
+                height: 1.25rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg class="moon-icon hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+    <!-- Landing Page & Authentication -->
+    <div id="landing-container" class="landing-container">
+        <!-- Landing Hero Section -->
+        <div id="landing-hero" class="landing-hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="hero-title-line1">Unlock Your Full Potential:</span>
+                        <br>
+                        <span class="hero-title-line2">Achieve More, Stress Less with </span>
+                        <span class="hero-brand animated-logo">BeProductive</span>
+                    </h1>
+                    <p class="hero-description">Our AI-powered app helps you identify your unique productivity bottlenecks and provides a personalized action plan to conquer them.</p>
+
+                    <!-- Key Benefits -->
+                    <div class="hero-benefits">
+                        <div class="hero-benefit">
+                            <svg class="hero-benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            <div>
+                                <span class="benefit-title">AI-Powered Insights</span>
+                                <span class="benefit-desc">Personalized recommendations</span>
+                            </div>
+                        </div>
+                        <div class="hero-benefit">
+                            <svg class="hero-benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            <div>
+                                <span class="benefit-title">Progress Tracking</span>
+                                <span class="benefit-desc">Visual growth reports</span>
+                            </div>
+                        </div>
+                        <div class="hero-benefit">
+                            <svg class="hero-benefit-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <span class="benefit-title">Smart Habits</span>
+                                <span class="benefit-desc">Intelligent reminders</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-lg hero-cta" onclick="showAuthFlow()">
+                            Start Your Productivity Journey
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </button>
+                        <button class="btn btn-ghost btn-lg" onclick="showAssessmentModal()">
+                            Take Free Assessment
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-cards">
+                        <div class="floating-card card-1">
+                            <div class="card-icon ai-insights">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">AI Insights</div>
+                                <div class="card-subtitle">85% productivity boost</div>
+                                <div class="card-progress ai-progress"></div>
+                            </div>
+                        </div>
+                        <div class="floating-card card-2">
+                            <div class="card-icon habits">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Smart Habits</div>
+                                <div class="card-subtitle">12 active routines</div>
+                                <div class="card-progress habits-progress"></div>
+                            </div>
+                        </div>
+                        <div class="floating-card card-3">
+                            <div class="card-icon goals">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <div class="card-text">
+                                <div class="card-title">Goal Tracking</div>
+                                <div class="card-subtitle">7 of 10 completed</div>
+                                <div class="card-progress goals-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Flow -->
+        <div id="auth-container" class="auth-container hidden">
+            <div class="auth-panel">
+                <div class="auth-form-container sign-up">
+                <form class="auth-form" onsubmit="handleSignup(event)">
+                    <h1 class="auth-title">Create Account</h1>
+                    <div class="auth-social-icons">
+                        <button type="button" class="social-icon" onclick="socialAuth('google')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="social-icon" onclick="socialAuth('github')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="social-icon" onclick="socialAuth('linkedin')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="auth-divider">or use your email for registration</span>
+                    <input type="text" class="auth-input" placeholder="Full Name" required>
+                    <input type="email" class="auth-input" placeholder="Email Address" required>
+                    <input type="password" class="auth-input" placeholder="Password" required>
+                    <button type="submit" class="btn btn-primary btn-lg auth-submit">Create Account</button>
+                </form>
+            </div>
+
+            <div class="auth-form-container sign-in">
+                <form class="auth-form" onsubmit="handleSignin(event)">
+                    <h1 class="auth-title">Welcome Back</h1>
+                    <div class="auth-social-icons">
+                        <button type="button" class="social-icon" onclick="socialAuth('google')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="social-icon" onclick="socialAuth('github')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="social-icon" onclick="socialAuth('linkedin')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="auth-divider">or use your email and password</span>
+                    <input type="email" class="auth-input" placeholder="Email Address" required>
+                    <input type="password" class="auth-input" placeholder="Password" required>
+                    <a href="#" class="auth-forgot" onclick="showForgotPassword()">Forgot your password?</a>
+                    <button type="submit" class="btn btn-primary btn-lg auth-submit">Sign In</button>
+                </form>
+            </div>
+
+            <div class="auth-toggle-container">
+                <div class="auth-toggle">
+                    <div class="auth-toggle-panel auth-toggle-left">
+                        <h1 class="auth-toggle-title">Welcome Back!</h1>
+                        <p class="auth-toggle-description">Sign in to continue your productivity journey and access your personalized dashboard</p>
+                        <button class="btn btn-ghost auth-toggle-btn" id="signin-btn" onclick="toggleAuthMode('signin')">Sign In</button>
+                    </div>
+                    <div class="auth-toggle-panel auth-toggle-right">
+                        <h1 class="auth-toggle-title">Start Your Journey!</h1>
+                        <p class="auth-toggle-description">Create an account to unlock powerful productivity tools and achieve your goals</p>
+                        <button class="btn btn-ghost auth-toggle-btn" id="signup-btn" onclick="toggleAuthMode('signup')">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section class="landing-features" id="features-section">
+            <div class="container">
+                <div class="features-header">
+                    <h2 class="features-title">How BeProductive Transforms Your Day</h2>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-block">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Personalized Insights</h3>
+                        <p class="feature-description">Understand your unique work patterns and discover what truly drives your productivity.</p>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Smart Habit Tracking</h3>
+                        <p class="feature-description">Build powerful routines with intelligent reminders and progress visualization.</p>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Goal Alignment</h3>
+                        <p class="feature-description">Break down big goals into manageable steps and stay focused on what matters most.</p>
+                    </div>
+
+                    <div class="feature-block">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Progress Visualization</h3>
+                        <p class="feature-description">See your achievements, track your growth, and stay motivated with clear visual reports.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Assessment CTA Section -->
+        <section class="assessment-cta" id="assessment-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2 class="cta-title">Ready to Boost Your Productivity?</h2>
+                    <p class="cta-description">Take our quick, AI-driven assessment to pinpoint your productivity challenges and get your custom action plan. It takes just 3 minutes!</p>
+                    <button class="btn btn-primary btn-xl cta-button" onclick="showAssessmentModal()">
+                        Take the Free Assessment
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing-section">
+            <div class="container">
+                <div class="pricing-header">
+                    <h2 class="pricing-title">Choose Your Plan</h2>
+                </div>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-header-card">
+                            <h3 class="plan-name">Basic</h3>
+                            <div class="plan-price">
+                                <span class="price">$9.99</span>
+                                <span class="period">/ month</span>
+                            </div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Core AI features
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Private & secure data
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Up to 10 projects
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Basic support
+                            </div>
+                        </div>
+                        <button class="btn btn-outline plan-button" onclick="showPricingModal('basic')">Choose Basic</button>
+                    </div>
+
+                    <div class="pricing-card featured">
+                        <div class="featured-badge">Most Popular</div>
+                        <div class="pricing-header-card">
+                            <h3 class="plan-name">Professional</h3>
+                            <div class="plan-price">
+                                <span class="price">$19.99</span>
+                                <span class="period">/ month</span>
+                            </div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Everything in Basic
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Advanced AI capabilities
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Unlimited projects
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Priority support
+                            </div>
+                        </div>
+                        <button class="btn btn-primary plan-button" onclick="showPricingModal('professional')">Choose Professional</button>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="pricing-header-card">
+                            <h3 class="plan-name">Teams</h3>
+                            <div class="plan-price">
+                                <span class="price">$24.99</span>
+                                <span class="period">/ user/month</span>
+                            </div>
+                        </div>
+                        <div class="plan-features">
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Everything in Professional
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Team collaboration features
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Centralized billing
+                            </div>
+                            <div class="feature-item">
+                                <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Dedicated support
+                            </div>
+                        </div>
+                        <button class="btn btn-outline plan-button" onclick="showPricingModal('teams')">Choose Teams</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beta Signup Section -->
+        <section class="beta-signup" id="beta-section">
+            <div class="container">
+                <div class="beta-card">
+                    <h2 class="beta-title">Join Our Early Access Program</h2>
+                    <p class="beta-description">Be among the first to experience BeProductive. Sign up for exclusive early access and shape the future of productivity.</p>
+                    <form class="beta-form" onsubmit="handleBetaSignup(event)">
+                        <div class="form-row">
+                            <input type="email" class="beta-input" placeholder="Your Email" required>
+                            <input type="text" class="beta-input" placeholder="Your Name (Optional)">
+                        </div>
+                        <textarea class="beta-textarea" placeholder="Any comments or specific needs? (Optional)"></textarea>
+                        <button type="submit" class="btn btn-primary btn-lg beta-submit">Get Early Access</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section" id="contact-section">
+            <div class="container">
+                <div class="contact-header">
+                    <h2 class="contact-title">Get in Touch</h2>
+                    <p class="contact-description">Have questions about BeProductive? Need help getting started? We're here to assist you.</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="email-title">Email Us Directly</h3>
+                    <div class="email-content">
+                        <a href="mailto:gabosoto@be-productive.app" class="email-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            gabosoto@be-productive.app
+                        </a>
+                        <button class="btn btn-ghost btn-sm copy-email" onclick="copyEmail()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            Copy
+                        </button>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="btn btn-primary" onclick="window.location.href='mailto:gabosoto@be-productive.app?subject=BeProductive Inquiry'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                            </svg>
+                            Send Email
+                        </button>
+                        <button class="btn btn-outline" onclick="showAuthFlow()">Schedule a Call</button>
+                    </div>
+                    <p class="response-time">We typically respond within 24 hours</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <span class="animated-logo">BeProductive</span>
+                    </div>
+                    <p class="footer-text">© 2025 BeProductive. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Luna AI Assistant -->
+        <div class="luna-assistant hidden" id="luna-assistant">
+            <div class="luna-avatar" onclick="showLunaModal()">
+                <div class="luna-pulse"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="hidden">
+        <!-- Dynamic Page Content -->
+        <div id="page-container">
+            <!-- Pages will be dynamically loaded here -->
+        </div>
+
+        <!-- Universal Navigation -->
+        <nav class="nav-breadcrumbs">
+            <button class="btn btn-ghost btn-sm" onclick="navigateBack()" id="back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </button>
+
+            <div class="nav-tabs">
+                <a href="#capture" class="nav-tab" data-route="capture">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Capture
+                </a>
+                <a href="#plan" class="nav-tab" data-route="plan">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    Plan
+                </a>
+                <a href="#engage" class="nav-tab" data-route="engage">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Engage
+                </a>
+                <a href="#profile" class="nav-tab" data-route="profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Profile
+                </a>
+            </div>
+        </nav>
+
+        <!-- Luna FAB -->
+        <button class="luna-fab" onclick="toggleLunaMenu()" id="luna-fab" aria-label="Luna Assistant">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+        </button>
+
+        <!-- Orbital Buttons (Hidden by default) -->
+        <div class="orbital-buttons hidden" id="orbital-buttons">
+            <!-- Orbital buttons will be dynamically generated here -->
+        </div>
+
+        <!-- Backdrop (Hidden by default) -->
+        <div class="backdrop hidden" id="backdrop" onclick="closeLunaMenu()"></div>
+    </div>
+
+    <script>
+        // ===========================================
+        // SPARK BLOOM FLOW MOCKUP - JAVASCRIPT
+        // Interactive Navigation & UI System
+        // ===========================================
+
+        // Global State
+        let currentRoute = 'capture';
+        let lunaMenuOpen = false;
+        let isDragging = false;
+        let rotationOffset = 0;
+        let dragStartAngle = 0;
+        let dragStartRotation = 0;
+
+        // Authentication & Landing State
+        let isAuthenticated = false;
+        let authMode = 'signup'; // 'signup' or 'signin'
+        let currentView = 'landing'; // 'landing', 'auth', 'app'
+
+        // Sample Data
+        const sampleData = {
+            user: {
+                name: 'Alex Chen',
+                email: 'alex@example.com',
+                avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face',
+                preferences: {
+                    theme: 'light',
+                    language: 'en'
+                }
+            },
+            tasks: [
+                {
+                    id: '1',
+                    title: 'Complete project proposal',
+                    description: 'Draft the Q4 project proposal for the new feature set',
+                    completed: false,
+                    priority: 'high',
+                    category: 'Work',
+                    dueDate: '2024-10-25',
+                    tags: ['urgent', 'project']
+                },
+                {
+                    id: '2',
+                    title: 'Review design mockups',
+                    description: 'Provide feedback on the new UI designs',
+                    completed: true,
+                    priority: 'medium',
+                    category: 'Design',
+                    dueDate: '2024-10-23',
+                    tags: ['design', 'review']
+                },
+                {
+                    id: '3',
+                    title: 'Team standup meeting',
+                    description: 'Weekly team sync and planning session',
+                    completed: false,
+                    priority: 'medium',
+                    category: 'Meeting',
+                    dueDate: '2024-10-24',
+                    tags: ['meeting', 'team']
+                }
+            ],
+            goals: [
+                {
+                    id: '1',
+                    title: 'Learn React Native',
+                    description: 'Build mobile development skills',
+                    progress: 65,
+                    category: 'Learning',
+                    deadline: '2024-12-31'
+                },
+                {
+                    id: '2',
+                    title: 'Improve work-life balance',
+                    description: 'Establish better boundaries between work and personal time',
+                    progress: 45,
+                    category: 'Personal',
+                    deadline: '2024-11-30'
+                }
+            ],
+            events: [
+                {
+                    id: '1',
+                    title: 'Product Planning Meeting',
+                    time: '10:00 AM',
+                    duration: '1h',
+                    attendees: ['Sarah', 'Mike', 'Jessica'],
+                    type: 'meeting'
+                },
+                {
+                    id: '2',
+                    title: 'Focus Time: Development',
+                    time: '2:00 PM',
+                    duration: '3h',
+                    type: 'focus'
+                }
+            ]
+        };
+
+        // Orbital Buttons Configuration
+        const orbitalButtons = [
+            {
+                id: 'home',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>`,
+                label: 'Home',
+                color: 'rgb(59, 130, 246)',
+                action: () => navigate('capture'),
+                shortcut: '⌘H'
+            },
+            {
+                id: 'plan',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>`,
+                label: 'Plan',
+                color: 'rgb(34, 197, 94)',
+                action: () => navigate('plan'),
+                shortcut: '⌘P'
+            },
+            {
+                id: 'tasks',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>`,
+                label: 'Tasks',
+                color: 'rgb(168, 85, 247)',
+                action: () => navigate('capture'),
+                shortcut: '⌘T'
+            },
+            {
+                id: 'engage',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>`,
+                label: 'Engage',
+                color: 'rgb(99, 102, 241)',
+                action: () => navigate('engage'),
+                shortcut: '⌘E'
+            },
+            {
+                id: 'profile',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>`,
+                label: 'Profile',
+                color: 'rgb(245, 158, 11)',
+                action: () => navigate('profile'),
+                shortcut: '⌘U'
+            },
+            {
+                id: 'search',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>`,
+                label: 'Search',
+                color: 'rgb(107, 114, 128)',
+                action: () => console.log('Search functionality'),
+                shortcut: '⌘K'
+            }
+        ];
+
+        // Initialize App
+        function initializeApp() {
+            // Check authentication status
+            const savedAuth = localStorage.getItem('spark_bloom_auth');
+            if (savedAuth) {
+                isAuthenticated = true;
+                currentView = 'app';
+                showApp();
+            } else {
+                currentView = 'landing';
+                showLanding();
+            }
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboardShortcuts);
+
+            // Add hash change listener
+            window.addEventListener('hashchange', () => {
+                if (isAuthenticated) {
+                    const route = getRouteFromHash();
+                    if (route) navigate(route);
+                }
+            });
+        }
+
+        // Landing & Authentication Functions
+        function showLanding() {
+            currentView = 'landing';
+            document.getElementById('landing-container').classList.remove('hidden');
+            document.getElementById('app').classList.add('hidden');
+        }
+
+        function showAuthFlow(mode = 'signup') {
+            currentView = 'auth';
+            authMode = mode;
+
+            // Hide landing hero
+            document.getElementById('landing-hero').style.display = 'none';
+
+            // Show auth container
+            const authContainer = document.getElementById('auth-container');
+            const authPanel = document.querySelector('.auth-panel');
+            authContainer.classList.remove('hidden');
+
+            // Set initial auth mode
+            if (mode === 'signin') {
+                authPanel.classList.remove('active');
+            } else {
+                authPanel.classList.add('active');
+            }
+
+            // Animate in
+            setTimeout(() => {
+                authContainer.style.opacity = '1';
+                authContainer.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        function hideAuthFlow() {
+            const authContainer = document.getElementById('auth-container');
+            authContainer.style.opacity = '0';
+            authContainer.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                authContainer.classList.add('hidden');
+                document.getElementById('landing-hero').style.display = 'flex';
+                currentView = 'landing';
+            }, 300);
+        }
+
+        function toggleAuthMode(mode) {
+            authMode = mode;
+            const authPanel = document.querySelector('.auth-panel');
+
+            if (mode === 'signin') {
+                authPanel.classList.remove('active');
+            } else {
+                authPanel.classList.add('active');
+            }
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Show loading state
+            const submitBtn = form.querySelector('.auth-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<div class="auth-loading"><div class="loading-spinner"></div>Creating account...</div>';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Show success
+                showAuthSuccess('Account created successfully!', 'Welcome to Spark Bloom Flow');
+
+                // Simulate authentication
+                setTimeout(() => {
+                    authenticateUser({
+                        name: formData.get('name') || 'New User',
+                        email: formData.get('email'),
+                    });
+                }, 1500);
+            }, 2000);
+        }
+
+        function handleSignin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Show loading state
+            const submitBtn = form.querySelector('.auth-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<div class="auth-loading"><div class="loading-spinner"></div>Signing in...</div>';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Show success
+                showAuthSuccess('Welcome back!', 'Taking you to your dashboard');
+
+                // Simulate authentication
+                setTimeout(() => {
+                    authenticateUser({
+                        name: 'Alex Chen',
+                        email: formData.get('email'),
+                    });
+                }, 1500);
+            }, 2000);
+        }
+
+        function socialAuth(provider) {
+            console.log(`Authenticating with ${provider}`);
+
+            // Show loading indicator
+            const authContainer = document.getElementById('auth-container');
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'auth-loading';
+            loadingOverlay.style.cssText = `
+                position: absolute;
+                inset: 0;
+                background: rgba(255, 255, 255, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1001;
+            `;
+            loadingOverlay.innerHTML = `
+                <div class="auth-loading">
+                    <div class="loading-spinner"></div>
+                    Connecting to ${provider}...
+                </div>
+            `;
+            authContainer.appendChild(loadingOverlay);
+
+            // Simulate OAuth flow
+            setTimeout(() => {
+                authContainer.removeChild(loadingOverlay);
+                showAuthSuccess(`Connected with ${provider}!`, 'Setting up your account');
+
+                setTimeout(() => {
+                    authenticateUser({
+                        name: 'Social User',
+                        email: `user@${provider}.com`,
+                        provider: provider
+                    });
+                }, 1500);
+            }, 2000);
+        }
+
+        function showAuthSuccess(title, description) {
+            const authContainer = document.getElementById('auth-container');
+
+            // Create success overlay
+            const successOverlay = document.createElement('div');
+            successOverlay.className = 'auth-success';
+            successOverlay.style.cssText = `
+                position: absolute;
+                inset: 0;
+                background: white;
+                z-index: 1001;
+            `;
+
+            successOverlay.innerHTML = `
+                <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h2 class="success-title">${title}</h2>
+                <p class="success-description">${description}</p>
+            `;
+
+            authContainer.appendChild(successOverlay);
+        }
+
+        function authenticateUser(userData) {
+            isAuthenticated = true;
+
+            // Save auth state
+            localStorage.setItem('spark_bloom_auth', JSON.stringify({
+                user: userData,
+                timestamp: Date.now()
+            }));
+
+            // Update sample data
+            sampleData.user.name = userData.name;
+            sampleData.user.email = userData.email;
+
+            // Transition to app
+            transitionToApp();
+        }
+
+        function transitionToApp() {
+            const landingContainer = document.getElementById('landing-container');
+            const appContainer = document.getElementById('app');
+
+            // Hide landing with animation
+            landingContainer.style.opacity = '0';
+            landingContainer.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                landingContainer.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+
+                // Show app with animation
+                appContainer.classList.add('app-enter');
+                setTimeout(() => {
+                    appContainer.classList.add('app-enter-active');
+                    currentView = 'app';
+                    showApp();
+                }, 50);
+            }, 300);
+        }
+
+        function showApp() {
+            // Initialize app navigation
+            updateActiveNavigation();
+            navigate(getRouteFromHash() || 'capture');
+
+            // Show onboarding tour for new users
+            const authData = JSON.parse(localStorage.getItem('spark_bloom_auth') || '{}');
+            const isNewUser = Date.now() - authData.timestamp < 60000; // Less than 1 minute
+
+            if (isNewUser) {
+                setTimeout(() => {
+                    showOnboardingTour();
+                }, 1000);
+            }
+        }
+
+        function showOnboardingTour() {
+            // Simple onboarding demonstration
+            const lunaFab = document.getElementById('luna-fab');
+            lunaFab.style.animation = 'pulse 2s infinite';
+            lunaFab.style.boxShadow = 'var(--shadow-glow-strong)';
+
+            // Create onboarding tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'onboarding-tooltip';
+            tooltip.style.cssText = `
+                position: fixed;
+                bottom: 140px;
+                right: 20px;
+                background: var(--glass-bg);
+                backdrop-filter: var(--glass-blur);
+                border: 1px solid var(--glass-border);
+                border-radius: var(--radius);
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                z-index: var(--z-tooltip);
+                max-width: 250px;
+                animation: fadeIn var(--transition-base) forwards;
+            `;
+
+            tooltip.innerHTML = `
+                <p style="margin: 0; font-size: 0.875rem; color: hsl(var(--foreground));">
+                    👋 Welcome! Click the Luna button to access quick navigation and smart features.
+                </p>
+                <button onclick="this.parentElement.remove(); document.getElementById('luna-fab').style.animation = ''; document.getElementById('luna-fab').style.boxShadow = '';"
+                        style="position: absolute; top: 4px; right: 8px; background: none; border: none; color: hsl(var(--muted-foreground)); cursor: pointer;">×</button>
+            `;
+
+            document.body.appendChild(tooltip);
+
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (tooltip.parentElement) {
+                    tooltip.remove();
+                    lunaFab.style.animation = '';
+                    lunaFab.style.boxShadow = '';
+                }
+            }, 10000);
+        }
+
+        function showForgotPassword() {
+            alert('Forgot password functionality would be implemented here. For this demo, please use the social authentication options.');
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            localStorage.removeItem('spark_bloom_auth');
+
+            // Transition back to landing
+            const landingContainer = document.getElementById('landing-container');
+            const appContainer = document.getElementById('app');
+
+            appContainer.style.opacity = '0';
+            appContainer.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                appContainer.classList.add('hidden');
+                landingContainer.classList.remove('hidden');
+                landingContainer.style.opacity = '1';
+                landingContainer.style.transform = 'scale(1)';
+
+                currentView = 'landing';
+                showLanding();
+            }, 300);
+        }
+
+        // Navigation Functions
+        function navigate(route) {
+            currentRoute = route;
+            updateActiveNavigation();
+            loadPage(route);
+            window.location.hash = route;
+            closeLunaMenu();
+        }
+
+        function navigateBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                navigate('capture');
+            }
+        }
+
+        function getRouteFromHash() {
+            return window.location.hash.slice(1);
+        }
+
+        function updateActiveNavigation() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.route === currentRoute) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        // Page Loading Functions
+        function loadPage(route) {
+            const container = document.getElementById('page-container');
+
+            switch (route) {
+                case 'capture':
+                    container.innerHTML = getCapturePageHTML();
+                    break;
+                case 'plan':
+                    container.innerHTML = getPlanPageHTML();
+                    break;
+                case 'engage':
+                    container.innerHTML = getEngagePageHTML();
+                    break;
+                case 'profile':
+                    container.innerHTML = getProfilePageHTML();
+                    break;
+                default:
+                    container.innerHTML = getCapturePageHTML();
+            }
+
+            // Add animation
+            container.classList.add('animate-slide-up');
+            setTimeout(() => container.classList.remove('animate-slide-up'), 400);
+        }
+
+        // Page HTML Generators
+        function getCapturePageHTML() {
+            return `
+                <div class="page">
+                    <header class="page-header">
+                        <h1 class="page-title">Capture</h1>
+                        <p class="page-description">Quickly capture thoughts, tasks, and ideas</p>
+                    </header>
+
+                    <div class="page-content">
+                        <div class="quick-add-grid">
+                            <div class="quick-add-item" onclick="createNewItem('note')">
+                                <svg class="quick-add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <div class="quick-add-title">Note</div>
+                                <div class="quick-add-description">Capture thoughts quickly</div>
+                            </div>
+
+                            <div class="quick-add-item" onclick="createNewItem('task')">
+                                <svg class="quick-add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                </svg>
+                                <div class="quick-add-title">Task</div>
+                                <div class="quick-add-description">Add to your todo list</div>
+                            </div>
+
+                            <div class="quick-add-item" onclick="createNewItem('goal')">
+                                <svg class="quick-add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                </svg>
+                                <div class="quick-add-title">Goal</div>
+                                <div class="quick-add-description">Set a new goal</div>
+                            </div>
+
+                            <div class="quick-add-item" onclick="createNewItem('reflection')">
+                                <svg class="quick-add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                <div class="quick-add-title">Reflection</div>
+                                <div class="quick-add-description">Journal your thoughts</div>
+                            </div>
+
+                            <div class="quick-add-item" onclick="createNewItem('project')">
+                                <svg class="quick-add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <div class="quick-add-title">Project</div>
+                                <div class="quick-add-description">Start a new project</div>
+                            </div>
+
+                            <div class="quick-add-item" onclick="createNewItem('habit')">
+                                <svg class="quick-add-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                <div class="quick-add-title">Habit</div>
+                                <div class="quick-add-description">Track a new habit</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h2 class="text-lg font-semibold mb-4">Recent Tasks</h2>
+                            <div class="grid gap-4">
+                                ${sampleData.tasks.map(task => `
+                                    <div class="card">
+                                        <div class="card-content">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-4">
+                                                    <input type="checkbox" ${task.completed ? 'checked' : ''}
+                                                           onchange="toggleTask('${task.id}')"
+                                                           class="w-4 h-4">
+                                                    <div>
+                                                        <h3 class="font-medium ${task.completed ? 'line-through opacity-60' : ''}">${task.title}</h3>
+                                                        <p class="text-sm text-muted-foreground">${task.description}</p>
+                                                        <div class="flex gap-2 mt-2">
+                                                            <span class="text-xs px-2 py-1 rounded-lg bg-accent">${task.category}</span>
+                                                            <span class="text-xs px-2 py-1 rounded-lg ${getPriorityColor(task.priority)}">${task.priority}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-sm text-muted-foreground">
+                                                    ${task.dueDate}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getPlanPageHTML() {
+            return `
+                <div class="page">
+                    <header class="page-header">
+                        <h1 class="page-title">Plan</h1>
+                        <p class="page-description">Organize your time and set priorities</p>
+                    </header>
+
+                    <div class="page-content">
+                        <div class="grid grid-cols-1 gap-6 mb-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Today's Schedule</h2>
+                                    <p class="card-description">October 23, 2024</p>
+                                </div>
+                                <div class="card-content">
+                                    <div class="grid gap-4">
+                                        ${sampleData.events.map(event => `
+                                            <div class="flex items-center gap-4 p-3 rounded-lg border">
+                                                <div class="text-sm font-medium text-primary">
+                                                    ${event.time}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <h3 class="font-medium">${event.title}</h3>
+                                                    <p class="text-sm text-muted-foreground">
+                                                        ${event.duration} ${event.attendees ? '• ' + event.attendees.join(', ') : ''}
+                                                    </p>
+                                                </div>
+                                                <div class="w-3 h-3 rounded-full ${event.type === 'meeting' ? 'bg-blue-500' : 'bg-green-500'}"></div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Goals Progress</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="grid gap-4">
+                                        ${sampleData.goals.map(goal => `
+                                            <div>
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <h3 class="font-medium">${goal.title}</h3>
+                                                    <span class="text-sm text-muted-foreground">${goal.progress}%</span>
+                                                </div>
+                                                <div class="w-full bg-muted rounded-full h-2">
+                                                    <div class="bg-primary h-2 rounded-full" style="width: ${goal.progress}%"></div>
+                                                </div>
+                                                <p class="text-sm text-muted-foreground mt-1">${goal.description}</p>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Quick Planning</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="grid gap-3">
+                                        <button class="btn btn-outline flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                            Add Event
+                                        </button>
+                                        <button class="btn btn-outline flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Time Block
+                                        </button>
+                                        <button class="btn btn-outline flex items-center gap-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                            </svg>
+                                            Review Goals
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getEngagePageHTML() {
+            return `
+                <div class="page">
+                    <header class="page-header">
+                        <h1 class="page-title">Engage</h1>
+                        <p class="page-description">Connect, collaborate, and share progress</p>
+                    </header>
+
+                    <div class="page-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Team Activity</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="grid gap-4">
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-medium">
+                                                S
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-sm"><strong>Sarah</strong> completed "Review design system"</p>
+                                                <p class="text-xs text-muted-foreground">2 hours ago</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white text-sm font-medium">
+                                                M
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-sm"><strong>Mike</strong> shared a new project update</p>
+                                                <p class="text-xs text-muted-foreground">4 hours ago</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-success flex items-center justify-center text-white text-sm font-medium">
+                                                J
+                                            </div>
+                                            <div class="flex-1">
+                                                <p class="text-sm"><strong>Jessica</strong> started working on the mobile app</p>
+                                                <p class="text-xs text-muted-foreground">6 hours ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="card-title">Shared Goals</h2>
+                                </div>
+                                <div class="card-content">
+                                    <div class="grid gap-4">
+                                        <div class="p-3 rounded-lg border">
+                                            <h3 class="font-medium">Q4 Product Launch</h3>
+                                            <p class="text-sm text-muted-foreground mb-2">Team goal • 3 members</p>
+                                            <div class="w-full bg-muted rounded-full h-2">
+                                                <div class="bg-primary h-2 rounded-full" style="width: 78%"></div>
+                                            </div>
+                                            <p class="text-xs text-muted-foreground mt-1">78% complete</p>
+                                        </div>
+
+                                        <div class="p-3 rounded-lg border">
+                                            <h3 class="font-medium">Improve Documentation</h3>
+                                            <p class="text-sm text-muted-foreground mb-2">Team goal • 5 members</p>
+                                            <div class="w-full bg-muted rounded-full h-2">
+                                                <div class="bg-secondary h-2 rounded-full" style="width: 45%"></div>
+                                            </div>
+                                            <p class="text-xs text-muted-foreground mt-1">45% complete</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-6">
+                            <div class="card-header">
+                                <h2 class="card-title">Collaboration Tools</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <button class="btn btn-outline flex flex-col items-center gap-2 h-auto py-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        <span class="text-sm">Team Chat</span>
+                                    </button>
+
+                                    <button class="btn btn-outline flex flex-col items-center gap-2 h-auto py-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <span class="text-sm">Shared Docs</span>
+                                    </button>
+
+                                    <button class="btn btn-outline flex flex-col items-center gap-2 h-auto py-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        <span class="text-sm">Video Call</span>
+                                    </button>
+
+                                    <button class="btn btn-outline flex flex-col items-center gap-2 h-auto py-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                        </svg>
+                                        <span class="text-sm">Share</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getProfilePageHTML() {
+            return `
+                <div class="page">
+                    <header class="page-header">
+                        <h1 class="page-title">Profile</h1>
+                        <p class="page-description">Manage your account and preferences</p>
+                    </header>
+
+                    <div class="page-content">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="card">
+                                <div class="card-content text-center">
+                                    <div class="w-20 h-20 rounded-full bg-primary mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                                        ${sampleData.user.name.charAt(0)}
+                                    </div>
+                                    <h2 class="card-title">${sampleData.user.name}</h2>
+                                    <p class="card-description">${sampleData.user.email}</p>
+                                    <button class="btn btn-primary mt-4">Edit Profile</button>
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <div class="grid gap-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h2 class="card-title">Productivity Stats</h2>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="grid grid-cols-3 gap-4 text-center">
+                                                <div>
+                                                    <div class="text-2xl font-bold text-primary">23</div>
+                                                    <div class="text-sm text-muted-foreground">Tasks Completed</div>
+                                                </div>
+                                                <div>
+                                                    <div class="text-2xl font-bold text-secondary">5</div>
+                                                    <div class="text-sm text-muted-foreground">Goals Achieved</div>
+                                                </div>
+                                                <div>
+                                                    <div class="text-2xl font-bold text-success">18</div>
+                                                    <div class="text-sm text-muted-foreground">Day Streak</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h2 class="card-title">Preferences</h2>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="grid gap-4">
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <h3 class="font-medium">Theme</h3>
+                                                        <p class="text-sm text-muted-foreground">Choose your preferred theme</p>
+                                                    </div>
+                                                    <button class="btn btn-outline btn-sm" onclick="toggleTheme()">
+                                                        Toggle Theme
+                                                    </button>
+                                                </div>
+
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <h3 class="font-medium">Language</h3>
+                                                        <p class="text-sm text-muted-foreground">Interface language</p>
+                                                    </div>
+                                                    <select class="btn btn-outline btn-sm">
+                                                        <option>English</option>
+                                                        <option>Spanish</option>
+                                                        <option>French</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <h3 class="font-medium">Notifications</h3>
+                                                        <p class="text-sm text-muted-foreground">Manage notification settings</p>
+                                                    </div>
+                                                    <input type="checkbox" checked class="w-4 h-4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-6">
+                            <div class="card-header">
+                                <h2 class="card-title">Account Actions</h2>
+                            </div>
+                            <div class="card-content">
+                                <div class="grid gap-3">
+                                    <button class="btn btn-outline flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
+                                        Change Password
+                                    </button>
+                                    <button class="btn btn-outline flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Export Data
+                                    </button>
+                                    <button class="btn btn-outline flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Backup Settings
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Luna FAB Functions
+        function toggleLunaMenu() {
+            if (lunaMenuOpen) {
+                closeLunaMenu();
+            } else {
+                openLunaMenu();
+            }
+        }
+
+        function openLunaMenu() {
+            lunaMenuOpen = true;
+            const backdrop = document.getElementById('backdrop');
+            const orbitalButtons = document.getElementById('orbital-buttons');
+            const fab = document.getElementById('luna-fab');
+
+            backdrop.classList.remove('hidden');
+            orbitalButtons.classList.remove('hidden');
+
+            // Get FAB position
+            const fabRect = fab.getBoundingClientRect();
+            const centerX = fabRect.left + fabRect.width / 2;
+            const centerY = fabRect.top + fabRect.height / 2;
+
+            // Position orbital buttons container
+            orbitalButtons.style.left = centerX + 'px';
+            orbitalButtons.style.top = centerY + 'px';
+            orbitalButtons.style.transform = 'translate(-50%, -50%)';
+
+            // Generate orbital buttons
+            generateOrbitalButtons();
+
+            // Add backdrop event listeners
+            addBackdropEventListeners();
+        }
+
+        function closeLunaMenu() {
+            lunaMenuOpen = false;
+            const backdrop = document.getElementById('backdrop');
+            const orbitalButtons = document.getElementById('orbital-buttons');
+
+            backdrop.classList.add('hidden');
+            orbitalButtons.classList.add('hidden');
+
+            // Remove backdrop event listeners
+            removeBackdropEventListeners();
+        }
+
+        function generateOrbitalButtons() {
+            const container = document.getElementById('orbital-buttons');
+            const radius = 80;
+            const buttons = orbitalButtons.filter(btn =>
+                btn.id !== currentRoute || btn.id === 'search'
+            );
+
+            container.innerHTML = buttons.map((button, index) => {
+                const angle = (index * (2 * Math.PI / buttons.length)) - Math.PI / 2 + (rotationOffset * Math.PI / 180);
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+
+                const labelPosition = getLabelPosition(x, y);
+
+                return `
+                    <div class="orbital-button animate-bounce-in"
+                         style="left: ${x}px; top: ${y}px; background-color: ${button.color}; animation-delay: ${index * 100}ms;"
+                         onclick="handleOrbitalButtonClick('${button.id}')">
+                        ${button.icon}
+                        <div class="orbital-button-label" style="${labelPosition}">
+                            <div class="font-medium">${button.label}</div>
+                            <div class="orbital-button-shortcut">${button.shortcut}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getLabelPosition(x, y) {
+            let position = '';
+
+            if (x > 20) {
+                position += 'left: 120%;';
+            } else if (x < -20) {
+                position += 'right: 120%;';
+            } else {
+                position += 'left: 50%; transform: translateX(-50%);';
+            }
+
+            if (y > 20) {
+                position += ' top: 120%;';
+            } else if (y < -20) {
+                position += ' bottom: 120%;';
+            } else {
+                position += ' top: 50%; transform: translateY(-50%);';
+            }
+
+            return position;
+        }
+
+        function handleOrbitalButtonClick(buttonId) {
+            const button = orbitalButtons.find(btn => btn.id === buttonId);
+            if (button) {
+                button.action();
+                closeLunaMenu();
+            }
+        }
+
+        // Rotation Functions
+        function addBackdropEventListeners() {
+            const backdrop = document.getElementById('backdrop');
+
+            // Mouse events
+            backdrop.addEventListener('mousedown', handleRotationStart);
+            backdrop.addEventListener('mousemove', handleRotationMove);
+            backdrop.addEventListener('mouseup', handleRotationEnd);
+            backdrop.addEventListener('mouseleave', handleRotationEnd);
+
+            // Touch events
+            backdrop.addEventListener('touchstart', handleTouchStart, { passive: false });
+            backdrop.addEventListener('touchmove', handleTouchMove, { passive: false });
+            backdrop.addEventListener('touchend', handleRotationEnd);
+        }
+
+        function removeBackdropEventListeners() {
+            const backdrop = document.getElementById('backdrop');
+
+            backdrop.removeEventListener('mousedown', handleRotationStart);
+            backdrop.removeEventListener('mousemove', handleRotationMove);
+            backdrop.removeEventListener('mouseup', handleRotationEnd);
+            backdrop.removeEventListener('mouseleave', handleRotationEnd);
+
+            backdrop.removeEventListener('touchstart', handleTouchStart);
+            backdrop.removeEventListener('touchmove', handleTouchMove);
+            backdrop.removeEventListener('touchend', handleRotationEnd);
+        }
+
+        function handleRotationStart(e) {
+            e.preventDefault();
+            const fab = document.getElementById('luna-fab');
+            const fabRect = fab.getBoundingClientRect();
+            const centerX = fabRect.left + fabRect.width / 2;
+            const centerY = fabRect.top + fabRect.height / 2;
+
+            const clientX = e.clientX;
+            const clientY = e.clientY;
+
+            // Check if in rotation area
+            const distance = Math.sqrt(Math.pow(clientX - centerX, 2) + Math.pow(clientY - centerY, 2));
+            if (distance >= 56 && distance <= 112) { // Ring around buttons
+                isDragging = true;
+                dragStartAngle = getAngleFromCenter(clientX, clientY, centerX, centerY);
+                dragStartRotation = rotationOffset;
+
+                const backdrop = document.getElementById('backdrop');
+                backdrop.classList.add('dragging');
+            }
+        }
+
+        function handleRotationMove(e) {
+            if (!isDragging) return;
+
+            e.preventDefault();
+            const fab = document.getElementById('luna-fab');
+            const fabRect = fab.getBoundingClientRect();
+            const centerX = fabRect.left + fabRect.width / 2;
+            const centerY = fabRect.top + fabRect.height / 2;
+
+            const currentAngle = getAngleFromCenter(e.clientX, e.clientY, centerX, centerY);
+            const angleDiff = normalizeAngleDifference(currentAngle - dragStartAngle);
+            rotationOffset = (dragStartRotation + angleDiff) % 360;
+
+            generateOrbitalButtons();
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            handleRotationStart({
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+                preventDefault: () => e.preventDefault()
+            });
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            handleRotationMove({
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+                preventDefault: () => e.preventDefault()
+            });
+        }
+
+        function handleRotationEnd() {
+            if (isDragging) {
+                isDragging = false;
+                const backdrop = document.getElementById('backdrop');
+                backdrop.classList.remove('dragging');
+            }
+        }
+
+        function getAngleFromCenter(x, y, centerX, centerY) {
+            const deltaX = x - centerX;
+            const deltaY = y - centerY;
+            return Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        }
+
+        function normalizeAngleDifference(angle) {
+            while (angle > 180) angle -= 360;
+            while (angle < -180) angle += 360;
+            return angle;
+        }
+
+        // Utility Functions
+        function getPriorityColor(priority) {
+            switch (priority) {
+                case 'high': return 'bg-destructive text-destructive-foreground';
+                case 'medium': return 'bg-warning text-warning-foreground';
+                case 'low': return 'bg-success text-success-foreground';
+                default: return 'bg-muted text-muted-foreground';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+
+            if (isDark) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+            }
+
+            // Update theme toggle icons
+            const sunIcon = document.querySelector('.sun-icon');
+            const moonIcon = document.querySelector('.moon-icon');
+
+            if (isDark) {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        function handleKeyboardShortcuts(e) {
+            if (e.metaKey || e.ctrlKey) {
+                switch (e.key) {
+                    case 'h':
+                        e.preventDefault();
+                        navigate('capture');
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        navigate('plan');
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        navigate('engage');
+                        break;
+                    case 'u':
+                        e.preventDefault();
+                        navigate('profile');
+                        break;
+                    case 'k':
+                        e.preventDefault();
+                        console.log('Search functionality');
+                        break;
+                }
+            }
+
+            if (e.key === 'Escape' && lunaMenuOpen) {
+                closeLunaMenu();
+            }
+        }
+
+        function createNewItem(type) {
+            console.log('Creating new', type);
+            // In a real app, this would open a modal or navigate to a creation form
+        }
+
+        function toggleTask(taskId) {
+            const task = sampleData.tasks.find(t => t.id === taskId);
+            if (task) {
+                task.completed = !task.completed;
+                loadPage(currentRoute); // Refresh the page
+            }
+        }
+
+        // BeProductive Landing Page Functions
+
+        function showAssessmentModal() {
+            alert('Assessment feature coming soon! This would open a productivity assessment to help you understand your current workflow and identify areas for improvement.');
+        }
+
+        function showPricingModal(plan) {
+            const planDetails = {
+                free: 'Free Plan: Perfect for getting started with basic productivity features.',
+                professional: 'Professional Plan ($14.99/month): Advanced features for serious productivity enthusiasts.',
+                teams: 'Teams Plan ($24.99/user/month): Complete team collaboration and management features.'
+            };
+            alert(`${planDetails[plan]}\n\nThis would normally open a detailed pricing modal with subscription options.`);
+        }
+
+        function handleBetaSignup(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('.beta-input').value;
+            if (email) {
+                alert(`Thank you for your interest! We've added ${email} to our beta waiting list. You'll be notified when BeProductive is ready for early access.`);
+                event.target.reset();
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+
+        function openLunaAssistant() {
+            alert('Luna AI Assistant: Your intelligent productivity companion!\n\nLuna can help you:\n• Optimize your workflow\n• Suggest productivity improvements\n• Analyze your habits\n• Provide personalized recommendations\n\nThis feature will be available in the full BeProductive application.');
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Add scroll animations for landing page sections
+        function observeLandingSections() {
+            const sections = document.querySelectorAll('.content-section, .feature-card, .pricing-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(section);
+            });
+        }
+
+        // Enhanced initialization for landing page features
+        function initializeLandingPage() {
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Initialize scroll animations
+            observeLandingSections();
+
+            // Add particle effect for hero section (simple version)
+            createHeroParticles();
+        }
+
+        function createHeroParticles() {
+            const hero = document.querySelector('.hero-section');
+            if (!hero) return;
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: 2px;
+                    height: 2px;
+                    background: hsl(221 83% 53% / 0.3);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: float ${3 + Math.random() * 4}s ease-in-out infinite;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation-delay: ${Math.random() * 2}s;
+                `;
+                hero.appendChild(particle);
+            }
+
+            // Add keyframes for particle animation
+            if (!document.querySelector('#particle-animation')) {
+                const style = document.createElement('style');
+                style.id = 'particle-animation';
+                style.textContent = `
+                    @keyframes float {
+                        0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+                        25% { transform: translateY(-20px) rotate(90deg); opacity: 0.6; }
+                        50% { transform: translateY(-10px) rotate(180deg); opacity: 0.8; }
+                        75% { transform: translateY(-30px) rotate(270deg); opacity: 0.4; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+            initializeLandingPage();
+        });
+    </script>
+</body>
+</html>

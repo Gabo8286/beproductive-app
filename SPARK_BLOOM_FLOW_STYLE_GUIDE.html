@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Spark Bloom Flow - Visual Style Guide & UI Mockups</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Custom Properties for Theme System */
+        :root {
+            /* Light theme colors */
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 221.2 83.2% 53.3%;
+            --success: 142.1 76.2% 36.3%;
+            --success-foreground: 355.7 100% 97.3%;
+            --warning: 32.2 95% 44.1%;
+            --warning-foreground: 355.7 100% 97.3%;
+            --info: 198.6 88.7% 48.4%;
+            --info-foreground: 355.7 100% 97.3%;
+        }
+
+        /* Dark theme */
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --card: 222.2 84% 4.9%;
+            --card-foreground: 210 40% 98%;
+            --primary: 217.2 91.2% 59.8%;
+            --primary-foreground: 222.2 84% 4.9%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 224.3 76.3% 94.0%;
+            --success: 142.1 70.6% 45.3%;
+            --success-foreground: 144.9 80.4% 10%;
+            --warning: 32.2 95% 44.1%;
+            --warning-foreground: 20.5 90.2% 4.3%;
+            --info: 198.6 88.7% 48.4%;
+            --info-foreground: 204 100% 9%;
+        }
+
+        /* High contrast theme */
+        .high-contrast {
+            --background: 0 0% 0%;
+            --foreground: 0 0% 100%;
+            --card: 0 0% 0%;
+            --card-foreground: 0 0% 100%;
+            --primary: 213 100% 60%;
+            --primary-foreground: 0 0% 0%;
+            --secondary: 0 0% 20%;
+            --secondary-foreground: 0 0% 100%;
+            --muted: 0 0% 20%;
+            --muted-foreground: 0 0% 80%;
+            --accent: 0 0% 20%;
+            --accent-foreground: 0 0% 100%;
+            --destructive: 0 100% 60%;
+            --destructive-foreground: 0 0% 100%;
+            --border: 0 0% 40%;
+            --input: 0 0% 30%;
+            --ring: 213 100% 60%;
+            --success: 120 100% 50%;
+            --success-foreground: 0 0% 0%;
+            --warning: 45 100% 50%;
+            --warning-foreground: 0 0% 0%;
+            --info: 200 100% 50%;
+            --info-foreground: 0 0% 0%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            transition: all 0.3s ease;
+        }
+
+        .card {
+            background-color: hsl(var(--card));
+            color: hsl(var(--card-foreground));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .btn-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+            border: 1px solid hsl(var(--border));
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: hsl(var(--accent));
+        }
+
+        .widget-card {
+            background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--muted)) 100%);
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .widget-card:hover {
+            border-color: hsl(var(--primary) / 20%);
+            box-shadow: 0 10px 25px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .success { color: hsl(var(--success)); }
+        .warning { color: hsl(var(--warning)); }
+        .info { color: hsl(var(--info)); }
+        .destructive { color: hsl(var(--destructive)); }
+
+        .progress-bar {
+            background-color: hsl(var(--muted));
+            border-radius: 9999px;
+            height: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: hsl(var(--primary));
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .badge-primary {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .badge-secondary {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .badge-success {
+            background-color: hsl(var(--success));
+            color: hsl(var(--success-foreground));
+        }
+
+        .badge-warning {
+            background-color: hsl(var(--warning));
+            color: hsl(var(--warning-foreground));
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .high-contrast .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animation keyframes */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--info)));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .grid-responsive {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .grid-responsive {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid-responsive {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button onclick="setTheme('light')" class="btn-secondary" title="Light Theme">☀️</button>
+        <button onclick="setTheme('dark')" class="btn-secondary" title="Dark Theme">🌙</button>
+        <button onclick="setTheme('high-contrast')" class="btn-secondary" title="High Contrast">🔲</button>
+    </div>
+
+    <!-- Header -->
+    <header class="p-8 text-center border-b border-border">
+        <h1 class="text-4xl font-bold text-gradient mb-4">🌟 Spark Bloom Flow</h1>
+        <p class="text-xl text-muted-foreground">Visual Style Guide & UI Component Library</p>
+        <p class="text-sm text-muted-foreground mt-2">Dedicated with Love - A comprehensive productivity application</p>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-8 space-y-12">
+        <!-- Branding & Identity -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">🎨 Branding & Identity</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-4">Logo & Typography</h3>
+                    <div class="space-y-4">
+                        <div class="text-4xl font-bold text-gradient">Spark Bloom Flow</div>
+                        <div class="text-2xl font-semibold">🌟 Productivity Made Beautiful</div>
+                        <div class="text-lg">Font Family: Inter (300, 400, 500, 600, 700)</div>
+                        <div class="text-sm text-muted-foreground">Tagline: "Dedicated with Love"</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-4">Brand Values</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-success">✨</span>
+                            <span>Simplicity & Elegance</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-info">🎯</span>
+                            <span>Focus & Productivity</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-warning">🌱</span>
+                            <span>Growth & Progress</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-destructive">❤️</span>
+                            <span>Care & Accessibility</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Color Palette -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">🎨 Color Palette</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Primary Colors -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">Primary Colors</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--primary))"></div>
+                            <div>
+                                <div class="font-medium">Primary</div>
+                                <div class="text-sm text-muted-foreground">HSL: 221.2 83.2% 53.3%</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--secondary))"></div>
+                            <div>
+                                <div class="font-medium">Secondary</div>
+                                <div class="text-sm text-muted-foreground">HSL: 210 40% 96%</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--accent))"></div>
+                            <div>
+                                <div class="font-medium">Accent</div>
+                                <div class="text-sm text-muted-foreground">HSL: 210 40% 96%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Semantic Colors -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">Semantic Colors</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--success))"></div>
+                            <div>
+                                <div class="font-medium success">Success</div>
+                                <div class="text-sm text-muted-foreground">HSL: 142.1 76.2% 36.3%</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--warning))"></div>
+                            <div>
+                                <div class="font-medium warning">Warning</div>
+                                <div class="text-sm text-muted-foreground">HSL: 32.2 95% 44.1%</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--info))"></div>
+                            <div>
+                                <div class="font-medium info">Info</div>
+                                <div class="text-sm text-muted-foreground">HSL: 198.6 88.7% 48.4%</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--destructive))"></div>
+                            <div>
+                                <div class="font-medium destructive">Destructive</div>
+                                <div class="text-sm text-muted-foreground">HSL: 0 84.2% 60.2%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Neutral Colors -->
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">Neutral Colors</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded border" style="background-color: hsl(var(--background))"></div>
+                            <div>
+                                <div class="font-medium">Background</div>
+                                <div class="text-sm text-muted-foreground">Adaptive</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--muted))"></div>
+                            <div>
+                                <div class="font-medium">Muted</div>
+                                <div class="text-sm text-muted-foreground">HSL: 210 40% 96%</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded" style="background-color: hsl(var(--border))"></div>
+                            <div>
+                                <div class="font-medium">Border</div>
+                                <div class="text-sm text-muted-foreground">HSL: 214.3 31.8% 91.4%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Typography Scale -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">✍️ Typography Scale</h2>
+            <div class="card">
+                <div class="space-y-4">
+                    <div class="text-4xl font-bold">Heading 1 - 36px</div>
+                    <div class="text-3xl font-bold">Heading 2 - 30px</div>
+                    <div class="text-2xl font-semibold">Heading 3 - 24px</div>
+                    <div class="text-xl font-semibold">Heading 4 - 20px</div>
+                    <div class="text-lg font-medium">Heading 5 - 18px</div>
+                    <div class="text-base">Body Text - 16px</div>
+                    <div class="text-sm text-muted-foreground">Small Text - 14px</div>
+                    <div class="text-xs text-muted-foreground">Extra Small - 12px</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Button Components -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">🔘 Button Components</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">Primary Buttons</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="btn-primary">Primary Action</button>
+                        <button class="btn-primary" disabled style="opacity: 0.5;">Disabled</button>
+                        <button class="btn-primary text-sm px-3 py-1">Small</button>
+                        <button class="btn-primary text-lg px-6 py-3">Large</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">Secondary Buttons</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="btn-secondary">Secondary Action</button>
+                        <button class="btn-secondary" disabled style="opacity: 0.5;">Disabled</button>
+                        <button class="btn-secondary text-sm px-3 py-1">Small</button>
+                        <button class="btn-secondary text-lg px-6 py-3">Large</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Badge & Status Components -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">🏷️ Badges & Status</h2>
+            <div class="card">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Status Badges</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge badge-primary">Active</span>
+                            <span class="badge badge-success">Completed</span>
+                            <span class="badge badge-warning">In Progress</span>
+                            <span class="badge" style="background-color: hsl(var(--destructive)); color: hsl(var(--destructive-foreground));">Blocked</span>
+                            <span class="badge badge-secondary">Draft</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Priority Badges</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="badge" style="background-color: hsl(var(--destructive)); color: hsl(var(--destructive-foreground));">🔥 Urgent</span>
+                            <span class="badge badge-warning">⚡ High</span>
+                            <span class="badge badge-primary">📋 Medium</span>
+                            <span class="badge badge-secondary">📝 Low</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Indicators -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">📊 Progress Indicators</h2>
+            <div class="card">
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Goal Progress</span>
+                            <span class="text-sm text-muted-foreground">75%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Habit Streak</span>
+                            <span class="text-sm text-muted-foreground">45%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%; background-color: hsl(var(--success))"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Task Completion</span>
+                            <span class="text-sm text-muted-foreground">90%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 90%; background-color: hsl(var(--info))"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Widget Mockups -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">📦 Widget Mockups</h2>
+            <div class="grid grid-responsive gap-6">
+                <!-- Tasks Widget -->
+                <div class="widget-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">✅</span>
+                            <h3 class="font-semibold">Next Steps</h3>
+                        </div>
+                        <button class="btn-secondary text-sm px-2 py-1">⚙️</button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold warning">12</div>
+                            <div class="text-xs text-muted-foreground">Pending</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold info">5</div>
+                            <div class="text-xs text-muted-foreground">Today</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold destructive">2</div>
+                            <div class="text-xs text-muted-foreground">Overdue</div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-2 rounded border border-border">
+                            <span class="text-sm">Review quarterly goals</span>
+                            <span class="badge badge-warning">High</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 rounded border border-border">
+                            <span class="text-sm">Finish project presentation</span>
+                            <span class="badge" style="background-color: hsl(var(--destructive)); color: hsl(var(--destructive-foreground));">Urgent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goals Widget -->
+                <div class="widget-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">🎯</span>
+                            <h3 class="font-semibold">Goals</h3>
+                        </div>
+                        <button class="btn-secondary text-sm px-2 py-1">⚙️</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-medium">Launch New Product</span>
+                                <span class="text-xs text-muted-foreground">85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-medium">Learn Spanish</span>
+                                <span class="text-xs text-muted-foreground">32%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 32%; background-color: hsl(var(--info))"></div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-lg font-semibold success">68%</div>
+                            <div class="text-xs text-muted-foreground">Average Progress</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Habits Widget -->
+                <div class="widget-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">🔄</span>
+                            <h3 class="font-semibold">Daily Habits</h3>
+                        </div>
+                        <button class="btn-secondary text-sm px-2 py-1">⚙️</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">Morning Exercise</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-muted-foreground">15 days</span>
+                                <span class="text-lg">🔥</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">Read 30 minutes</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-muted-foreground">8 days</span>
+                                <span class="text-lg">📚</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm">Meditation</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-muted-foreground">3 days</span>
+                                <span class="text-lg">🧘</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Insights Widget -->
+                <div class="widget-card glass-effect">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">🤖</span>
+                            <h3 class="font-semibold">AI Insights</h3>
+                        </div>
+                        <span class="badge badge-primary">New</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-3 rounded border border-border">
+                            <div class="text-sm text-muted-foreground mb-1">💡 Recommendation</div>
+                            <div class="text-sm">Consider batching similar tasks tomorrow morning for better focus</div>
+                        </div>
+                        <div class="p-3 rounded border border-border">
+                            <div class="text-sm text-muted-foreground mb-1">📈 Trend</div>
+                            <div class="text-sm">Your productivity peaks at 10 AM - schedule important tasks then</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Widget -->
+                <div class="widget-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">📊</span>
+                            <h3 class="font-semibold">This Week</h3>
+                        </div>
+                        <span class="text-sm text-success">+12%</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="text-xl font-bold">47</div>
+                            <div class="text-xs text-muted-foreground">Tasks Done</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold success">89%</div>
+                            <div class="text-xs text-muted-foreground">Goal Progress</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold info">12</div>
+                            <div class="text-xs text-muted-foreground">Habit Streaks</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xl font-bold warning">42h</div>
+                            <div class="text-xs text-muted-foreground">Focus Time</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Widget -->
+                <div class="widget-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">📅</span>
+                            <h3 class="font-semibold">Today's Schedule</h3>
+                        </div>
+                        <span class="text-sm text-muted-foreground">Nov 17</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 p-2 rounded border border-border">
+                            <div class="w-2 h-8 rounded" style="background-color: hsl(var(--primary))"></div>
+                            <div>
+                                <div class="text-sm font-medium">Team Meeting</div>
+                                <div class="text-xs text-muted-foreground">9:00 - 10:00 AM</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 rounded border border-border">
+                            <div class="w-2 h-8 rounded" style="background-color: hsl(var(--success))"></div>
+                            <div>
+                                <div class="text-sm font-medium">Focus Block</div>
+                                <div class="text-xs text-muted-foreground">10:30 AM - 12:00 PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen Layout Mockups -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">📱 Screen Layout Mockups</h2>
+
+            <!-- Dashboard Layout -->
+            <div class="card mb-8">
+                <h3 class="text-xl font-semibold mb-4">🏠 Dashboard Layout</h3>
+                <div class="border border-border rounded-lg p-4" style="min-height: 400px;">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-border">
+                        <div>
+                            <h1 class="text-2xl font-bold">Good morning, Gabriel! 👋</h1>
+                            <p class="text-muted-foreground">Ready to make today productive?</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="btn-secondary">⚙️</button>
+                            <button class="btn-primary">+ New Task</button>
+                        </div>
+                    </div>
+
+                    <!-- Widget Grid -->
+                    <div class="grid grid-responsive gap-4">
+                        <div class="widget-card h-48 flex items-center justify-center text-muted-foreground">
+                            📋 Tasks Widget
+                        </div>
+                        <div class="widget-card h-48 flex items-center justify-center text-muted-foreground">
+                            🎯 Goals Widget
+                        </div>
+                        <div class="widget-card h-48 flex items-center justify-center text-muted-foreground">
+                            🔄 Habits Widget
+                        </div>
+                        <div class="widget-card h-48 flex items-center justify-center text-muted-foreground">
+                            🤖 AI Insights
+                        </div>
+                        <div class="widget-card h-48 flex items-center justify-center text-muted-foreground">
+                            📊 Analytics
+                        </div>
+                        <div class="widget-card h-48 flex items-center justify-center text-muted-foreground">
+                            📅 Calendar
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile App Navigation -->
+            <div class="card">
+                <h3 class="text-xl font-semibold mb-4">📱 Mobile App Navigation</h3>
+                <div class="max-w-sm mx-auto border border-border rounded-2xl p-4" style="background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));">
+                    <!-- Mobile Header -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="text-lg font-semibold">Spark Bloom</div>
+                        <div class="w-8 h-8 rounded-full" style="background-color: hsl(var(--primary))"></div>
+                    </div>
+
+                    <!-- Tab Navigation -->
+                    <div class="flex justify-around mb-4 p-2 rounded-lg" style="background-color: hsl(var(--muted));">
+                        <div class="flex flex-col items-center p-2 rounded" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground));">
+                            <span class="text-lg">📝</span>
+                            <span class="text-xs">Capture</span>
+                        </div>
+                        <div class="flex flex-col items-center p-2">
+                            <span class="text-lg">📋</span>
+                            <span class="text-xs">Plan</span>
+                        </div>
+                        <div class="flex flex-col items-center p-2">
+                            <span class="text-lg">🎯</span>
+                            <span class="text-xs">Engage</span>
+                        </div>
+                        <div class="flex flex-col items-center p-2">
+                            <span class="text-lg">👤</span>
+                            <span class="text-xs">Profile</span>
+                        </div>
+                    </div>
+
+                    <!-- Mock Content -->
+                    <div class="space-y-3">
+                        <div class="p-3 rounded border border-border">
+                            <div class="font-medium text-sm">Quick Add Task</div>
+                            <div class="text-xs text-muted-foreground">Tap to add...</div>
+                        </div>
+                        <div class="p-3 rounded border border-border">
+                            <div class="font-medium text-sm">Voice Note</div>
+                            <div class="text-xs text-muted-foreground">Record your thoughts</div>
+                        </div>
+                        <div class="p-3 rounded border border-border">
+                            <div class="font-medium text-sm">Photo Capture</div>
+                            <div class="text-xs text-muted-foreground">Save visual reminders</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accessibility Features -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">♿ Accessibility Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">Focus Indicators</h3>
+                    <div class="space-y-4">
+                        <button class="btn-primary" style="outline: 2px solid hsl(var(--ring)); outline-offset: 2px;">Standard Focus</button>
+                        <button class="btn-secondary" style="outline: 4px solid hsl(var(--primary)); outline-offset: 4px;">High Contrast Focus</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-lg font-semibold mb-4">WCAG AAA Compliance</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="success">✅</span>
+                            <span>7:1 Contrast Ratio (High Contrast)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="success">✅</span>
+                            <span>Screen Reader Support</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="success">✅</span>
+                            <span>Keyboard Navigation</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="success">✅</span>
+                            <span>Motion Preferences</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Animation & Interactions -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">✨ Animations & Interactions</h2>
+            <div class="card">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <h3 class="font-semibold mb-2">Hover Effects</h3>
+                        <div class="widget-card cursor-pointer">
+                            <div class="text-center">Hover me!</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold mb-2">Loading States</h3>
+                        <div class="card">
+                            <div class="animate-pulse">
+                                <div class="h-4 bg-muted rounded mb-2"></div>
+                                <div class="h-4 bg-muted rounded w-3/4"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-semibold mb-2">Glass Effect</h3>
+                        <div class="glass-effect rounded-lg p-4">
+                            <div class="text-center">Glassmorphism</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- International Support -->
+        <section class="animate-fade-in">
+            <h2 class="text-3xl font-bold mb-6">🌍 International Support</h2>
+            <div class="card">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div class="text-center p-3 rounded border border-border">
+                        <div class="text-2xl mb-2">🇬🇧</div>
+                        <div class="font-medium">English</div>
+                        <div class="text-sm text-muted-foreground">Default</div>
+                    </div>
+                    <div class="text-center p-3 rounded border border-border">
+                        <div class="text-2xl mb-2">🇪🇸</div>
+                        <div class="font-medium">Español</div>
+                        <div class="text-sm text-muted-foreground">Spanish</div>
+                    </div>
+                    <div class="text-center p-3 rounded border border-border">
+                        <div class="text-2xl mb-2">🇸🇦</div>
+                        <div class="font-medium">العربية</div>
+                        <div class="text-sm text-muted-foreground">RTL Support</div>
+                    </div>
+                    <div class="text-center p-3 rounded border border-border">
+                        <div class="text-2xl mb-2">🇩🇪</div>
+                        <div class="font-medium">Deutsch</div>
+                        <div class="text-sm text-muted-foreground">German</div>
+                    </div>
+                    <div class="text-center p-3 rounded border border-border">
+                        <div class="text-2xl mb-2">🇫🇷</div>
+                        <div class="font-medium">Français</div>
+                        <div class="text-sm text-muted-foreground">French</div>
+                    </div>
+                    <div class="text-center p-3 rounded border border-border">
+                        <div class="text-2xl mb-2">🇵🇹</div>
+                        <div class="font-medium">Português</div>
+                        <div class="text-sm text-muted-foreground">Portuguese</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-border p-8 text-center text-muted-foreground">
+        <p>🌟 Spark Bloom Flow - Visual Style Guide</p>
+        <p class="text-sm mt-2">Dedicated with Love - Created with comprehensive design system for consistency</p>
+    </footer>
+
+    <script>
+        function setTheme(theme) {
+            document.body.className = theme === 'light' ? '' : theme;
+            localStorage.setItem('theme', theme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // Auto-detect system preference
+        if (!localStorage.getItem('theme')) {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark ? 'dark' : 'light');
+        }
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    </script>
+</body>
+</html>

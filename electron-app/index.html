@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/spark-icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeProductive Coding Framework - Your Personal AI-Powered Development Environment</title>
+    <meta name="description" content="Native macOS app for browser automation, AI-powered testing, and iPad Pro integration" />
+
+    <!-- Prevent zooming on mobile/touch -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- macOS/iOS optimizations -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="BeProductive Coding Framework" />
+
+    <!-- Preconnect to improve performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <!-- Inline critical CSS for faster initial render -->
+    <style>
+      /* Critical CSS for initial render */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f9fafb;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #111827;
+        }
+      }
+
+      /* Loading spinner */
+      .initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f9fafb;
+        z-index: 9999;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .initial-loader {
+          background-color: #111827;
+        }
+      }
+
+      .loader-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e5e7eb;
+        border-top: 4px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .loader-spinner {
+          border-color: #374151;
+          border-top-color: #60a5fa;
+        }
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loader-text {
+        margin-top: 16px;
+        color: #6b7280;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .loader-text {
+          color: #9ca3af;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Initial loading state -->
+      <div class="initial-loader">
+        <div>
+          <div class="loader-spinner"></div>
+          <div class="loader-text">
+            Loading BeProductive Coding Framework...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App initialization script -->
+    <script>
+      // Remove initial loader when React app loads
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const loader = document.querySelector('.initial-loader');
+          if (loader) {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+              loader.remove();
+            }, 300);
+          }
+        }, 1000);
+      });
+
+      // Electron security: Prevent navigation to external URLs
+      if (window.electronAPI) {
+        window.addEventListener('beforeunload', (event) => {
+          // Allow navigation within the app
+          return;
+        });
+
+        // Prevent new window creation
+        window.addEventListener('click', (event) => {
+          const target = event.target.closest('a');
+          if (target && target.href && !target.href.startsWith(window.location.origin)) {
+            event.preventDefault();
+            // Let Electron handle external links
+            if (window.electronAPI?.utils?.openExternal) {
+              window.electronAPI.utils.openExternal(target.href);
+            }
+          }
+        });
+      }
+
+      // Global error handling
+      window.addEventListener('error', (event) => {
+        console.error('Global error:', event.error);
+      });
+
+      window.addEventListener('unhandledrejection', (event) => {
+        console.error('Unhandled promise rejection:', event.reason);
+      });
+    </script>
+
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

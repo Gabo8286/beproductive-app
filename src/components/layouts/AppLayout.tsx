@@ -24,9 +24,9 @@ import {
 import { Timer } from "@/components/time/Timer";
 import { useConfigPanel } from "@/hooks/useConfigPanel";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { UnifiedBottomNav } from "@/components/navigation/UnifiedBottomNav";
 import { UniversalBreadcrumbs } from "@/components/navigation/UniversalBreadcrumbs";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { LunaFABProvider } from "@/components/luna/providers/LunaFABProvider";
 
 type NavigationMode = 'minimal-sidebar' | 'top-navigation' | 'full-sidebar';
 
@@ -35,6 +35,7 @@ export function AppLayout() {
   const navigate = useNavigate();
   const [navigationMode, setNavigationMode] = useState<NavigationMode>('top-navigation');
   const configPanel = useConfigPanel();
+
 
   // Auto-set Luna context based on route
   useLunaRouteContext();
@@ -51,6 +52,7 @@ export function AppLayout() {
     }, 250);
   };
 
+
   const initials =
     profile?.full_name
       ?.split(" ")
@@ -61,7 +63,11 @@ export function AppLayout() {
   // Top Navigation Layout (New Default)
   if (navigationMode === 'top-navigation') {
     return (
-      <div className="flex min-h-screen w-full flex-col">
+      <LunaFABProvider
+        fabSize="medium"
+        fabClassName="shadow-lg"
+      >
+        <div className="flex min-h-screen w-full flex-col">
         <SkipNavigation />
 
         {/* Top Navigation Bar */}
@@ -143,19 +149,25 @@ export function AppLayout() {
           <Outlet />
         </main>
 
-        {/* Unified Bottom Navigation */}
-        <UnifiedBottomNav />
+        {/* Universal Breadcrumbs Navigation with Luna FAB */}
+        <UniversalBreadcrumbs className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t" />
         <Timer />
+
 
         {/* Configuration Panel */}
         <ConfigPanel isOpen={configPanel.isOpen} onClose={configPanel.close} />
-      </div>
+        </div>
+      </LunaFABProvider>
     );
   }
 
   // Sidebar-based layouts
   return (
-    <SidebarProvider>
+    <LunaFABProvider
+      fabSize="medium"
+      fabClassName="shadow-lg"
+    >
+      <SidebarProvider>
       <SkipNavigation />
       <div className="flex min-h-screen w-full">
         {navigationMode === 'minimal-sidebar' ? <MinimalSidebar /> : <AppSidebar />}
@@ -248,12 +260,15 @@ export function AppLayout() {
             <Outlet />
           </main>
         </div>
-        <UnifiedBottomNav />
+        {/* Universal Breadcrumbs Navigation with Luna FAB */}
+        <UniversalBreadcrumbs className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t" />
       </div>
       <Timer />
 
+
       {/* Configuration Panel */}
       <ConfigPanel isOpen={configPanel.isOpen} onClose={configPanel.close} />
-    </SidebarProvider>
+      </SidebarProvider>
+    </LunaFABProvider>
   );
 }

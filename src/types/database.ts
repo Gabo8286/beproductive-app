@@ -1,4 +1,5 @@
-export type UserRole = "user" | "team_lead" | "admin" | "super_admin";
+import { UserRole } from '@/types/roles';
+
 export type WorkspaceType = "personal" | "team" | "organization";
 export type MemberRole = "member" | "admin" | "owner";
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "done";

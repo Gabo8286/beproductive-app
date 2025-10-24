@@ -89,9 +89,18 @@ export const useBreadcrumbs = (customBreadcrumbs?: BreadcrumbItem[]) => {
     const path = location.pathname;
     const breadcrumbs: BreadcrumbItem[] = [];
 
-    // Skip breadcrumbs for main app tabs (they are top-level)
-    if (path === '/app/capture' || path === '/app/plan' || path === '/app/engage' || path === '/app/profile') {
-      return [];
+    // Show minimal breadcrumbs for main app tabs to indicate location
+    if (path === '/app/capture') {
+      return [{ label: 'Capture', isCurrentPage: true }];
+    }
+    if (path === '/app/plan') {
+      return [{ label: 'Plan', isCurrentPage: true }];
+    }
+    if (path === '/app/engage') {
+      return [{ label: 'Engage', isCurrentPage: true }];
+    }
+    if (path === '/app/profile') {
+      return [{ label: 'Profile', isCurrentPage: true }];
     }
 
     // Auto-generate breadcrumbs based on common patterns

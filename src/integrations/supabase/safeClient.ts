@@ -12,7 +12,7 @@ function validateEnvironment(): {
   errors: string[];
 } {
   const url = import.meta.env.VITE_SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
   const errors: string[] = [];
 
   if (!url) {
@@ -22,9 +22,9 @@ function validateEnvironment(): {
   }
 
   if (!key) {
-    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY is not defined");
+    errors.push("VITE_SUPABASE_ANON_KEY is not defined");
   } else if (key.length < 20) {
-    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY appears to be invalid");
+    errors.push("VITE_SUPABASE_ANON_KEY appears to be invalid");
   }
 
   return {
@@ -93,19 +93,26 @@ class SafeSupabaseClient {
 
   private async createClientWithTimeout(): Promise<SupabaseClient<Database> | null> {
     return new Promise((resolve) => {
-      // Set timeout for initialization - reduced to 5 seconds
+      // Set timeout for initialization - increased to 15 seconds for better reliability
       const timeoutId = setTimeout(() => {
         console.warn(
-          "[SafeSupabase] Initialization timed out after 5s - continuing in offline mode"
+          "[SafeSupabase] Initialization timed out after 15s - continuing in offline mode"
         );
         this.initializationError = "Backend connection timed out";
         this.isInitialized = true;
         resolve(null);
-      }, 5000);
+      }, 15000);
 
       try {
         // Validate environment variables first
         const env = validateEnvironment();
+        console.log("[SafeSupabase] Environment validation result:", {
+          url: env.url ? `${env.url.substring(0, 20)}...` : "undefined",
+          keyLength: env.key ? env.key.length : 0,
+          isValid: env.isValid,
+          errors: env.errors
+        });
+
         if (!env.isValid) {
           console.error(
             "[SafeSupabase] Environment validation failed:",
@@ -118,7 +125,7 @@ class SafeSupabaseClient {
           return;
         }
 
-        console.log("[SafeSupabase] Creating Supabase client...");
+        console.log("[SafeSupabase] Creating Supabase client with URL:", env.url);
 
         // Create client with safe storage
         const client = createClient<Database>(env.url, env.key, {
@@ -132,7 +139,7 @@ class SafeSupabaseClient {
           // Add connection timeout
           global: {
             headers: {
-              "x-client-timeout": "5000",
+              "x-client-timeout": "15000",
             },
           },
         });
@@ -158,22 +165,30 @@ class SafeSupabaseClient {
         }
 
         // Test connectivity in background (don't block initialization)
+        const connectivityTest = setTimeout(() => {
+          console.warn("[SafeSupabase] Background connectivity test timed out after 10s");
+        }, 10000);
+
         client.auth
           .getSession()
           .then(({ data, error }) => {
+            clearTimeout(connectivityTest);
             if (error) {
               console.warn(
                 "[SafeSupabase] Initial session check warning:",
                 error.message,
+                "Error details:", error
               );
             } else {
-              console.log("[SafeSupabase] Session check completed successfully");
+              console.log("[SafeSupabase] Session check completed successfully", data ? "with session data" : "no session");
             }
           })
           .catch((error) => {
-            console.warn(
+            clearTimeout(connectivityTest);
+            console.error(
               "[SafeSupabase] Background session check failed:",
-              error,
+              error.message || error,
+              "Full error:", error
             );
           });
 

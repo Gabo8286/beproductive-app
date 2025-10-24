@@ -24,11 +24,11 @@ RewriteRule ^.*$ /index.html [L]
     # Enable XSS protection
     Header always set X-XSS-Protection "1; mode=block"
 
-    # Force HTTPS (only if SSL is configured)
-    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    # Force HTTPS (enabled for production)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
-    # Content Security Policy (basic)
-    Header always set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' https:;"
+    # Content Security Policy (production-optimized for Supabase auth)
+    Header always set Content-Security-Policy "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https: *.supabase.co *.supabase.com; font-src 'self' https:; frame-src 'self' https:;"
 </IfModule>
 
 # Compression for better performance
@@ -86,10 +86,10 @@ RewriteRule ^.*$ /index.html [L]
     Deny from all
 </Files>
 
-# Force HTTPS redirect (uncomment when SSL is configured)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Force HTTPS redirect (enabled for production)
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Redirect www to non-www (or vice versa)
-# RewriteCond %{HTTP_HOST} ^www\.be-productive\.app [NC]
-# RewriteRule ^(.*)$ https://be-productive.app/$1 [L,R=301]
+# Redirect www to non-www (enabled for production)
+RewriteCond %{HTTP_HOST} ^www\.be-productive\.app [NC]
+RewriteRule ^(.*)$ https://be-productive.app/$1 [L,R=301]

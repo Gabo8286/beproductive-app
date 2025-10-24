@@ -1,0 +1,62 @@
+{
+  "timestamp": "2025-10-17T20:59:02.551Z",
+  "passed": false,
+  "summary": {
+    "total": 5,
+    "passed": 2,
+    "failed": 3,
+    "threshold": {
+      "coverage": 80,
+      "bundleSize": 500,
+      "qualityScore": 80
+    }
+  },
+  "gates": [
+    {
+      "name": "Linting",
+      "passed": false,
+      "duration": 44451,
+      "details": "Linting errors found",
+      "stderr": ""
+    },
+    {
+      "name": "TypeScript",
+      "passed": true,
+      "duration": 186,
+      "details": "No type errors found",
+      "stderr": ""
+    },
+    {
+      "name": "Tests & Coverage",
+      "passed": false,
+      "duration": 46297,
+      "details": "Tests: Failed",
+      "coverage": null,
+      "coverageThreshold": 80,
+      "stderr": "failed to load config from /Users/gabrielsotomorales/projects/spark-bloom-flow/vitest.config.ts\n\n⎯⎯⎯⎯⎯⎯⎯ Startup Error ⎯⎯⎯⎯⎯⎯⎯⎯\nError [ERR_MODULE_NOT_FOUND]: Cannot find package '@vitejs/plugin-react' imported from /Users/gabrielsotomorales/projects/spark-bloom-flow/vitest.config.ts.timestamp-1760734734439-a6e8f99874b71.mjs\n    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:266:9)\n    at packageResolve (node:internal/modules/esm/resolve:767:81)\n    at moduleResolve (node:internal/modules/esm/resolve:853:18)\n    at defaultResolve (node:internal/modules/esm/resolve:983:11)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:717:20)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:694:38)\n    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:308:38)\n    at ModuleJob._link (node:internal/modules/esm/module_job:183:49) {\n  code: 'ERR_MODULE_NOT_FOUND'\n}\n\n\n\n\n"
+    },
+    {
+      "name": "Bundle Size",
+      "passed": false,
+      "duration": 5612,
+      "details": "Bundle analysis: Failed",
+      "bundleSize": null,
+      "bundleThreshold": 500,
+      "stderr": "file:///Users/gabrielsotomorales/projects/spark-bloom-flow/scripts/bundle-analyzer.js:3\nimport { analyzeBundle } from 'rollup-plugin-visualizer';\n         ^^^^^^^^^^^^^\nSyntaxError: Named export 'analyzeBundle' not found. The requested module 'rollup-plugin-visualizer' is a CommonJS module, which may not support all module.exports as named exports.\nCommonJS modules can always be imported via the default export, for example using:\n\nimport pkg from 'rollup-plugin-visualizer';\nconst { analyzeBundle } = pkg;\n\n    at ModuleJob._instantiate (node:internal/modules/esm/module_job:228:21)\n    at async ModuleJob.run (node:internal/modules/esm/module_job:337:5)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:651:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v22.19.0\n"
+    },
+    {
+      "name": "Code Quality",
+      "passed": true,
+      "duration": 464,
+      "details": "Quality analysis: Completed",
+      "qualityScore": null,
+      "qualityThreshold": 80,
+      "stderr": "⚠️ Test coverage analysis failed (tests may not be configured)\n"
+    }
+  ],
+  "environment": {
+    "node": "v22.19.0",
+    "platform": "darwin",
+    "strict": false
+  }
+}

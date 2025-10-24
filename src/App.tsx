@@ -169,6 +169,9 @@ function AppContent() {
 
   console.log('[AppContent] Auth state:', { authLoading, authError: authError ? 'ERROR' : 'OK' });
 
+  // Add simple test output for debugging
+  console.log('[AppContent] Routes rendered at:', new Date().toISOString());
+
   useOfflineDetection();
 
   // Show error banner if auth fails (non-blocking)
@@ -202,6 +205,14 @@ function AppContent() {
           />
           <Route
             path="/signup/invite/:token"
+            element={
+              <Suspense fallback={<PageLoading />}>
+                <InvitationSignup />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/invitation/:token"
             element={
               <Suspense fallback={<PageLoading />}>
                 <InvitationSignup />
@@ -278,8 +289,8 @@ function AppContent() {
                 <ProfileTab />
               </Suspense>
             } />
-            {/* Redirect /app to /app/capture by default */}
-            <Route index element={<Navigate to="/app/capture" replace />} />
+            {/* Redirect /app to /app/plan by default - Plan-first approach */}
+            <Route index element={<Navigate to="/app/plan" replace />} />
           </Route>
 
           {/* Protected routes - legacy AppLayout for detailed views */}
@@ -615,6 +626,7 @@ function AppContent() {
 
 function App() {
   console.log('[App] App component rendering...');
+  console.error('[App] DEBUG: App component started rendering at', new Date().toISOString());
 
   // Temporary minimal test - bypass all complex providers
   return (

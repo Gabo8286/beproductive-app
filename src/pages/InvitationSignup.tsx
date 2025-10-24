@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,10 @@ import {
   Lock,
   User,
   Calendar,
-  Sparkles
+  Sparkles,
+  QrCode,
+  Zap,
+  Shield
 } from "lucide-react";
 import { useInvitationValidation } from "@/hooks/useBetaSignupManagement";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,17 +27,27 @@ import { useAuth } from "@/contexts/AuthContext";
 
 interface InvitationData {
   valid: boolean;
-  signup_id: string;
-  email: string;
-  name: string;
+  signup_id?: string;
+  email?: string;
+  name?: string;
   expires_at: string;
+  // QR invitation specific fields
+  invitation_id?: string;
+  description?: string;
+  auto_approve?: boolean;
+  uses_remaining?: number;
 }
 
 const InvitationSignup: React.FC = () => {
   const { token } = useParams<{ token: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { validateTokenAsync, isValidating } = useInvitationValidation();
+
+  // Check if this is a QR code invitation
+  const isQRInvitation = searchParams.get('qr') === 'true';
+  const autoApprove = searchParams.get('auto_approve') === 'true';
 
   const [invitationData, setInvitationData] = useState<InvitationData | null>(null);
   const [error, setError] = useState<string>("");
@@ -42,6 +55,8 @@ const InvitationSignup: React.FC = () => {
   const [accountCreated, setAccountCreated] = useState(false);
 
   // Form state
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -58,19 +73,51 @@ const InvitationSignup: React.FC = () => {
       return;
     }
 
-    validateTokenAsync(token)
-      .then((data) => {
-        setInvitationData(data);
-      })
-      .catch((err) => {
+    // Use different validation for QR invitations
+    const validateInvitation = async () => {
+      try {
+        if (isQRInvitation) {
+          // Validate QR invitation token
+          const { data, error } = await supabase.rpc('validate_qr_invitation_token', {
+            token: token
+          });
+
+          if (error) throw error;
+          if (!data?.valid) {
+            throw new Error(data?.error || 'Invalid QR invitation');
+          }
+
+          setInvitationData({
+            valid: true,
+            invitation_id: data.invitation_id,
+            description: data.description,
+            auto_approve: data.auto_approve,
+            expires_at: data.expires_at,
+            uses_remaining: data.uses_remaining
+          });
+        } else {
+          // Use existing beta signup validation
+          const data = await validateTokenAsync(token);
+          setInvitationData(data);
+        }
+      } catch (err: any) {
         setError(err.message || "Invalid or expired invitation");
-      });
-  }, [token, validateTokenAsync]);
+      }
+    };
+
+    validateInvitation();
+  }, [token, isQRInvitation, validateTokenAsync]);
 
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!invitationData) return;
+
+    // For QR invitations, collect user info first
+    if (isQRInvitation && (!email || !name)) {
+      setError("Please provide your email and full name");
+      return;
+    }
 
     // Validation
     if (password.length < 8) {
@@ -92,16 +139,40 @@ const InvitationSignup: React.FC = () => {
     setError("");
 
     try {
+      let signupEmail = email;
+      let signupName = name;
+      let signupId = invitationData.signup_id;
+
+      // Handle QR invitation signup
+      if (isQRInvitation) {
+        // Consume QR invitation and create beta signup
+        const { data: qrData, error: qrError } = await supabase.rpc('consume_qr_invitation', {
+          token: token,
+          signup_email: email,
+          signup_name: name
+        });
+
+        if (qrError) throw qrError;
+        if (!qrData?.success) {
+          throw new Error(qrData?.error || 'Failed to process QR invitation');
+        }
+
+        signupId = qrData.signup_id;
+        signupEmail = email;
+        signupName = name;
+      }
+
       // Create account with Supabase
       const { data, error: signUpError } = await supabase.auth.signUp({
-        email: invitationData.email,
+        email: signupEmail,
         password: password,
         options: {
           data: {
-            full_name: invitationData.name,
-            beta_signup_id: invitationData.signup_id,
+            full_name: signupName,
+            beta_signup_id: signupId,
             invitation_token: token,
-            onboarding_source: 'beta_invitation'
+            onboarding_source: isQRInvitation ? 'qr_invitation' : 'beta_invitation',
+            auto_approved: isQRInvitation && autoApprove
           }
         }
       });
@@ -114,6 +185,7 @@ const InvitationSignup: React.FC = () => {
         // Account created successfully
         setAccountCreated(true);
 
+<<<<<<< HEAD
         // Optional: Mark invitation as used in the database
         await (supabase
           .from('beta_signups' as any) as any)
@@ -122,6 +194,18 @@ const InvitationSignup: React.FC = () => {
             user_id: data.user.id
           })
           .eq('id', invitationData.signup_id);
+=======
+        // Mark invitation as used in the database
+        if (signupId) {
+          await supabase
+            .from('beta_signups')
+            .update({
+              account_created_at: new Date().toISOString(),
+              user_id: data.user.id
+            })
+            .eq('id', signupId);
+        }
+>>>>>>> 74aa79e (🔧 CRITICAL FIX: Resolve login authentication issue on be-productive.app)
 
         // Redirect to dashboard after a short delay
         setTimeout(() => {
@@ -235,24 +319,59 @@ const InvitationSignup: React.FC = () => {
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
-              <Mail className="h-5 w-5 text-primary" />
-              Beta Invitation
+              {isQRInvitation ? (
+                <>
+                  <QrCode className="h-5 w-5 text-primary" />
+                  QR Code Invitation
+                </>
+              ) : (
+                <>
+                  <Mail className="h-5 w-5 text-primary" />
+                  Beta Invitation
+                </>
+              )}
             </CardTitle>
             <CardDescription>
-              Complete your account setup to join the BeProductive beta
+              {isQRInvitation
+                ? "You've been invited via QR code with instant approval!"
+                : "Complete your account setup to join the BeProductive beta"
+              }
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Invitation Info */}
             {invitationData && (
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border">
-                <div className="flex items-start gap-3">
-                  <User className="h-5 w-5 text-primary mt-0.5" />
-                  <div className="flex-1">
-                    <p className="font-medium">{invitationData.name}</p>
-                    <p className="text-sm text-muted-foreground">{invitationData.email}</p>
+                {isQRInvitation ? (
+                  <div className="flex items-start gap-3">
+                    <QrCode className="h-5 w-5 text-primary mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-medium">{invitationData.description}</p>
+                      <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                        {invitationData.auto_approve && (
+                          <div className="flex items-center gap-1">
+                            <Zap className="h-3 w-3 text-green-600" />
+                            <span className="text-green-600 font-medium">Auto-Approval</span>
+                          </div>
+                        )}
+                        {invitationData.uses_remaining !== undefined && (
+                          <div className="flex items-center gap-1">
+                            <Shield className="h-3 w-3" />
+                            <span>{invitationData.uses_remaining} uses remaining</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-start gap-3">
+                    <User className="h-5 w-5 text-primary mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-medium">{invitationData.name}</p>
+                      <p className="text-sm text-muted-foreground">{invitationData.email}</p>
+                    </div>
+                  </div>
+                )}
 
                 {expiryInfo && (
                   <div className="flex items-center gap-2 mt-3">
@@ -269,6 +388,43 @@ const InvitationSignup: React.FC = () => {
 
             {/* Account Creation Form */}
             <form onSubmit={handleCreateAccount} className="space-y-4">
+              {/* User Info for QR Invitations */}
+              {isQRInvitation && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email address"
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Enter your full name"
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="password">Create Password</Label>
                 <div className="relative">
@@ -337,15 +493,41 @@ const InvitationSignup: React.FC = () => {
               )}
 
               {/* Trial Information */}
-              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                <p className="text-sm text-green-800 font-medium mb-1">
-                  🎉 Exclusive Beta Benefits
+              <div className={`p-4 rounded-lg border ${
+                isQRInvitation && autoApprove
+                  ? 'bg-blue-50 border-blue-200'
+                  : 'bg-green-50 border-green-200'
+              }`}>
+                <p className={`text-sm font-medium mb-1 ${
+                  isQRInvitation && autoApprove
+                    ? 'text-blue-800'
+                    : 'text-green-800'
+                }`}>
+                  {isQRInvitation && autoApprove
+                    ? '⚡ QR Code Instant Access'
+                    : '🎉 Exclusive Beta Benefits'
+                  }
                 </p>
-                <ul className="text-xs text-green-700 space-y-1">
-                  <li>• 14-day Professional trial (no credit card required)</li>
-                  <li>• Early access to new features</li>
-                  <li>• Direct feedback channel to our team</li>
-                  <li>• Special beta pricing when we launch</li>
+                <ul className={`text-xs space-y-1 ${
+                  isQRInvitation && autoApprove
+                    ? 'text-blue-700'
+                    : 'text-green-700'
+                }`}>
+                  {isQRInvitation && autoApprove ? (
+                    <>
+                      <li>• ⚡ Instant approval - no waiting required</li>
+                      <li>• 🚀 Immediate access to BeProductive</li>
+                      <li>• 💎 14-day Professional trial activated instantly</li>
+                      <li>• 🎯 Trusted invitation with premium benefits</li>
+                    </>
+                  ) : (
+                    <>
+                      <li>• 14-day Professional trial (no credit card required)</li>
+                      <li>• Early access to new features</li>
+                      <li>• Direct feedback channel to our team</li>
+                      <li>• Special beta pricing when we launch</li>
+                    </>
+                  )}
                 </ul>
               </div>
 

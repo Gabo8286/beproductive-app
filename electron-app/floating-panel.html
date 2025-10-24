@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeProductive Coding Framework - Control Panel</title>
+
+    <!-- Tailwind CSS CDN for the floating panel -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 16px;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: rgba(31, 41, 55, 0.9);
+          color: white;
+        }
+      }
+
+      .floating-container {
+        padding: 16px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .control-button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .control-button:hover {
+        background: rgba(255, 255, 255, 0.95);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .control-button {
+          background: rgba(55, 65, 81, 0.8);
+          border-color: rgba(255, 255, 255, 0.1);
+          color: white;
+        }
+
+        .control-button:hover {
+          background: rgba(75, 85, 99, 0.9);
+        }
+      }
+
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 6px;
+        margin-bottom: 8px;
+        font-size: 12px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .status-indicator {
+          background: rgba(255, 255, 255, 0.05);
+        }
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .status-online {
+        background-color: #10b981;
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+      }
+
+      .status-offline {
+        background-color: #6b7280;
+      }
+
+      .keyboard-shortcut {
+        font-size: 10px;
+        color: #6b7280;
+        background: rgba(0, 0, 0, 0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: auto;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .keyboard-shortcut {
+          color: #9ca3af;
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-container">
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 16px;">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 600; color: #374151;">
+          🎯 Quick Controls
+        </h2>
+      </div>
+
+      <!-- Status Indicators -->
+      <div class="status-indicator">
+        <div style="display: flex; align-items: center;">
+          <div class="status-dot status-online"></div>
+          <span>App Status</span>
+        </div>
+        <span>Ready</span>
+      </div>
+
+      <div class="status-indicator">
+        <div style="display: flex; align-items: center;">
+          <div class="status-dot status-online"></div>
+          <span>Claude AI</span>
+        </div>
+        <span>Online</span>
+      </div>
+
+      <div class="status-indicator" id="ipad-status">
+        <div style="display: flex; align-items: center;">
+          <div class="status-dot status-offline" id="ipad-dot"></div>
+          <span>iPad Pro</span>
+        </div>
+        <span id="ipad-text">Disconnected</span>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="margin-top: 16px;">
+        <button class="control-button" onclick="takeScreenshot()">
+          <span>📸 Screenshot</span>
+          <span class="keyboard-shortcut">⌘⇧4</span>
+        </button>
+
+        <button class="control-button" onclick="newBrowser()">
+          <span>🌐 New Browser</span>
+          <span class="keyboard-shortcut">⌘B</span>
+        </button>
+
+        <button class="control-button" onclick="askClaude()">
+          <span>🤖 Ask Claude</span>
+          <span class="keyboard-shortcut">⌘/</span>
+        </button>
+
+        <button class="control-button" onclick="runQuickTest()">
+          <span>⚡ Quick Test</span>
+          <span class="keyboard-shortcut">⌘T</span>
+        </button>
+
+        <button class="control-button" onclick="toggleSidecar()">
+          <span>📱 Toggle Sidecar</span>
+          <span class="keyboard-shortcut">⌘⌃S</span>
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top: auto; text-align: center; font-size: 10px; color: #6b7280; padding-top: 16px;">
+        BeProductive Coding Framework v1.0
+      </div>
+    </div>
+
+    <script>
+      // Check if we're running in Electron
+      const isElectron = window.electronAPI !== undefined;
+
+      // Function to communicate with main window
+      function sendToMainWindow(action, data = {}) {
+        if (isElectron && window.electronAPI) {
+          // Send message to main process which will forward to main window
+          window.electronAPI.window.sendToMainWindow?.(action, data);
+        } else {
+          console.log(`Floating panel action: ${action}`, data);
+        }
+      }
+
+      // Quick action functions
+      function takeScreenshot() {
+        sendToMainWindow('take-screenshot');
+        if (isElectron && window.electronAPI?.automation?.takeScreenshot) {
+          window.electronAPI.automation.takeScreenshot({ type: 'selection' });
+        }
+      }
+
+      function newBrowser() {
+        sendToMainWindow('new-browser');
+        if (isElectron && window.electronAPI?.automation?.startBrowser) {
+          window.electronAPI.automation.startBrowser({
+            browser: 'chrome',
+            url: 'http://localhost:5173'
+          });
+        }
+      }
+
+      function askClaude() {
+        sendToMainWindow('open-claude-chat');
+        // Focus main window and open chat
+        if (isElectron && window.electronAPI?.window) {
+          // This would need to be implemented in the main process
+        }
+      }
+
+      function runQuickTest() {
+        sendToMainWindow('run-quick-test');
+        if (isElectron && window.electronAPI?.automation?.runTest) {
+          window.electronAPI.automation.runTest({ type: 'quick' });
+        }
+      }
+
+      function toggleSidecar() {
+        sendToMainWindow('toggle-sidecar');
+        if (isElectron && window.electronAPI?.sidecar) {
+          // Toggle sidecar status
+          window.electronAPI.sidecar.getStatus().then(result => {
+            if (result.success) {
+              if (result.status.enabled) {
+                window.electronAPI.sidecar.disable();
+              } else {
+                window.electronAPI.sidecar.enable();
+              }
+            }
+          });
+        }
+      }
+
+      // Update status indicators
+      function updateStatus() {
+        if (isElectron && window.electronAPI?.sidecar?.getStatus) {
+          window.electronAPI.sidecar.getStatus().then(result => {
+            if (result.success) {
+              const dot = document.getElementById('ipad-dot');
+              const text = document.getElementById('ipad-text');
+
+              if (result.status.iPadConnected) {
+                dot.className = 'status-dot status-online';
+                text.textContent = result.status.enabled ? 'Sidecar Active' : 'Connected';
+              } else {
+                dot.className = 'status-dot status-offline';
+                text.textContent = 'Disconnected';
+              }
+            }
+          }).catch(console.error);
+        }
+      }
+
+      // Initialize and update status periodically
+      document.addEventListener('DOMContentLoaded', () => {
+        updateStatus();
+        setInterval(updateStatus, 5000); // Update every 5 seconds
+
+        // Add global keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+          if (e.metaKey) { // Cmd key on macOS
+            switch (e.key) {
+              case 'b':
+                e.preventDefault();
+                newBrowser();
+                break;
+              case 't':
+                e.preventDefault();
+                runQuickTest();
+                break;
+              case '/':
+                e.preventDefault();
+                askClaude();
+                break;
+              case '4':
+                if (e.shiftKey) {
+                  e.preventDefault();
+                  takeScreenshot();
+                }
+                break;
+            }
+          }
+        });
+
+        // Add visual feedback for button presses
+        document.querySelectorAll('.control-button').forEach(button => {
+          button.addEventListener('mousedown', () => {
+            button.style.transform = 'translateY(0px) scale(0.98)';
+          });
+
+          button.addEventListener('mouseup', () => {
+            button.style.transform = 'translateY(-1px) scale(1)';
+          });
+
+          button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translateY(0px) scale(1)';
+          });
+        });
+      });
+
+      // Listen for system theme changes
+      if (window.matchMedia) {
+        const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        darkModeQuery.addEventListener('change', (e) => {
+          // The CSS will automatically handle the theme change
+          console.log('Theme changed to:', e.matches ? 'dark' : 'light');
+        });
+      }
+
+      // Auto-hide panel when clicking outside (if focus is lost)
+      let hideTimeout;
+
+      window.addEventListener('blur', () => {
+        hideTimeout = setTimeout(() => {
+          if (window.electronAPI?.window?.hide) {
+            // Hide the floating panel after 2 seconds of inactivity
+            // This would need to be implemented in the main process
+          }
+        }, 2000);
+      });
+
+      window.addEventListener('focus', () => {
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+        }
+      });
+    </script>
+  </body>
+</html>

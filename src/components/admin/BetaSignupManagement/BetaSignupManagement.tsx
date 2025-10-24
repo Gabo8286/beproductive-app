@@ -24,6 +24,7 @@ import {
   Send,
   Eye,
   Settings,
+  QrCode,
 } from "lucide-react";
 import { withSuperAdminAccess } from "@/hooks/useSupeRadminAccess";
 import { BetaSignupOverview } from "./BetaSignupOverview";
@@ -31,6 +32,7 @@ import { PendingApprovals } from "./PendingApprovals";
 import { ApprovedUsers } from "./ApprovedUsers";
 import { EmailHistory } from "./EmailHistory";
 import { BetaSignupSettings } from "./BetaSignupSettings";
+import { SuperAdminQRGenerator } from "./SuperAdminQRGenerator";
 
 interface BetaSignupStats {
   totalSignups: number;
@@ -124,7 +126,7 @@ const BetaSignupManagement: React.FC = () => {
         onValueChange={setActiveTab}
         className="space-y-6"
       >
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="pending">
             Pending
@@ -135,6 +137,10 @@ const BetaSignupManagement: React.FC = () => {
             )}
           </TabsTrigger>
           <TabsTrigger value="approved">Approved</TabsTrigger>
+          <TabsTrigger value="qr-codes">
+            <QrCode className="h-4 w-4 mr-1" />
+            QR Codes
+          </TabsTrigger>
           <TabsTrigger value="rejected">Rejected</TabsTrigger>
           <TabsTrigger value="emails">Email History</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
@@ -363,6 +369,10 @@ const BetaSignupManagement: React.FC = () => {
 
         <TabsContent value="approved">
           <ApprovedUsers />
+        </TabsContent>
+
+        <TabsContent value="qr-codes">
+          <SuperAdminQRGenerator />
         </TabsContent>
 
         <TabsContent value="rejected">
