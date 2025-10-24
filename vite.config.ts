@@ -1,7 +1,8 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import { componentTagger } from "lovable-tagger";
 import * as path from "path";
+
+import react from "@vitejs/plugin-react-swc";
+import { defineConfig } from "vite";
+import { componentTagger } from "lovable-tagger";
 
 // Vite config with mobile development support
 // Use 'npm run dev:mobile' for mobile-sized floating window development

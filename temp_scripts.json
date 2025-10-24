@@ -1,0 +1,12 @@
+{
+  "check:all": "npm run lint && npm run type-check && npm run test:run",
+  "check:pre-commit": "npm run lint && npm run type-check && npm run test:run && npm run check:todos",
+  "check:todos": "./scripts/check-todos.sh",
+  "check:bundle": "npm run build && npm run build:analyze",
+  "check:consistency": "../shared/scripts/validate-consistency.sh",
+  "quality:gate": "npm run check:all && npm run check:bundle",
+  "quality:full": "npm run quality:gate && npm run check:consistency",
+  "maintenance:daily": "../shared/scripts/daily-maintenance.sh",
+  "maintenance:weekly": "../shared/scripts/weekly-maintenance.sh",
+  "maintenance:monthly": "../shared/scripts/monthly-maintenance.sh"
+}

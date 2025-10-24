@@ -28,14 +28,20 @@ class LoginDiagnostic {
 
     async runFullDiagnostic() {
         console.log('╔═══════════════════════════════════════════════════════════╗');
-        console.log('║            🔍 Login Issue Diagnostic Tool                 ║');
+        console.log('║            🔍 Enhanced Login Diagnostic Tool              ║');
         console.log('║              be-productive.app Analysis                   ║');
         console.log('╚═══════════════════════════════════════════════════════════╝\n');
 
         await this.checkProductionSite();
         await this.checkDatabaseConnection();
+        await this.checkSupabaseProjectDetails();
+
+        // Check both specified user accounts
         await this.checkUserExistence('gabosoto@be-productive.app');
+        await this.checkUserExistence('gabotico82@gmail.com');
+
         await this.checkAuthConfiguration();
+        await this.testLoginAttempts();
         await this.provideSolutions();
     }
 
@@ -76,9 +82,9 @@ class LoginDiagnostic {
 
         try {
             // Test basic connection
-            const { data, error } = await this.supabase
+            const { data, error, count } = await this.supabase
                 .from('profiles')
-                .select('count', { count: 'exact', head: true });
+                .select('*', { count: 'exact' });
 
             if (error) {
                 console.log(`❌ Database connection failed: ${error.message}`);
@@ -86,17 +92,27 @@ class LoginDiagnostic {
             }
 
             console.log('✅ Database connection successful');
-            console.log(`📊 Total user profiles: ${data || 0}`);
+            console.log(`📊 Total user profiles: ${count || 0}`);
 
-            // Check auth.users table
-            const { data: authData } = await this.supabase
-                .rpc('get_user_count')
-                .catch(() => ({ data: null }));
+            // If we have profiles, show some details
+            if (data && data.length > 0) {
+                console.log('👥 Found user profiles:');
+                data.forEach((profile, index) => {
+                    console.log(`   ${index + 1}. ${profile.email} (${profile.role || 'user'})`);
+                });
+            }
 
-            if (authData !== null) {
-                console.log(`👥 Total auth users: ${authData}`);
-            } else {
-                console.log('⚠️  Cannot access auth.users table (expected in production)');
+            // Try to check user roles specifically
+            const { data: roleData, error: roleError } = await this.supabase
+                .from('user_roles')
+                .select('*');
+
+            if (!roleError && roleData) {
+                console.log(`🎭 Total role assignments: ${roleData.length}`);
+                if (roleData.length > 0) {
+                    const superAdmins = roleData.filter(r => r.role === 'super_admin');
+                    console.log(`👑 Super admins: ${superAdmins.length}`);
+                }
             }
 
         } catch (error) {
@@ -105,8 +121,19 @@ class LoginDiagnostic {
         console.log('');
     }
 
+    async checkSupabaseProjectDetails() {
+        console.log('🏗️  3. SUPABASE PROJECT VERIFICATION');
+        console.log('────────────────────────────────────────────────────────────');
+
+        console.log(`🆔 Project ID: ${this.supabaseUrl.split('//')[1].split('.')[0]}`);
+        console.log(`🌐 Project URL: ${this.supabaseUrl}`);
+        console.log(`🔑 Key length: ${this.supabaseKey.length} characters`);
+        console.log(`🔑 Key prefix: ${this.supabaseKey.substring(0, 20)}...`);
+        console.log('');
+    }
+
     async checkUserExistence(email) {
-        console.log('👤 3. USER ACCOUNT VERIFICATION');
+        console.log(`👤 USER ACCOUNT VERIFICATION: ${email}`);
         console.log('────────────────────────────────────────────────────────────');
 
         try {
@@ -119,7 +146,18 @@ class LoginDiagnostic {
 
             if (profileError && profileError.code === 'PGRST116') {
                 console.log(`❌ User profile not found: ${email}`);
-                console.log('   This means the user account does not exist in the database');
+                console.log('   This means the user account does not exist in the profiles table');
+
+                // Try to check if there's a role assignment without profile
+                const { data: roleData } = await this.supabase
+                    .from('user_roles')
+                    .select('*')
+                    .eq('email', email);
+
+                if (roleData && roleData.length > 0) {
+                    console.log(`⚠️  Found role assignment without profile: ${roleData[0].role}`);
+                }
+
                 this.userExists = false;
                 return;
             }
@@ -134,6 +172,17 @@ class LoginDiagnostic {
             console.log(`   - Role: ${profile.role || 'user'}`);
             console.log(`   - Created: ${new Date(profile.created_at).toLocaleDateString()}`);
             console.log(`   - Onboarding completed: ${profile.onboarding_completed ? 'Yes' : 'No'}`);
+
+            // Check for role assignments
+            const { data: roleData } = await this.supabase
+                .from('user_roles')
+                .select('*')
+                .eq('user_id', profile.id);
+
+            if (roleData && roleData.length > 0) {
+                console.log(`   - Role assignments: ${roleData.map(r => r.role).join(', ')}`);
+            }
+
             this.userExists = true;
 
         } catch (error) {
@@ -168,6 +217,52 @@ class LoginDiagnostic {
             console.log('⚠️  Environment variables need production URLs');
         }
         console.log('');
+    }
+
+    async testLoginAttempts() {
+        console.log('🔐 LOGIN ATTEMPT TESTING');
+        console.log('────────────────────────────────────────────────────────────');
+
+        const testAccounts = [
+            { email: 'gabosoto@be-productive.app', password: 'SecureAdmin2024!', expectedRole: 'super_admin' },
+            { email: 'gabotico82@gmail.com', password: 'SecureUser2024!', expectedRole: 'user' }
+        ];
+
+        for (const account of testAccounts) {
+            console.log(`🧪 Testing login for: ${account.email}`);
+
+            try {
+                const { data, error } = await this.supabase.auth.signInWithPassword({
+                    email: account.email,
+                    password: account.password
+                });
+
+                if (error) {
+                    console.log(`❌ Login failed: ${error.message}`);
+
+                    // Specific error analysis
+                    if (error.message.includes('Invalid login credentials')) {
+                        console.log('   → Either email or password is incorrect');
+                    } else if (error.message.includes('Email not confirmed')) {
+                        console.log('   → Email verification required');
+                    } else if (error.message.includes('User not found')) {
+                        console.log('   → User account does not exist in auth.users table');
+                    }
+                } else {
+                    console.log(`✅ Login successful for: ${account.email}`);
+                    console.log(`   - User ID: ${data.user.id}`);
+                    console.log(`   - Email confirmed: ${data.user.email_confirmed_at ? 'Yes' : 'No'}`);
+                    console.log(`   - Last sign in: ${data.user.last_sign_in_at || 'Never'}`);
+
+                    // Sign out immediately after test
+                    await this.supabase.auth.signOut();
+                    console.log('   - Test session signed out');
+                }
+            } catch (error) {
+                console.log(`❌ Login test failed: ${error.message}`);
+            }
+            console.log('');
+        }
     }
 
     async provideSolutions() {

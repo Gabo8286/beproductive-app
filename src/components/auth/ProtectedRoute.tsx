@@ -15,7 +15,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Shield, ArrowLeft, Upgrade } from "lucide-react";
+import { Shield, ArrowLeft, Star } from "lucide-react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -93,7 +93,7 @@ function UnauthorizedPage({
               variant="secondary"
               className="w-full"
             >
-              <Upgrade className="mr-2 h-4 w-4" />
+              <Star className="mr-2 h-4 w-4" />
               Upgrade Account
             </Button>
           )}

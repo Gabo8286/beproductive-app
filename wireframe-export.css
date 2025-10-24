@@ -1,0 +1,405 @@
+/* BeProductive Wireframe - Export & Social Media Optimizations */
+
+/* Social Media Layouts */
+.social-media-container {
+    display: none;
+}
+
+/* Instagram Square (1080x1080) */
+.instagram-layout {
+    width: 1080px;
+    height: 1080px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    box-sizing: border-box;
+}
+
+.instagram-layout .wireframe-header {
+    margin-bottom: 40px;
+}
+
+.instagram-layout .wireframe-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.instagram-layout .wireframe-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 960px;
+}
+
+.instagram-layout .iphone-mockup {
+    width: 280px;
+    height: 560px;
+}
+
+/* LinkedIn Banner (1200x630) */
+.linkedin-layout {
+    width: 1200px;
+    height: 630px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    align-items: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.linkedin-layout .content-area {
+    flex: 1;
+    padding-right: 40px;
+}
+
+.linkedin-layout .content-area h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.linkedin-layout .content-area p {
+    font-size: 1.25rem;
+    color: #64748b;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.linkedin-layout .features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.linkedin-layout .features-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    color: #475569;
+}
+
+.linkedin-layout .features-list li::before {
+    content: "✓";
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.linkedin-layout .preview-area {
+    display: flex;
+    gap: 20px;
+}
+
+.linkedin-layout .preview-area .iphone-mockup {
+    width: 180px;
+    height: 360px;
+}
+
+/* Twitter Card (1200x675) */
+.twitter-layout {
+    width: 1200px;
+    height: 675px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    text-align: center;
+}
+
+.twitter-layout .hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.twitter-layout .hero-content p {
+    font-size: 1.5rem;
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+
+.twitter-layout .stats-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 2rem;
+}
+
+.twitter-layout .stat-item {
+    text-align: center;
+}
+
+.twitter-layout .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.twitter-layout .stat-label {
+    font-size: 1rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+.twitter-layout .preview-phones {
+    display: flex;
+    gap: 30px;
+}
+
+.twitter-layout .preview-phones .iphone-mockup {
+    width: 200px;
+    height: 400px;
+}
+
+/* High-Resolution Export */
+.export-hires {
+    transform: scale(2);
+    transform-origin: top left;
+}
+
+/* Print Optimization */
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    body {
+        background: white !important;
+        padding: 1in !important;
+    }
+
+    .wireframe-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5in !important;
+        page-break-inside: avoid;
+    }
+
+    .iphone-mockup {
+        width: 250px !important;
+        height: 500px !important;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important;
+        page-break-inside: avoid;
+        margin-bottom: 0.25in;
+    }
+
+    .wireframe-header {
+        page-break-after: avoid;
+        margin-bottom: 0.5in !important;
+    }
+
+    .wireframe-footer {
+        page-break-before: avoid;
+        margin-top: 0.5in !important;
+    }
+}
+
+/* PDF Export Optimization */
+.pdf-export {
+    background: white;
+    padding: 40px;
+}
+
+.pdf-export .wireframe-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.pdf-export .iphone-mockup {
+    width: 280px;
+    height: 560px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Presentation Mode */
+.presentation-mode {
+    background: #000000;
+    color: white;
+}
+
+.presentation-mode .wireframe-header h1 {
+    color: white;
+}
+
+.presentation-mode .wireframe-header p {
+    color: #cbd5e1;
+}
+
+.presentation-mode .feature-count {
+    background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+}
+
+.presentation-mode .iphone-mockup {
+    box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
+}
+
+/* Accessibility High Contrast */
+.high-contrast {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+.high-contrast .wireframe-header h1 {
+    background: #ffffff;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.high-contrast .wireframe-header p {
+    color: #ffffff !important;
+}
+
+.high-contrast .feature-count {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+.high-contrast .iphone-screen {
+    background: #ffffff !important;
+    border: 2px solid #000000;
+}
+
+.high-contrast .card,
+.high-contrast .grid-item {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    color: #000000 !important;
+}
+
+.high-contrast .btn-primary {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff;
+}
+
+.high-contrast .btn-secondary {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000;
+}
+
+/* Animation Controls */
+.no-animations * {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Mobile Export Optimization */
+@media (max-width: 768px) {
+    .instagram-layout,
+    .linkedin-layout,
+    .twitter-layout {
+        width: 100vw;
+        height: auto;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .linkedin-layout {
+        flex-direction: column;
+    }
+
+    .linkedin-layout .content-area {
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .linkedin-layout .preview-area {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .twitter-layout .preview-phones {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .twitter-layout .stats-row {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+/* Utility Classes */
+.hide-for-export {
+    display: none !important;
+}
+
+.show-for-export {
+    display: block !important;
+}
+
+.center-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.shadow-lg {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+.rounded-lg {
+    border-radius: 12px;
+}
+
+/* Export Controls */
+.export-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    display: none;
+}
+
+.export-controls.show {
+    display: block;
+}
+
+.export-controls button {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.export-controls button:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+}
+
+.export-controls button:last-child {
+    margin-bottom: 0;
+}

@@ -7,7 +7,7 @@ import importPlugin from "eslint-plugin-import";
 import unusedImports from "eslint-plugin-unused-imports";
 
 export default tseslint.config(
-  { ignores: ["dist", "node_modules", "coverage", ".husky", "scripts"] },
+  { ignores: ["dist", "node_modules", "coverage", ".husky", "scripts", "electron-app", "tests", "*.config.ts", "*.config.js"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
