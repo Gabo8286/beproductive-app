@@ -1,0 +1,109 @@
+{
+  "name": "@spark-bloom-flow/build-system",
+  "version": "1.0.0",
+  "description": "Modular build system for Spark Bloom Flow application",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:modules": "node scripts/build-modules.js",
+    "build:types": "node scripts/build-types.js",
+    "build:hooks": "node scripts/build-hooks.js",
+    "build:components": "node scripts/build-components.js",
+    "build:analytics": "node scripts/build-analytics.js",
+    "build:luna": "node scripts/build-luna.js",
+    "analyze": "node scripts/analyze-bundles.js",
+    "validate": "node scripts/validate-modules.js",
+    "test:modules": "node scripts/test-modules.js",
+    "test:integration": "node scripts/test-integration.js",
+    "benchmark": "node scripts/benchmark.js",
+    "generate:docs": "node scripts/generate-docs.js",
+    "generate:types": "node scripts/generate-types.js",
+    "clean": "node scripts/clean.js",
+    "deps:check": "node scripts/check-dependencies.js",
+    "deps:update": "node scripts/update-dependencies.js",
+    "quality:check": "node scripts/quality-check.js",
+    "performance:profile": "node scripts/performance-profile.js"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/node": "^20.8.0",
+    "esbuild": "^0.19.5",
+    "rollup": "^4.1.4",
+    "rollup-plugin-analyzer": "^4.0.0",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-filesize": "^10.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "terser": "^5.24.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-bundle-analyzer": "^4.9.1"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10",
+    "ora": "^7.0.1",
+    "pretty-bytes": "^6.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs",
+      "types": "./dist/types.d.ts"
+    },
+    "./hooks": {
+      "import": "./dist/hooks.js",
+      "require": "./dist/hooks.cjs",
+      "types": "./dist/hooks.d.ts"
+    },
+    "./components": {
+      "import": "./dist/components.js",
+      "require": "./dist/components.cjs",
+      "types": "./dist/components.d.ts"
+    },
+    "./analytics": {
+      "import": "./dist/analytics.js",
+      "require": "./dist/analytics.cjs",
+      "types": "./dist/analytics.d.ts"
+    },
+    "./luna": {
+      "import": "./dist/luna.js",
+      "require": "./dist/luna.cjs",
+      "types": "./dist/luna.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "scripts",
+    "configs",
+    "README.md"
+  ],
+  "keywords": [
+    "build-system",
+    "modular",
+    "productivity",
+    "typescript",
+    "react",
+    "vite"
+  ],
+  "author": "Spark Bloom Flow Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spark-bloom-flow/build-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/spark-bloom-flow/build-system/issues"
+  },
+  "homepage": "https://github.com/spark-bloom-flow/build-system#readme"
+}
