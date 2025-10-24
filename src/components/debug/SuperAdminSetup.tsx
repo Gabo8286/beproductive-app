@@ -24,9 +24,6 @@ export const SuperAdminSetup: React.FC = () => {
     setStatus('Assigning super admin role...');
 
     try {
-<<<<<<< HEAD
-      const { data, error } = await supabase.rpc('assign_initial_super_admin') as any;
-=======
       // Handle guest mode users differently
       if (isGuestModeUser && guestUserType === 'admin') {
         console.log('Guest mode admin detected, simulating super admin assignment...');
@@ -49,7 +46,6 @@ export const SuperAdminSetup: React.FC = () => {
       }
 
       const { data, error } = await supabase.rpc('assign_initial_super_admin');
->>>>>>> 74aa79e (🔧 CRITICAL FIX: Resolve login authentication issue on be-productive.app)
 
       if (error) {
         console.error('Error assigning super admin:', error);

@@ -185,16 +185,6 @@ const InvitationSignup: React.FC = () => {
         // Account created successfully
         setAccountCreated(true);
 
-<<<<<<< HEAD
-        // Optional: Mark invitation as used in the database
-        await (supabase
-          .from('beta_signups' as any) as any)
-          .update({
-            account_created_at: new Date().toISOString(),
-            user_id: data.user.id
-          })
-          .eq('id', invitationData.signup_id);
-=======
         // Mark invitation as used in the database
         if (signupId) {
           await supabase
@@ -205,7 +195,6 @@ const InvitationSignup: React.FC = () => {
             })
             .eq('id', signupId);
         }
->>>>>>> 74aa79e (🔧 CRITICAL FIX: Resolve login authentication issue on be-productive.app)
 
         // Redirect to dashboard after a short delay
         setTimeout(() => {
