@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useMemo, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { isGuestUser, getGuestUserType, isGuestAdmin } from '@/utils/auth/guestMode';
 
 export interface SuperAdminAccess {
   isSuperAdmin: boolean;
@@ -32,6 +33,15 @@ export const useSuperAdminAccess = (): SuperAdminAccess => {
         setIsSuperAdmin(false);
         setLoading(false);
         setError("No user found");
+        return;
+      }
+
+      // Handle guest mode admin users
+      if (isGuestAdmin(user)) {
+        console.log('🎭 [SuperAdmin] Guest admin detected, granting access');
+        setIsSuperAdmin(true);
+        setError(null);
+        setLoading(false);
         return;
       }
 

@@ -21,10 +21,9 @@
  */
 
 // Main App component - Force rebuild
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense, useEffect } from "react";
+import { I18nextProvider } from 'react-i18next';
 import {
   BrowserRouter,
   Routes,
@@ -32,38 +31,42 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
-import { ModulesProvider } from "@/contexts/ModulesContext";
-import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
-import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
-import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
+
+import { toast } from "sonner";
+import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { TagFilterModal } from "@/components/filters/TagFilterModal";
 import { LunaProvider, useLunaUnifiedMenu } from "@/components/luna/context/LunaContext";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+
+import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { ConfigProvider } from "@/contexts/ConfigContext";
+import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
+import { ModulesProvider } from "@/contexts/ModulesContext";
+import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
 import { LunaFrameworkProvider } from "@/components/luna/context/LunaFrameworkContext";
 import { UnifiedLunaMenu } from "@/components/luna/UnifiedLunaMenu";
-import { ConfigProvider } from "@/contexts/ConfigContext";
-import { TagFilterModal } from "@/components/filters/TagFilterModal";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { AppLayout } from "@/components/layouts/AppLayout";
 import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
 import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
 import { KeyboardShortcutsDialog } from "@/components/dialogs/KeyboardShortcutsDialog";
 import { useKeyboardShortcutsDialog } from "@/hooks/useKeyboardShortcutsDialog";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
-import { lazy, Suspense, useEffect } from "react";
-import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
 import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
-import { I18nextProvider } from 'react-i18next';
+
+
 import i18n from '@/lib/i18n';
 
 // Eagerly loaded routes (critical path)
+import DashboardContextTester from "@/pages/Dashboard-ContextTester";
+import DashboardMinimal from "@/pages/Dashboard-Minimal";
+import DashboardPerformanceComparison from "@/pages/Dashboard-PerformanceComparison";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
-import { RedesignedLandingPage } from "@/components/landing/RedesignedLandingPage";
-import Dashboard from "@/pages/Dashboard";
-import DashboardMinimal from "@/pages/Dashboard-Minimal";
-import DashboardContextTester from "@/pages/Dashboard-ContextTester";
-import DashboardPerformanceComparison from "@/pages/Dashboard-PerformanceComparison";
 
 // Lazy loaded routes (code splitting)
 const Signup = lazy(() => import("@/pages/Signup"));
@@ -79,6 +82,8 @@ const Capture = lazy(() => import("@/pages/Capture"));
 const PlanPage = lazy(() => import("@/pages/PlanPage"));
 const Engage = lazy(() => import("@/pages/Engage"));
 const ProfileTab = lazy(() => import("@/components/tabs/ProfileTab"));
+const SuperAdminHub = lazy(() => import("@/pages/SuperAdminHub"));
+const LunaHub = lazy(() => import("@/pages/LunaHub"));
 const NewGoal = lazy(() => import("@/pages/NewGoal"));
 const GoalDetail = lazy(() => import("@/pages/GoalDetail"));
 const Tasks = lazy(() => import("@/pages/Tasks"));
@@ -121,6 +126,7 @@ const AccountSettings = lazy(() => import("@/pages/AccountSettings"));
 const Billing = lazy(() => import("@/pages/Billing"));
 const PricingPlans = lazy(() => import("@/pages/PricingPlans"));
 const LunaCommandCenterPage = lazy(() => import("@/pages/LunaCommandCenter"));
+const LunaMenuOptions = lazy(() => import("@/pages/LunaMenuOptions"));
 
 // Lead Generation pages - TEMPORARILY COMMENTED OUT FOR DEBUGGING
 // const LeadGenerationAssessment = lazy(() => import("@/pages/LeadGenerationAssessment"));
@@ -289,6 +295,175 @@ function AppContent() {
                 <ProfileTab />
               </Suspense>
             } />
+            <Route path="admin" element={
+              <Suspense fallback={<PageLoading />}>
+                <SuperAdminHub />
+              </Suspense>
+            } />
+            <Route path="luna" element={
+              <Suspense fallback={<PageLoading />}>
+                <LunaHub />
+              </Suspense>
+            } />
+
+            {/* Goals routes under AppShell */}
+            <Route path="goals" element={
+              <Suspense fallback={<PageLoading />}>
+                <Goals />
+              </Suspense>
+            } />
+            <Route path="goals/new" element={
+              <Suspense fallback={<PageLoading />}>
+                <NewGoal />
+              </Suspense>
+            } />
+            <Route path="goals/:id" element={
+              <Suspense fallback={<PageLoading />}>
+                <GoalDetail />
+              </Suspense>
+            } />
+
+            {/* Tasks routes under AppShell */}
+            <Route path="tasks" element={
+              <Suspense fallback={<PageLoading />}>
+                <Tasks />
+              </Suspense>
+            } />
+            <Route path="tasks/:id" element={
+              <Suspense fallback={<PageLoading />}>
+                <TaskDetail />
+              </Suspense>
+            } />
+
+            {/* Additional core routes under AppShell */}
+            <Route path="habits" element={
+              <Suspense fallback={<PageLoading />}>
+                <Habits />
+              </Suspense>
+            } />
+            <Route path="habits/:id" element={
+              <Suspense fallback={<PageLoading />}>
+                <HabitDetail />
+              </Suspense>
+            } />
+            <Route path="reflections" element={
+              <Suspense fallback={<PageLoading />}>
+                <Reflections />
+              </Suspense>
+            } />
+            <Route path="reflections/:id" element={
+              <Suspense fallback={<PageLoading />}>
+                <ReflectionDetail />
+              </Suspense>
+            } />
+            <Route path="templates" element={
+              <Suspense fallback={<PageLoading />}>
+                <Templates />
+              </Suspense>
+            } />
+            <Route path="quick-todos" element={
+              <Suspense fallback={<PageLoading />}>
+                <QuickTodos />
+              </Suspense>
+            } />
+            <Route path="projects" element={
+              <Suspense fallback={<PageLoading />}>
+                <Projects />
+              </Suspense>
+            } />
+            <Route path="notes" element={
+              <Suspense fallback={<PageLoading />}>
+                <Notes />
+              </Suspense>
+            } />
+            <Route path="calendar" element={
+              <Suspense fallback={<PageLoading />}>
+                <Calendar />
+              </Suspense>
+            } />
+            <Route path="pomodoro" element={
+              <Suspense fallback={<PageLoading />}>
+                <PomodoroTimer />
+              </Suspense>
+            } />
+            <Route path="time-blocking" element={
+              <Suspense fallback={<PageLoading />}>
+                <TimeBlocking />
+              </Suspense>
+            } />
+            <Route path="analytics" element={
+              <Suspense fallback={<PageLoading />}>
+                <Analytics />
+              </Suspense>
+            } />
+            <Route path="settings" element={
+              <Suspense fallback={<PageLoading />}>
+                <Settings />
+              </Suspense>
+            } />
+            <Route path="profile-assessment" element={
+              <Suspense fallback={<PageLoading />}>
+                <ProfileAssessment />
+              </Suspense>
+            } />
+            <Route path="gamification" element={
+              <Suspense fallback={<PageLoading />}>
+                <Gamification />
+              </Suspense>
+            } />
+
+            {/* Additional user-facing routes that need AppShell navigation */}
+            <Route path="recurring-tasks" element={
+              <Suspense fallback={<PageLoading />}>
+                <RecurringTasks />
+              </Suspense>
+            } />
+            <Route path="tags" element={
+              <Suspense fallback={<PageLoading />}>
+                <TagManagement />
+              </Suspense>
+            } />
+            <Route path="automation" element={
+              <Suspense fallback={<PageLoading />}>
+                <Automation />
+              </Suspense>
+            } />
+            <Route path="reflections/:id" element={
+              <Suspense fallback={<PageLoading />}>
+                <ReflectionDetail />
+              </Suspense>
+            } />
+            <Route path="ai-insights" element={
+              <Suspense fallback={<PageLoading />}>
+                <AIInsights />
+              </Suspense>
+            } />
+            <Route path="calendar/settings" element={
+              <Suspense fallback={<PageLoading />}>
+                <CalendarSettings />
+              </Suspense>
+            } />
+            <Route path="account-settings" element={
+              <Suspense fallback={<PageLoading />}>
+                <AccountSettings />
+              </Suspense>
+            } />
+            <Route path="billing" element={
+              <Suspense fallback={<PageLoading />}>
+                <Billing />
+              </Suspense>
+            } />
+            <Route path="pricing" element={
+              <Suspense fallback={<PageLoading />}>
+                <PricingPlans />
+              </Suspense>
+            } />
+            <Route path="settings/accessibility" element={
+              <Suspense fallback={<PageLoading />}>
+                <AccessibilitySettingsPage />
+              </Suspense>
+            } />
+
             {/* Redirect /app to /app/plan by default - Plan-first approach */}
             <Route index element={<Navigate to="/app/plan" replace />} />
           </Route>
@@ -301,248 +476,51 @@ function AppContent() {
               </ProtectedRoute>
             }
           >
+            {/* Legacy redirects to new AppShell routes */}
             <Route path="/dashboard" element={<Navigate to="/app/capture" replace />} />
+            <Route path="/plan" element={<Navigate to="/app/plan" replace />} />
+            <Route path="/profile" element={<Navigate to="/app/profile" replace />} />
+            <Route path="/goals" element={<Navigate to="/app/goals" replace />} />
+            <Route path="/goals/new" element={<Navigate to="/app/goals/new" replace />} />
+            <Route path="/goals/:id" element={<Navigate to="/app/goals/:id" replace />} />
+            <Route path="/tasks" element={<Navigate to="/app/tasks" replace />} />
+            <Route path="/tasks/:id" element={<Navigate to="/app/tasks/:id" replace />} />
+            <Route path="/templates" element={<Navigate to="/app/templates" replace />} />
+            <Route path="/recurring-tasks" element={<Navigate to="/app/recurring-tasks" replace />} />
+            <Route path="/tags" element={<Navigate to="/app/tags" replace />} />
+            <Route path="/automation" element={<Navigate to="/app/automation" replace />} />
+            <Route path="/quick-todos" element={<Navigate to="/app/quick-todos" replace />} />
+            <Route path="/habits" element={<Navigate to="/app/habits" replace />} />
+            <Route path="/habits/:id" element={<Navigate to="/app/habits/:id" replace />} />
+            <Route path="/reflections" element={<Navigate to="/app/reflections" replace />} />
+            <Route path="/reflections/:id" element={<Navigate to="/app/reflections/:id" replace />} />
+            <Route path="/projects" element={<Navigate to="/app/projects" replace />} />
+            <Route path="/notes" element={<Navigate to="/app/notes" replace />} />
+            <Route path="/gamification" element={<Navigate to="/app/gamification" replace />} />
+            <Route path="/profile-assessment" element={<Navigate to="/app/profile-assessment" replace />} />
+            <Route path="/ai-insights" element={<Navigate to="/app/ai-insights" replace />} />
+            <Route path="/analytics" element={<Navigate to="/app/analytics" replace />} />
+            <Route path="/calendar" element={<Navigate to="/app/calendar" replace />} />
+            <Route path="/pomodoro" element={<Navigate to="/app/pomodoro" replace />} />
+            <Route path="/time-blocking" element={<Navigate to="/app/time-blocking" replace />} />
+            <Route path="/calendar/settings" element={<Navigate to="/app/calendar/settings" replace />} />
+            <Route path="/settings" element={<Navigate to="/app/settings" replace />} />
+            <Route path="/account-settings" element={<Navigate to="/app/account-settings" replace />} />
+            <Route path="/billing" element={<Navigate to="/app/billing" replace />} />
+            <Route path="/pricing" element={<Navigate to="/app/pricing" replace />} />
+            <Route path="/settings/accessibility" element={<Navigate to="/app/settings/accessibility" replace />} />
+
+            {/* Debug and development routes remain in AppLayout */}
             <Route path="/dashboard-minimal" element={<DashboardMinimal />} />
             <Route path="/dashboard-context-test" element={<DashboardContextTester />} />
             <Route path="/dashboard-performance" element={<DashboardPerformanceComparison />} />
-            <Route path="/plan" element={<Navigate to="/app/plan" replace />} />
+
+            {/* Legacy reflections page for compatibility */}
             <Route
-              path="/profile"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Profile />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/goals"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Goals />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/goals/new"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <NewGoal />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/goals/:id"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <GoalDetail />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/tasks"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Tasks />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/tasks/:id"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <TaskDetail />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/templates"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Templates />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/recurring-tasks"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <RecurringTasks />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/tags"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <TagManagement />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/automation"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Automation />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/quick-todos"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <QuickTodos />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/habits"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Habits />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/habits/:id"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <HabitDetail />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/reflections"
+              path="/reflections-old"
               element={
                 <Suspense fallback={<PageLoading />}>
                   <Reflections />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/reflections/:id"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <ReflectionDetail />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/projects"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Projects />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/notes"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Notes />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/gamification"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Gamification />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/profile-assessment"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <ProfileAssessment />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/ai-insights"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <AIInsights />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/analytics"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Analytics />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/calendar"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Calendar />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/pomodoro"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <PomodoroTimer />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/time-blocking"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <TimeBlocking />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/calendar/settings"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <CalendarSettings />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/settings"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Settings />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/account-settings"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <AccountSettings />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/billing"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <Billing />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/pricing"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <PricingPlans />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/settings/accessibility"
-              element={
-                <Suspense fallback={<PageLoading />}>
-                  <AccessibilitySettingsPage />
                 </Suspense>
               }
             />
@@ -589,6 +567,14 @@ function AppContent() {
                 </Suspense>
               }
             />
+            <Route
+              path="/luna-menu-options"
+              element={
+                <Suspense fallback={<PageLoading />}>
+                  <LunaMenuOptions />
+                </Suspense>
+              }
+            />
           </Route>
 
           <Route
@@ -628,40 +614,31 @@ function App() {
   console.log('[App] App component rendering...');
   console.error('[App] DEBUG: App component started rendering at', new Date().toISOString());
 
-  // Temporary minimal test - bypass all complex providers
+  // Fixed provider hierarchy - BrowserRouter moved higher to provide router context to all providers
   return (
     <QueryClientProvider client={queryClient}>
       <I18nextProvider i18n={i18n}>
-        <ConfigProvider>
-          <AuthProvider>
-            <ModulesProvider>
-              <AccessibilityProvider>
-                <ProductivityCycleProvider>
-                  <GlobalViewProvider>
-                    <LunaFrameworkProvider>
-                      <ErrorBoundary
-                        fallback={({ error, resetError }) => (
-                          <div className="fixed bottom-4 right-4 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm border rounded-lg px-3 py-2">
-                            Luna Assistant loading...
-                          </div>
-                        )}
-                        onError={(error) => console.warn('Luna initialization error:', error)}
-                      >
+        <BrowserRouter>
+          <ConfigProvider>
+            <AuthProvider>
+              <ModulesProvider>
+                <AccessibilityProvider>
+                  <ProductivityCycleProvider>
+                    <GlobalViewProvider>
+                      <LunaFrameworkProvider>
                         <LunaProvider>
-                          <BrowserRouter>
-                            <RouteAnnouncer />
-                            <AppContent />
-                            <TagFilterModal />
-                          </BrowserRouter>
+                          <RouteAnnouncer />
+                          <AppContent />
+                          <TagFilterModal />
                         </LunaProvider>
-                      </ErrorBoundary>
-                    </LunaFrameworkProvider>
-                  </GlobalViewProvider>
-                </ProductivityCycleProvider>
-              </AccessibilityProvider>
-            </ModulesProvider>
-          </AuthProvider>
-        </ConfigProvider>
+                      </LunaFrameworkProvider>
+                    </GlobalViewProvider>
+                  </ProductivityCycleProvider>
+                </AccessibilityProvider>
+              </ModulesProvider>
+            </AuthProvider>
+          </ConfigProvider>
+        </BrowserRouter>
       </I18nextProvider>
     </QueryClientProvider>
   );
