@@ -23,8 +23,8 @@ import {
   Filter,
   Share2,
 } from 'lucide-react';
-import { CarouselCategory } from './types';
-import { lunaColors } from '../design/DesignTokens';
+import { CarouselCategory } from '@/components/luna/carousel/types';
+import { lunaColors } from '@/components/luna/design/DesignTokens';
 
 export const useCarouselData = (): CarouselCategory[] => {
   const navigate = useNavigate();

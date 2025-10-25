@@ -4,7 +4,7 @@
  */
 
 import React, { useRef, useEffect, useCallback } from 'react';
-import { useAccessibility } from './AccessibilityProvider';
+import { useAccessibility } from '@/components/accessibility/AccessibilityProvider';
 
 interface FocusManagerProps {
   children: React.ReactNode;

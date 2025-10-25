@@ -4,10 +4,11 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Send, Loader2, X, Sparkles, FileText, Mic, Upload, Target, CheckSquare, Folder, Play, Calendar, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useLuna, useLunaChat } from '../context/LunaContext';
-import { LunaAvatar } from '../core/LunaAvatar';
+import { useLuna, useLunaChat } from '@/components/luna/context/LunaContext';
+import { LunaAvatar } from '@/components/luna/core/LunaAvatar';
 import { LUNA_COLORS } from '@/assets/luna/luna-assets';
-import { LunaTypingIndicator } from '../animations/LunaAnimations';
+import { LunaTypingIndicator } from '@/components/luna/animations/LunaAnimations';
+import { PromptSuggestions } from '@/components/luna/prompt-library/PromptSuggestions';
 import { useNavigate } from 'react-router-dom';
 
 interface LunaChatProps {
@@ -341,6 +342,20 @@ export const LunaChat: React.FC<LunaChatProps> = ({
                 </Button>
               );
             })}
+          </div>
+        )}
+
+        {/* Prompt Suggestions */}
+        {messages.length === 0 && (
+          <div className="mb-4">
+            <PromptSuggestions
+              context={currentContext}
+              maxSuggestions={3}
+              onPromptSelect={(prompt) => {
+                setInput(`Help me with ${prompt.description.toLowerCase()}`);
+                inputRef.current?.focus();
+              }}
+            />
           </div>
         )}
 

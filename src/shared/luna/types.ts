@@ -4,7 +4,7 @@
  * Designed for compatibility between TypeScript and Swift
  */
 
-import { UUID, Timestamp, Score, ConfidenceLevel } from '../types/core';
+import { UUID, Timestamp, Score, ConfidenceLevel } from '@/shared/types/core';
 
 // MARK: - Luna Core Types
 

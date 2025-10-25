@@ -13,10 +13,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { TagBadge } from "./TagBadge";
+import { TagBadge } from "@/components/tags/TagBadge";
 import { useTags, useCreateTag } from "@/hooks/useTags";
 import { Plus, X } from "lucide-react";
-import { TagColorPicker } from "./TagColorPicker";
+import { TagColorPicker } from "@/components/tags/TagColorPicker";
 import {
   Dialog,
   DialogContent,

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { CarouselPosition } from './types';
+import { CarouselPosition } from '@/components/luna/carousel/types';
 import {
   lunaColors,
   lunaShadows,
@@ -11,12 +11,12 @@ import {
   lunaTypography,
   getCategoryColor,
   getColoredShadow
-} from '../design/DesignTokens';
+} from '@/components/luna/design/DesignTokens';
 import {
   entranceAnimations,
   interactionAnimations,
   premiumSprings
-} from '../design/AnimationConfigs';
+} from '@/components/luna/design/AnimationConfigs';
 
 interface CarouselButtonProps {
   icon: LucideIcon;

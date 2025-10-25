@@ -1,6 +1,6 @@
 // Productivity State Detection System - Privacy-First Local Analysis
-import { performanceMonitor } from './performanceMonitor';
-import { energyTracker } from './energyTracking';
+import { performanceMonitor } from '@/utils/performanceMonitor';
+import { energyTracker } from '@/utils/energyTracking';
 
 export interface ProductivityState {
   currentState: 'focused' | 'distracted' | 'overwhelmed' | 'energized' | 'tired' | 'planning' | 'deep-work';

@@ -1,4 +1,4 @@
-import { Json } from "@/integrations/supabase/types";
+import type { Json } from "@/integrations/supabase/types";
 
 export type AchievementRarity = "common" | "rare" | "epic" | "legendary";
 export type AchievementCategory =

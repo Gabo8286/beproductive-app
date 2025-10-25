@@ -1,9 +1,9 @@
 // AI Agents Orchestrator - Main coordination system
-import { MonitoringAgent } from './monitoring/monitoring-agent';
-import { SecurityMonitoringAgent } from './security/security-monitor';
-import { BackupRecoveryAgent } from './backup/backup-agent';
-import { AgentConfig, getConfig } from './shared/config';
-import { NotificationService } from './shared/notification-service';
+import { MonitoringAgent } from '@/agents/monitoring/monitoring-agent';
+import { SecurityMonitoringAgent } from '@/agents/security/security-monitor';
+import { BackupRecoveryAgent } from '@/agents/backup/backup-agent';
+import { AgentConfig, getConfig } from '@/agents/shared/config';
+import { NotificationService } from '@/agents/shared/notification-service';
 
 export interface AgentStatus {
   name: string;

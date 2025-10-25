@@ -1,5 +1,5 @@
 // AI Agents Status API Endpoints
-import { agentOrchestrator } from '../../agents/agent-orchestrator';
+import { agentOrchestrator } from '@/agents/agent-orchestrator';
 
 export interface ApiResponse<T = any> {
   success: boolean;

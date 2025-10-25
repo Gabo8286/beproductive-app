@@ -23,7 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCreateHabit } from "@/hooks/useHabits";
 import { CreateHabitInput } from "@/types/habits";
-import { HabitTemplates } from "./HabitTemplates";
+import { HabitTemplates } from "@/components/habits/HabitTemplates";
 
 const habitSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),

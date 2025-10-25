@@ -23,10 +23,10 @@ import {
   Shield,
 } from "lucide-react";
 import { withSuperAdminAccess } from "@/hooks/useSupeRadminAccess";
-import { APIKeyManagement } from "./APIKeyManagement";
-import { SystemLimitsConfig } from "./SystemLimitsConfig";
-import { UsageAnalytics } from "./UsageAnalytics";
-import { SystemConfig } from "./SystemConfig";
+import { APIKeyManagement } from "@/components/admin/APIManagement/APIKeyManagement";
+import { SystemLimitsConfig } from "@/components/admin/APIManagement/SystemLimitsConfig";
+import { UsageAnalytics } from "@/components/admin/APIManagement/UsageAnalytics";
+import { SystemConfig } from "@/components/admin/APIManagement/SystemConfig";
 
 interface DashboardStats {
   totalApiKeys: number;

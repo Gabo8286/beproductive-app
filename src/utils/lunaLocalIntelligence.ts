@@ -1,5 +1,5 @@
 // Luna Local Intelligence System - Handle simple tasks without API calls
-import { performanceMonitor } from './performanceMonitor';
+import { performanceMonitor } from '@/utils/performanceMonitor';
 
 export interface LocalTaskResult {
   type: 'success' | 'fallback' | 'error';

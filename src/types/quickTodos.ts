@@ -1,4 +1,4 @@
-import { Database } from "@/integrations/supabase/types";
+import type { Database } from "@/integrations/supabase/types";
 
 export type QuickTodo = Database["public"]["Tables"]["quick_todos"]["Row"];
 export type QuickTodoInsert =

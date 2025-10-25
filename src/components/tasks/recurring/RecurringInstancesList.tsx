@@ -1,5 +1,5 @@
 import { useRecurringInstances } from "@/hooks/useRecurringTasks";
-import { TaskCard } from "../TaskCard";
+import { TaskCard } from "@/components/tasks/TaskCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 

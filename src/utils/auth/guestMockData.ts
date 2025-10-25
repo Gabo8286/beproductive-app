@@ -2,7 +2,7 @@
 import { Goal } from "@/types/goals";
 import { Habit } from "@/types/habits";
 import { Profile } from "@/types/database";
-import { GuestUserType } from "./guestMode";
+import { GuestUserType } from "@/utils/auth/guestMode";
 
 // Generate consistent IDs based on user type
 const generateId = (type: GuestUserType, entity: string, index: number = 0): string => {

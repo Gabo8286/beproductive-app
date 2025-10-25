@@ -12,7 +12,7 @@ import {
   isSameDay,
   isToday,
 } from "date-fns";
-import { TaskCard } from "./TaskCard";
+import { TaskCard } from "@/components/tasks/TaskCard";
 import { Database } from "@/integrations/supabase/types";
 
 type Task = Database["public"]["Tables"]["tasks"]["Row"] & {

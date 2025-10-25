@@ -3,7 +3,6 @@ import type {
   PromptCategory,
   TemplatePrompt,
   TemplateStructure,
-  TemplateSection,
 } from "@/types/reflections";
 
 export interface SystemTemplate {

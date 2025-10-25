@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { useLuna } from '../context/LunaContext';
-import { LunaChat } from '../chat/LunaChat';
+import { useLuna } from '@/components/luna/context/LunaContext';
+import { LunaChat } from '@/components/luna/chat/LunaChat';
 
 interface LunaChatModalProps {
   className?: string;
@@ -27,7 +27,8 @@ export const LunaChatModal: React.FC<LunaChatModalProps> = ({ className }) => {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-50 flex items-center justify-center',
+        'fixed top-0 left-0 right-0 z-50 flex items-center justify-center',
+        'h-[75vh] pb-20', // Top 3/4 of screen, with padding for nav bar
         'bg-black/50 backdrop-blur-sm',
         'animate-in fade-in-0 duration-200',
         className
@@ -44,7 +45,7 @@ export const LunaChatModal: React.FC<LunaChatModalProps> = ({ className }) => {
         className={cn(
           'relative w-full max-w-md mx-4',
           'animate-in slide-in-from-bottom-4 zoom-in-95 duration-200',
-          'max-h-[80vh] overflow-hidden'
+          'max-h-full overflow-hidden'
         )}
         onClick={(e) => e.stopPropagation()}
       >
@@ -52,7 +53,7 @@ export const LunaChatModal: React.FC<LunaChatModalProps> = ({ className }) => {
           onClose={closeChat}
           autoFocus={true}
           compact={false}
-          className="w-full h-[600px] max-h-[80vh]"
+          className="w-full h-[500px] max-h-[60vh]"
         />
       </div>
     </div>

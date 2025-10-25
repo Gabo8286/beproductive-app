@@ -1,5 +1,5 @@
 // NLP utilities stub - temporarily disabled
-import { TaskExtractionResult } from './ai-service';
+import { TaskExtractionResult } from '@/lib/ai-service';
 
 export const extractKeywords = (text: string) => [];
 export const analyzeSentiment = (text: string) => ({ score: 0, comparative: 0 });

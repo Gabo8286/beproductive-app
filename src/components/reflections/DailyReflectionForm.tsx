@@ -18,8 +18,8 @@ import {
 import { CalendarIcon, X, Sparkles } from "lucide-react";
 import { format } from "date-fns";
 import { useCreateReflection } from "@/hooks/useReflections";
-import MoodTracker from "./MoodTracker";
-import GuidedReflectionFlow from "./GuidedReflectionFlow";
+import MoodTracker from "@/components/reflections/MoodTracker";
+import GuidedReflectionFlow from "@/components/reflections/GuidedReflectionFlow";
 import type { CreateReflectionInput, MoodLevel } from "@/types/reflections";
 import type { SystemTemplate } from "@/utils/systemTemplates";
 import { cn } from "@/lib/utils";

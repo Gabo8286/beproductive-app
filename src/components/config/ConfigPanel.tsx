@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ColorPicker } from './ColorPicker';
+import { ColorPicker } from '@/components/config/ColorPicker';
 import { X, Download, Upload, RotateCcw, Palette, Settings, Zap } from 'lucide-react';
 
 interface ConfigPanelProps {

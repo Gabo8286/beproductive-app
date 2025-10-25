@@ -1,6 +1,6 @@
 import { StickyNote, Plus } from "lucide-react";
-import { BaseWidget } from "./BaseWidget";
-import { WidgetActions } from "./WidgetActions";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
+import { WidgetActions } from "@/components/widgets/WidgetActions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useQuickTodos } from "@/hooks/useQuickTodos";

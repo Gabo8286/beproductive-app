@@ -4,7 +4,7 @@
  */
 
 import { Variants } from 'framer-motion';
-import { lunaTimings } from './DesignTokens';
+import { lunaTimings } from '@/components/luna/design/DesignTokens';
 
 // === SPRING CONFIGURATIONS ===
 export const premiumSprings = {

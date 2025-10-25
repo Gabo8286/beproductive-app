@@ -14,7 +14,7 @@ import {
   type RecoveryLevel,
   type LunaCapability,
   type ProductivityMetric,
-} from '../framework/LunaFrameworkDocumentation';
+} from '@/components/luna/framework/LunaFrameworkDocumentation';
 
 // Framework-specific interfaces
 interface UserProductivityProfile {

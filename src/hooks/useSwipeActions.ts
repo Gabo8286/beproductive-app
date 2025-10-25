@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHapticFeedback } from './useHapticFeedback';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 
 export interface SwipeAction {
   id: string;

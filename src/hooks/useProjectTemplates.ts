@@ -11,7 +11,7 @@ import {
   CreateProjectInput,
 } from "@/types/projects";
 import { useAuth } from "@/contexts/AuthContext";
-import { projectKeys } from "./useProjects";
+import { projectKeys } from "@/hooks/useProjects";
 
 // =====================================================
 // QUERY KEYS

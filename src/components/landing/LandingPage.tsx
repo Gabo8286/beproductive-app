@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Target, Repeat, BookOpen, CheckCircle, Code, Zap, Brain, Calendar, Users, Rocket } from "lucide-react";
-import { InteractiveJourneyBuilder } from "./InteractiveJourneyBuilder";
-import { BuildStory } from "./BuildStory";
+import { InteractiveJourneyBuilder } from "@/components/landing/InteractiveJourneyBuilder";
+import { BuildStory } from "@/components/landing/BuildStory";
 // import { EditableTeamSection } from "./EditableTeamSection"; // TEMPORARILY COMMENTED OUT FOR DEBUGGING
 import { useConversionTracking } from "@/hooks/useConversionTracking";
 import { ConversionEventType } from "@/types/conversion";

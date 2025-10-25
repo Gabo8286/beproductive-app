@@ -1,4 +1,4 @@
-import { Json } from "@/integrations/supabase/types";
+import type { Json } from "@/integrations/supabase/types";
 
 export type NoteType = "fleeting" | "literature" | "permanent";
 

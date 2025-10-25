@@ -1,4 +1,4 @@
-import { Database } from "@/integrations/supabase/types";
+import type { Database } from "@/integrations/supabase/types";
 
 // Extract enums from database types
 export type APIProviderType = Database["public"]["Enums"]["api_provider_type"];

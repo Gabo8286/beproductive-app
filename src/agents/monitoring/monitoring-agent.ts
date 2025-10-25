@@ -1,7 +1,7 @@
 // Monitoring & Alerting Agent
-import { ClaudeClient } from '../shared/claude-client';
-import { NotificationService } from '../shared/notification-service';
-import { AgentConfig, getConfig } from '../shared/config';
+import { ClaudeClient } from '@/agents/shared/claude-client';
+import { NotificationService } from '@/agents/shared/notification-service';
+import { AgentConfig, getConfig } from '@/agents/shared/config';
 
 export interface SystemMetrics {
   timestamp: string;

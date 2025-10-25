@@ -25,13 +25,13 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { useDeleteTask, useToggleTaskCompletion } from "@/hooks/useTasks";
-import { TaskForm } from "./TaskForm";
+import { TaskForm } from "@/components/tasks/TaskForm";
 import { Database } from "@/integrations/supabase/types";
 import { Link } from "react-router-dom";
 import { TagBadge } from "@/components/tags/TagBadge";
 import { useTags } from "@/hooks/useTags";
 import { DraggableTask } from "@/components/dnd/DraggableTask";
-import { ProgressIndicator } from "./ProgressIndicator";
+import { ProgressIndicator } from "@/components/tasks/ProgressIndicator";
 import { useSubtaskProgress } from "@/hooks/useSubtasks";
 import { TimerButton } from "@/components/time/TimerButton";
 

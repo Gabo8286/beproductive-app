@@ -16,8 +16,8 @@ import {
   useUpdateTag,
   useDeleteTag,
 } from "@/hooks/useTags";
-import { TagBadge } from "./TagBadge";
-import { TagColorPicker } from "./TagColorPicker";
+import { TagBadge } from "@/components/tags/TagBadge";
+import { TagColorPicker } from "@/components/tags/TagColorPicker";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import {
   Table,

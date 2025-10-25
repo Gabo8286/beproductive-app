@@ -31,8 +31,8 @@ import {
   Trash,
   AlertTriangle,
 } from "lucide-react";
-import { MilestoneEditor } from "./MilestoneEditor";
-import { MilestoneCompletion } from "./MilestoneCompletion";
+import { MilestoneEditor } from "@/components/goals/MilestoneEditor";
+import { MilestoneCompletion } from "@/components/goals/MilestoneCompletion";
 
 interface MilestoneCardProps {
   milestone: GoalMilestone & {

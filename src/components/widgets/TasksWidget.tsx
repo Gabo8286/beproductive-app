@@ -1,6 +1,6 @@
 import { CheckSquare, Plus, Calendar } from "lucide-react";
-import { BaseWidget } from "./BaseWidget";
-import { WidgetActions } from "./WidgetActions";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
+import { WidgetActions } from "@/components/widgets/WidgetActions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTasks } from "@/hooks/useTasks";

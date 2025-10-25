@@ -20,7 +20,7 @@ import {
   LunaTaskStatus,
   LunaCapability
 } from './types';
-import { UUID, Timestamp, Score, ConfidenceLevel } from '../types/core';
+import { UUID, Timestamp, Score, ConfidenceLevel } from '@/shared/types/core';
 
 /**
  * Luna AI Framework Core Manager

@@ -1,4 +1,4 @@
-import { UserRole } from '@/types/roles';
+import type { UserRole } from '@/types/roles';
 
 export type WorkspaceType = "personal" | "team" | "organization";
 export type MemberRole = "member" | "admin" | "owner";

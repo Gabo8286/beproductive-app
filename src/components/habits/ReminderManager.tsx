@@ -34,7 +34,7 @@ import {
   useDeleteReminder,
   useToggleReminder,
 } from "@/hooks/useHabitReminders";
-import { ReminderForm } from "./ReminderForm";
+import { ReminderForm } from "@/components/habits/ReminderForm";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { HabitReminder } from "@/types/habits";

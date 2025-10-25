@@ -1,6 +1,6 @@
 // Productivity Cycle Hook
 import { useState, useEffect, useCallback } from 'react';
-import { cycleManager } from '../services/cycleManager';
+import { cycleManager } from '@/modules/productivity-cycle/services/cycleManager';
 import {
   ProductivityCycleState,
   ProductivityPhase,

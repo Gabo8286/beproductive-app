@@ -1,5 +1,5 @@
 import { TrendingUp, Award, Calendar } from "lucide-react";
-import { BaseWidget } from "./BaseWidget";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { usePersonalization } from "@/hooks/usePersonalization";

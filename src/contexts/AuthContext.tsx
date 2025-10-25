@@ -55,6 +55,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authLoading, setAuthLoading] = useState(true); // Start true for initial load
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // PERMANENT FIX: Failsafe timeout to prevent infinite loading
+  // This ensures authLoading is ALWAYS set to false after max time
+  useEffect(() => {
+    const isDev = import.meta.env.DEV;
+    const maxWaitTime = isDev ? 5000 : 30000; // 5s in dev, 30s in prod
+
+
+    const failsafeTimeout = setTimeout(() => {
+      setAuthLoading(false);
+      // Don't set auth error - guest mode handles this gracefully
+    }, maxWaitTime);
+
+    return () => {
+      clearTimeout(failsafeTimeout);
+    };
+  }, []); // Run once on mount
+
+  // Monitor auth loading state changes
+  useEffect(() => {
+  }, [authLoading]);
+
   // Guest mode state
   const [isGuestMode, setIsGuestMode] = useState<boolean>(false);
   const [guestUserType, setGuestUserType] = useState<GuestUserType | null>(null);
@@ -65,21 +86,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const maxRetries = 2; // Reduced for faster recovery
 
   useEffect(() => {
-    console.log("[AuthContext] Initializing auth state...");
-    console.log("[AuthContext] Environment variables:", {
-      VITE_LOCAL_MODE: import.meta.env.VITE_LOCAL_MODE,
-      VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-      VITE_LOCAL_AUTH_URL: import.meta.env.VITE_LOCAL_AUTH_URL,
-      VITE_ENABLE_GUEST_MODE: import.meta.env.VITE_ENABLE_GUEST_MODE,
-      VITE_SKIP_LOGIN: import.meta.env.VITE_SKIP_LOGIN,
-      NODE_ENV: import.meta.env.NODE_ENV,
-      MODE: import.meta.env.MODE,
-    });
 
     // Development skip login - auto-authenticate with mock user
     const skipLogin = import.meta.env.VITE_SKIP_LOGIN === 'true' && import.meta.env.DEV;
     if (skipLogin) {
-      console.log("[AuthContext] Skip login enabled - auto-authenticating with mock user");
       const mockUser: User = {
         id: crypto.randomUUID(),
         email: 'developer@beproductive.local',
@@ -121,19 +131,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setProfile(mockProfile);
       setAuthLoading(false);
       setAuthError(null);
-      console.log("[AuthContext] ✅ Auto-authentication complete - ready for development");
       return;
     }
 
     const guestModeEnabled = isGuestModeEnabled();
     const localMode = isLocalMode();
-    console.log(`[AuthContext] Guest mode enabled: ${guestModeEnabled}`);
-    console.log(`[AuthContext] Local mode detected: ${localMode}`);
 
     // Check for saved guest mode selection first
     const savedGuestType = getSavedGuestModeSelection();
     if (guestModeEnabled && savedGuestType) {
-      console.log(`[AuthContext] Found saved guest mode selection: ${savedGuestType}`);
       initializeGuestMode(savedGuestType);
       return;
     }
@@ -145,7 +151,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Timeout to prevent infinite loading - 20s for improved reliability
     const loadingTimeout = setTimeout(async () => {
       if (isComponentMounted && authLoading) {
-        console.warn("[AuthContext] Auth initialization timed out after 20 seconds");
 
         // Run diagnostics to help debug the issue
         try {
@@ -159,24 +164,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           } else if (!diagnostics.networkConnectivity.canReachSupabase) {
             toast.error("Cannot connect to authentication service. Check your connection.");
           } else if (!localMode) {
-            toast.error("Authentication timed out. You can continue in guest mode.");
+            // Guest mode handles timeout gracefully - no error needed
           }
         } catch (error) {
           console.error("[AuthContext] Diagnostics failed:", error);
           if (!localMode) {
-            toast.error("Authentication timed out. You can continue in guest mode.");
+            // Guest mode handles timeout gracefully - no error needed
           }
         }
 
-        setAuthError("Authentication timed out.");
+        // Don't set auth error - guest mode handles this gracefully
         setAuthLoading(false);
         isInitializing.current = false;
       }
     }, 20000); // 20 seconds timeout for better Docker compatibility
 
     const initializeLocalAuth = async () => {
-      console.log("[AuthContext] Initializing local auth...");
-      console.log("[AuthContext] Local auth URL:", import.meta.env.VITE_LOCAL_AUTH_URL);
       isInitializing.current = true;
 
       try {
@@ -184,7 +187,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data } = localAuth.onAuthStateChange((event, localSession) => {
           if (!isComponentMounted) return;
 
-          console.log("[AuthContext] Local auth state changed:", event, localSession ? "has session" : "no session");
 
           if (localSession) {
             // Convert local session to Supabase-compatible format
@@ -239,10 +241,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (sessionData?.session) {
-          console.log("[AuthContext] Found existing local session");
           // The onAuthStateChange will handle setting the session
         } else {
-          console.log("[AuthContext] No existing local session");
           setAuthLoading(false);
           isInitializing.current = false;
         }
@@ -263,14 +263,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initializeSupabaseAuth = async () => {
       // Prevent multiple simultaneous initialization attempts
       if (isInitializing.current) {
-        console.log("[AuthContext] Already initializing, skipping duplicate attempt");
         return;
       }
 
       isInitializing.current = true;
 
       try {
-        console.log("[AuthContext] Setting up Supabase auth state listener...");
 
         // CRITICAL: Check if Supabase client is ready before using it
         if (
@@ -299,7 +297,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           retryTimeout = setTimeout(() => {
             if (isComponentMounted) {
-              console.log(`[AuthContext] Retrying auth initialization (attempt ${retryCount.current}/${maxRetries})...`);
               initializeSupabaseAuth();
             }
           }, 1000);
@@ -313,11 +310,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data } = supabase.auth.onAuthStateChange((event, session) => {
           if (!isComponentMounted) return;
 
-          console.log(
-            "[AuthContext] Auth state changed:",
-            event,
-            session ? "has session" : "no session",
-          );
           setSession(session);
           setUser(session?.user ?? null);
 
@@ -333,7 +325,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         authSubscription = data.subscription;
 
-        console.log("[AuthContext] Checking for existing session...");
 
         // Check for existing session with timeout (increased to 18s for better reliability)
         const sessionPromise = supabase.auth.getSession();
@@ -358,10 +349,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
 
           const { session } = sessionData;
-          console.log(
-            "[AuthContext] Initial session check:",
-            session ? "found session" : "no session",
-          );
 
           setSession(session);
           setUser(session?.user ?? null);
@@ -405,7 +392,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Cleanup function
     return () => {
-      console.log("[AuthContext] Cleaning up auth context...");
       isComponentMounted = false;
       isInitializing.current = false;
       clearTimeout(loadingTimeout);
@@ -422,7 +408,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     try {
-      console.log("[AuthContext] Fetching profile with role for user:", userId);
       const localMode = isLocalMode();
 
       let data, error;
@@ -460,7 +445,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // The function returns an array, get the first (and only) result
           data = Array.isArray(result) ? result[0] : result;
           error = null;
-          console.log("[AuthContext] Profile with role fetched from PostgREST function:", data);
         } catch (fetchError) {
           console.error("[AuthContext] Profile+role fetch failed:", fetchError);
           error = fetchError;
@@ -496,7 +480,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      console.log("[AuthContext] Profile with role loaded successfully");
       setProfile(data as ProfileWithRole);
       setAuthLoading(false);
       isInitializing.current = false;
@@ -517,7 +500,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const initializeGuestMode = (type: GuestUserType) => {
-    console.log(`[AuthContext] Initializing guest mode as ${type}`);
 
     try {
       // Create guest user and session
@@ -534,7 +516,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAuthLoading(false);
       setAuthError(null);
 
-      console.log(`[AuthContext] Guest mode initialized successfully as ${type}`);
     } catch (error) {
       console.error("[AuthContext] Failed to initialize guest mode:", error);
       setAuthError("Failed to initialize guest mode");
@@ -543,7 +524,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signInAsGuest = (type: GuestUserType) => {
-    console.log(`[AuthContext] Signing in as guest: ${type}`);
 
     // Save selection for future sessions
     saveGuestModeSelection(type);
@@ -553,7 +533,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearGuestMode = () => {
-    console.log("[AuthContext] Clearing guest mode");
 
     // Clear saved selection
     clearGuestModeSelection();

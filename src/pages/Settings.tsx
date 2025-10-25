@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { toast } from "sonner";
 import {
   Settings as SettingsIcon,
@@ -387,22 +388,13 @@ export default function Settings() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="language">Language</Label>
-                  <Select
-                    value={settings.general.language}
-                    onValueChange={(value) => updateSetting('general', 'language', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="es">Español</SelectItem>
-                      <SelectItem value="fr">Français</SelectItem>
-                      <SelectItem value="de">Deutsch</SelectItem>
-                      <SelectItem value="pt">Português</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label>Language</Label>
+                  <div className="flex items-center gap-2">
+                    <LanguageSwitcher />
+                    <p className="text-sm text-muted-foreground">
+                      Choose your interface language
+                    </p>
+                  </div>
                 </div>
               </div>
 

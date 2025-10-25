@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useEnhancedNavigationContext } from './useEnhancedNavigationContext';
+import { useEnhancedNavigationContext } from '@/hooks/useEnhancedNavigationContext';
 import {
   roleBasedNavigationService,
   RoleConfiguration,

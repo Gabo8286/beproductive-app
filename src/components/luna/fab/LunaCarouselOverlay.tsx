@@ -2,19 +2,19 @@ import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { LunaCarousel } from '../carousel/LunaCarousel';
-import { useCarouselData } from '../carousel/carouselData';
-import { CarouselCategory } from '../carousel/types';
+import { LunaCarousel } from '@/components/luna/carousel/LunaCarousel';
+import { useCarouselData } from '@/components/luna/carousel/carouselData';
+import { CarouselCategory } from '@/components/luna/carousel/types';
 import {
   lunaColors,
   lunaShadows,
   lunaSize,
   lunaSpacing,
-} from '../design/DesignTokens';
+} from '@/components/luna/design/DesignTokens';
 import {
   overlayAnimations,
   premiumSprings,
-} from '../design/AnimationConfigs';
+} from '@/components/luna/design/AnimationConfigs';
 
 interface LunaCarouselOverlayProps {
   isOpen: boolean;

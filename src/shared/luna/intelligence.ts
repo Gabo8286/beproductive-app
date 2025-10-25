@@ -4,8 +4,8 @@
  * Refactored from original lunaLocalIntelligence.ts with enhanced modularity
  */
 
-import { LunaContext, LunaResult, LunaAlgorithm, LunaCapability } from './types';
-import { UUID, Score, ConfidenceLevel } from '../types/core';
+import { LunaContext, LunaResult, LunaAlgorithm, LunaCapability } from '@/shared/luna/types';
+import { UUID, Score, ConfidenceLevel } from '@/shared/types/core';
 
 // MARK: - Local Intelligence Engine
 

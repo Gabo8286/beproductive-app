@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
-import { IBaseRepository, IRealtimeRepository, IUserScopedRepository } from '../interfaces/IBaseRepository';
+import { IBaseRepository, IRealtimeRepository, IUserScopedRepository } from '@/services/repositories/interfaces/IBaseRepository';
 
 /**
  * Base Supabase Repository

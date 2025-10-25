@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { QuickTaskModal } from "./QuickTaskModal";
+import { QuickTaskModal } from "@/components/tasks/QuickTaskModal";
 import { cn } from "@/lib/utils";
 import { Z_INDEX } from "@/lib/z-index";
 

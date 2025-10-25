@@ -2,12 +2,12 @@ import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { LunaAvatar } from '../core/LunaAvatar';
-import { LunaOrbitalButtons } from './LunaOrbitalButtons';
+import { LunaAvatar } from '@/components/luna/core/LunaAvatar';
+import { LunaOrbitalButtons } from '@/components/luna/fab/LunaOrbitalButtons';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
-import { useLuna } from '../context/LunaContext';
+import { useLuna } from '@/components/luna/context/LunaContext';
 import { useCornerPreference } from '@/hooks/useCornerPreference';
-import { getTargetCorner, getCornerTransitionProgress } from '../design/DesignTokens';
+import { getTargetCorner, getCornerTransitionProgress } from '@/components/luna/design/DesignTokens';
 
 interface LunaFABProps {
   onOpenCarousel?: () => void;

@@ -16,7 +16,7 @@ import {
 } from "@/hooks/useHabits";
 import { useCreateEntry } from "@/hooks/useHabitEntries";
 import { HabitWithStats, CreateHabitEntryInput } from "@/types/habits";
-import { ProgressRing } from "./ProgressRing";
+import { ProgressRing } from "@/components/habits/ProgressRing";
 import { format } from "date-fns";
 import { toast } from "sonner";
 

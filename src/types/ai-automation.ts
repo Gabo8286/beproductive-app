@@ -1,4 +1,4 @@
-import { AutomationRule } from "@/hooks/useAutomation";
+import type { AutomationRule } from "@/hooks/useAutomation";
 
 // Enhanced AI Automation Types
 export type AIAutomationType =

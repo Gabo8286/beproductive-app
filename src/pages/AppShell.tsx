@@ -3,9 +3,7 @@ import { NotificationContainer, useNotifications } from '@/components/notificati
 import { LunaChatModal } from '@/components/luna/modal/LunaChatModal';
 import { useLunaRouteContext } from '@/components/luna/hooks/useLunaRouteContext';
 import { PageErrorBoundary } from '@/components/errors/CascadingErrorBoundary';
-import { UniversalBreadcrumbs } from '@/components/navigation/UniversalBreadcrumbs';
-import { CompactLanguageSwitcher } from '@/components/ui/LanguageSwitcher';
-import { LunaFABProvider } from '@/components/luna/providers/LunaFABProvider';
+import { BeProductiveTabBar } from '@/components/navigation/BeProductiveTabBar';
 
 function AppShellContent() {
   const { notifications, removeNotification } = useNotifications();
@@ -16,22 +14,13 @@ function AppShellContent() {
   return (
     <PageErrorBoundary pageName="AppShell">
       <div className="min-h-screen bg-background">
-        {/* Main content area with padding for breadcrumbs only */}
-        <main className="pb-16">
+        {/* Main content area with padding for tab bar */}
+        <main className="pb-20">
           <Outlet />
         </main>
 
-        {/* Enhanced Universal Breadcrumbs - Now primary navigation */}
-        <UniversalBreadcrumbs
-          className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t"
-          showBackButton={true}
-        />
-
-        {/* Floating Language Switcher */}
-        <div className="fixed top-4 right-4 z-30">
-          <CompactLanguageSwitcher />
-        </div>
-
+        {/* BeProductive iOS Tab Bar - Primary navigation */}
+        <BeProductiveTabBar />
 
         {/* Luna Chat Modal */}
         <LunaChatModal />
@@ -47,12 +36,5 @@ function AppShellContent() {
 }
 
 export default function AppShell() {
-  return (
-    <LunaFABProvider
-      fabSize="medium"
-      fabClassName="shadow-lg"
-    >
-      <AppShellContent />
-    </LunaFABProvider>
-  );
+  return <AppShellContent />;
 }

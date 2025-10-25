@@ -342,6 +342,527 @@
             text-decoration: none;
         }
 
+        /* Luna Action Sheet Styles */
+        .luna-action-section {
+            margin: 4rem auto;
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .action-sheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .action-demo {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .action-demo:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-demo h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .iphone-mockup.small {
+            width: 200px;
+            height: 400px;
+            margin: 0 auto 1rem;
+        }
+
+        .demo-description {
+            text-align: left;
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .demo-description p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Luna Tab Styles */
+        .luna-tab {
+            position: relative;
+        }
+
+        .luna-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .luna-tab.expanded .luna-icon {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+        }
+
+        .context-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 50%;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Classic Action Sheet */
+        .classic-action-sheet {
+            position: absolute;
+            bottom: 40px;
+            left: 8px;
+            right: 8px;
+            background: white;
+            border-radius: 16px 16px 4px 4px;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            max-height: 60%;
+        }
+
+        .action-handle {
+            width: 36px;
+            height: 4px;
+            background: #d1d5db;
+            border-radius: 2px;
+            margin: 0 auto 1rem;
+        }
+
+        .action-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .luna-avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .action-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .action-header p {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .action-item {
+            padding: 0.75rem 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #374151;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .action-item:hover {
+            background: #f3f4f6;
+        }
+
+        .action-item.priority {
+            background: linear-gradient(135deg, #fef3cd 0%, #fde68a 100%);
+            color: #92400e;
+        }
+
+        .action-item.featured {
+            background: linear-gradient(135deg, #fef3cd 0%, #fde68a 100%);
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        .action-item.more {
+            background: #e5e7eb;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        /* Floating Panel */
+        .floating-panel {
+            position: absolute;
+            bottom: 50px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .panel-header span {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .action-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+
+        .action-tile:hover {
+            transform: scale(1.05);
+        }
+
+        .action-tile span {
+            font-size: 10px;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        /* Radial Menu */
+        .radial-menu {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+        }
+
+        .radial-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+        }
+
+        .radial-item {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f97316;
+        }
+
+        .radial-top {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .radial-right {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .radial-bottom {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .radial-left {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .radial-connections {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 30%, rgba(249, 115, 22, 0.1) 31%, rgba(249, 115, 22, 0.1) 32%, transparent 33%);
+        }
+
+        /* Expandable Tab Bar */
+        .tab-nav.expanded {
+            height: 80px;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .tab-row {
+            display: flex;
+            justify-content: space-around;
+            flex: 1;
+        }
+
+        .action-row {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 1rem;
+            background: rgba(249, 115, 22, 0.1);
+            margin: 0 8px;
+            border-radius: 8px;
+        }
+
+        .inline-action {
+            font-size: 10px;
+            padding: 0.25rem 0.5rem;
+            color: #ea580c;
+            font-weight: 500;
+        }
+
+        /* Pop-up Grid */
+        .popup-grid {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .grid-action {
+            width: 32px;
+            height: 32px;
+            background: #f8fafc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Contextual Sheet */
+        .contextual-sheet {
+            position: absolute;
+            bottom: 40px;
+            left: 12px;
+            right: 12px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .context-header {
+            background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+            padding: 0.5rem 1rem;
+            text-align: center;
+        }
+
+        .context-header span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #5b21b6;
+        }
+
+        /* Multi-level Sheet */
+        .multilevel-sheet {
+            position: absolute;
+            bottom: 40px;
+            left: 12px;
+            right: 12px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .level-primary {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .level-secondary {
+            padding: 0.75rem;
+            background: #f9fafb;
+        }
+
+        .secondary-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        /* Side Strip */
+        .side-strip {
+            position: absolute;
+            right: 8px;
+            bottom: 45px;
+            top: 60px;
+            width: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+        }
+
+        .strip-action {
+            width: 28px;
+            height: 28px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            margin-top: 3rem;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .comparison-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-header {
+            display: contents;
+        }
+
+        .comparison-header > div {
+            background: #1e293b;
+            color: white;
+            padding: 1rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .comparison-row {
+            display: contents;
+        }
+
+        .comparison-row > div {
+            background: white;
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comparison-row:nth-child(even) > div {
+            background: #f8fafc;
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .wireframe-container {
@@ -898,6 +1419,363 @@
                         <div class="tab-icon"></div>
                         <span>Profile</span>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Luna Action Sheet Options Section -->
+    <div class="luna-action-section">
+        <div class="section-header">
+            <h2>🤖 Luna Action Sheet Variations</h2>
+            <p>Explore 8 different ways Luna can present quick actions</p>
+            <div class="feature-count">Interactive Design Options</div>
+        </div>
+
+        <div class="action-sheet-grid">
+            <!-- 1. Classic iOS Action Sheet -->
+            <div class="action-demo">
+                <h3>1. Classic iOS Action Sheet</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <!-- Tab Bar -->
+                        <div class="tab-nav">
+                            <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item active luna-tab">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Classic Action Sheet -->
+                        <div class="classic-action-sheet">
+                            <div class="action-handle"></div>
+                            <div class="action-header">
+                                <div class="luna-avatar">🤖</div>
+                                <div>
+                                    <h4>Luna AI Assistant</h4>
+                                    <p>How can I help you?</p>
+                                </div>
+                            </div>
+                            <div class="action-list">
+                                <div class="action-item">📝 Quick Capture</div>
+                                <div class="action-item">💬 AI Chat</div>
+                                <div class="action-item">📊 Insights</div>
+                                <div class="action-item">⏰ Smart Timer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Native iOS Feel:</strong> Slides up from bottom with backdrop blur</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Sheet appears, swipe down to dismiss</p>
+                </div>
+            </div>
+
+            <!-- 2. Floating Action Panel -->
+            <div class="action-demo">
+                <h3>2. Floating Action Panel</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <div class="tab-nav">
+                            <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item active luna-tab">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Floating Panel -->
+                        <div class="floating-panel">
+                            <div class="panel-header">
+                                <div class="luna-avatar">🤖</div>
+                                <span>Luna AI</span>
+                            </div>
+                            <div class="action-grid">
+                                <div class="action-tile">📝<span>Note</span></div>
+                                <div class="action-tile">💬<span>Chat</span></div>
+                                <div class="action-tile">📊<span>Stats</span></div>
+                                <div class="action-tile">🎯<span>Goals</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Card Design:</strong> Appears above tab bar as floating card</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Panel floats up with shadow</p>
+                </div>
+            </div>
+
+            <!-- 3. Radial Action Menu -->
+            <div class="action-demo">
+                <h3>3. Radial Action Menu</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <div class="tab-nav">
+                            <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item active luna-tab expanded">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Radial Menu -->
+                        <div class="radial-menu">
+                            <div class="radial-center">🤖</div>
+                            <div class="radial-item radial-top">📝</div>
+                            <div class="radial-item radial-right">💬</div>
+                            <div class="radial-item radial-bottom">📊</div>
+                            <div class="radial-item radial-left">⏰</div>
+                            <div class="radial-connections"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Circular Layout:</strong> Actions appear in circle around Luna</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Actions radiate outward</p>
+                </div>
+            </div>
+
+            <!-- 4. Expandable Tab Bar -->
+            <div class="action-demo">
+                <h3>4. Expandable Tab Bar</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <!-- Expanded Tab Bar -->
+                        <div class="tab-nav expanded">
+                            <div class="tab-row">
+                                <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                                <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                                <div class="tab-item active luna-tab">
+                                    <div class="luna-icon">🤖</div><span>Luna</span>
+                                </div>
+                                <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                                <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                            </div>
+                            <div class="action-row">
+                                <div class="inline-action">📝 Note</div>
+                                <div class="inline-action">💬 Chat</div>
+                                <div class="inline-action">📊 Stats</div>
+                                <div class="inline-action">⏰ Timer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Seamless Integration:</strong> Tab bar grows to show actions</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Tab bar expands upward</p>
+                </div>
+            </div>
+
+            <!-- 5. Pop-up Action Grid -->
+            <div class="action-demo">
+                <h3>5. Pop-up Action Grid</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <div class="tab-nav">
+                            <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item active luna-tab">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Compact Grid -->
+                        <div class="popup-grid">
+                            <div class="grid-action">📝</div>
+                            <div class="grid-action">💬</div>
+                            <div class="grid-action">📊</div>
+                            <div class="grid-action">⏰</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Minimal Footprint:</strong> Compact 2x2 grid above Luna</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Quick grid pops up</p>
+                </div>
+            </div>
+
+            <!-- 6. Contextual Action Sheet -->
+            <div class="action-demo">
+                <h3>6. Contextual Action Sheet</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <div class="tab-nav">
+                            <div class="tab-item active"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item luna-tab smart">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                                <div class="context-badge">📝</div>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Context-Aware Actions -->
+                        <div class="contextual-sheet">
+                            <div class="context-header">
+                                <span>💡 Capture Mode Suggestions</span>
+                            </div>
+                            <div class="action-list">
+                                <div class="action-item priority">📝 Quick Note</div>
+                                <div class="action-item">📸 Photo Note</div>
+                                <div class="action-item">🎙️ Voice Memo</div>
+                                <div class="action-item">🎯 Quick Goal</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Smart Suggestions:</strong> Different actions per current tab</p>
+                    <p><strong>Interaction:</strong> Luna badge shows context, actions adapt</p>
+                </div>
+            </div>
+
+            <!-- 7. Multi-level Action Sheet -->
+            <div class="action-demo">
+                <h3>7. Multi-level Action Sheet</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <div class="tab-nav">
+                            <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item active luna-tab">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Multi-level Sheet -->
+                        <div class="multilevel-sheet">
+                            <div class="level-primary">
+                                <div class="action-item featured">📝 Quick Capture</div>
+                                <div class="action-item featured">💬 AI Chat</div>
+                                <div class="action-item more">⋯ More Actions</div>
+                            </div>
+                            <div class="level-secondary">
+                                <div class="secondary-actions">
+                                    <div class="action-item">📊 Analytics</div>
+                                    <div class="action-item">⏰ Timer</div>
+                                    <div class="action-item">🎯 Goals</div>
+                                    <div class="action-item">⚙️ Settings</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Hierarchical:</strong> Primary actions + expandable "More"</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Primary, tap "More" → Full list</p>
+                </div>
+            </div>
+
+            <!-- 8. Side Action Strip -->
+            <div class="action-demo">
+                <h3>8. Side Action Strip</h3>
+                <div class="iphone-mockup small">
+                    <div class="iphone-screen">
+                        <div class="tab-nav">
+                            <div class="tab-item"><div class="tab-icon"></div><span>Capture</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Plan</span></div>
+                            <div class="tab-item active luna-tab">
+                                <div class="luna-icon">🤖</div><span>Luna</span>
+                            </div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Engage</span></div>
+                            <div class="tab-item"><div class="tab-icon"></div><span>Profile</span></div>
+                        </div>
+
+                        <!-- Side Strip -->
+                        <div class="side-strip">
+                            <div class="strip-action">📝</div>
+                            <div class="strip-action">💬</div>
+                            <div class="strip-action">📊</div>
+                            <div class="strip-action">⏰</div>
+                            <div class="strip-action">🎯</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-description">
+                    <p><strong>Vertical Strip:</strong> Actions slide in from screen edge</p>
+                    <p><strong>Interaction:</strong> Tap Luna → Strip slides from right edge</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Grid -->
+        <div class="comparison-section">
+            <h3>📊 Feature Comparison</h3>
+            <div class="comparison-table">
+                <div class="comparison-header">
+                    <div>Style</div>
+                    <div>Space Usage</div>
+                    <div>Discoverability</div>
+                    <div>Gesture Support</div>
+                    <div>Best For</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Classic iOS</strong></div>
+                    <div>📱 Full Screen</div>
+                    <div>⭐⭐⭐⭐⭐</div>
+                    <div>🤏 Swipe Down</div>
+                    <div>Native iOS Users</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Floating Panel</strong></div>
+                    <div>📋 Medium</div>
+                    <div>⭐⭐⭐⭐</div>
+                    <div>👆 Tap Outside</div>
+                    <div>Clean Design</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Radial Menu</strong></div>
+                    <div>🎯 Focused</div>
+                    <div>⭐⭐⭐</div>
+                    <div>👆 Touch Actions</div>
+                    <div>Creative Apps</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Expandable Tab</strong></div>
+                    <div>📏 Minimal</div>
+                    <div>⭐⭐⭐⭐⭐</div>
+                    <div>👆 Tab Integration</div>
+                    <div>Seamless UX</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Pop-up Grid</strong></div>
+                    <div>🔸 Tiny</div>
+                    <div>⭐⭐⭐</div>
+                    <div>👆 Quick Access</div>
+                    <div>Power Users</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Contextual</strong></div>
+                    <div>🧠 Smart</div>
+                    <div>⭐⭐⭐⭐⭐</div>
+                    <div>🤖 AI-Driven</div>
+                    <div>Adaptive UX</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Multi-level</strong></div>
+                    <div>📚 Organized</div>
+                    <div>⭐⭐⭐⭐</div>
+                    <div>🔄 Progressive</div>
+                    <div>Feature-Rich</div>
+                </div>
+                <div class="comparison-row">
+                    <div><strong>Side Strip</strong></div>
+                    <div>📏 Edge</div>
+                    <div>⭐⭐</div>
+                    <div>👈 Slide In</div>
+                    <div>Pro Workflows</div>
                 </div>
             </div>
         </div>

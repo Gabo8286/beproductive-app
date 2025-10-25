@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { LunaFABContext } from './LunaFABProvider';
+import { LunaFABContext } from '@/components/luna/providers/LunaFABProvider';
 
 /**
  * Hook to access Luna FAB functionality from any component

@@ -8,8 +8,8 @@ import {
   EnhancedNavigationContext,
   SubNavigationItem,
 } from '@/types/navigation';
-import { smartNavigationSuggestionsService } from './SmartNavigationSuggestionsService';
-import { navigationHubRegistry } from './NavigationHubRegistry';
+import { smartNavigationSuggestionsService } from '@/services/SmartNavigationSuggestionsService';
+import { navigationHubRegistry } from '@/services/NavigationHubRegistry';
 
 interface PreloadTask {
   id: string;

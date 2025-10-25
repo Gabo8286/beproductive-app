@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { ChevronRight, CheckCircle } from 'lucide-react';
-import { useProductivityCycle } from '../hooks/useProductivityCycle';
-import { getPhaseInfo, ProductivityPhase } from '../types/cycle';
+import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProductivityCycle';
+import { getPhaseInfo, ProductivityPhase } from '@/modules/productivity-cycle/types/cycle';
 import { cn } from '@/lib/utils';
 
 interface CycleNavigationProps {

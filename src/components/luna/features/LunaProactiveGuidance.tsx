@@ -16,9 +16,9 @@ import {
   Heart,
   Zap,
 } from 'lucide-react';
-import { useLunaFramework, useFrameworkInsights } from '../context/LunaFrameworkContext';
-import { useLuna } from '../context/LunaContext';
-import { RECOVERY_LEVELS } from '../framework/LunaFrameworkDocumentation';
+import { useLunaFramework, useFrameworkInsights } from '@/components/luna/context/LunaFrameworkContext';
+import { useLuna } from '@/components/luna/context/LunaContext';
+import { RECOVERY_LEVELS } from '@/components/luna/framework/LunaFrameworkDocumentation';
 
 interface ProactiveGuidanceProps {
   className?: string;

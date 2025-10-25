@@ -17,16 +17,19 @@ import {
   Brain,
   Palette,
   X,
+  Sparkles,
 } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { cn } from '@/lib/utils';
 
-import { useLuna } from './context/LunaContext';
-import { LunaAvatar } from './core/LunaAvatar';
+import { useLuna } from '@/components/luna/context/LunaContext';
+import { LunaAvatar } from '@/components/luna/core/LunaAvatar';
+import { PromptLibraryModal } from '@/components/luna/prompt-library/PromptLibraryModal';
+import { LunaActionSheetSettingsModal } from '@/components/luna/settings/LunaActionSheetSettingsModal';
 
 interface UnifiedLunaMenuProps {
   isOpen: boolean;
@@ -139,6 +142,20 @@ const navigationItems: NavigationItem[] = [
     colorClass: 'text-purple-600 hover:bg-purple-50',
   },
   {
+    id: 'prompt-library',
+    label: 'Prompt Library',
+    icon: Sparkles,
+    href: '#prompt-library',
+    colorClass: 'text-indigo-600 hover:bg-indigo-50',
+  },
+  {
+    id: 'luna-settings',
+    label: 'Luna Interaction',
+    icon: Settings,
+    href: '#luna-settings',
+    colorClass: 'text-orange-600 hover:bg-orange-50',
+  },
+  {
     id: 'settings',
     label: 'Settings',
     icon: Settings,
@@ -191,6 +208,8 @@ export const UnifiedLunaMenu: React.FC<UnifiedLunaMenuProps> = ({ isOpen, onClos
   const { currentExpression, openChat } = useLuna();
   const { buttonPress, taskCreate, success } = useHapticFeedback();
   const menuRef = useRef<HTMLDivElement>(null);
+  const [isPromptLibraryOpen, setIsPromptLibraryOpen] = useState(false);
+  const [isActionSheetSettingsOpen, setIsActionSheetSettingsOpen] = useState(false);
 
   // Handle clicks outside the menu
   useEffect(() => {
@@ -232,10 +251,19 @@ export const UnifiedLunaMenu: React.FC<UnifiedLunaMenuProps> = ({ isOpen, onClos
     onClose();
   };
 
-  const handleNavigationClick = (href: string) => {
+  const handleNavigationClick = (href: string, id?: string) => {
     buttonPress();
-    navigate(href);
-    onClose();
+
+    if (id === 'prompt-library') {
+      setIsPromptLibraryOpen(true);
+      onClose();
+    } else if (id === 'luna-settings') {
+      setIsActionSheetSettingsOpen(true);
+      onClose();
+    } else {
+      navigate(href);
+      onClose();
+    }
   };
 
   const handleChatOpen = () => {
@@ -357,7 +385,7 @@ export const UnifiedLunaMenu: React.FC<UnifiedLunaMenuProps> = ({ isOpen, onClos
                 return (
                   <button
                     key={item.id}
-                    onClick={() => handleNavigationClick(item.href)}
+                    onClick={() => handleNavigationClick(item.href, item.id)}
                     className={cn(
                       'w-full flex items-center gap-3 p-2 rounded-lg',
                       'transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]',
@@ -414,6 +442,18 @@ export const UnifiedLunaMenu: React.FC<UnifiedLunaMenuProps> = ({ isOpen, onClos
           </div>
         </div>
       </div>
+
+      {/* Prompt Library Modal */}
+      <PromptLibraryModal
+        isOpen={isPromptLibraryOpen}
+        onClose={() => setIsPromptLibraryOpen(false)}
+      />
+
+      {/* Luna Action Sheet Settings Modal */}
+      <LunaActionSheetSettingsModal
+        isOpen={isActionSheetSettingsOpen}
+        onClose={() => setIsActionSheetSettingsOpen(false)}
+      />
     </>
   );
 };

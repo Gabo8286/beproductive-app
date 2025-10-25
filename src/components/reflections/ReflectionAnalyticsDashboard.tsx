@@ -9,11 +9,11 @@ import {
   Heart,
   Sparkles,
 } from "lucide-react";
-import MoodAnalytics from "./MoodAnalytics";
-import StreakAnalytics from "./StreakAnalytics";
-import PersonalGrowthMetrics from "./PersonalGrowthMetrics";
-import ContentAnalytics from "./ContentAnalytics";
-import ImpactAnalysis from "./ImpactAnalysis";
+import MoodAnalytics from "@/components/reflections/MoodAnalytics";
+import StreakAnalytics from "@/components/reflections/StreakAnalytics";
+import PersonalGrowthMetrics from "@/components/reflections/PersonalGrowthMetrics";
+import ContentAnalytics from "@/components/reflections/ContentAnalytics";
+import ImpactAnalysis from "@/components/reflections/ImpactAnalysis";
 
 interface ReflectionAnalyticsDashboardProps {
   workspaceId: string;

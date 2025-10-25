@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { getRepositoryManager } from "../repositories/RepositoryFactory";
-import { Task, TaskInsert, TaskUpdate, TaskFilters } from "../repositories/interfaces/ITaskRepository";
+import { getRepositoryManager } from "@/services/repositories/RepositoryFactory";
+import { Task, TaskInsert, TaskUpdate, TaskFilters } from "@/services/repositories/interfaces/ITaskRepository";
 
 /**
  * Task Service Hook

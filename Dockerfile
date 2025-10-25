@@ -1,6 +1,53 @@
-# BeProductive v2 - Multi-stage Docker Build
-# Stage 1: Build the application
-FROM node:20-alpine AS builder
+# Spark Bloom Flow - Multi-stage Docker Build
+# Supports both development and production environments
+
+# ================================
+# Base Stage
+# ================================
+FROM node:22-alpine AS base
+
+# Install system dependencies
+RUN apk add --no-cache libc6-compat curl
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# ================================
+# Development Stage
+# ================================
+FROM base AS development
+
+# Install all dependencies (including devDependencies)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 reactdev
+
+# Change ownership of the app directory
+RUN chown -R reactdev:nodejs /app
+USER reactdev
+
+# Expose development port
+EXPOSE 8080
+
+# Health check for development server
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
+
+# Start development server
+CMD ["npm", "run", "dev"]
+
+# ================================
+# Builder Stage
+# ================================
+FROM base AS builder
 
 # Build argument for environment file
 ARG ENV_FILE=.env.docker

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { useGamification } from "./useGamification";
+import { useGamification } from "@/hooks/useGamification";
 import { Json } from "@/integrations/supabase/types";
 
 export interface ProductivityQuestion {

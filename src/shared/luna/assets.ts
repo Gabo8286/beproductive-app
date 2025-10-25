@@ -4,7 +4,7 @@
  * Cross-platform compatible asset handling
  */
 
-import { LunaSize, LunaExpression, LunaAssetConfig, LunaVisualState } from './types';
+import { LunaSize, LunaExpression, LunaAssetConfig, LunaVisualState } from '@/shared/luna/types';
 
 // MARK: - Luna Visual Assets
 

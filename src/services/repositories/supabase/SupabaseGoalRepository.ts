@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
-import { SupabaseUserScopedRepository } from './SupabaseBaseRepository';
-import { IGoalRepository, Goal, GoalInsert, GoalUpdate, GoalFilters } from '../interfaces/IGoalRepository';
+import { SupabaseUserScopedRepository } from '@/services/repositories/supabase/SupabaseBaseRepository';
+import { IGoalRepository, Goal, GoalInsert, GoalUpdate, GoalFilters } from '@/services/repositories/interfaces/IGoalRepository';
 
 export class SupabaseGoalRepository
   extends SupabaseUserScopedRepository<Goal, GoalInsert, GoalUpdate>

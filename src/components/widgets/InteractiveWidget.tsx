@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { BaseWidget, BaseWidgetProps } from "./BaseWidget";
+import { BaseWidget, BaseWidgetProps } from "@/components/widgets/BaseWidget";
 import { cn } from "@/lib/utils";
 
 interface InteractiveWidgetProps extends BaseWidgetProps {

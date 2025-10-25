@@ -143,7 +143,7 @@ export function getNavigationHubDefinitions(): NavigationHub[] {
           id: 'new-task',
           label: 'New Task',
           icon: PlusCircle,
-          action: () => console.log('Creating new task'),
+          action: () => {},
           color: 'bg-blue-500',
           shortcut: '⌘⇧T',
           contextRules: [
@@ -158,7 +158,7 @@ export function getNavigationHubDefinitions(): NavigationHub[] {
           id: 'quick-note',
           label: 'Quick Note',
           icon: FileText,
-          action: () => console.log('Creating quick note'),
+          action: () => {},
           color: 'bg-green-500',
           shortcut: '⌘⇧N',
           contextRules: [
@@ -243,7 +243,7 @@ export function getNavigationHubDefinitions(): NavigationHub[] {
           id: 'new-event',
           label: 'New Event',
           icon: CalendarIcon,
-          action: () => console.log('Creating new event'),
+          action: () => {},
           color: 'bg-green-500',
           shortcut: '⌘⇧E',
           contextRules: [
@@ -258,7 +258,7 @@ export function getNavigationHubDefinitions(): NavigationHub[] {
           id: 'focus-session',
           label: 'Start Focus',
           icon: Timer,
-          action: () => console.log('Starting focus session'),
+          action: () => {},
           color: 'bg-orange-500',
           shortcut: '⌘⇧F',
           contextRules: [
@@ -340,7 +340,7 @@ export function getNavigationHubDefinitions(): NavigationHub[] {
           id: 'start-meeting',
           label: 'Start Meeting',
           icon: Video,
-          action: () => console.log('Starting meeting'),
+          action: () => {},
           color: 'bg-indigo-500',
           shortcut: '⌘⇧M',
           contextRules: [

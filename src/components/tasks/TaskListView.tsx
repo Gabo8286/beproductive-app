@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Clock, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { useDeleteTask, useToggleTaskCompletion } from "@/hooks/useTasks";
-import { TaskForm } from "./TaskForm";
+import { TaskForm } from "@/components/tasks/TaskForm";
 import { Database } from "@/integrations/supabase/types";
 import { TagBadge } from "@/components/tags/TagBadge";
 import { useTags } from "@/hooks/useTags";
@@ -25,10 +25,10 @@ import {
 } from "@dnd-kit/sortable";
 import { DragEndEvent } from "@dnd-kit/core";
 import { useUpdateTaskPositions } from "@/hooks/useDragAndDrop";
-import { QuickTaskInput } from "./QuickTaskInput";
+import { QuickTaskInput } from "@/components/tasks/QuickTaskInput";
 import { useState } from "react";
 import { Plus, ChevronRight, ChevronDown } from "lucide-react";
-import { SubtaskList } from "./SubtaskList";
+import { SubtaskList } from "@/components/tasks/SubtaskList";
 import { useSubtasks } from "@/hooks/useSubtasks";
 
 type Task = Database["public"]["Tables"]["tasks"]["Row"] & {

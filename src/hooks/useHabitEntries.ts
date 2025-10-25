@@ -8,8 +8,8 @@ import {
 } from "@/types/habits";
 import { validateEntryInput } from "@/utils/habits";
 import { format, startOfMonth, endOfMonth } from "date-fns";
-import { habitKeys } from "./useHabits";
-import { useGamification } from "./useGamification";
+import { habitKeys } from "@/hooks/useHabits";
+import { useGamification } from "@/hooks/useGamification";
 
 // =====================================================
 // QUERY KEYS

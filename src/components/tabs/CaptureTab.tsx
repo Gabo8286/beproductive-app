@@ -18,7 +18,7 @@ import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { PullToRefresh } from '@/components/ui/PullToRefresh';
 import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
 import { useSuperAdminAccess } from '@/hooks/useSupeRadminAccess';
-import { SuperAdminCaptureTab } from './SuperAdminCaptureTab';
+import { SuperAdminCaptureTab } from '@/components/tabs/SuperAdminCaptureTab';
 import { SuperAdminSetup } from '@/components/debug/SuperAdminSetup';
 
 interface QuickAddItem {

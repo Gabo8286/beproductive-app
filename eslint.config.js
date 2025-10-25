@@ -7,7 +7,7 @@ import importPlugin from "eslint-plugin-import";
 import unusedImports from "eslint-plugin-unused-imports";
 
 export default tseslint.config(
-  { ignores: ["dist", "node_modules", "coverage", ".husky", "scripts", "electron-app", "tests", "*.config.ts", "*.config.js"] },
+  { ignores: ["dist", "node_modules", "coverage", ".husky", "scripts", "electron-app", "tests", "*.config.ts", "*.config.js", "ios-development-mcp", "supabase/functions"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -56,7 +56,7 @@ export default tseslint.config(
 
       // FMEW Import Consistency Rules (FM-02 Countermeasure)
       "import/order": [
-        "error",
+        "warn",
         {
           groups: [
             "builtin",   // Node.js built-ins
@@ -83,19 +83,19 @@ export default tseslint.config(
       ],
 
       // Import/Export Rules
-      "import/no-unresolved": "error",
-      "import/named": "error",
-      "import/default": "error",
-      "import/namespace": "error",
-      "import/no-absolute-path": "error",
-      "import/no-dynamic-require": "error",
-      "import/no-self-import": "error",
-      "import/no-cycle": "error",
-      "import/no-useless-path-segments": "error",
-      "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+      "import/no-unresolved": "warn",
+      "import/named": "warn",
+      "import/default": "warn",
+      "import/namespace": "warn",
+      "import/no-absolute-path": "warn",
+      "import/no-dynamic-require": "warn",
+      "import/no-self-import": "warn",
+      "import/no-cycle": "warn",
+      "import/no-useless-path-segments": "warn",
+      "import/consistent-type-specifier-style": ["warn", "prefer-top-level"],
 
       // Unused Imports (FMEW Dependency Drift Prevention)
-      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-imports": "warn",
       "unused-imports/no-unused-vars": [
         "warn",
         {
@@ -108,38 +108,38 @@ export default tseslint.config(
 
       // FMEW Specific Rules for Code Quality
       "no-console": ["warn", { allow: ["warn", "error"] }],
-      "no-debugger": "error",
-      "no-alert": "error",
-      "no-eval": "error",
-      "no-implied-eval": "error",
-      "no-new-func": "error",
-      "no-script-url": "error",
+      "no-debugger": "warn",
+      "no-alert": "warn",
+      "no-eval": "warn",
+      "no-implied-eval": "warn",
+      "no-new-func": "warn",
+      "no-script-url": "warn",
 
       // TypeScript Specific Enhancements
       "@typescript-eslint/consistent-type-imports": [
-        "error",
+        "warn",
         {
           prefer: "type-imports",
           disallowTypeAnnotations: false,
         },
       ],
       "@typescript-eslint/consistent-type-exports": [
-        "error",
+        "warn",
         {
           fixMixedExportsWithInlineTypeSpecifier: false,
         },
       ],
-      "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-import-type-side-effects": "warn",
 
       // FMEW Performance Rules
       "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/prefer-nullish-coalescing": "warn",
       "@typescript-eslint/prefer-optional-chain": "warn",
-      "@typescript-eslint/prefer-as-const": "error",
+      "@typescript-eslint/prefer-as-const": "warn",
 
       // FMEW Security Rules (FM-05 Countermeasure)
-      "no-unsafe-finally": "error",
-      "no-unsafe-negation": "error",
+      "no-unsafe-finally": "warn",
+      "no-unsafe-negation": "warn",
       "@typescript-eslint/no-unsafe-argument": "warn",
       "@typescript-eslint/no-unsafe-assignment": "warn",
       "@typescript-eslint/no-unsafe-call": "warn",

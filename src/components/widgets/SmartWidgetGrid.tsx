@@ -11,7 +11,7 @@ import {
   arrayMove,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import { SortableWidget } from "./SortableWidget";
+import { SortableWidget } from "@/components/widgets/SortableWidget";
 import { useWidgets } from "@/contexts/WidgetContext";
 import { cn } from "@/lib/utils";
 

@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowLeft, Sparkles, MessageCircle, Brain, Zap } from 'lucide-react';
-import { LunaAvatar } from '../core/LunaAvatar';
-import { useLuna } from '../context/LunaContext';
+import { LunaAvatar } from '@/components/luna/core/LunaAvatar';
+import { useLuna } from '@/components/luna/context/LunaContext';
 import { LUNA_COLORS } from '@/assets/luna/luna-assets';
 
 interface LunaIntroStepProps {

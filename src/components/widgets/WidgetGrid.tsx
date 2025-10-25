@@ -20,8 +20,8 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { DraggableWidget } from "./DraggableWidget";
-import { WidgetSelector } from "./WidgetSelector";
+import { DraggableWidget } from "@/components/widgets/DraggableWidget";
+import { WidgetSelector } from "@/components/widgets/WidgetSelector";
 import { useWidgetLayout } from "@/hooks/useWidgetLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

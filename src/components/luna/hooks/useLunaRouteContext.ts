@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useLuna } from '../context/LunaContext';
+import { useLuna } from '@/components/luna/context/LunaContext';
 
 /**
  * Hook that automatically sets Luna's context based on the current route

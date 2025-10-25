@@ -72,7 +72,7 @@ import {
   useAnalyticsInsights,
   useReportTemplates,
 } from "@/hooks/useAnalytics";
-import { DashboardBuilder } from "./DashboardBuilder";
+import { DashboardBuilder } from "@/components/analytics/DashboardBuilder";
 
 export function AnalyticsDashboard() {
   const [selectedTimeframe, setSelectedTimeframe] =

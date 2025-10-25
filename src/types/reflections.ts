@@ -3,9 +3,10 @@
 // Matches database schema from Sprint 6
 // =====================================================
 
+import type { Database } from "@/integrations/supabase/types";
+
 import type { Goal } from "./goals";
 import type { Habit } from "./habits";
-import type { Database } from "@/integrations/supabase/types";
 
 // Enums matching database types
 export type ReflectionType =

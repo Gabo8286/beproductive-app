@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { RuleEditor } from "./RuleEditor";
+import { RuleEditor } from "@/components/automation/RuleEditor";
 import { Plus, Trash2, Edit, Zap } from "lucide-react";
 import { format } from "date-fns";
 

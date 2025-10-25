@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { LunaFAB } from '../fab/LunaFAB';
-import { LunaCarouselOverlay } from '../fab/LunaCarouselOverlay';
+import { LunaFAB } from '@/components/luna/fab/LunaFAB';
+import { LunaCarouselOverlay } from '@/components/luna/fab/LunaCarouselOverlay';
 
 interface LunaFABContextType {
   isOverlayOpen: boolean;

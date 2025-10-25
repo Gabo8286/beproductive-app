@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useEnhancedNavigationContext } from './useEnhancedNavigationContext';
+import { useEnhancedNavigationContext } from '@/hooks/useEnhancedNavigationContext';
 import {
   predictiveNavigationService,
   PreloadTask,

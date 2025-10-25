@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { AIInsightType } from "@/types/ai-insights";
-import { aiServiceManager, AIServiceRequest } from "./aiServiceManager";
+import { aiServiceManager, AIServiceRequest } from "@/services/ai/aiServiceManager";
 
 export interface ProductivityData {
   goals: any[];

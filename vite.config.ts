@@ -8,22 +8,51 @@ import { componentTagger } from "lovable-tagger";
 // Use 'npm run dev:mobile' for mobile-sized floating window development
 export default defineConfig(({ mode }) => ({
   server: {
-    host: true,
+    // Fix for Safari WebSocket connection issues - always bind to all interfaces
+    host: '127.0.0.1',
     port: 8080,
-    // Note: Browser opening is controlled by mobile development scripts for device simulation
+    strictPort: true, // Force specific port to avoid conflicts
+    open: false, // Browser opening controlled by mobile development scripts
+    // Connection and timeout settings for stability
+    cors: true,
     // Development performance optimizations
     ...(mode === 'development' && {
       hmr: {
         overlay: false, // Reduce overlay interference
+        host: '127.0.0.1', // Match main server host binding
+        port: 8080, // Use same port as main server to avoid conflicts
       },
       fs: {
         strict: false, // Allow broader file access
       },
+      // Docker compatibility
+      watch: {
+        usePolling: true, // Required for Docker on macOS
+        interval: 1000,
+      },
     }),
+    // Custom middleware for health check endpoint
+    middlewareMode: false
   },
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
+    // Health check endpoint plugin for Docker monitoring
+    {
+      name: 'health-check',
+      configureServer(server) {
+        server.middlewares.use('/health', (req, res, next) => {
+          res.setHeader('Content-Type', 'application/json');
+          res.statusCode = 200;
+          res.end(JSON.stringify({
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            port: 8080,
+            environment: mode || 'development'
+          }));
+        });
+      }
+    }
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -34,12 +63,12 @@ export default defineConfig(({ mode }) => ({
     target: 'es2020',
     sourcemap: false,
     minify: 'esbuild',
-    // Optimized performance budgets
-    chunkSizeWarningLimit: 500, // Adjusted limit for vendor chunks
+    // EMERGENCY: Strict performance budgets to force smaller chunks
+    chunkSizeWarningLimit: 500, // Reduced back to force smaller chunks
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Optimized chunking strategy based on actual usage patterns and load priorities
+          // Emergency bundle size reduction - aggressive chunking strategy
           if (id.includes('node_modules')) {
             // Core React libraries - split for better caching and loading
             if (id.includes('react/') || id.includes('react-dom/client')) {
@@ -71,14 +100,23 @@ export default defineConfig(({ mode }) => ({
               return 'query';
             }
 
-            // Charts - large but only used in specific pages
-            if (id.includes('recharts') || id.includes('d3')) {
-              return 'charts';
+            // Charts - large but only used in specific pages - split further
+            if (id.includes('recharts')) {
+              return 'charts-recharts';
+            }
+            if (id.includes('d3')) {
+              return 'charts-d3';
             }
 
-            // Utilities - small, frequently used
-            if (id.includes('zod') || id.includes('date-fns') || id.includes('clsx') || id.includes('class-variance-authority')) {
-              return 'utils';
+            // Utilities - split into smaller chunks
+            if (id.includes('zod')) {
+              return 'utils-validation';
+            }
+            if (id.includes('date-fns')) {
+              return 'utils-date';
+            }
+            if (id.includes('clsx') || id.includes('class-variance-authority')) {
+              return 'utils-styling';
             }
 
             // AI libraries - feature-specific, can be lazy loaded
@@ -86,17 +124,81 @@ export default defineConfig(({ mode }) => ({
               return 'ai-services';
             }
 
+            // Forms and validation - common but can be split
+            if (id.includes('react-hook-form') || id.includes('@hookform')) {
+              return 'forms';
+            }
+
+            // Internationalization - large but can be split
+            if (id.includes('react-i18next') || id.includes('i18next')) {
+              return 'i18n';
+            }
+
+            // Testing libraries - development only
+            if (id.includes('vitest') || id.includes('@testing-library')) {
+              return 'testing';
+            }
+
+            // Large utility libraries
+            if (id.includes('lodash') || id.includes('ramda') || id.includes('moment')) {
+              return 'utilities-large';
+            }
+
             // Everything else from node_modules
             return 'vendor-misc';
           }
 
-          // App code chunking for better code splitting
-          if (id.includes('src/pages/')) {
-            // Group admin pages together (lower priority)
-            if (id.includes('src/pages/admin/')) {
-              return 'pages-admin';
+          // EMERGENCY: Aggressive app code chunking to reduce main bundle
+          if (id.includes('src/')) {
+            // Admin features - rarely used, separate chunk
+            if (id.includes('src/pages/admin/') || id.includes('src/components/admin/')) {
+              return 'admin-features';
             }
-            // Let Vite handle other pages automatically for optimal splitting
+
+            // Analytics features - heavy, separate chunk
+            if (id.includes('Analytics') || id.includes('analytics') || id.includes('src/components/analytics/')) {
+              return 'analytics-features';
+            }
+
+            // AI and Luna features - feature-specific
+            if (id.includes('luna') || id.includes('Luna') || id.includes('src/components/ai/')) {
+              return 'ai-features';
+            }
+
+            // Automation features - complex, separate chunk
+            if (id.includes('automation') || id.includes('Automation')) {
+              return 'automation-features';
+            }
+
+            // Habit features - large component set
+            if (id.includes('habit') || id.includes('Habit')) {
+              return 'habit-features';
+            }
+
+            // Goal features - large component set
+            if (id.includes('goal') || id.includes('Goal')) {
+              return 'goal-features';
+            }
+
+            // Reflection features
+            if (id.includes('reflection') || id.includes('Reflection')) {
+              return 'reflection-features';
+            }
+
+            // Task features - core but can be chunked
+            if (id.includes('task') || id.includes('Task') || id.includes('src/pages/Tasks')) {
+              return 'task-features';
+            }
+
+            // Widget system - modular loading
+            if (id.includes('widget') || id.includes('Widget')) {
+              return 'widget-system';
+            }
+
+            // Settings and config
+            if (id.includes('settings') || id.includes('Settings') || id.includes('config') || id.includes('Config')) {
+              return 'settings-features';
+            }
           }
         },
         // Optimize chunk naming for caching
@@ -104,6 +206,10 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
+      // Conservative tree shaking to avoid empty chunks
+      treeshake: {
+        preset: 'recommended' // Use recommended settings only
+      }
     },
     // Tree shaking and dead code elimination
     cssCodeSplit: true,
@@ -121,11 +227,12 @@ export default defineConfig(({ mode }) => ({
       '@supabase/supabase-js',
       '@supabase/postgrest-js',
       '@supabase/realtime-js',
-      '@supabase/storage-js'
-    ],
-    exclude: [
-      // Large libraries that should be loaded on demand
-      'recharts'
+      '@supabase/storage-js',
+      // Include recharts and its dependencies to ensure proper initialization
+      'recharts',
+      'recharts/es6/index',
+      'd3-shape',
+      'd3-scale'
     ]
   },
   css: {

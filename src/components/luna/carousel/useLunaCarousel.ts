@@ -1,12 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useHapticFeedback } from '@/hooks/useHapticFeedback';
-import { CarouselState, CarouselPosition, CarouselCategory, CarouselItem, CarouselConfig, DragDirection } from './types';
+import { CarouselState, CarouselPosition, CarouselCategory, CarouselItem, CarouselConfig, DragDirection } from '@/components/luna/carousel/types';
 import {
   lunaSize,
   getCornerFABPosition,
   getCornerArcPositions,
   validateCornerMenuBounds
-} from '../design/DesignTokens';
+} from '@/components/luna/design/DesignTokens';
 
 const DEFAULT_CONFIG: CarouselConfig = {
   radius: 120, // Will be overridden by mobile-optimized corner radius

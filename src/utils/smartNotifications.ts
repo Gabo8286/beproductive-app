@@ -1,5 +1,5 @@
 // Smart Notification System - Privacy-First Context-Aware Notifications
-import { productivityStateDetector } from './productivityState';
+import { productivityStateDetector } from '@/utils/productivityState';
 import type { ProductivityState } from './productivityState';
 
 export interface SmartNotification {

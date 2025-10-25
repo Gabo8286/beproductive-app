@@ -1,5 +1,5 @@
 import { Plus, Target, CheckSquare, Repeat, BookOpen } from "lucide-react";
-import { BaseWidget } from "./BaseWidget";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 

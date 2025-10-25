@@ -1,5 +1,5 @@
 // Notification Service for AI Agents
-import { AgentConfig } from './config';
+import { AgentConfig } from '@/agents/shared/config';
 
 export interface NotificationPayload {
   title: string;

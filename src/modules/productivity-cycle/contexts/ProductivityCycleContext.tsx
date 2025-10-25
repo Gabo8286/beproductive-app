@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { useProductivityCycle } from '../hooks/useProductivityCycle';
+import { useProductivityCycle } from '@/modules/productivity-cycle/hooks/useProductivityCycle';
 import {
   ProductivityCycleState,
   ProductivityPhase,

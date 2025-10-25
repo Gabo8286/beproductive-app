@@ -18,6 +18,7 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart,
+  ComposedChart,
 } from "recharts";
 import { format, parseISO, startOfDay, eachDayOfInterval } from "date-fns";
 
@@ -126,7 +127,7 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
         {chartData.length > 0 ? (
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData}>
+              <ComposedChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                 <XAxis
                   dataKey="date"
@@ -155,7 +156,7 @@ export function ProgressChart({ goal, progressHistory }: ProgressChartProps) {
                   dot={{ fill: "hsl(var(--primary))", strokeWidth: 2, r: 4 }}
                   activeDot={{ r: 6, fill: "hsl(var(--primary))" }}
                 />
-              </AreaChart>
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         ) : (

@@ -56,8 +56,8 @@ import {
   PROVIDER_LABELS,
   API_KEY_STATUS_LABELS,
 } from "@/types/api-management";
-import { CreateAPIKeyDialog } from "./CreateAPIKeyDialog";
-import { EditAPIKeyDialog } from "./EditAPIKeyDialog";
+import { CreateAPIKeyDialog } from "@/components/admin/APIManagement/CreateAPIKeyDialog";
+import { EditAPIKeyDialog } from "@/components/admin/APIManagement/EditAPIKeyDialog";
 
 export const APIKeyManagement: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");

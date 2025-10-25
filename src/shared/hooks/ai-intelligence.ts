@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { lunaManager, processWithLocalIntelligence, canHandleLocally } from '../luna';
+import { lunaManager, processWithLocalIntelligence, canHandleLocally } from '@/shared/luna';
 import type {
   LunaContext,
   LunaResult,

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TaskCard } from "./TaskCard";
+import { TaskCard } from "@/components/tasks/TaskCard";
 import { Database } from "@/integrations/supabase/types";
 import { DragAndDropProvider } from "@/components/dnd/DragAndDropProvider";
 import { DroppableArea } from "@/components/dnd/DroppableArea";
@@ -16,9 +16,9 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { QuickTaskInput } from "./QuickTaskInput";
+import { QuickTaskInput } from "@/components/tasks/QuickTaskInput";
 import { useSubtaskProgress } from "@/hooks/useSubtasks";
-import { ProgressIndicator } from "./ProgressIndicator";
+import { ProgressIndicator } from "@/components/tasks/ProgressIndicator";
 
 type Task = Database["public"]["Tables"]["tasks"]["Row"] & {
   assigned_to_profile?: { full_name: string | null; avatar_url: string | null };

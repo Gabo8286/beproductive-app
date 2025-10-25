@@ -240,3 +240,8 @@ Required for development:
 - All components support dark mode and RTL languages
 - Performance gates must pass before deployment
 - Accessibility compliance is mandatory for all new features
+
+## Critical Troubleshooting Reference
+- **VITE SERVER ISSUES**: See `VITE_SERVER_TROUBLESHOOTING_FMEA.md` for proven solutions
+- **React Context Errors**: Check BrowserRouter positioning in provider hierarchy
+- **Port Binding Issues**: Verify host/port consistency in vite.config.ts

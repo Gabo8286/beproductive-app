@@ -1,5 +1,5 @@
 // Supabase performance monitoring utility
-import { performanceMonitor } from './performanceMonitor';
+import { performanceMonitor } from '@/utils/performanceMonitor';
 
 interface SupabaseCall {
   operation: string;

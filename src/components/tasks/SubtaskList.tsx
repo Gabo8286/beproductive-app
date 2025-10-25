@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useSubtasks, useSubtaskProgress } from "@/hooks/useSubtasks";
-import { TaskCard } from "./TaskCard";
-import { SubtaskCreator } from "./SubtaskCreator";
-import { ProgressIndicator } from "./ProgressIndicator";
+import { TaskCard } from "@/components/tasks/TaskCard";
+import { SubtaskCreator } from "@/components/tasks/SubtaskCreator";
+import { ProgressIndicator } from "@/components/tasks/ProgressIndicator";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";

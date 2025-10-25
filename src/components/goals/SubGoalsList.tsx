@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useGoals } from "@/hooks/useGoals";
-import { GoalCard } from "./GoalCard";
+import { GoalCard } from "@/components/goals/GoalCard";
 import { Plus } from "lucide-react";
 
 interface SubGoalsListProps {

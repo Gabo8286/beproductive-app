@@ -1,4 +1,4 @@
-import { IUserScopedRepository, IRealtimeRepository } from './IBaseRepository';
+import { IUserScopedRepository, IRealtimeRepository } from '@/services/repositories/interfaces/IBaseRepository';
 import { Database } from '@/integrations/supabase/types';
 
 // Type definitions

@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
-import { SupabaseUserScopedRepository } from './SupabaseBaseRepository';
-import { ITaskRepository, Task, TaskInsert, TaskUpdate, TaskFilters } from '../interfaces/ITaskRepository';
+import { SupabaseUserScopedRepository } from '@/services/repositories/supabase/SupabaseBaseRepository';
+import { ITaskRepository, Task, TaskInsert, TaskUpdate, TaskFilters } from '@/services/repositories/interfaces/ITaskRepository';
 
 export class SupabaseTaskRepository
   extends SupabaseUserScopedRepository<Task, TaskInsert, TaskUpdate>

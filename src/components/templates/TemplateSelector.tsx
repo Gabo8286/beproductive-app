@@ -15,8 +15,8 @@ import {
   useTemplateCategories,
   useCreateTaskFromTemplate,
 } from "@/hooks/useTaskTemplates";
-import { TemplateCard } from "./TemplateCard";
-import { VariableInput } from "./VariableInput";
+import { TemplateCard } from "@/components/templates/TemplateCard";
+import { VariableInput } from "@/components/templates/VariableInput";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface TemplateSelectorProps {

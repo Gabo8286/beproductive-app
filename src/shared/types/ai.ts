@@ -4,7 +4,7 @@
  * Designed to work consistently across React TypeScript and Swift
  */
 
-import { UUID, Timestamp, UserId, Score, ConfidenceLevel, PerformanceGrade } from './core';
+import { UUID, Timestamp, UserId, Score, ConfidenceLevel, PerformanceGrade } from '@/shared/types/core';
 
 // MARK: - AI Provider Types
 export type AIProvider =

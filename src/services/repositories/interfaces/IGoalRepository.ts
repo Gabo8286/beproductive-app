@@ -1,4 +1,4 @@
-import { IUserScopedRepository, IRealtimeRepository } from './IBaseRepository';
+import { IUserScopedRepository, IRealtimeRepository } from '@/services/repositories/interfaces/IBaseRepository';
 
 // Goal types - simplified from the existing types
 export interface Goal {

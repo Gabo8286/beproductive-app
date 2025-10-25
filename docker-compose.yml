@@ -60,28 +60,38 @@ services:
       timeout: 10s
       retries: 3
 
-  # Development mode service (alternative to production build)
+  # Development mode service (reliable development environment)
   dev:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    container_name: beproductive-v2-dev
+      dockerfile: Dockerfile
+      target: development
+    container_name: spark-bloom-flow-dev
     restart: unless-stopped
     ports:
-      - "8080:8080"
-    env_file:
-      - docker.env
+      - "8080:8080"  # Vite dev server
+      - "8081:8081"  # HMR port
     environment:
       - NODE_ENV=development
       - VITE_APP_ENVIRONMENT=docker-dev
+      - VITE_LOCAL_MODE=true
     volumes:
+      # Mount source code for hot reloading
       - .:/app
+      # Preserve node_modules in container for performance
       - /app/node_modules
+      # Cache directories for better performance
+      - dev_cache:/app/.vite
     networks:
       - beproductive-network
     profiles:
       - dev
-    command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
 # Networks
 networks:
@@ -94,3 +104,6 @@ volumes:
   redis_data:
     driver: local
     name: beproductive-redis-data
+  dev_cache:
+    driver: local
+    name: spark-bloom-flow-dev-cache

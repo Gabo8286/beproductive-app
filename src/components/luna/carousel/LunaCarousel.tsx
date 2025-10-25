@@ -2,25 +2,25 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, MessageSquare, Menu, Star, Search, ArrowRight, ArrowUp, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { CarouselButton } from './CarouselButton';
-import { useLunaCarousel } from './useLunaCarousel';
-import { CarouselCategory, CarouselConfig } from './types';
-import { LunaAvatar } from '../core/LunaAvatar';
-import { useLuna } from '../context/LunaContext';
+import { CarouselButton } from '@/components/luna/carousel/CarouselButton';
+import { useLunaCarousel } from '@/components/luna/carousel/useLunaCarousel';
+import { CarouselCategory, CarouselConfig } from '@/components/luna/carousel/types';
+import { LunaAvatar } from '@/components/luna/core/LunaAvatar';
+import { useLuna } from '@/components/luna/context/LunaContext';
 import {
   lunaColors,
   lunaShadows,
   lunaSize,
   lunaSpacing,
   getContainerSize,
-} from '../design/DesignTokens';
+} from '@/components/luna/design/DesignTokens';
 import {
   entranceAnimations,
   interactionAnimations,
   layoutAnimations,
   dragIndicatorAnimations,
   premiumSprings,
-} from '../design/AnimationConfigs';
+} from '@/components/luna/design/AnimationConfigs';
 
 interface LunaCarouselProps {
   categories: CarouselCategory[];

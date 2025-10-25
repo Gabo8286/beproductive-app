@@ -1,9 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
-import { ITaskRepository } from './interfaces/ITaskRepository';
-import { IGoalRepository } from './interfaces/IGoalRepository';
-import { SupabaseTaskRepository } from './supabase/SupabaseTaskRepository';
-import { SupabaseGoalRepository } from './supabase/SupabaseGoalRepository';
+import { ITaskRepository } from '@/services/repositories/interfaces/ITaskRepository';
+import { IGoalRepository } from '@/services/repositories/interfaces/IGoalRepository';
+import { SupabaseTaskRepository } from '@/services/repositories/supabase/SupabaseTaskRepository';
+import { SupabaseGoalRepository } from '@/services/repositories/supabase/SupabaseGoalRepository';
 
 /**
  * Repository Factory

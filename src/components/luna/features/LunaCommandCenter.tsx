@@ -20,8 +20,8 @@ import {
   Lightbulb,
   Zap,
 } from 'lucide-react';
-import { useLuna } from '../context/LunaContext';
-import { useLunaFramework } from '../context/LunaFrameworkContext';
+import { useLuna } from '@/components/luna/context/LunaContext';
+import { useLunaFramework } from '@/components/luna/context/LunaFrameworkContext';
 import { generateContextualSuggestions } from '@/utils/aiFrameworkStreaming';
 
 interface LunaCommandCenterProps {

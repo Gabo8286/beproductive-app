@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BaseWidget } from "./BaseWidget";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

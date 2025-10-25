@@ -32,6 +32,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   ErrorBar,
+  ComposedChart,
 } from "recharts";
 import {
   Brain,
@@ -409,7 +410,7 @@ export function PredictiveAnalytics() {
                 </div>
               ) : predictionData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={400}>
-                  <LineChart data={predictionData}>
+                  <ComposedChart data={predictionData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="date" />
                     <YAxis />
@@ -461,7 +462,7 @@ export function PredictiveAnalytics() {
                       strokeDasharray="2 2"
                       label="Today"
                     />
-                  </LineChart>
+                  </ComposedChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="text-center py-8 text-muted-foreground">

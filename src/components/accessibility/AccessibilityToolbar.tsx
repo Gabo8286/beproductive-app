@@ -27,7 +27,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { useAccessibility } from './AccessibilityProvider';
+import { useAccessibility } from '@/components/accessibility/AccessibilityProvider';
 
 interface AccessibilityToolbarProps {
   position?: 'top' | 'bottom' | 'left' | 'right';

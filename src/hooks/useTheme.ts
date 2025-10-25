@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { usePersonalization } from "./usePersonalization";
+import { usePersonalization } from "@/hooks/usePersonalization";
 
 export function useTheme() {
   const { userPreferences, updatePreferences } = usePersonalization();

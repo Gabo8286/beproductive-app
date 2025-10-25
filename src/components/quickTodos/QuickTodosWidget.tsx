@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StickyNote, ArrowRight } from "lucide-react";
 import { useQuickTodos } from "@/hooks/quickTodos";
-import { QuickTodoForm } from "./QuickTodoForm";
+import { QuickTodoForm } from "@/components/quickTodos/QuickTodoForm";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 

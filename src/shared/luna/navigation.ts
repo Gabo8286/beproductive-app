@@ -10,7 +10,7 @@ import {
   LunaContext,
   LunaResult
 } from './types';
-import { UUID, Score, ConfidenceLevel } from '../types/core';
+import { UUID, Score, ConfidenceLevel } from '@/shared/types/core';
 
 // MARK: - Navigation Intelligence Engine
 

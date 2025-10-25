@@ -1,5 +1,5 @@
 import { format, isToday, isYesterday, isThisWeek } from "date-fns";
-import ReflectionCard from "./ReflectionCard";
+import ReflectionCard from "@/components/reflections/ReflectionCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookOpen } from "lucide-react";
 import type { ReflectionWithRelations } from "@/types/reflections";

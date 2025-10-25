@@ -7,7 +7,7 @@ import {
   Habit,
   CreateHabitInput,
 } from "@/types/habits";
-import { habitKeys, useCreateHabit } from "./useHabits";
+import { habitKeys, useCreateHabit } from "@/hooks/useHabits";
 import { getHabitColor, getHabitIcon } from "@/utils/habits";
 
 // =====================================================

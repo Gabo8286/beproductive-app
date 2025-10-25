@@ -1,6 +1,6 @@
 import { Repeat, Flame, CheckCircle } from "lucide-react";
-import { BaseWidget } from "./BaseWidget";
-import { WidgetActions } from "./WidgetActions";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
+import { WidgetActions } from "@/components/widgets/WidgetActions";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useHabits } from "@/hooks/useHabits";

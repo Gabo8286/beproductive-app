@@ -1,6 +1,6 @@
 import { BookOpen, TrendingUp } from "lucide-react";
-import { BaseWidget } from "./BaseWidget";
-import { WidgetActions } from "./WidgetActions";
+import { BaseWidget } from "@/components/widgets/BaseWidget";
+import { WidgetActions } from "@/components/widgets/WidgetActions";
 import { Button } from "@/components/ui/button";
 import { useReflections } from "@/hooks/useReflections";
 import { useAuth } from "@/contexts/AuthContext";

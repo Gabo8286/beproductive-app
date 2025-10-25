@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { LunaOrbitalButtons } from './LunaOrbitalButtons';
-import { EnhancedLunaOrbitalButtons } from './EnhancedLunaOrbitalButtons';
+import { LunaOrbitalButtons } from '@/components/luna/fab/LunaOrbitalButtons';
+import { EnhancedLunaOrbitalButtons } from '@/components/luna/fab/EnhancedLunaOrbitalButtons';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface LunaOrbitalButtonsMigrationProps {

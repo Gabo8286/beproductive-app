@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { LunaActionSheetSettingsModal } from "@/components/luna/settings/LunaActionSheetSettingsModal";
 import {
   Loader2,
   Upload,
@@ -43,6 +44,7 @@ import {
   Timer,
   Brain,
   Heart,
+  Hand,
   Coffee,
   Moon,
   Sun,
@@ -92,6 +94,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isLunaSettingsOpen, setIsLunaSettingsOpen] = useState(false);
 
   const [stats, setStats] = useState<ProductivityStats>({
     tasksCompleted: 847,
@@ -724,6 +727,32 @@ export default function Profile() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Luna Interface Settings */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Hand className="h-5 w-5" />
+                Luna Interface
+              </CardTitle>
+              <CardDescription>Customize how Luna's quick actions appear and behave</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Choose from 8 different interface styles for Luna's action menu, from classic iOS-style sheets to modern radial menus.
+                </p>
+                <Button
+                  onClick={() => setIsLunaSettingsOpen(true)}
+                  className="w-full"
+                  variant="outline"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  Configure Luna Interface
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Public Profile Tab */}
@@ -827,6 +856,12 @@ export default function Profile() {
         </TabsContent>
 
       </Tabs>
+
+      {/* Luna Action Sheet Settings Modal */}
+      <LunaActionSheetSettingsModal
+        isOpen={isLunaSettingsOpen}
+        onClose={() => setIsLunaSettingsOpen(false)}
+      />
     </div>
   );
 }

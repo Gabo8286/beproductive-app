@@ -11,7 +11,7 @@ import {
   AnimatedLunaWrapper,
   LunaParticleEffect,
   LunaContextGlow
-} from '../animations/LunaAnimations';
+} from '@/components/luna/animations/LunaAnimations';
 
 interface LunaAvatarProps {
   size: LunaSize;

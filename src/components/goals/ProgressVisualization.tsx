@@ -16,10 +16,10 @@ import {
   useGoalProgressAnalytics,
   useProgressSuggestions,
 } from "@/hooks/useGoalProgress";
-import { ProgressChart } from "./ProgressChart";
-import { ProgressSuggestions } from "./ProgressSuggestions";
-import { ProgressHistory } from "./ProgressHistory";
-import { ProgressEditor } from "./ProgressEditor";
+import { ProgressChart } from "@/components/goals/ProgressChart";
+import { ProgressSuggestions } from "@/components/goals/ProgressSuggestions";
+import { ProgressHistory } from "@/components/goals/ProgressHistory";
+import { ProgressEditor } from "@/components/goals/ProgressEditor";
 import { TrendingUp, TrendingDown, Minus, Target, Clock } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 

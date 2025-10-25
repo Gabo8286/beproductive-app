@@ -27,12 +27,12 @@ import {
   QrCode,
 } from "lucide-react";
 import { withSuperAdminAccess } from "@/hooks/useSupeRadminAccess";
-import { BetaSignupOverview } from "./BetaSignupOverview";
-import { PendingApprovals } from "./PendingApprovals";
-import { ApprovedUsers } from "./ApprovedUsers";
-import { EmailHistory } from "./EmailHistory";
-import { BetaSignupSettings } from "./BetaSignupSettings";
-import { SuperAdminQRGenerator } from "./SuperAdminQRGenerator";
+import { BetaSignupOverview } from "@/components/admin/BetaSignupManagement/BetaSignupOverview";
+import { PendingApprovals } from "@/components/admin/BetaSignupManagement/PendingApprovals";
+import { ApprovedUsers } from "@/components/admin/BetaSignupManagement/ApprovedUsers";
+import { EmailHistory } from "@/components/admin/BetaSignupManagement/EmailHistory";
+import { BetaSignupSettings } from "@/components/admin/BetaSignupManagement/BetaSignupSettings";
+import { SuperAdminQRGenerator } from "@/components/admin/BetaSignupManagement/SuperAdminQRGenerator";
 
 interface BetaSignupStats {
   totalSignups: number;

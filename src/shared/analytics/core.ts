@@ -13,12 +13,12 @@ import type {
   RecommendationContext
 } from './types';
 
-import { DataCollectionService } from './data-collection';
-import { PatternRecognitionService } from './pattern-recognition';
-import { InsightGenerationService } from './insight-generation';
-import { RecommendationEngineService } from './recommendation-engine';
-import { AchievementSystemService } from './achievement-system';
-import { AnalyticsStorageService } from './storage';
+import { DataCollectionService } from '@/shared/analytics/data-collection';
+import { PatternRecognitionService } from '@/shared/analytics/pattern-recognition';
+import { InsightGenerationService } from '@/shared/analytics/insight-generation';
+import { RecommendationEngineService } from '@/shared/analytics/recommendation-engine';
+import { AchievementSystemService } from '@/shared/analytics/achievement-system';
+import { AnalyticsStorageService } from '@/shared/analytics/storage';
 
 export class AnalyticsEngine {
   private static instance: AnalyticsEngine;

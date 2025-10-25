@@ -3,8 +3,9 @@
  * Defines the type system for the new Luna orbital navigation architecture
  */
 
-import { LucideIcon } from 'lucide-react';
-import { UserRole } from '@/types/roles';
+import type { LucideIcon } from 'lucide-react';
+
+import type { UserRole } from '@/types/roles';
 
 // Navigation hub identifiers
 export type NavigationHubId =

@@ -14,7 +14,7 @@ import type {
   AnalyticsStats
 } from './types';
 
-import { AnalyticsEngine } from './core';
+import { AnalyticsEngine } from '@/shared/analytics/core';
 
 // Export types for external use
 export type {

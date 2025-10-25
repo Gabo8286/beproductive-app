@@ -6,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { QuickTaskInput } from "./QuickTaskInput";
-import { TaskTemplateSelector } from "./TaskTemplateSelector";
+import { QuickTaskInput } from "@/components/tasks/QuickTaskInput";
+import { TaskTemplateSelector } from "@/components/tasks/TaskTemplateSelector";
 import { QuickTaskDefaults } from "@/hooks/useQuickTask";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

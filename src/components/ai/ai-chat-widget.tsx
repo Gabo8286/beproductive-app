@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Minimize2, Maximize2 } from "lucide-react";
-import ConversationalInterface from "./ConversationalInterface";
+import ConversationalInterface from "@/components/ai/ConversationalInterface";
 import { useI18n } from "@/hooks/useI18n";
 import { cn } from "@/lib/utils";
 
