@@ -167,16 +167,12 @@ function RouteAnnouncer() {
 }
 
 function AppContent() {
-  console.log('[AppContent] AppContent component rendering...');
 
   const { isOpen, close } = useKeyboardShortcutsDialog();
   const { authLoading, authError } = useAuth();
   const { isUnifiedMenuOpen, closeUnifiedMenu } = useLunaUnifiedMenu();
 
-  console.log('[AppContent] Auth state:', { authLoading, authError: authError ? 'ERROR' : 'OK' });
 
-  // Add simple test output for debugging
-  console.log('[AppContent] Routes rendered at:', new Date().toISOString());
 
   useOfflineDetection();
 
@@ -611,7 +607,6 @@ function AppContent() {
 }
 
 function App() {
-  console.log('[App] App component rendering...');
   console.error('[App] DEBUG: App component started rendering at', new Date().toISOString());
 
   // Fixed provider hierarchy - BrowserRouter moved higher to provide router context to all providers
