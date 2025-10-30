@@ -1,8 +1,13 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { CarouselPosition } from '@/components/luna/carousel/types';
+import type { LucideIcon } from 'lucide-react';
+import React from 'react';
+
+import type { CarouselPosition } from '@/components/luna/carousel/types';
+import {
+  entranceAnimations,
+  interactionAnimations,
+  premiumSprings
+} from '@/components/luna/design/AnimationConfigs';
 import {
   lunaColors,
   lunaShadows,
@@ -12,11 +17,7 @@ import {
   getCategoryColor,
   getColoredShadow
 } from '@/components/luna/design/DesignTokens';
-import {
-  entranceAnimations,
-  interactionAnimations,
-  premiumSprings
-} from '@/components/luna/design/AnimationConfigs';
+import { cn } from '@/lib/utils';
 
 interface CarouselButtonProps {
   icon: LucideIcon;
@@ -25,7 +26,6 @@ interface CarouselButtonProps {
   onClick: () => void;
   isActive?: boolean;
   size?: number;
-  color?: string;
   disabled?: boolean;
   className?: string;
   category?: string;
@@ -40,7 +40,6 @@ export const CarouselButton: React.FC<CarouselButtonProps> = ({
   onClick,
   isActive = false,
   size = lunaSize.action,
-  color,
   disabled = false,
   className,
   category,
@@ -57,29 +56,29 @@ export const CarouselButton: React.FC<CarouselButtonProps> = ({
     if (disabled) {
       return {
         background: lunaColors.neutral.gray200,
-        border: `2px solid ${lunaColors.neutral.gray300}`,
+        border: '2px solid ' + lunaColors.neutral.gray300,
       };
     }
 
     if (isPrimary && categoryColors) {
       return {
-        background: `linear-gradient(135deg, ${categoryColors.primary} 0%, ${categoryColors.secondary} 100%)`,
-        border: `2px solid ${lunaColors.neutral.white}`,
+        background: 'linear-gradient(135deg, ' + categoryColors.primary + ' 0%, ' + categoryColors.secondary + ' 100%)',
+        border: '2px solid ' + lunaColors.neutral.white,
         ...getColoredShadow(category as keyof typeof lunaShadows.colored),
       };
     }
 
     if (isSecondary && categoryColors) {
       return {
-        background: `linear-gradient(135deg, ${lunaColors.neutral.white} 0%, ${categoryColors.light} 100%)`,
-        border: `2px solid ${categoryColors.primary}`,
+        background: 'linear-gradient(135deg, ' + lunaColors.neutral.white + ' 0%, ' + categoryColors.light + ' 100%)',
+        border: '2px solid ' + categoryColors.primary,
       };
     }
 
     // Default action button styling
     return {
-      background: `linear-gradient(135deg, ${lunaColors.neutral.white} 0%, ${lunaColors.neutral.gray50} 100%)`,
-      border: `2px solid ${lunaColors.neutral.gray200}`,
+      background: 'linear-gradient(135deg, ' + lunaColors.neutral.white + ' 0%, ' + lunaColors.neutral.gray50 + ' 100%)',
+      border: '2px solid ' + lunaColors.neutral.gray200,
     };
   };
 
@@ -110,7 +109,7 @@ export const CarouselButton: React.FC<CarouselButtonProps> = ({
 
         // Focus ring color based on variant
         isPrimary && categoryColors
-          ? `focus:ring-[${categoryColors.primary}]`
+          ? 'focus:ring-blue-500'
           : 'focus:ring-blue-500',
 
         className
@@ -175,7 +174,7 @@ export const CarouselButton: React.FC<CarouselButtonProps> = ({
           left: '50%',
           transform: 'translateX(-50%)',
           background: categoryColors
-            ? `linear-gradient(135deg, ${categoryColors.primary}f0 0%, ${categoryColors.secondary}f0 100%)`
+            ? 'linear-gradient(135deg, ' + categoryColors.primary + 'f0 0%, ' + categoryColors.secondary + 'f0 100%)'
             : 'rgba(17, 24, 39, 0.95)',
         }}
         initial={{ opacity: 0, y: -4, scale: 0.95 }}
@@ -196,7 +195,7 @@ export const CarouselButton: React.FC<CarouselButtonProps> = ({
             height: 0,
             borderLeft: '6px solid transparent',
             borderRight: '6px solid transparent',
-            borderBottom: `6px solid ${categoryColors?.primary || '#111827'}`,
+            borderBottom: '6px solid ' + (categoryColors?.primary || '#111827'),
           }}
         />
       </motion.div>
