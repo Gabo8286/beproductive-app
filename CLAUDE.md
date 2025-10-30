@@ -14,6 +14,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint` - ESLint code linting
 - `npm run lint:fix` - Auto-fix linting issues
 
+### iOS Development
+- `npm run ios` - Open iOS app in Xcode (auto-detects project)
+- `npm run ios:clean` - Open iOS app with clean build folder
+- `npm run ios:verbose` - Open with detailed logging
+- `npm run ios:sim` - Open with iPhone 15 Pro simulator
+- `npm run ios:package` - Open specific Swift package
+- `npm run ios:list` - List all available iOS projects
+
 ### Testing
 - `npm run test:run` - Run unit tests once (83% coverage)
 - `npm run test:e2e` - End-to-end tests with Playwright

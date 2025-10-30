@@ -14,8 +14,8 @@ echo -e "${BLUE}Step 1/7: Running ESLint...${NC}"
 # Run ESLint but don't fail build for warnings (import order, etc.)
 npm run lint > /tmp/eslint_output.txt 2>&1
 ESLINT_EXIT_CODE=$?
-ERROR_COUNT=$(grep "errors" /tmp/eslint_output.txt | tail -1 | grep -o '[0-9]* errors' | grep -o '[0-9]*' || echo "0")
-WARNING_COUNT=$(grep "warnings" /tmp/eslint_output.txt | tail -1 | grep -o '[0-9]* warnings' | grep -o '[0-9]*' || echo "0")
+ERROR_COUNT=$(grep "✖.*problems" /tmp/eslint_output.txt | grep -o '([0-9]* errors' | grep -o '[0-9]*' || echo "0")
+WARNING_COUNT=$(grep "✖.*problems" /tmp/eslint_output.txt | grep -o '[0-9]* warnings' | grep -o '[0-9]*' || echo "0")
 
 if [ "$ERROR_COUNT" -gt 0 ]; then
     echo -e "${RED}❌ ESLint found $ERROR_COUNT errors (blocking)${NC}"
