@@ -21,7 +21,6 @@
  */
 
 // Main App component - Force rebuild
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect } from "react";
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -31,35 +30,33 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { toast } from "sonner";
+
 import { LoadingSkeleton } from "@/components/ai/LoadingSkeleton";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { KeyboardShortcutsDialog } from "@/components/dialogs/KeyboardShortcutsDialog";
+import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
+import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
 import { TagFilterModal } from "@/components/filters/TagFilterModal";
+import { AppLayout } from "@/components/layouts/AppLayout";
+import { LunaFrameworkProvider } from "@/components/luna/context/LunaFrameworkContext";
 import { LunaProvider, useLunaUnifiedMenu } from "@/components/luna/context/LunaContext";
+import { UnifiedLunaMenu } from "@/components/luna/UnifiedLunaMenu";
+import { Spinner } from "@/components/ui/spinner";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-
 
 import { AccessibilityProvider } from "@/contexts/AccessibilityContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ConfigProvider } from "@/contexts/ConfigContext";
 import { GlobalViewProvider } from "@/contexts/GlobalViewContext";
 import { ModulesProvider } from "@/contexts/ModulesContext";
-import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
-import { LunaFrameworkProvider } from "@/components/luna/context/LunaFrameworkContext";
-import { UnifiedLunaMenu } from "@/components/luna/UnifiedLunaMenu";
-import { AppLayout } from "@/components/layouts/AppLayout";
-import { ErrorBoundary } from "@/components/errors/ErrorBoundary";
-import { PageErrorFallback } from "@/components/errors/ErrorFallbacks";
-import { KeyboardShortcutsDialog } from "@/components/dialogs/KeyboardShortcutsDialog";
 import { useKeyboardShortcutsDialog } from "@/hooks/useKeyboardShortcutsDialog";
 import { useOfflineDetection } from "@/hooks/useOfflineDetection";
-import { Spinner } from "@/components/ui/spinner";
-
-
 import i18n from '@/lib/i18n';
+import { ProductivityCycleProvider } from "@/modules/productivity-cycle/contexts/ProductivityCycleContext";
 
 // Eagerly loaded routes (critical path)
 import DashboardContextTester from "@/pages/Dashboard-ContextTester";

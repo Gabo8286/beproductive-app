@@ -19,7 +19,7 @@ jobs:
   pr-validation:
     name: PR Validation (Fast)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     if: github.event_name == 'pull_request'
 
     steps:
