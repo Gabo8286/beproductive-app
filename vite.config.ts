@@ -230,9 +230,16 @@ export default defineConfig(({ mode }) => ({
       '@supabase/storage-js',
       // Include recharts and its dependencies to ensure proper initialization
       'recharts',
-      'recharts/es6/index',
+      'recharts/es6',
       'd3-shape',
-      'd3-scale'
+      'd3-scale',
+      'd3-path',
+      'd3-array',
+      'd3-interpolate',
+      'd3-format',
+      'd3-time',
+      'd3-time-format',
+      'victory-vendor'
     ]
   },
   css: {
