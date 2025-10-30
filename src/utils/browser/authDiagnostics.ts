@@ -109,7 +109,7 @@ function testStorage() {
 async function testSupabaseConnectivity(): Promise<{ canReachSupabase: boolean; error?: string }> {
   try {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl) {
       return { canReachSupabase: false, error: 'VITE_SUPABASE_URL not configured' };
@@ -176,7 +176,7 @@ export async function runAuthDiagnostics(): Promise<AuthDiagnostics> {
     environmentVariables: {
       localMode: import.meta.env.VITE_LOCAL_MODE || 'undefined',
       supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'undefined',
-      supabaseKey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ? '[CONFIGURED]' : 'undefined',
+      supabaseKey: import.meta.env.VITE_SUPABASE_ANON_KEY ? '[CONFIGURED]' : 'undefined',
     },
     networkConnectivity: connectivity,
     securityFeatures: security,

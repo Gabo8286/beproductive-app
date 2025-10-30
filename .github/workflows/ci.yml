@@ -13,6 +13,9 @@ concurrency:
 env:
   NODE_VERSION: '20'
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+  # Mock environment variables for CI builds
+  VITE_SUPABASE_URL: https://test-project.supabase.co
+  VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlc3QtcHJvamVjdCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQwOTk1MjAwLCJleHAiOjE5NTY1NTEyMDB9.test-token-for-ci-builds
 
 jobs:
   # Fast feedback for PRs - Essential checks only

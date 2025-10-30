@@ -5,7 +5,7 @@
 
 export interface EnvironmentConfig {
   VITE_SUPABASE_URL: string;
-  VITE_SUPABASE_PUBLISHABLE_KEY: string;
+  VITE_SUPABASE_ANON_KEY: string;
 }
 
 export interface ValidationResult {
@@ -38,19 +38,19 @@ export function validateEnvironment(): ValidationResult {
   }
 
   // Check Supabase publishable key
-  const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
   if (!supabaseKey) {
-    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY is required but not defined");
+    errors.push("VITE_SUPABASE_ANON_KEY is required but not defined");
   } else if (typeof supabaseKey !== "string") {
-    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY must be a string");
+    errors.push("VITE_SUPABASE_ANON_KEY must be a string");
   } else if (supabaseKey.length < 20) {
-    errors.push("VITE_SUPABASE_PUBLISHABLE_KEY appears to be too short");
+    errors.push("VITE_SUPABASE_ANON_KEY appears to be too short");
   } else if (!supabaseKey.startsWith("eyJ") && supabaseKey !== "demo-key") {
     warnings.push(
-      "VITE_SUPABASE_PUBLISHABLE_KEY does not appear to be a valid JWT token",
+      "VITE_SUPABASE_ANON_KEY does not appear to be a valid JWT token",
     );
   } else {
-    config.VITE_SUPABASE_PUBLISHABLE_KEY = supabaseKey;
+    config.VITE_SUPABASE_ANON_KEY = supabaseKey;
   }
 
   // Check if we're in development and missing .env file
@@ -86,11 +86,11 @@ export function getEnvironmentInfo(): {
     variables: {
       // Only include safe variables for debugging
       hasSupabaseUrl: !!import.meta.env.VITE_SUPABASE_URL,
-      hasSupabaseKey: !!import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      hasSupabaseKey: !!import.meta.env.VITE_SUPABASE_ANON_KEY,
       supabaseUrlFormat:
         import.meta.env.VITE_SUPABASE_URL?.substring(0, 20) + "...",
       supabaseKeyFormat:
-        import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.substring(0, 10) + "...",
+        import.meta.env.VITE_SUPABASE_ANON_KEY?.substring(0, 10) + "...",
     },
   };
 }
@@ -150,7 +150,7 @@ export function createEnvironmentErrorMessage(
       "",
       "Example .env file:",
       "  VITE_SUPABASE_URL=https://your-project.supabase.co",
-      "  VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key",
+      "  VITE_SUPABASE_ANON_KEY=your-publishable-key",
     );
   } else {
     messages.push(
@@ -174,7 +174,7 @@ export function isEnvironmentReady(): boolean {
 
     // For local development, be more lenient
     const isLocalhost = window.location.hostname === 'localhost';
-    const hasBasicConfig = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY);
+    const hasBasicConfig = !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
 
     if (isLocalhost && hasBasicConfig) {
       console.log("[Environment] Local development mode - accepting basic configuration");

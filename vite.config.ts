@@ -238,8 +238,7 @@ export default defineConfig(({ mode }) => ({
       'd3-interpolate',
       'd3-format',
       'd3-time',
-      'd3-time-format',
-      'victory-vendor'
+      'd3-time-format'
     ]
   },
   css: {

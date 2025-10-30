@@ -50,7 +50,7 @@ export const defaultConfig: AgentConfig = {
   claudeModel: 'claude-3-haiku-20240307',
 
   supabaseUrl: process.env.VITE_SUPABASE_URL || '',
-  supabaseKey: process.env.VITE_SUPABASE_PUBLISHABLE_KEY || '',
+  supabaseKey: process.env.VITE_SUPABASE_ANON_KEY || '',
   supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 
   thresholds: {
