@@ -212,7 +212,7 @@ class DataManager: ObservableObject {
         
         // Set description if provided
         if let description = description {
-            project.description = description
+            project.projectDescription = description
         }
 
         try save(project)

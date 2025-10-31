@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,11 +20,14 @@
 		2A1DC71D807EEE5046D06BAB /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98B3E40D763A623E20697AB /* TaskViewModel.swift */; };
 		2C7F33C489960DB81175F2E7 /* EngageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D607A04019E33E662AED65 /* EngageView.swift */; };
 		2E99C42ABC18A41D0D532C37 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC9865DB46801D0D06ADAD1 /* KeychainManager.swift */; };
+		328A4BD0B5E37BD79EA28C56 /* Task+Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40093AB4889F3F4AE5751C6F /* Task+Observable.swift */; };
 		331AE1C82EFAD57911D84A58 /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECA10B13D6854AEB0EB89C1 /* PlanView.swift */; };
+		36B6D512C2A566060D2F94B7 /* HabitDetailView_Fixed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE04CC08706FE9D2B52394BE /* HabitDetailView_Fixed.swift */; };
 		3A9DFBFFCD9D75C1798EEDEE /* HabitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3817A234A71BA55E6F4C9096 /* HabitDetailView.swift */; };
 		427AC920EBAFF8DF96603392 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22E321F05A166C5D663D0D5F /* Note.swift */; };
 		453CAD8C9DEE7EC371E1EA23 /* ConfigurationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FEB7171FBBE867CD92AB4F /* ConfigurationManager.swift */; };
 		54D64F99A133135C2E7B0912 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E3F4129C3A47596F3F3CF7CF /* ComposableArchitecture */; };
+		575774475777BE33DE6349BA /* Habit 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3209095E13EF12E161D1E4D6 /* Habit 2.swift */; };
 		5DC3D58DBB7AA0162FB7C1E1 /* GoalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCEFEDC1D8D60E68DED05596 /* GoalViewModel.swift */; };
 		6C7D252586059C07020AF9E2 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = B454F6FC0D7B7AABC5B973C3 /* SwiftyJSON */; };
 		75F9C4071C128DE6847130BC /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C600231598FF454845565A /* MainTabView.swift */; };
@@ -32,13 +35,17 @@
 		7DC253DE33535BC6C3AB19FD /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FA97132EDE68807F8DB3C4C1 /* Algorithms */; };
 		80EF4AE86AF3D6553AFBAB36 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = E6487AA328BB162F13212565 /* NukeUI */; };
 		8D7B6DB862158A117EB42EA0 /* ProductionReadinessValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A65BD2A5CC398ACFD212661 /* ProductionReadinessValidator.swift */; };
+		94760E91814BA5951593E443 /* MIGRATION_GUIDE.md in Resources */ = {isa = PBXBuildFile; fileRef = 8105E6889005FF7C57F58E58 /* MIGRATION_GUIDE.md */; };
 		99E965AA798BFC769D5BD961 /* BeProductive_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169C236FCC8D32DBDA6AF065 /* BeProductive_iOSUITests.swift */; };
 		A4C2FF498340A33DD04C406F /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3388D78DB100EBC5E25559 /* Habit.swift */; };
+		A54253950041B4A6B6CE79D8 /* ProductivityMetric.xcdatamodel in Resources */ = {isa = PBXBuildFile; fileRef = 98148BCF7E9E25BCBD11AA81 /* ProductivityMetric.xcdatamodel */; };
 		A69DE2FB278FC09D6D831FE1 /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBF06F3863AB8D6598DA5ED /* TaskDetailView.swift */; };
+		A7FAAF90A9D164E35BABB955 /* ProductivityMetricDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52077AA2C162D5DA07AA1CE /* ProductivityMetricDataManager.swift */; };
 		AB6393C88C2F55A917BD43BA /* TaskEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E11E8A4AC8D3A20D272B31 /* TaskEditView.swift */; };
 		B0FB953AF6D98D818C93681A /* GoalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDA93159DEB32FFD0835F44 /* GoalListView.swift */; };
 		B1C61962AE8A5012553485E5 /* HabitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE19F7F28655B7A6A366E2 /* HabitViewModel.swift */; };
 		BC38F698B7EE6B6A14F91AC8 /* ProductivityMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99775427DCB2014F3E55B24E /* ProductivityMetric.swift */; };
+		C116539EB93A22D1D0E63BD2 /* SyncableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5200C2C571C49396B7EB6DF2 /* SyncableModel.swift */; };
 		C4143F5FDEED5204FD9E83D0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799142BF271CBBC64EF73F3A /* AppCoordinator.swift */; };
 		C7E3E503B9667EB27D04F3EA /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98D56AE3673F6F2E3E596AE /* AnalyticsManager.swift */; };
 		C927A9E361266C347288A12D /* HabitListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30126127374063F9AB47E9CE /* HabitListView.swift */; };
@@ -49,18 +56,8 @@
 		D7662F3E85D985D8DC700684 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B593DDFC87F0DB267A31F84A /* DataManager.swift */; };
 		D9293F3DD1692E2B9BCAB004 /* CaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F09C8B6E05B6610C384AA03 /* CaptureView.swift */; };
 		DAD6BA2BC05B1F2120744379 /* BeProductiveUIImport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB93984205477038EA7E315 /* BeProductiveUIImport.swift */; };
-		DE5CB4062EB3681A0063F86E /* ProductivityMetric.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = DE5CB4052EB3681A0063F86E /* ProductivityMetric.xcdatamodel */; };
-		DE5CB4082EB368340063F86E /* ProductivityMetricDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5CB4072EB368340063F86E /* ProductivityMetricDataManager.swift */; };
-		DE5CB40A2EB368450063F86E /* ProductivityMetricExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5CB4092EB368450063F86E /* ProductivityMetricExampleView.swift */; };
-		DE5CB40D2EB36C970063F86E /* SyncableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5CB40C2EB36C970063F86E /* SyncableModel.swift */; };
-		DE6B51692EB39A6F009D3EF1 /* HabitDetailView_Fixed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6B51682EB39A6E009D3EF1 /* HabitDetailView_Fixed.swift */; };
-		DE6B516B2EB3B635009D3EF1 /* Task+Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6B516A2EB3B635009D3EF1 /* Task+Observable.swift */; };
-		DE71EF7F2EB37A3B00A40A78 /* Habit 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE71EF7E2EB37A3B00A40A78 /* Habit 2.swift */; };
-		DED5A7662EB4553B00F6C804 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED5A7652EB4553B00F6C804 /* Project.swift */; };
-		DED5A7682EB4554900F6C804 /* ProductivityMetric.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED5A7672EB4554900F6C804 /* ProductivityMetric.swift */; };
-		DED5A76A2EB4555200F6C804 /* ConfigurationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED5A7692EB4555200F6C804 /* ConfigurationManager.swift */; };
-		DED618532EB405130021860D /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED618522EB405130021860D /* TaskModel.swift */; };
 		DEF8EBA006BBBE4A1E47C95F /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = A771AAB20517755BE3194C66 /* Task.swift */; };
+		DF891AB75C37866E9754B3F4 /* TaskModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A449CAB6229598F2914D3100 /* TaskModel.swift */; };
 		E05D4E5460D954F88A608CA4 /* BeProductiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F52802EF033F117663116DD /* BeProductiveApp.swift */; };
 		E0E5AD745316EFF65D95FB71 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49610FD35A1468330935D63 /* Team.swift */; };
 		E430054CEC9C97782547CC48 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7719F0613972756D3E3FA79B /* SessionManager.swift */; };
@@ -68,6 +65,7 @@
 		E54414084A916DDBD87E5F22 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D0A7848BAF9EC07686A075 /* TaskListView.swift */; };
 		E83861CBECBD47D0E9828C54 /* BackgroundSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6C7FAF9652328428C691FA /* BackgroundSyncManager.swift */; };
 		EDF86394463A398FC8B23939 /* OnboardingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C939A8F2AA177113BDFDA8 /* OnboardingManager.swift */; };
+		F582BEA8729C5334C8100CC6 /* ProductivityMetricExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95836EF5BD898CE471C38855 /* ProductivityMetricExampleView.swift */; };
 		F9B673304376CEA710F71D22 /* AIConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4F53FB3BDCA5551BF54DDF /* AIConversation.swift */; };
 /* End PBXBuildFile section */
 
@@ -95,10 +93,13 @@
 		169C236FCC8D32DBDA6AF065 /* BeProductive_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeProductive_iOSUITests.swift; sourceTree = "<group>"; };
 		22E321F05A166C5D663D0D5F /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		30126127374063F9AB47E9CE /* HabitListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitListView.swift; sourceTree = "<group>"; };
+		3209095E13EF12E161D1E4D6 /* Habit 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit 2.swift"; sourceTree = "<group>"; };
 		3817A234A71BA55E6F4C9096 /* HabitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailView.swift; sourceTree = "<group>"; };
 		3ECA10B13D6854AEB0EB89C1 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
+		40093AB4889F3F4AE5751C6F /* Task+Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Observable.swift"; sourceTree = "<group>"; };
 		47BB76BA37D3F70EF61A07B5 /* Configuration.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Configuration.plist; sourceTree = "<group>"; };
 		49BC2BF4664CAB695436111C /* ProductionReadinessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductionReadinessRunner.swift; sourceTree = "<group>"; };
+		5200C2C571C49396B7EB6DF2 /* SyncableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncableModel.swift; sourceTree = "<group>"; };
 		54F8253BAD910D0E08397FA3 /* Configuration-Production.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Configuration-Production.plist"; sourceTree = "<group>"; };
 		55C939A8F2AA177113BDFDA8 /* OnboardingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManager.swift; sourceTree = "<group>"; };
 		55DE19F7F28655B7A6A366E2 /* HabitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewModel.swift; sourceTree = "<group>"; };
@@ -112,43 +113,37 @@
 		7BB7B8ACD76F6B17CAC3CF20 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		7BB93984205477038EA7E315 /* BeProductiveUIImport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeProductiveUIImport.swift; sourceTree = "<group>"; };
 		7F4F53FB3BDCA5551BF54DDF /* AIConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIConversation.swift; sourceTree = "<group>"; };
-		7F506F36675A381EF0C6792E /* BeProductive-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BeProductive-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F506F36675A381EF0C6792E /* BeProductive-iOSUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "BeProductive-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F52802EF033F117663116DD /* BeProductiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeProductiveApp.swift; sourceTree = "<group>"; };
 		7FDA93159DEB32FFD0835F44 /* GoalListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalListView.swift; sourceTree = "<group>"; };
+		8105E6889005FF7C57F58E58 /* MIGRATION_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MIGRATION_GUIDE.md; sourceTree = "<group>"; };
 		816461015655FDEC82808AE5 /* PerformanceMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceMonitor.swift; sourceTree = "<group>"; };
 		8A65BD2A5CC398ACFD212661 /* ProductionReadinessValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductionReadinessValidator.swift; sourceTree = "<group>"; };
 		8BBF06F3863AB8D6598DA5ED /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
 		91BC8B31462E29C8653C136B /* BeProductiveUI */ = {isa = PBXFileReference; lastKnownFileType = folder; name = BeProductiveUI; path = ../BeProductiveUI; sourceTree = SOURCE_ROOT; };
+		95836EF5BD898CE471C38855 /* ProductivityMetricExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityMetricExampleView.swift; sourceTree = "<group>"; };
+		98148BCF7E9E25BCBD11AA81 /* ProductivityMetric.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ProductivityMetric.xcdatamodel; sourceTree = "<group>"; };
 		99775427DCB2014F3E55B24E /* ProductivityMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityMetric.swift; sourceTree = "<group>"; };
 		A0D607A04019E33E662AED65 /* EngageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngageView.swift; sourceTree = "<group>"; };
 		A0F9F96C0BD8956853723FE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A449CAB6229598F2914D3100 /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		A5E11E8A4AC8D3A20D272B31 /* TaskEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditView.swift; sourceTree = "<group>"; };
 		A771AAB20517755BE3194C66 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		B48E4E6261C39788B58BA1B4 /* BeProductive-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BeProductive-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B48E4E6261C39788B58BA1B4 /* BeProductive-iOSTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "BeProductive-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B49610FD35A1468330935D63 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		B593DDFC87F0DB267A31F84A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C2C600231598FF454845565A /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		C4A10CBC794E847E8E717D58 /* BeProductive_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeProductive_iOSTests.swift; sourceTree = "<group>"; };
+		C52077AA2C162D5DA07AA1CE /* ProductivityMetricDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityMetricDataManager.swift; sourceTree = "<group>"; };
 		C66935781ACF9DD4CB970664 /* GoalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailView.swift; sourceTree = "<group>"; };
 		CAA7EB9708EB4327A2B25070 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		CCEFEDC1D8D60E68DED05596 /* GoalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewModel.swift; sourceTree = "<group>"; };
+		CE04CC08706FE9D2B52394BE /* HabitDetailView_Fixed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailView_Fixed.swift; sourceTree = "<group>"; };
 		D98D56AE3673F6F2E3E596AE /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 		DA4BD21B498DCD0B378AF8BA /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		DC3388D78DB100EBC5E25559 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
-		DE5CB4052EB3681A0063F86E /* ProductivityMetric.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ProductivityMetric.xcdatamodel; sourceTree = "<group>"; };
-		DE5CB4072EB368340063F86E /* ProductivityMetricDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityMetricDataManager.swift; sourceTree = "<group>"; };
-		DE5CB4092EB368450063F86E /* ProductivityMetricExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityMetricExampleView.swift; sourceTree = "<group>"; };
-		DE5CB40B2EB368590063F86E /* MIGRATION_GUIDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MIGRATION_GUIDE.md; sourceTree = "<group>"; };
-		DE5CB40C2EB36C970063F86E /* SyncableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncableModel.swift; sourceTree = "<group>"; };
-		DE6B51682EB39A6E009D3EF1 /* HabitDetailView_Fixed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailView_Fixed.swift; sourceTree = "<group>"; };
-		DE6B516A2EB3B635009D3EF1 /* Task+Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Observable.swift"; sourceTree = "<group>"; };
-		DE71EF7E2EB37A3B00A40A78 /* Habit 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit 2.swift"; sourceTree = "<group>"; };
-		DED5A7652EB4553B00F6C804 /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
-		DED5A7672EB4554900F6C804 /* ProductivityMetric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductivityMetric.swift; sourceTree = "<group>"; };
-		DED5A7692EB4555200F6C804 /* ConfigurationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationManager.swift; sourceTree = "<group>"; };
-		DED618522EB405130021860D /* TaskModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		EEC6822868A4BCF3264CFF34 /* SyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
-		F5489C3DDD8D6E63793209D2 /* BeProductive-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BeProductive-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5489C3DDD8D6E63793209D2 /* BeProductive-iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "BeProductive-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F98B3E40D763A623E20697AB /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -192,11 +187,11 @@
 		0F1E0D5E277D4B41B8FD9568 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				40093AB4889F3F4AE5751C6F /* Task+Observable.swift */,
 				8BBF06F3863AB8D6598DA5ED /* TaskDetailView.swift */,
 				A5E11E8A4AC8D3A20D272B31 /* TaskEditView.swift */,
 				63D0A7848BAF9EC07686A075 /* TaskListView.swift */,
-				DE6B516A2EB3B635009D3EF1 /* Task+Observable.swift */,
-				DED618522EB405130021860D /* TaskModel.swift */,
+				A449CAB6229598F2914D3100 /* TaskModel.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -313,9 +308,6 @@
 				0A6C7FAF9652328428C691FA /* BackgroundSyncManager.swift */,
 				B593DDFC87F0DB267A31F84A /* DataManager.swift */,
 				EEC6822868A4BCF3264CFF34 /* SyncEngine.swift */,
-				DED5A7652EB4553B00F6C804 /* Project.swift */,
-				DED5A7672EB4554900F6C804 /* ProductivityMetric.swift */,
-				DED5A7692EB4555200F6C804 /* ConfigurationManager.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -367,9 +359,9 @@
 		8ABD1316CBD7731296B3B960 /* Habits */ = {
 			isa = PBXGroup;
 			children = (
+				CE04CC08706FE9D2B52394BE /* HabitDetailView_Fixed.swift */,
 				3817A234A71BA55E6F4C9096 /* HabitDetailView.swift */,
 				30126127374063F9AB47E9CE /* HabitListView.swift */,
-				DE6B51682EB39A6E009D3EF1 /* HabitDetailView_Fixed.swift */,
 			);
 			path = Habits;
 			sourceTree = "<group>";
@@ -414,18 +406,18 @@
 			children = (
 				7F4F53FB3BDCA5551BF54DDF /* AIConversation.swift */,
 				CAA7EB9708EB4327A2B25070 /* Goal.swift */,
+				3209095E13EF12E161D1E4D6 /* Habit 2.swift */,
 				DC3388D78DB100EBC5E25559 /* Habit.swift */,
+				8105E6889005FF7C57F58E58 /* MIGRATION_GUIDE.md */,
 				22E321F05A166C5D663D0D5F /* Note.swift */,
 				99775427DCB2014F3E55B24E /* ProductivityMetric.swift */,
+				98148BCF7E9E25BCBD11AA81 /* ProductivityMetric.xcdatamodel */,
+				C52077AA2C162D5DA07AA1CE /* ProductivityMetricDataManager.swift */,
+				95836EF5BD898CE471C38855 /* ProductivityMetricExampleView.swift */,
 				14FFCA4019DB60DCE1C58C9C /* Project.swift */,
+				5200C2C571C49396B7EB6DF2 /* SyncableModel.swift */,
 				A771AAB20517755BE3194C66 /* Task.swift */,
 				B49610FD35A1468330935D63 /* Team.swift */,
-				DE5CB4052EB3681A0063F86E /* ProductivityMetric.xcdatamodel */,
-				DE5CB4072EB368340063F86E /* ProductivityMetricDataManager.swift */,
-				DE5CB4092EB368450063F86E /* ProductivityMetricExampleView.swift */,
-				DE5CB40B2EB368590063F86E /* MIGRATION_GUIDE.md */,
-				DE5CB40C2EB36C970063F86E /* SyncableModel.swift */,
-				DE71EF7E2EB37A3B00A40A78 /* Habit 2.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -516,6 +508,7 @@
 			buildConfigurationList = 5063AFD257B0444435491973 /* Build configuration list for PBXNativeTarget "BeProductive-iOS" */;
 			buildPhases = (
 				48D5200DF0A98C9A47091BF4 /* Sources */,
+				02E4E28F2C58AF7E77C0B258 /* Resources */,
 				76A3E9DA36527D4522D0FB6F /* Frameworks */,
 			);
 			buildRules = (
@@ -546,7 +539,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					5CEC897B22965317D4E3FF4B = {
 						TestTargetID = CDB4C828070CEF5FFD8984B7;
@@ -578,6 +571,7 @@
 				F47A113E8CD1B898EDF0D6D4 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				64BAB092F3D0BD5E531FA426 /* XCLocalSwiftPackageReference "../BeProductiveUI" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -588,34 +582,42 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		02E4E28F2C58AF7E77C0B258 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94760E91814BA5951593E443 /* MIGRATION_GUIDE.md in Resources */,
+				A54253950041B4A6B6CE79D8 /* ProductivityMetric.xcdatamodel in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		48D5200DF0A98C9A47091BF4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE6B51692EB39A6F009D3EF1 /* HabitDetailView_Fixed.swift in Sources */,
 				F9B673304376CEA710F71D22 /* AIConversation.swift in Sources */,
 				C7E3E503B9667EB27D04F3EA /* AnalyticsManager.swift in Sources */,
 				C4143F5FDEED5204FD9E83D0 /* AppCoordinator.swift in Sources */,
 				E4B4D6E4B26C20246D6B3551 /* AuthenticationManager.swift in Sources */,
 				E83861CBECBD47D0E9828C54 /* BackgroundSyncManager.swift in Sources */,
 				E05D4E5460D954F88A608CA4 /* BeProductiveApp.swift in Sources */,
-				DE6B516B2EB3B635009D3EF1 /* Task+Observable.swift in Sources */,
 				DAD6BA2BC05B1F2120744379 /* BeProductiveUIImport.swift in Sources */,
 				D9293F3DD1692E2B9BCAB004 /* CaptureView.swift in Sources */,
 				453CAD8C9DEE7EC371E1EA23 /* ConfigurationManager.swift in Sources */,
 				D7662F3E85D985D8DC700684 /* DataManager.swift in Sources */,
-				DED5A7682EB4554900F6C804 /* ProductivityMetric.swift in Sources */,
 				2C7F33C489960DB81175F2E7 /* EngageView.swift in Sources */,
 				D74E3C8700E7DB9AE4C820EE /* Goal.swift in Sources */,
-				DE5CB4062EB3681A0063F86E /* ProductivityMetric.xcdatamodel in Sources */,
 				20A7DDD327CEC59AAAD61DC9 /* GoalDetailView.swift in Sources */,
 				B0FB953AF6D98D818C93681A /* GoalListView.swift in Sources */,
 				5DC3D58DBB7AA0162FB7C1E1 /* GoalViewModel.swift in Sources */,
+				575774475777BE33DE6349BA /* Habit 2.swift in Sources */,
 				A4C2FF498340A33DD04C406F /* Habit.swift in Sources */,
-				DED5A76A2EB4555200F6C804 /* ConfigurationManager.swift in Sources */,
 				3A9DFBFFCD9D75C1798EEDEE /* HabitDetailView.swift in Sources */,
-				DE71EF7F2EB37A3B00A40A78 /* Habit 2.swift in Sources */,
+				36B6D512C2A566060D2F94B7 /* HabitDetailView_Fixed.swift in Sources */,
 				C927A9E361266C347288A12D /* HabitListView.swift in Sources */,
 				B1C61962AE8A5012553485E5 /* HabitViewModel.swift in Sources */,
 				2E99C42ABC18A41D0D532C37 /* KeychainManager.swift in Sources */,
@@ -628,21 +630,21 @@
 				CC9DB08D742EAC8A04F4D563 /* ProductionReadinessRunner.swift in Sources */,
 				8D7B6DB862158A117EB42EA0 /* ProductionReadinessValidator.swift in Sources */,
 				BC38F698B7EE6B6A14F91AC8 /* ProductivityMetric.swift in Sources */,
-				DE5CB4082EB368340063F86E /* ProductivityMetricDataManager.swift in Sources */,
-				DE5CB40D2EB36C970063F86E /* SyncableModel.swift in Sources */,
+				A7FAAF90A9D164E35BABB955 /* ProductivityMetricDataManager.swift in Sources */,
+				F582BEA8729C5334C8100CC6 /* ProductivityMetricExampleView.swift in Sources */,
 				060356BB083D3B4923F4F021 /* ProfileView.swift in Sources */,
 				00851A9AF7185AB3CC0D37E8 /* Project.swift in Sources */,
-				DED618532EB405130021860D /* TaskModel.swift in Sources */,
-				DE5CB40A2EB368450063F86E /* ProductivityMetricExampleView.swift in Sources */,
 				E430054CEC9C97782547CC48 /* SessionManager.swift in Sources */,
 				CDBCD77B54A6635B3CBD1DC8 /* SyncEngine.swift in Sources */,
+				C116539EB93A22D1D0E63BD2 /* SyncableModel.swift in Sources */,
+				328A4BD0B5E37BD79EA28C56 /* Task+Observable.swift in Sources */,
 				DEF8EBA006BBBE4A1E47C95F /* Task.swift in Sources */,
 				A69DE2FB278FC09D6D831FE1 /* TaskDetailView.swift in Sources */,
 				AB6393C88C2F55A917BD43BA /* TaskEditView.swift in Sources */,
 				E54414084A916DDBD87E5F22 /* TaskListView.swift in Sources */,
+				DF891AB75C37866E9754B3F4 /* TaskModel.swift in Sources */,
 				2A1DC71D807EEE5046D06BAB /* TaskViewModel.swift in Sources */,
 				E0E5AD745316EFF65D95FB71 /* Team.swift in Sources */,
-				DED5A7662EB4553B00F6C804 /* Project.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -715,7 +717,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -730,13 +731,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -780,7 +780,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -789,12 +788,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -805,7 +803,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -813,7 +811,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.beproductive.BeProductive-iOSUITests";
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "BeProductive-iOS";
 			};
@@ -823,7 +820,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -831,7 +828,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.beproductive.BeProductive-iOSTests";
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BeProductive-iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BeProductive-iOS";
 			};
@@ -840,6 +836,7 @@
 		AAEB0E558A78B2B087D0589F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -847,7 +844,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Sources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -866,6 +863,7 @@
 		CCE169F320F150BDDECA8017 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -873,7 +871,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Sources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -893,7 +891,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -901,7 +899,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.beproductive.BeProductive-iOSUITests";
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "BeProductive-iOS";
 			};
@@ -911,7 +908,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -919,7 +916,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.beproductive.BeProductive-iOSTests";
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BeProductive-iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BeProductive-iOS";
 			};

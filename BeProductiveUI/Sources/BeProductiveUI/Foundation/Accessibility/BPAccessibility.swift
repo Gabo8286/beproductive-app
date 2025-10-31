@@ -14,7 +14,7 @@ public struct BPAccessibility {
     @MainActor
     public class AccessibilityManager: ObservableObject {
 
-        public static let shared = AccessibilityManager()
+        nonisolated(unsafe) public static let shared = AccessibilityManager()
 
         @Published public var isVoiceOverRunning = false
         @Published public var isSwitchControlRunning = false
@@ -499,11 +499,7 @@ public struct BPAccessibility {
 
 @available(iOS 16.0, watchOS 9.0, macOS 13.0, *)
 struct AccessibilityManagerKey: EnvironmentKey {
-    static var defaultValue: BPAccessibility.AccessibilityManager {
-        MainActor.assumeIsolated {
-            BPAccessibility.AccessibilityManager.shared
-        }
-    }
+    static let defaultValue = BPAccessibility.AccessibilityManager.shared
 }
 
 @available(iOS 16.0, watchOS 9.0, macOS 13.0, *)
@@ -647,7 +643,7 @@ extension View {
 
     /// Announce changes for screen readers
     public func bpAnnounceChanges(_ message: String, trigger: some Equatable) -> some View {
-        self.onChange(of: trigger) {
+        self.onChange(of: trigger) { _ in
             BPAccessibility.FocusManager.announceNotification(message)
         }
     }
