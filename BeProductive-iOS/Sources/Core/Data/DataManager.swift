@@ -16,6 +16,9 @@ class DataManager: ObservableObject {
     @Published var syncProgress: Double = 0.0
     @Published var lastSyncDate: Date?
 
+    // MARK: - Shared Instance
+    static let shared = DataManager()
+
     // MARK: - Properties
     let container: ModelContainer
     private let supabaseClient: SupabaseClient

@@ -111,7 +111,7 @@ public struct BPTabBar: View {
         .onAppear {
             updateIndicator(geometry: nil)
         }
-        .onChange(of: selectedIndex) { _ in
+        .onChange(of: selectedIndex) { _, _ in
             updateIndicator(geometry: nil)
         }
     }

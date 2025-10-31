@@ -502,10 +502,10 @@ struct AddSubtaskView: View {
 
 #Preview {
     // Create a sample task using the TodoTask model
-    let sampleTask = TodoTask(
+    let sampleTask: TodoTask = TodoTask(
         title: "Sample Task",
         taskDescription: "This is a sample task",
-        priority: TaskPriorityLevel.medium,
+        priority: .medium,
         category: "Work",
         userId: UUID()
     )
@@ -513,6 +513,6 @@ struct AddSubtaskView: View {
     // Set additional properties after initialization
     sampleTask.dueDate = Date()
 
-    TaskEditView(task: sampleTask, viewModel: TaskViewModel(dataManager: DataManager()))
+    return TaskEditView(task: sampleTask, viewModel: TaskViewModel(dataManager: DataManager()))
         .environmentObject(BPThemeManager.shared)
 }

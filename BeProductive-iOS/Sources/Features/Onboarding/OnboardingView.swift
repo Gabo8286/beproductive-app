@@ -44,7 +44,7 @@ struct OnboardingControls: View {
             HStack(spacing: BPSpacing.xs) {
                 ForEach(OnboardingStep.allCases, id: \.self) { step in
                     Circle()
-                        .fill(step.rawValue <= onboardingManager.currentStep.rawValue ? BPColors.primary : BPColors.backgroundSecondary)
+                        .fill(step.rawValue <= onboardingManager.currentStep.rawValue ? BPColors.Primary.main : BPColors.Background.secondary)
                         .frame(width: 8, height: 8)
                 }
             }
@@ -85,7 +85,7 @@ struct OnboardingControls: View {
             .padding(.horizontal, BPSpacing.lg)
         }
         .padding(.vertical, BPSpacing.lg)
-        .background(BPColors.backgroundPrimary)
+        .background(BPColors.Background.primary)
     }
 }
 
@@ -98,15 +98,15 @@ struct WelcomeStep: View {
             // App Icon/Logo
             Image(systemName: "target")
                 .font(.system(size: 100))
-                .foregroundColor(BPColors.primary)
+                .foregroundColor(BPColors.Primary.main)
 
             VStack(spacing: BPSpacing.md) {
                 BPText("Welcome to BeProductive", style: .displayLarge)
-                    .foregroundColor(BPColors.textPrimary)
+                    .foregroundColor(BPColors.Text.primary)
                     .multilineTextAlignment(.center)
 
                 BPText("Your personal productivity companion for tasks, goals, and habits", style: .bodyLarge)
-                    .foregroundColor(BPColors.textSecondary)
+                    .foregroundColor(BPColors.Text.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, BPSpacing.lg)
             }
@@ -132,10 +132,10 @@ struct FeaturesStep: View {
             VStack(spacing: BPSpacing.xl) {
                 VStack(spacing: BPSpacing.md) {
                     BPText("Powerful Features", style: .displayMedium)
-                        .foregroundColor(BPColors.textPrimary)
+                        .foregroundColor(BPColors.Text.primary)
 
                     BPText("Everything you need to stay productive and achieve your goals", style: .bodyLarge)
-                        .foregroundColor(BPColors.textSecondary)
+                        .foregroundColor(BPColors.Text.secondary)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.top, BPSpacing.xl)
@@ -186,13 +186,13 @@ struct PermissionsStep: View {
             VStack(spacing: BPSpacing.md) {
                 Image(systemName: "lock.shield")
                     .font(.system(size: 60))
-                    .foregroundColor(BPColors.primary)
+                    .foregroundColor(BPColors.Primary.main)
 
                 BPText("Privacy & Permissions", style: .displayMedium)
-                    .foregroundColor(BPColors.textPrimary)
+                    .foregroundColor(BPColors.Text.primary)
 
                 BPText("We respect your privacy. These permissions help us provide the best experience.", style: .bodyLarge)
-                    .foregroundColor(BPColors.textSecondary)
+                    .foregroundColor(BPColors.Text.secondary)
                     .multilineTextAlignment(.center)
             }
 
@@ -249,13 +249,13 @@ struct PersonalizationStep: View {
                 VStack(spacing: BPSpacing.md) {
                     Image(systemName: "person.crop.circle.badge.checkmark")
                         .font(.system(size: 60))
-                        .foregroundColor(BPColors.primary)
+                        .foregroundColor(BPColors.Primary.main)
 
                     BPText("Personalize Your Experience", style: .displayMedium)
-                        .foregroundColor(BPColors.textPrimary)
+                        .foregroundColor(BPColors.Text.primary)
 
                     BPText("Customize BeProductive to match your workflow and preferences", style: .bodyLarge)
-                        .foregroundColor(BPColors.textSecondary)
+                        .foregroundColor(BPColors.Text.secondary)
                         .multilineTextAlignment(.center)
                 }
 
@@ -263,7 +263,7 @@ struct PersonalizationStep: View {
                     PreferenceSection(title: "Appearance") {
                         VStack(spacing: BPSpacing.md) {
                             BPText("Theme", style: .bodyLarge)
-                                .foregroundColor(BPColors.textPrimary)
+                                .foregroundColor(BPColors.Text.primary)
 
                             HStack(spacing: BPSpacing.sm) {
                                 ForEach(UserPreferences.AppTheme.allCases, id: \.self) { theme in
@@ -331,14 +331,14 @@ struct CompletionStep: View {
             VStack(spacing: BPSpacing.lg) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(BPColors.success)
+                    .foregroundColor(BPColors.Success.main)
 
                 VStack(spacing: BPSpacing.md) {
                     BPText("You're All Set!", style: .displayLarge)
-                        .foregroundColor(BPColors.textPrimary)
+                        .foregroundColor(BPColors.Text.primary)
 
                     BPText("Welcome to BeProductive! Start by creating your first task, goal, or habit.", style: .bodyLarge)
-                        .foregroundColor(BPColors.textSecondary)
+                        .foregroundColor(BPColors.Text.secondary)
                         .multilineTextAlignment(.center)
                 }
             }
@@ -347,7 +347,7 @@ struct CompletionStep: View {
 
             VStack(spacing: BPSpacing.md) {
                 BPText("Quick Tips", style: .headingMedium)
-                    .foregroundColor(BPColors.textPrimary)
+                    .foregroundColor(BPColors.Text.primary)
 
                 VStack(spacing: BPSpacing.sm) {
                     QuickTip(icon: "plus", text: "Tap the + button to create new items")
@@ -372,10 +372,10 @@ struct FeaturePreview: View {
         VStack(spacing: BPSpacing.xs) {
             Image(systemName: icon)
                 .font(.title)
-                .foregroundColor(BPColors.primary)
+                .foregroundColor(BPColors.Primary.main)
 
             BPText(title, style: .labelMedium)
-                .foregroundColor(BPColors.textSecondary)
+                .foregroundColor(BPColors.Text.secondary)
         }
     }
 }
@@ -389,21 +389,21 @@ struct FeatureCard: View {
         HStack(spacing: BPSpacing.md) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(BPColors.primary)
+                .foregroundColor(BPColors.Primary.main)
                 .frame(width: 40, height: 40)
 
             VStack(alignment: .leading, spacing: BPSpacing.xs) {
                 BPText(title, style: .bodyLarge)
-                    .foregroundColor(BPColors.textPrimary)
+                    .foregroundColor(BPColors.Text.primary)
 
                 BPText(description, style: .bodySmall)
-                    .foregroundColor(BPColors.textSecondary)
+                    .foregroundColor(BPColors.Text.secondary)
             }
 
             Spacer()
         }
         .padding(BPSpacing.md)
-        .background(BPColors.backgroundSecondary)
+        .background(BPColors.Background.secondary)
         .cornerRadius(BPSpacing.md)
     }
 }
@@ -429,13 +429,13 @@ struct PermissionCard: View {
         HStack(spacing: BPSpacing.md) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(isGranted ? BPColors.success : BPColors.textSecondary)
+                .foregroundColor(isGranted ? BPColors.Success.main : BPColors.Text.secondary)
                 .frame(width: 40, height: 40)
 
             VStack(alignment: .leading, spacing: BPSpacing.xs) {
                 HStack {
                     BPText(title, style: .bodyLarge)
-                        .foregroundColor(BPColors.textPrimary)
+                        .foregroundColor(BPColors.Text.primary)
 
                     if isOptional {
                         BPText("Optional", style: .labelSmall)
@@ -450,7 +450,7 @@ struct PermissionCard: View {
                 }
 
                 BPText(description, style: .bodySmall)
-                    .foregroundColor(BPColors.textSecondary)
+                    .foregroundColor(BPColors.Text.secondary)
             }
 
             if !isGranted {
@@ -462,11 +462,11 @@ struct PermissionCard: View {
                 )
             } else {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(BPColors.success)
+                    .foregroundColor(BPColors.Success.main)
             }
         }
         .padding(BPSpacing.md)
-        .background(BPColors.backgroundSecondary)
+        .background(BPColors.Background.secondary)
         .cornerRadius(BPSpacing.md)
     }
 }
@@ -483,12 +483,12 @@ struct PreferenceSection<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
             BPText(title, style: .headingMedium)
-                .foregroundColor(BPColors.textPrimary)
+                .foregroundColor(BPColors.Text.primary)
 
             content
         }
         .padding(BPSpacing.md)
-        .background(BPColors.backgroundSecondary)
+        .background(BPColors.Background.secondary)
         .cornerRadius(BPSpacing.md)
     }
 }
@@ -502,16 +502,16 @@ struct PreferenceToggle: View {
         HStack {
             VStack(alignment: .leading, spacing: BPSpacing.xs) {
                 BPText(title, style: .bodyMedium)
-                    .foregroundColor(BPColors.textPrimary)
+                    .foregroundColor(BPColors.Text.primary)
 
                 BPText(description, style: .bodySmall)
-                    .foregroundColor(BPColors.textSecondary)
+                    .foregroundColor(BPColors.Text.secondary)
             }
 
             Spacer()
 
             Toggle("", isOn: $isOn)
-                .tint(BPColors.primary)
+                .tint(BPColors.Primary.main)
         }
     }
 }
@@ -526,17 +526,17 @@ struct ThemeOption: View {
             VStack(spacing: BPSpacing.xs) {
                 Image(systemName: theme.iconName)
                     .font(.title2)
-                    .foregroundColor(isSelected ? BPColors.primary : BPColors.textSecondary)
+                    .foregroundColor(isSelected ? BPColors.Primary.main : BPColors.Text.secondary)
 
                 BPText(theme.displayName, style: .labelSmall)
-                    .foregroundColor(isSelected ? BPColors.primary : BPColors.textSecondary)
+                    .foregroundColor(isSelected ? BPColors.Primary.main : BPColors.Text.secondary)
             }
             .padding(BPSpacing.md)
-            .background(isSelected ? BPColors.primary.opacity(0.1) : BPColors.backgroundTertiary)
+            .background(isSelected ? BPColors.Primary.main.opacity(0.1) : BPColors.backgroundTertiary)
             .cornerRadius(BPSpacing.sm)
             .overlay(
                 RoundedRectangle(cornerRadius: BPSpacing.sm)
-                    .stroke(isSelected ? BPColors.primary : Color.clear, lineWidth: 2)
+                    .stroke(isSelected ? BPColors.Primary.main : Color.clear, lineWidth: 2)
             )
         }
         .buttonStyle(PlainButtonStyle())
@@ -551,11 +551,11 @@ struct QuickTip: View {
         HStack(spacing: BPSpacing.sm) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundColor(BPColors.primary)
+                .foregroundColor(BPColors.Primary.main)
                 .frame(width: 16)
 
             BPText(text, style: .bodySmall)
-                .foregroundColor(BPColors.textSecondary)
+                .foregroundColor(BPColors.Text.secondary)
 
             Spacer()
         }

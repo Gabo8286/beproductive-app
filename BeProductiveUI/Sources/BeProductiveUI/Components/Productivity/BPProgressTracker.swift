@@ -112,7 +112,7 @@ public struct BPProgressTracker: View {
                 animatedProgress = progress
             }
         }
-        .onChange(of: progress) { newValue in
+        .onChange(of: progress) { _, newValue in
             if animated {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     animatedProgress = newValue

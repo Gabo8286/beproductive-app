@@ -288,7 +288,7 @@ struct TaskRowView: View {
                             TaskMetadataChip(
                                 icon: "folder",
                                 text: category,
-                                color: BPColors.primary
+                                color: BPColors.Primary.main
                             )
                         }
 
@@ -412,7 +412,7 @@ struct LoadingView: View {
     var body: some View {
         VStack(spacing: BPSpacing.lg) {
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: BPColors.primary))
+                .progressViewStyle(CircularProgressViewStyle(tint: BPColors.Primary.main))
                 .scaleEffect(1.5)
 
             BPText("Loading tasks...", style: .bodyMedium)
@@ -534,7 +534,7 @@ struct CreateTaskView: View {
                     VStack(alignment: .leading, spacing: BPSpacing.md) {
                         HStack {
                             Toggle("Set due date", isOn: $hasDueDate)
-                                .toggleStyle(SwitchToggleStyle(tint: BPColors.primary))
+                                .toggleStyle(SwitchToggleStyle(tint: BPColors.Primary.main))
 
                             Spacer()
                         }
@@ -630,7 +630,7 @@ struct TaskFiltersView: View {
                                 get: { viewModel.showCompleted },
                                 set: { _ in viewModel.toggleShowCompleted() }
                             ))
-                            .toggleStyle(SwitchToggleStyle(tint: BPColors.primary))
+                            .toggleStyle(SwitchToggleStyle(tint: BPColors.Primary.main))
 
                             Spacer()
                         }
@@ -666,7 +666,7 @@ struct FilterOptionRow: View {
                 if isSelected {
                     Image(systemName: "checkmark")
                         .font(.body)
-                        .foregroundColor(BPColors.primary)
+                        .foregroundColor(BPColors.Primary.main)
                 }
             }
             .padding(.vertical, BPSpacing.sm)

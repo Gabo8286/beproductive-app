@@ -14,6 +14,9 @@ class SyncEngine: ObservableObject {
     @Published var conflictCount: Int = 0
     @Published var isOnline: Bool = true
 
+    // MARK: - Shared Instance
+    static let shared = SyncEngine(dataManager: DataManager.shared)
+
     // MARK: - Private Properties
     private let dataManager: DataManager
     private let supabaseClient: SupabaseClient

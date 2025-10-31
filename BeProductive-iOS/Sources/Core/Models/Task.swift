@@ -9,7 +9,7 @@ final class TodoTask: SyncableModel {
     var taskDescription: String?
     var isCompleted: Bool
     var priority: TaskPriorityLevel
-    var status: TodoTaskStatus
+    var status: TaskStatus
     var category: String?
     var tags: [String]
     var dueDate: Date?

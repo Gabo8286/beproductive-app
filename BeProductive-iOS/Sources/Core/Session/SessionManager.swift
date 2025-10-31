@@ -24,6 +24,12 @@ class SessionManager: ObservableObject {
     private let backgroundTimeoutInterval: TimeInterval = 5 * 60 // 5 minutes
     private let autoSaveInterval: TimeInterval = 60 // 1 minute
 
+    // MARK: - Shared Instance
+    static let shared = SessionManager(
+        authManager: AuthenticationManager.shared ?? AuthenticationManager(),
+        dataManager: DataManager.shared
+    )
+
     // MARK: - Initialization
     init(authManager: AuthenticationManager, dataManager: DataManager) {
         self.authManager = authManager
@@ -310,12 +316,14 @@ class SessionManager: ObservableObject {
 }
 
 // MARK: - Supporting Types
-struct UserPreferences: Codable {
+class UserPreferences: ObservableObject, Codable {
     var theme: AppTheme = .system
     var language: String = "en"
     var notifications: NotificationSettings = NotificationSettings()
     var sync: SyncSettings = SyncSettings()
     var privacy: PrivacySettings = PrivacySettings()
+
+    init() {}
 
     enum AppTheme: String, CaseIterable, Codable {
         case light = "light"

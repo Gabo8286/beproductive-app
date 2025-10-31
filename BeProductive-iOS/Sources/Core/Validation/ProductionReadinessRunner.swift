@@ -10,7 +10,7 @@ struct ProductionReadinessRunner {
 
         // Initialize required managers
         let dataManager = DataManager.shared
-        let authManager = AuthenticationManager.shared
+        let authManager = AuthenticationManager.shared ?? AuthenticationManager()
         let sessionManager = SessionManager.shared
         let syncEngine = SyncEngine.shared
 

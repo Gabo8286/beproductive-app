@@ -45,7 +45,9 @@ class PerformanceMonitor: ObservableObject {
 
         // Start periodic monitoring
         monitoringTimer = Timer.scheduledTimer(withTimeInterval: monitoringInterval, repeats: true) { [weak self] _ in
-            self?.performPeriodicCheck()
+            Task { @MainActor in
+                self?.performPeriodicCheck()
+            }
         }
 
         // Track app launch performance
@@ -82,7 +84,7 @@ class PerformanceMonitor: ObservableObject {
 
         // Log to analytics
         analyticsManager?.trackPerformance(
-            AnalyticsManager.AnalyticsPerformanceMetric(rawValue: metric.rawValue) ?? .appLaunchTime,
+            AnalyticsPerformanceMetric(rawValue: metric.rawValue) ?? .appLaunchTime,
             value: value,
             context: context
         )
