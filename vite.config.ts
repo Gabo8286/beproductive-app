@@ -62,6 +62,8 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     minify: 'esbuild',
     chunkSizeWarningLimit: 1000, // Reasonable limit to avoid over-chunking
+    // NUCLEAR CACHE BUST: Force complete rebuild
+    assetsDir: `assets-${Date.now()}`,
     rollupOptions: {
       treeshake: {
         preset: 'recommended' // Use recommended settings for stable builds

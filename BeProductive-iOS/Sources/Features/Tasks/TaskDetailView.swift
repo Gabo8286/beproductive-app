@@ -3,7 +3,7 @@ import BeProductiveUI
 
 struct TaskDetailView: View {
     @Bindable var task: TodoTask
-    @StateObject private var viewModel: TodoTaskViewModel
+    @StateObject private var viewModel: TaskViewModel
     @EnvironmentObject var appCoordinator: AppCoordinator
     @Environment(\.dismiss) private var dismiss
 
@@ -14,7 +14,7 @@ struct TaskDetailView: View {
 
     init(task: TodoTask, dataManager: DataManager) {
         self.task = task
-        self._viewModel = StateObject(wrappedValue: TodoTaskViewModel(dataManager: dataManager))
+        self._viewModel = StateObject(wrappedValue: TaskViewModel(dataManager: dataManager))
     }
 
     var body: some View {
@@ -113,7 +113,7 @@ struct TaskDetailView: View {
 struct TaskHeaderSection: View {
     @Bindable var task: TodoTask
     @Binding var isEditing: Bool
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
@@ -239,7 +239,7 @@ struct TaskContentSection: View {
 
 struct SubtasksSection: View {
     @Bindable var task: TodoTask
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
@@ -263,7 +263,7 @@ struct SubtasksSection: View {
 
 struct SubtaskRow: View {
     @Bindable var subtask: TodoTask
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
 
     var body: some View {
         HStack(spacing: BPSpacing.md) {
@@ -411,7 +411,7 @@ struct CommentRow: View {
 
 struct TaskActionButtons: View {
     @Bindable var task: TodoTask
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
     let onAddSubtask: () -> Void
     let onDelete: () -> Void
 

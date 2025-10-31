@@ -2,14 +2,14 @@ import SwiftUI
 import BeProductiveUI
 
 struct TaskListView: View {
-    @StateObject private var viewModel: TodoTaskViewModel
+    @StateObject private var viewModel: TaskViewModel
     @EnvironmentObject var appCoordinator: AppCoordinator
     @State private var showingCreateTask = false
     @State private var showingFilters = false
     @State private var selectedTask: TodoTask?
 
     init(dataManager: DataManager) {
-        _viewModel = StateObject(wrappedValue: TodoTaskViewModel(dataManager: dataManager))
+        _viewModel = StateObject(wrappedValue: TaskViewModel(dataManager: dataManager))
     }
 
     var body: some View {
@@ -138,7 +138,7 @@ struct QuickFilterButton: View {
 
 struct TaskScrollView: View {
     let tasks: [TodoTask]
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
     @Binding var selectedTask: TodoTask?
 
     var body: some View {
@@ -166,7 +166,7 @@ struct TaskScrollView: View {
         }
     }
 
-    private var todayTasks: [Task] {
+    private var todayTasks: [TodoTask] {
         let today = Calendar.current.startOfDay(for: Date())
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
 
@@ -176,7 +176,7 @@ struct TaskScrollView: View {
         }
     }
 
-    private var overdueTasks: [Task] {
+    private var overdueTasks: [TodoTask] {
         let today = Calendar.current.startOfDay(for: Date())
         return tasks.filter { task in
             guard let dueDate = task.dueDate, !task.isCompleted else { return false }
@@ -184,7 +184,7 @@ struct TaskScrollView: View {
         }
     }
 
-    private var upcomingTasks: [Task] {
+    private var upcomingTasks: [TodoTask] {
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
         let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
 
@@ -194,7 +194,7 @@ struct TaskScrollView: View {
         }
     }
 
-    private var otherTasks: [Task] {
+    private var otherTasks: [TodoTask] {
         let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
         return tasks.filter { task in
             if let dueDate = task.dueDate {
@@ -210,7 +210,7 @@ struct TaskSection: View {
     let title: String
     let tasks: [TodoTask]
     var isOverdue: Bool = false
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
     @Binding var selectedTask: TodoTask?
 
     var body: some View {
@@ -235,8 +235,8 @@ struct TaskSection: View {
 }
 
 struct TaskRowView: View {
-    @ObservedObject var task: TodoTask
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @Bindable var task: TodoTask
+    @ObservedObject var viewModel: TaskViewModel
     let onTap: () -> Void
 
     var body: some View {
@@ -369,8 +369,8 @@ struct TaskMetadataChip: View {
 }
 
 struct TaskContextMenu: View {
-    @ObservedObject var task: TodoTask
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @Bindable var task: TodoTask
+    @ObservedObject var viewModel: TaskViewModel
 
     var body: some View {
         Button(action: {
@@ -475,7 +475,7 @@ struct EmptyTasksView: View {
 }
 
 struct CreateTaskView: View {
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var title = ""
@@ -597,7 +597,7 @@ struct CreateTaskView: View {
 }
 
 struct TaskFiltersView: View {
-    @ObservedObject var viewModel: TodoTaskViewModel
+    @ObservedObject var viewModel: TaskViewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

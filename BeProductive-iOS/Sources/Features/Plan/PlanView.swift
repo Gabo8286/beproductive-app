@@ -133,7 +133,7 @@ struct QuickCreateSheet: View {
                                     try await dataManager.createGoal(
                                         title: "New Goal",
                                         description: nil,
-                                        category: .personal,
+                                        category: "Personal",
                                         targetDate: Calendar.current.date(byAdding: .month, value: 1, to: Date())
                                     )
                                     dismiss()

@@ -1,4 +1,4 @@
-// 🚨 EMERGENCY CACHE BUST: Force Vercel deployment - Thu Oct 31 04:59:08 GMT 2025
+// 🚨 NUCLEAR CACHE BUST: Force COMPLETE Vercel rebuild - Thu Oct 31 05:28:30 GMT 2025
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";

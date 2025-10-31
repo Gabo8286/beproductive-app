@@ -7,6 +7,9 @@ import Combine
 @MainActor
 class AnalyticsManager: ObservableObject {
 
+    // MARK: - Singleton
+    static var shared: AnalyticsManager?
+
     // MARK: - Published Properties
     @Published var isAnalyticsEnabled: Bool {
         didSet {
@@ -41,6 +44,9 @@ class AnalyticsManager: ObservableObject {
         self.isCrashReportingEnabled = UserDefaults.standard.bool(forKey: "crashReportingEnabled") || ConfigurationManager.shared.crashReportingEnabled
 
         setupAnalytics()
+        
+        // Set as shared instance
+        AnalyticsManager.shared = self
     }
 
     // MARK: - Public Methods

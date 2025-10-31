@@ -203,11 +203,11 @@ class TaskViewModel: ObservableObject {
     }
 
     // MARK: - Computed Properties
-    var overdueTasks: [Task] {
+    var overdueTasks: [TodoTask] {
         tasks.filter { $0.isOverdue }
     }
 
-    var todayTasks: [Task] {
+    var todayTasks: [TodoTask] {
         let today = Calendar.current.startOfDay(for: Date())
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
 
@@ -217,7 +217,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    var upcomingTasks: [Task] {
+    var upcomingTasks: [TodoTask] {
         let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
         let weekFromNow = Calendar.current.date(byAdding: .day, value: 7, to: Date())!
 

@@ -138,7 +138,10 @@ class ConfigurationManager {
         self.environment = .production
         #endif
 
-        // Load configuration
+        // Initialize configuration as empty first
+        self.configuration = [:]
+        
+        // Load configuration after all stored properties are initialized
         self.configuration = loadConfiguration()
     }
 

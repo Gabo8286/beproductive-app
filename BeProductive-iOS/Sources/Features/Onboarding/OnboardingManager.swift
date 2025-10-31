@@ -93,7 +93,7 @@ class PermissionManager: ObservableObject {
 
             if granted {
                 // Register for remote notifications
-                await UIApplication.shared.registerForRemoteNotifications()
+                UIApplication.shared.registerForRemoteNotifications()
             }
         } catch {
             print("Failed to request notification permission: \(error)")

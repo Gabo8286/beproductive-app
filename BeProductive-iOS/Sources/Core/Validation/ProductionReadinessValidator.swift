@@ -4,8 +4,8 @@ import SwiftUI
 import SwiftData
 
 // Type alias to avoid confusion with Swift's built-in Task type
-// This refers to our SwiftData Task model class
-typealias ProductivityTask = Task
+// This refers to our SwiftData TodoTask model class
+typealias ProductivityTask = TodoTask
 
 @MainActor
 class ProductionReadinessValidator: ObservableObject {
@@ -155,11 +155,18 @@ class ProductionReadinessValidator: ObservableObject {
         do {
             // Test task creation
             if let userId = authManager.currentUser?.id {
-                let testTask = ProductivityTask(title: "Validation Test", userId: userId)
+                let testTask = ProductivityTask(
+                    title: "Validation Test",
+                    taskDescription: "Test task for validation",
+                    priority: .medium,
+                    category: "Validation",
+                    dueDate: nil,
+                    userId: userId
+                )
                 try dataManager.save(testTask)
 
                 // Test fetch
-                let fetchedTasks: [ProductivityTask] = try dataManager.fetch(ProductivityTask.self)
+                let fetchedTasks = try dataManager.fetch(ProductivityTask.self)
                 if !fetchedTasks.contains(where: { $0.title == "Validation Test" }) {
                     issues.append("Task fetch operation failed")
                 }
@@ -352,7 +359,11 @@ class ProductionReadinessValidator: ObservableObject {
         var testObjects: [ProductivityTask] = []
         for i in 0..<1000 {
             if let userId = authManager.currentUser?.id {
-                testObjects.append(ProductivityTask(title: "Test \(i)", userId: userId))
+                testObjects.append(ProductivityTask(
+                    title: "Test \(i)",
+                    taskDescription: "Memory test task",
+                    userId: userId
+                ))
             }
         }
 
@@ -454,7 +465,7 @@ class ProductionReadinessValidator: ObservableObject {
 
         // Perform database operations
         do {
-            let _: [ProductivityTask] = try dataManager.fetch(ProductivityTask.self)
+            let _ = try dataManager.fetch(ProductivityTask.self)
         } catch {
             // Handle error
         }

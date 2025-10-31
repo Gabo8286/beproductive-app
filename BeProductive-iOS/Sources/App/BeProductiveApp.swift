@@ -11,6 +11,7 @@ struct BeProductiveApp: App {
     @StateObject private var authenticationManager = AuthenticationManager()
     @StateObject private var themeManager = BPThemeManager.shared
     @StateObject private var dataManager = DataManager()
+    @StateObject private var analyticsManager: AnalyticsManager
     @StateObject private var sessionManager: SessionManager
     @StateObject private var backgroundSyncManager: BackgroundSyncManager
 
@@ -21,11 +22,13 @@ struct BeProductiveApp: App {
         // Initialize state objects with dependencies
         let dataManager = DataManager()
         let authManager = AuthenticationManager()
+        let analyticsManager = AnalyticsManager(dataManager: dataManager)
         let sessionManager = SessionManager(authManager: authManager, dataManager: dataManager)
         let backgroundSyncManager = BackgroundSyncManager(dataManager: dataManager, syncEngine: dataManager.syncEngine)
 
         self._dataManager = StateObject(wrappedValue: dataManager)
         self._authenticationManager = StateObject(wrappedValue: authManager)
+        self._analyticsManager = StateObject(wrappedValue: analyticsManager)
         self._sessionManager = StateObject(wrappedValue: sessionManager)
         self._backgroundSyncManager = StateObject(wrappedValue: backgroundSyncManager)
     }
@@ -40,6 +43,7 @@ struct BeProductiveApp: App {
                 .environmentObject(authenticationManager)
                 .environmentObject(themeManager)
                 .environmentObject(dataManager)
+                .environmentObject(analyticsManager)
                 .environmentObject(sessionManager)
                 .environmentObject(backgroundSyncManager)
                 .beProductiveTheme(themeManager.currentTheme)
@@ -59,6 +63,9 @@ struct BeProductiveApp: App {
         // Initialize core services
         await authenticationManager.initialize()
         await dataManager.initialize()
+        
+        // Start analytics session
+        analyticsManager.startAnalyticsSession()
 
         // Set up initial state
         appCoordinator.initialize()
