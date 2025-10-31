@@ -1,0 +1,138 @@
+{
+  "": {
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/master.swiftdeps"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/BeProductiveUI.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BeProductiveUI.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BeProductiveUI.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BeProductiveUI~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BeProductiveUI.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BeProductiveUI.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/AI/BPChatMessage.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPChatMessage.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPChatMessage.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPChatMessage~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPChatMessage.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPChatMessage.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/Buttons/BPButton.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPButton.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPButton.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPButton~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPButton.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPButton.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/Inputs/BPTextField.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTextField.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTextField.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTextField~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTextField.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTextField.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/Productivity/BPProgressTracker.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPProgressTracker.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPProgressTracker.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPProgressTracker~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPProgressTracker.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPProgressTracker.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/Productivity/BPTaskCard.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTaskCard.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTaskCard.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTaskCard~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTaskCard.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTaskCard.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/Text/BPText.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPText.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPText.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPText~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPText.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPText.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/iOS/BPNavigationBar.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPNavigationBar.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPNavigationBar.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPNavigationBar~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPNavigationBar.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPNavigationBar.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/iOS/BPTabBar.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTabBar.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTabBar.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTabBar~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTabBar.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTabBar.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Components/iOS/BPWidget.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPWidget.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPWidget.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPWidget~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPWidget.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPWidget.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Accessibility/BPAccessibility.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPAccessibility.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPAccessibility.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPAccessibility~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPAccessibility.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPAccessibility.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Colors/BPColors.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPColors.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPColors.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPColors~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPColors.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPColors.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Modifiers/BPCoreModifiers.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPCoreModifiers.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPCoreModifiers.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPCoreModifiers~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPCoreModifiers.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPCoreModifiers.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Modifiers/BPLayoutModifiers.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPLayoutModifiers.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPLayoutModifiers.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPLayoutModifiers~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPLayoutModifiers.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPLayoutModifiers.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Spacing/BPSpacing.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPSpacing.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPSpacing.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPSpacing~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPSpacing.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPSpacing.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Theme/BPTheme.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTheme.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTheme.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTheme~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTheme.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTheme.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Theme/BPThemeManager.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeManager.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeManager.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeManager.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeManager.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Theme/BPThemeModifiers.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeModifiers.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeModifiers.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeModifiers~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeModifiers.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPThemeModifiers.dia"
+  },
+  "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/Sources/BeProductiveUI/Foundation/Typography/BPTypography.swift": {
+    "dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTypography.d",
+    "object": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTypography.swift.o",
+    "swiftmodule": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTypography~partial.swiftmodule",
+    "swift-dependencies": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTypography.swiftdeps",
+    "diagnostics": "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductiveUI/.build/arm64-apple-macosx/debug/BeProductiveUI.build/BPTypography.dia"
+  }
+}

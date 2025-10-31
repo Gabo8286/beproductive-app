@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FEATURE_LUNA_AI</key>
+	<string>true</string>
+	<key>FEATURE_TEAM_COLLABORATION</key>
+	<string>true</string>
+	<key>FEATURE_WIDGETS</key>
+	<string>true</string>
+	<key>FEATURE_ADVANCED_ANALYTICS</key>
+	<string>true</string>
+	<key>FEATURE_OFFLINE_MODE</key>
+	<string>true</string>
+	<key>MAX_API_REQUESTS_PER_MINUTE</key>
+	<string>60</string>
+	<key>REQUEST_TIMEOUT_INTERVAL</key>
+	<string>30</string>
+	<key>MAX_RETRY_ATTEMPTS</key>
+	<string>3</string>
+	<key>MAX_LOCAL_STORAGE_SIZE</key>
+	<string>1073741824</string>
+	<key>SYNC_INTERVAL</key>
+	<string>300</string>
+	<key>ANALYTICS_ENABLED</key>
+	<string>true</string>
+	<key>CRASH_REPORTING_ENABLED</key>
+	<string>true</string>
+</dict>
+</plist>

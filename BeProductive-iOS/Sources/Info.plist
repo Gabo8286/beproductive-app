@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleDisplayName</key>
+    <string>BeProductive</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <true/>
+        <key>UISceneConfigurations</key>
+        <dict>
+            <key>UIWindowSceneSessionRoleApplication</key>
+            <array>
+                <dict>
+                    <key>UISceneConfigurationName</key>
+                    <string>Default Configuration</string>
+                    <key>UISceneDelegateClassName</key>
+                    <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+                </dict>
+            </array>
+        </dict>
+    </dict>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+    <key>UILaunchScreen</key>
+    <dict>
+        <key>UIColorName</key>
+        <string>LaunchScreenBackground</string>
+        <key>UIImageName</key>
+        <string>LaunchIcon</string>
+    </dict>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>armv7</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UIUserInterfaceStyle</key>
+    <string>Automatic</string>
+
+    <!-- Privacy Permissions -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>BeProductive needs microphone access to enable voice capture for tasks and notes.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>BeProductive needs camera access to capture photos for your tasks and projects.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>BeProductive needs photo library access to attach images to your tasks and notes.</string>
+    <key>NSNotificationAlwaysAndWhenInUseUsageDescription</key>
+    <string>BeProductive uses notifications to remind you about tasks, goals, and productivity insights.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>BeProductive uses location to provide context-aware productivity insights and location-based reminders.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>BeProductive needs access to contacts to enable team collaboration features.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>BeProductive integrates with your calendar to help schedule tasks and track productivity.</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>BeProductive can sync with Reminders to keep all your tasks in one place.</string>
+
+    <!-- Network and Background Capabilities -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>background-fetch</string>
+        <string>background-processing</string>
+        <string>remote-notification</string>
+    </array>
+
+    <!-- App Transport Security -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <key>NSAllowsArbitraryLoadsInWebContent</key>
+        <false/>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+
+    <!-- URL Schemes -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.beproductive.deeplink</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>beproductive</string>
+            </array>
+        </dict>
+    </array>
+
+    <!-- Document Types -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>BeProductive Project</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Owner</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.beproductive.project</string>
+            </array>
+        </dict>
+    </array>
+
+    <!-- Exported Type Declarations -->
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeDescription</key>
+            <string>BeProductive Project File</string>
+            <key>UTTypeIconFiles</key>
+            <array/>
+            <key>UTTypeIdentifier</key>
+            <string>com.beproductive.project</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>bpproj</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+
+    <!-- Accessibility -->
+    <key>UIAccessibilityContainerType</key>
+    <string>semanticGroup</string>
+
+    <!-- Widget Extension -->
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.widgetkit-extension</string>
+    </dict>
+
+    <!-- Siri Integration -->
+    <key>NSUserActivityTypes</key>
+    <array>
+        <string>com.beproductive.create-task</string>
+        <string>com.beproductive.view-tasks</string>
+        <string>com.beproductive.start-focus-session</string>
+    </array>
+
+    <!-- Feature Flags -->
+    <key>FEATURE_LUNA_AI</key>
+    <string>true</string>
+    <key>FEATURE_TEAM_COLLABORATION</key>
+    <string>true</string>
+    <key>FEATURE_WIDGETS</key>
+    <string>true</string>
+    <key>FEATURE_ADVANCED_ANALYTICS</key>
+    <string>true</string>
+    <key>FEATURE_OFFLINE_MODE</key>
+    <string>true</string>
+</dict>
+</plist>

@@ -26,15 +26,19 @@ SPECIFIC_PACKAGE=""
 
 # Project paths (in priority order)
 PROJECTS=(
+    "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductive-iOS/BeProductive-iOS.xcodeproj"
     "/Users/gabrielsotomorales/projects/Gemini/spark-bloom-flow/BeProductive-iOS/BeProductive.xcodeproj"
     "/Users/gabrielsotomorales/projects/beproductive-ios/BeProductiveApp/BeProductiveApp.xcodeproj"
+    "./BeProductive-iOS/BeProductive-iOS.xcodeproj"
     "./ios-app/BeProductive.xcodeproj"
     "./BeProductive-iOS/BeProductive.xcodeproj"
 )
 
 WORKSPACES=(
+    "/Users/gabrielsotomorales/projects/spark-bloom-flow/BeProductive-iOS/BeProductive-iOS.xcworkspace"
     "/Users/gabrielsotomorales/projects/Gemini/spark-bloom-flow/BeProductive-iOS/BeProductive.xcworkspace"
     "/Users/gabrielsotomorales/projects/beproductive-ios/BeProductiveApp/BeProductiveApp.xcworkspace"
+    "./BeProductive-iOS/BeProductive-iOS.xcworkspace"
     "./ios-app/BeProductive.xcworkspace"
     "./BeProductive-iOS/BeProductive.xcworkspace"
 )

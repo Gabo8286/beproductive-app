@@ -2,7 +2,6 @@ import * as path from "path";
 
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-import { componentTagger } from "lovable-tagger";
 
 // Vite config with mobile development support
 // Use 'npm run dev:mobile' for mobile-sized floating window development
@@ -36,7 +35,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' && componentTagger(),
     // Health check endpoint plugin for Docker monitoring
     {
       name: 'health-check',
@@ -63,142 +61,28 @@ export default defineConfig(({ mode }) => ({
     target: 'es2020',
     sourcemap: false,
     minify: 'esbuild',
-    // EMERGENCY: Strict performance budgets to force smaller chunks
-    chunkSizeWarningLimit: 500, // Reduced back to force smaller chunks
+    chunkSizeWarningLimit: 1000, // Reasonable limit to avoid over-chunking
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Emergency bundle size reduction - aggressive chunking strategy
           if (id.includes('node_modules')) {
-            // Core React libraries - split for better caching and loading
-            if (id.includes('react/') || id.includes('react-dom/client')) {
-              return 'react-runtime';
-            }
-            if (id.includes('react-dom') && !id.includes('client')) {
-              return 'react-dom';
-            }
-            if (id.includes('react-router')) {
-              return 'react-router';
+            // Core React libraries - keep together for better compatibility
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
             }
 
-            // UI Component libraries - frequently used, cache separately
-            if (id.includes('@radix-ui') || id.includes('radix-ui')) {
+            // UI component libraries
+            if (id.includes('@radix-ui')) {
               return 'ui-components';
-            }
-            if (id.includes('lucide-react')) {
-              return 'icons';
-            }
-            if (id.includes('framer-motion')) {
-              return 'animations';
-            }
-
-            // Data & Backend - heavy but essential
-            if (id.includes('@supabase') || id.includes('supabase')) {
-              return 'supabase';
-            }
-            if (id.includes('@tanstack/react-query')) {
-              return 'query';
-            }
-
-            // Charts - large but only used in specific pages - split further
-            if (id.includes('recharts')) {
-              return 'charts-recharts';
-            }
-            if (id.includes('d3')) {
-              return 'charts-d3';
-            }
-
-            // Utilities - split into smaller chunks
-            if (id.includes('zod')) {
-              return 'utils-validation';
-            }
-            if (id.includes('date-fns')) {
-              return 'utils-date';
-            }
-            if (id.includes('clsx') || id.includes('class-variance-authority')) {
-              return 'utils-styling';
-            }
-
-            // AI libraries - feature-specific, can be lazy loaded
-            if (id.includes('openai') || id.includes('anthropic')) {
-              return 'ai-services';
-            }
-
-            // Forms and validation - common but can be split
-            if (id.includes('react-hook-form') || id.includes('@hookform')) {
-              return 'forms';
-            }
-
-            // Internationalization - large but can be split
-            if (id.includes('react-i18next') || id.includes('i18next')) {
-              return 'i18n';
-            }
-
-            // Testing libraries - development only
-            if (id.includes('vitest') || id.includes('@testing-library')) {
-              return 'testing';
             }
 
             // Large utility libraries
-            if (id.includes('lodash') || id.includes('ramda') || id.includes('moment')) {
-              return 'utilities-large';
+            if (id.includes('date-fns') || id.includes('framer-motion') || id.includes('recharts')) {
+              return 'heavy-vendor';
             }
 
-            // Everything else from node_modules
-            return 'vendor-misc';
-          }
-
-          // EMERGENCY: Aggressive app code chunking to reduce main bundle
-          if (id.includes('src/')) {
-            // Admin features - rarely used, separate chunk
-            if (id.includes('src/pages/admin/') || id.includes('src/components/admin/')) {
-              return 'admin-features';
-            }
-
-            // Analytics features - heavy, separate chunk
-            if (id.includes('Analytics') || id.includes('analytics') || id.includes('src/components/analytics/')) {
-              return 'analytics-features';
-            }
-
-            // AI and Luna features - feature-specific
-            if (id.includes('luna') || id.includes('Luna') || id.includes('src/components/ai/')) {
-              return 'ai-features';
-            }
-
-            // Automation features - complex, separate chunk
-            if (id.includes('automation') || id.includes('Automation')) {
-              return 'automation-features';
-            }
-
-            // Habit features - large component set
-            if (id.includes('habit') || id.includes('Habit')) {
-              return 'habit-features';
-            }
-
-            // Goal features - large component set
-            if (id.includes('goal') || id.includes('Goal')) {
-              return 'goal-features';
-            }
-
-            // Reflection features
-            if (id.includes('reflection') || id.includes('Reflection')) {
-              return 'reflection-features';
-            }
-
-            // Task features - core but can be chunked
-            if (id.includes('task') || id.includes('Task') || id.includes('src/pages/Tasks')) {
-              return 'task-features';
-            }
-
-            // Widget system - modular loading
-            if (id.includes('widget') || id.includes('Widget')) {
-              return 'widget-system';
-            }
-
-            // Settings and config
-            if (id.includes('settings') || id.includes('Settings') || id.includes('config') || id.includes('Config')) {
-              return 'settings-features';
-            }
+            // Everything else
+            return 'vendor';
           }
         },
         // Optimize chunk naming for caching
@@ -206,9 +90,8 @@ export default defineConfig(({ mode }) => ({
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
       },
-      // Conservative tree shaking to avoid empty chunks
       treeshake: {
-        preset: 'recommended' // Use recommended settings only
+        preset: 'safest' // Use safest settings to avoid module resolution issues
       }
     },
     // Tree shaking and dead code elimination

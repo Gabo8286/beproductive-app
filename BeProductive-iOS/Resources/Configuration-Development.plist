@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SUPABASE_URL</key>
+	<string>https://your-project.supabase.co</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>your-supabase-anon-key</string>
+	<key>ANALYTICS_ENABLED</key>
+	<string>false</string>
+	<key>CRASH_REPORTING_ENABLED</key>
+	<string>false</string>
+	<key>MAX_API_REQUESTS_PER_MINUTE</key>
+	<string>30</string>
+	<key>SYNC_INTERVAL</key>
+	<string>600</string>
+</dict>
+</plist>
