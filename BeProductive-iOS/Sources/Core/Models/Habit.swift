@@ -20,7 +20,7 @@ final class Habit {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships
@@ -72,7 +72,7 @@ final class Habit {
         self.userId = userId
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.completions = []
     }
@@ -245,7 +245,7 @@ final class HabitCompletion {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
     
     var tableName: String { "habit_completions" }
@@ -263,7 +263,7 @@ final class HabitCompletion {
         // Initialize sync properties
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
     }
 }

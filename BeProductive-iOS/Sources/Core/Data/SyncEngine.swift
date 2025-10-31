@@ -141,7 +141,7 @@ class SyncEngine: ObservableObject {
 
         do {
             // Get all entities that need syncing
-            let tasks = try context.fetch(FetchDescriptor<Task>(
+            let tasks = try context.fetch(FetchDescriptor<TodoTask>(
                 predicate: #Predicate { $0.needsSync == true }
             ))
 
@@ -173,7 +173,7 @@ class SyncEngine: ObservableObject {
         }
     }
 
-    private func pushTasksBatch(_ tasks: [Task]) async throws {
+    private func pushTasksBatch(_ tasks: [TodoTask]) async throws {
         let context = dataManager.container.mainContext
 
         for batch in tasks.chunked(into: batchSize) {
@@ -201,10 +201,10 @@ class SyncEngine: ObservableObject {
         }
     }
 
-    private func pushTask(_ task: Task) async throws {
+    private func pushTask(_ task: TodoTask) async throws {
         let remoteTask = task.toRemoteTask()
 
-        if task.isDeleted {
+        if task.isSoftDeleted {
             try await supabaseClient
                 .from("tasks")
                 .delete()
@@ -242,8 +242,8 @@ class SyncEngine: ObservableObject {
     }
 
     private func syncRemoteTask(_ remoteTask: RemoteTask, context: ModelContext) async throws {
-        let predicate = #Predicate<Task> { $0.id == remoteTask.id }
-        let descriptor = FetchDescriptor<Task>(predicate: predicate)
+        let predicate = #Predicate<TodoTask> { $0.id == remoteTask.id }
+        let descriptor = FetchDescriptor<TodoTask>(predicate: predicate)
         let existingTasks = try context.fetch(descriptor)
 
         if let existingTask = existingTasks.first {
@@ -257,12 +257,12 @@ class SyncEngine: ObservableObject {
             }
         } else {
             // Create new local task
-            let newTask = Task.from(remoteTask)
+            let newTask = TodoTask.from(remoteTask)
             context.insert(newTask)
         }
     }
 
-    private func handleTaskConflict(local: Task, remote: RemoteTask) async {
+    private func handleTaskConflict(local: TodoTask, remote: RemoteTask) async {
         // For now, create a conflict record for manual resolution
         _ = SyncConflict(
             entityType: "Task",
@@ -299,7 +299,7 @@ class SyncEngine: ObservableObject {
     private func pushGoal(_ goal: Goal) async throws {
         let remoteGoal = goal.toRemoteGoal()
 
-        if goal.isDeleted {
+        if goal.isSoftDeleted {
             try await supabaseClient
                 .from("goals")
                 .delete()
@@ -369,7 +369,7 @@ class SyncEngine: ObservableObject {
     private func pushHabit(_ habit: Habit) async throws {
         let remoteHabit = habit.toRemoteHabit()
 
-        if habit.isDeleted {
+        if habit.isSoftDeleted {
             try await supabaseClient
                 .from("habits")
                 .delete()

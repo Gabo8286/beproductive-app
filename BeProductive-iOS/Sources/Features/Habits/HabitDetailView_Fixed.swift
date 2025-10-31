@@ -112,7 +112,7 @@ struct HabitDetailView: View {
     }
 
     private func deleteHabit() {
-        Swift.Task {
+        Task {
             do {
                 try await viewModel.deleteHabit(habit)
                 await MainActor.run {
@@ -270,7 +270,7 @@ struct HabitQuickActions: View {
                         style: habit.isCompletedToday ? .secondary : .primary,
                         size: .medium
                     ) {
-                        Swift.Task {
+                        Task {
                             try? await viewModel.toggleHabitCompletion(habit)
                         }
                     }
@@ -426,7 +426,7 @@ struct HabitActionButtons: View {
                     style: .secondary,
                     size: .medium
                 ) {
-                    Swift.Task {
+                    Task {
                         if habit.isActive {
                             try? await viewModel.pauseHabit(habit)
                         } else {

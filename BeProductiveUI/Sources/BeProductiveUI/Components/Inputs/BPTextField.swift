@@ -234,9 +234,9 @@ public struct BPTextField: View {
         .overlay(borderOverlay)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .disabled(isDisabled)
-        .onChange(of: fieldIsFocused) { focused in
+        .onChange(of: fieldIsFocused) {
             withAnimation(Animation.easeInOut(duration: theme.animations.fast)) {
-                isFocused = focused
+                isFocused = fieldIsFocused
             }
         }
     }
@@ -253,9 +253,9 @@ public struct BPTextField: View {
             .autocapitalization(autocapitalization)
             .disableAutocorrection(shouldDisableAutocorrection)
             .focused($fieldIsFocused)
-            .onChange(of: text) { newValue in
-                if let maxLength = maxLength, newValue.count > maxLength {
-                    text = String(newValue.prefix(maxLength))
+            .onChange(of: text) {
+                if let maxLength = maxLength, text.count > maxLength {
+                    text = String(text.prefix(maxLength))
                 }
             }
     }
@@ -267,9 +267,9 @@ public struct BPTextField: View {
             .foregroundColor(textColor)
             .textContentType(inputType.textContentType)
             .focused($fieldIsFocused)
-            .onChange(of: text) { newValue in
-                if let maxLength = maxLength, newValue.count > maxLength {
-                    text = String(newValue.prefix(maxLength))
+            .onChange(of: text) {
+                if let maxLength = maxLength, text.count > maxLength {
+                    text = String(text.prefix(maxLength))
                 }
             }
     }
@@ -283,9 +283,9 @@ public struct BPTextField: View {
                 .frame(minHeight: CGFloat(minLines) * lineHeight, maxHeight: CGFloat(maxLines) * lineHeight)
                 .focused($fieldIsFocused)
                 .scrollContentBackground(.hidden)
-                .onChange(of: text) { newValue in
-                    if let maxLength = maxLength, newValue.count > maxLength {
-                        text = String(newValue.prefix(maxLength))
+                .onChange(of: text) {
+                    if let maxLength = maxLength, text.count > maxLength {
+                        text = String(text.prefix(maxLength))
                     }
                 }
         }

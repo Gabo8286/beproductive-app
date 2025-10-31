@@ -2,8 +2,8 @@ import SwiftUI
 import BeProductiveUI
 
 struct TaskDetailView: View {
-    @Bindable var task: Task
-    @StateObject private var viewModel: TaskViewModel
+    @Bindable var task: TodoTask
+    @StateObject private var viewModel: TodoTaskViewModel
     @EnvironmentObject var appCoordinator: AppCoordinator
     @Environment(\.dismiss) private var dismiss
 
@@ -12,9 +12,9 @@ struct TaskDetailView: View {
     @State private var showingSubtaskSheet = false
     @State private var newSubtaskTitle = ""
 
-    init(task: Task, dataManager: DataManager) {
+    init(task: TodoTask, dataManager: DataManager) {
         self.task = task
-        self._viewModel = StateObject(wrappedValue: TaskViewModel(dataManager: dataManager))
+        self._viewModel = StateObject(wrappedValue: TodoTaskViewModel(dataManager: dataManager))
     }
 
     var body: some View {
@@ -97,7 +97,7 @@ struct TaskDetailView: View {
     }
 
     private func deleteTask() {
-        Swift.Task {
+        Task {
             do {
                 try await viewModel.deleteTask(task)
                 await MainActor.run {
@@ -111,15 +111,15 @@ struct TaskDetailView: View {
 }
 
 struct TaskHeaderSection: View {
-    @Bindable var task: Task
+    @Bindable var task: TodoTask
     @Binding var isEditing: Bool
-    @ObservedObject var viewModel: TaskViewModel
+    @ObservedObject var viewModel: TodoTaskViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
             HStack {
                 Button(action: {
-                    Swift.Task {
+                    Task {
                         try? await viewModel.toggleTaskCompletion(task)
                     }
                 }) {
@@ -190,7 +190,7 @@ struct TaskHeaderSection: View {
 }
 
 struct TaskContentSection: View {
-    @Bindable var task: Task
+    @Bindable var task: TodoTask
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
@@ -238,8 +238,8 @@ struct TaskContentSection: View {
 }
 
 struct SubtasksSection: View {
-    @Bindable var task: Task
-    @ObservedObject var viewModel: TaskViewModel
+    @Bindable var task: TodoTask
+    @ObservedObject var viewModel: TodoTaskViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
@@ -262,13 +262,13 @@ struct SubtasksSection: View {
 }
 
 struct SubtaskRow: View {
-    @Bindable var subtask: Task
-    @ObservedObject var viewModel: TaskViewModel
+    @Bindable var subtask: TodoTask
+    @ObservedObject var viewModel: TodoTaskViewModel
 
     var body: some View {
         HStack(spacing: BPSpacing.md) {
             Button(action: {
-                Swift.Task {
+                Task {
                     try? await viewModel.toggleTaskCompletion(subtask)
                 }
             }) {
@@ -308,7 +308,7 @@ struct AttachmentsSection: View {
 }
 
 struct AttachmentRow: View {
-    let attachment: TaskAttachment
+    let attachment: TodoTaskAttachment
 
     var body: some View {
         HStack(spacing: BPSpacing.md) {
@@ -377,7 +377,7 @@ struct CommentsSection: View {
 }
 
 struct CommentRow: View {
-    let comment: TaskComment
+    let comment: TodoTaskComment
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.sm) {
@@ -410,8 +410,8 @@ struct CommentRow: View {
 }
 
 struct TaskActionButtons: View {
-    @Bindable var task: Task
-    @ObservedObject var viewModel: TaskViewModel
+    @Bindable var task: TodoTask
+    @ObservedObject var viewModel: TodoTaskViewModel
     let onAddSubtask: () -> Void
     let onDelete: () -> Void
 
@@ -433,7 +433,7 @@ struct TaskActionButtons: View {
                     style: .secondary,
                     size: .medium
                 ) {
-                    Swift.Task {
+                    Task {
                         try? await viewModel.duplicateTask(task)
                     }
                 }
@@ -446,7 +446,7 @@ struct TaskActionButtons: View {
                     style: task.isCompleted ? .secondary : .primary,
                     size: .medium
                 ) {
-                    Swift.Task {
+                    Task {
                         try? await viewModel.toggleTaskCompletion(task)
                     }
                 }
@@ -576,7 +576,7 @@ struct TaskDetailRow: View {
 }
 
 #Preview {
-    let task = Task(
+    let task = TodoTask(
         title: "Sample Task",
         taskDescription: "This is a sample task description",
         priority: TaskPriorityLevel.high,

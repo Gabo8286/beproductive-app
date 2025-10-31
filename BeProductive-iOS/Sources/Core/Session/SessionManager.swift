@@ -81,7 +81,7 @@ class SessionManager: ObservableObject {
         stopInactivityTimer()
 
         // Save current state
-        Swift.Task {
+        Task {
             await saveSessionData()
         }
 
@@ -191,7 +191,7 @@ class SessionManager: ObservableObject {
             .sink { [weak self] user in
                 self?.currentUser = user
                 if user == nil && self?.isSessionActive == true {
-                    Swift.Task {
+                    Task {
                         await self?.endSession()
                     }
                 }
@@ -202,7 +202,7 @@ class SessionManager: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isAuthenticated in
                 if !isAuthenticated && self?.isSessionActive == true {
-                    Swift.Task {
+                    Task {
                         await self?.endSession()
                     }
                 }
@@ -253,7 +253,7 @@ class SessionManager: ObservableObject {
     }
 
     @objc private func appWillTerminate() {
-        Swift.Task {
+        Task {
             await endSession()
         }
     }
@@ -275,7 +275,7 @@ class SessionManager: ObservableObject {
 
     private func startInactivityTimer() {
         inactivityTimer = Timer.scheduledTimer(withTimeInterval: sessionTimeoutInterval, repeats: false) { [weak self] _ in
-            Swift.Task {
+            Task {
                 await self?.handleInactivityTimeout()
             }
         }

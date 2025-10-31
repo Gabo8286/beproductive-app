@@ -13,15 +13,15 @@ final class BeProductive_iOSTests: XCTestCase {
 
     func testTaskCreation() throws {
         let userId = UUID()
-        let task = Task(
+        let task = TodoTask(
             title: "Test Task",
-            description: "This is a test task",
+            taskDescription: "This is a test task",
             priority: .medium,
             userId: userId
         )
 
         XCTAssertEqual(task.title, "Test Task")
-        XCTAssertEqual(task.description, "This is a test task")
+        XCTAssertEqual(task.taskDescription, "This is a test task")
         XCTAssertEqual(task.priority, .medium)
         XCTAssertEqual(task.userId, userId)
         XCTAssertFalse(task.isCompleted)
@@ -30,7 +30,7 @@ final class BeProductive_iOSTests: XCTestCase {
 
     func testTaskCompletion() throws {
         let userId = UUID()
-        let task = Task(title: "Test Task", userId: userId)
+        let task = TodoTask(title: "Test Task", userId: userId)
 
         XCTAssertFalse(task.isCompleted)
         XCTAssertNil(task.completedDate)
@@ -72,11 +72,11 @@ final class BeProductive_iOSTests: XCTestCase {
 
     // MARK: - Sync and Data Tests
     func testSyncableModelProtocol() throws {
-        let task = Task(title: "Sync Test", userId: testUserId)
+        let task = TodoTask(title: "Sync Test", userId: testUserId)
 
         XCTAssertTrue(task.needsSync)
         XCTAssertTrue(task.isNew)
-        XCTAssertFalse(task.isDeleted)
+        XCTAssertFalse(task.isSoftDeleted)
         XCTAssertEqual(task.tableName, "tasks")
 
         task.needsSync = false
@@ -86,7 +86,7 @@ final class BeProductive_iOSTests: XCTestCase {
     }
 
     func testRemoteTaskConversion() throws {
-        let task = Task(title: "Remote Test", description: "Test conversion", userId: testUserId)
+        let task = TodoTask(title: "Remote Test", description: "Test conversion", userId: testUserId)
         task.priority = .urgent
 
         let remoteTask = task.toRemoteTask()

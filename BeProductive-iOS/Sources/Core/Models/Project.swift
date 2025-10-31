@@ -24,11 +24,11 @@ final class Project: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships
-    var tasks: [Task]
+    var tasks: [TodoTask]
     @available(iOS 17, macOS 14, watchOS 10, tvOS 17, *)
     var goals: [Goal]
     var team: Team?
@@ -94,7 +94,7 @@ final class Project: SyncableModel {
         self.ownerId = userId
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.tasks = []
         self.goals = []
@@ -127,7 +127,7 @@ final class Project: SyncableModel {
         lastModified = Date()
     }
 
-    func addTask(_ task: Task) {
+    func addTask(_ task: TodoTask) {
         task.project = self
         tasks.append(task)
         updateProgress()

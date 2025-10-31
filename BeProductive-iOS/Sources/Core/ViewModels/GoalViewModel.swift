@@ -31,7 +31,7 @@ class GoalViewModel: ObservableObject {
 
         do {
             let allGoals = try dataManager.fetch(Goal.self)
-            goals = allGoals.filter { !$0.isDeleted }
+            goals = allGoals.filter { !$0.isSoftDeleted }
             applyFiltersAndSort()
             isLoading = false
         } catch {
@@ -152,7 +152,7 @@ class GoalViewModel: ObservableObject {
             throw GoalError.noUser
         }
 
-        let task = Task(
+        let task = TodoTask(
             title: taskTitle,
             priority: .medium,
             userId: userId

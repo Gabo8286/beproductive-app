@@ -124,7 +124,7 @@ class BackgroundSyncManager: ObservableObject {
         scheduleBackgroundSync()
 
         // Create a task to handle the sync
-        let syncTask = _Concurrency.Task {
+        let syncTask = Task {
             do {
                 // Perform quick incremental sync
                 await syncEngine.performIncrementalSync()
@@ -151,7 +151,7 @@ class BackgroundSyncManager: ObservableObject {
         scheduleBackgroundSync()
 
         // Create a task to handle the processing
-        let processingTask = _Concurrency.Task {
+        let processingTask = Task {
             do {
                 // Perform full sync and maintenance tasks
                 await syncEngine.performFullSync()
@@ -203,8 +203,8 @@ class BackgroundSyncManager: ObservableObject {
                 // Clean up old deleted items
                 let cutoffDate = Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
                 
-                let deletedTasks = try context.fetch(FetchDescriptor<Task>(
-                    predicate: #Predicate<Task> { $0.isDeleted == true && $0.updatedAt < cutoffDate }
+                let deletedTasks = try context.fetch(FetchDescriptor<TodoTask>(
+                    predicate: #Predicate<TodoTask> { $0.isSoftDeleted == true && $0.updatedAt < cutoffDate }
                 ))
                 
                 for task in deletedTasks {
@@ -250,7 +250,7 @@ class BackgroundSyncManager: ObservableObject {
                 let today = Calendar.current.startOfDay(for: Date())
                 
                 // Task completion rate - using simplified predicate
-                let allTasksDescriptor = FetchDescriptor<Task>()
+                let allTasksDescriptor = FetchDescriptor<TodoTask>()
                 let allTasks = try context.fetch(allTasksDescriptor).filter { task in
                     Calendar.current.isDate(task.createdAt, inSameDayAs: today) ||
                     Calendar.current.isDate(task.completedDate ?? Date.distantPast, inSameDayAs: today)
@@ -292,10 +292,10 @@ class BackgroundSyncManager: ObservableObject {
 
     private func updateBackgroundTaskProgress(task: BGProcessingTask) {
         // Simulate progress updates
-        _Concurrency.Task {
+        Task {
             for progress in stride(from: 0.0, through: 1.0, by: 0.1) {
-                try? await _Concurrency.Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-                if _Concurrency.Task.isCancelled { break }
+                try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+                if Task.isCancelled { break }
 
                 await MainActor.run {
                     // Update progress if needed

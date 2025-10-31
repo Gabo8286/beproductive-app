@@ -34,7 +34,7 @@ class HabitViewModel: ObservableObject {
 
         do {
             let allHabits = try dataManager.fetch(Habit.self)
-            habits = allHabits.filter { !$0.isDeleted }
+            habits = allHabits.filter { !$0.isSoftDeleted }
             applyFiltersAndSort()
             isLoading = false
         } catch {

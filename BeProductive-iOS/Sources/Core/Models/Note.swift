@@ -19,12 +19,12 @@ final class Note: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships
     var project: Project?
-    var task: Task?
+    var task: TodoTask?
     var attachments: [NoteAttachment]
 
     var tableName: String { "notes" }
@@ -48,7 +48,7 @@ final class Note: SyncableModel {
         self.userId = userId
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.attachments = []
     }

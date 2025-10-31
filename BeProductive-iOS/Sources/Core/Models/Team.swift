@@ -16,7 +16,7 @@ final class Team: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships
@@ -50,7 +50,7 @@ final class Team: SyncableModel {
         self.userId = ownerId // Set userId to ownerId for SyncableModel compliance
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.members = []
         self.projects = []

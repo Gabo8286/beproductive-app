@@ -276,7 +276,7 @@ class AnalyticsManager: ObservableObject {
 
     private func schedulePeriodicUpload() {
         Timer.scheduledTimer(withTimeInterval: uploadInterval, repeats: true) { [weak self] _ in
-            _Concurrency.Task { @MainActor in
+            Task { @MainActor in
                 self?.uploadPendingEvents()
             }
         }
@@ -288,7 +288,7 @@ class AnalyticsManager: ObservableObject {
         let eventsToUpload = Array(eventQueue.prefix(batchUploadSize))
         eventQueue.removeFirst(min(batchUploadSize, eventQueue.count))
 
-        _Concurrency.Task {
+        Task {
             await uploadEvents(eventsToUpload)
         }
     }

@@ -26,11 +26,11 @@ final class Goal: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships - explicitly typed as SwiftData model
-    var tasks: [Task] = []
+    var tasks: [TodoTask] = []
     var milestones: [GoalMilestone]
     var metrics: [GoalMetric]
 
@@ -84,7 +84,7 @@ final class Goal: SyncableModel {
         self.userId = userId
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.tasks = []
         self.milestones = []
@@ -118,7 +118,7 @@ final class Goal: SyncableModel {
         updatedAt = Date()
     }
 
-    func addTask(_ task: Task) {
+    func addTask(_ task: TodoTask) {
         task.goal = self
         tasks.append(task)
         updateProgress()

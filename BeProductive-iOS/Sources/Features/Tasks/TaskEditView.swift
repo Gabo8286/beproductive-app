@@ -5,10 +5,10 @@ import BeProductiveUI
 import Foundation
 
 // Avoid naming conflict with Swift concurrency Task when we need to use it
-typealias ConcurrentTask<Success, Failure: Error> = _Concurrency.Task<Success, Failure>
+typealias ConcurrentTask<Success, Failure: Error> = Task<Success, Failure>
 
 struct TaskEditView: View {
-    @Bindable var taskModel: Task
+    @Bindable var taskModel: TodoTask
     @ObservedObject var viewModel: TaskViewModel
     @Environment(\.dismiss) private var dismiss
 
@@ -19,7 +19,7 @@ struct TaskEditView: View {
     @State private var showingError = false
     @State private var errorMessage = ""
 
-    init(task: Task, viewModel: TaskViewModel) {
+    init(task: TodoTask, viewModel: TaskViewModel) {
         self.taskModel = task
         self.viewModel = viewModel
     }
@@ -113,7 +113,7 @@ struct TaskEditView: View {
 }
 
 struct BasicInfoSection: View {
-    @Bindable var taskModel: Task
+    @Bindable var taskModel: TodoTask
     
     private var description: String {
         get { taskModel.taskDescription ?? "" }
@@ -189,7 +189,7 @@ struct PrioritySection: View {
 }
 
 struct DueDateSection: View {
-    @Bindable var taskModel: Task
+    @Bindable var taskModel: TodoTask
     @Binding var showingDatePicker: Bool
 
     var body: some View {
@@ -440,7 +440,7 @@ struct DatePickerSheet: View {
 }
 
 struct AddSubtaskView: View {
-    let parentTask: Task
+    let parentTask: TodoTask
     @ObservedObject var viewModel: TaskViewModel
     @Environment(\.dismiss) private var dismiss
 
@@ -501,8 +501,8 @@ struct AddSubtaskView: View {
 }
 
 #Preview {
-    // Create a sample task using the Task model
-    let sampleTask = Task(
+    // Create a sample task using the TodoTask model
+    let sampleTask = TodoTask(
         title: "Sample Task",
         taskDescription: "This is a sample task",
         priority: TaskPriorityLevel.medium,
@@ -513,6 +513,6 @@ struct AddSubtaskView: View {
     // Set additional properties after initialization
     sampleTask.dueDate = Date()
 
-    return TaskEditView(task: sampleTask, viewModel: TaskViewModel(dataManager: DataManager()))
+    TaskEditView(task: sampleTask, viewModel: TaskViewModel(dataManager: DataManager()))
         .environmentObject(BPThemeManager.shared)
 }

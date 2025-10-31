@@ -63,35 +63,8 @@ export default defineConfig(({ mode }) => ({
     minify: 'esbuild',
     chunkSizeWarningLimit: 1000, // Reasonable limit to avoid over-chunking
     rollupOptions: {
-      output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            // Core React libraries - keep together for better compatibility
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-
-            // UI component libraries
-            if (id.includes('@radix-ui')) {
-              return 'ui-components';
-            }
-
-            // Large utility libraries
-            if (id.includes('date-fns') || id.includes('framer-motion') || id.includes('recharts')) {
-              return 'heavy-vendor';
-            }
-
-            // Everything else
-            return 'vendor';
-          }
-        },
-        // Optimize chunk naming for caching
-        chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
-      },
       treeshake: {
-        preset: 'safest' // Use safest settings to avoid module resolution issues
+        preset: 'recommended' // Use recommended settings for stable builds
       }
     },
     // Tree shaking and dead code elimination

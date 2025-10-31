@@ -327,7 +327,7 @@ struct BPButtonStyle: ButtonStyle {
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(Animation.easeInOut(duration: theme.animations.fast), value: configuration.isPressed)
-            .onChange(of: configuration.isPressed) { newValue in
+            .onChange(of: configuration.isPressed) { _, newValue in
                 isPressed = newValue
             }
     }

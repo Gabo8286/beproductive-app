@@ -17,7 +17,7 @@ final class AIConversation: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships
@@ -52,7 +52,7 @@ final class AIConversation: SyncableModel {
         self.isActive = true
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.messages = []
     }

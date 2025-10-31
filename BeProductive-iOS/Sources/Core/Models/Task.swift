@@ -3,13 +3,13 @@ import Foundation
 
 @available(iOS 17.0, macOS 14.0, watchOS 10.0, tvOS 17.0, *)
 @Model
-final class Task: SyncableModel {
+final class TodoTask: SyncableModel {
     var id: UUID
     var title: String
     var taskDescription: String?
     var isCompleted: Bool
     var priority: TaskPriorityLevel
-    var status: TaskStatus
+    var status: TodoTaskStatus
     var category: String?
     var tags: [String]
     var dueDate: Date?
@@ -24,14 +24,14 @@ final class Task: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
 
     // Relationships
     var project: Project?
     var goal: Goal?
-    var subtasks: [Task]
-    var parentTask: Task?
+    var subtasks: [TodoTask]
+    var parentTask: TodoTask?
     var attachments: [TaskAttachment]
     var comments: [TaskComment]
 
@@ -75,7 +75,7 @@ final class Task: SyncableModel {
         self.userId = userId
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
         self.subtasks = []
         self.attachments = []
@@ -107,8 +107,8 @@ final class Task: SyncableModel {
         )
     }
 
-    static func from(_ remoteTask: RemoteTask) -> Task {
-        let task = Task(
+    static func from(_ remoteTask: RemoteTask) -> TodoTask {
+        let task = TodoTask(
             title: remoteTask.title,
             taskDescription: remoteTask.description,
             priority: TaskPriorityLevel(rawValue: remoteTask.priority) ?? .medium,
@@ -147,7 +147,7 @@ final class Task: SyncableModel {
         lastModified = Date()
     }
 
-    func addSubtask(_ subtask: Task) {
+    func addSubtask(_ subtask: TodoTask) {
         subtask.parentTask = self
         subtasks.append(subtask)
         needsSync = true

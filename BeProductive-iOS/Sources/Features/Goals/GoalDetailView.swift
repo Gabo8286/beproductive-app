@@ -109,7 +109,7 @@ struct GoalDetailView: View {
     }
 
     private func deleteGoal() {
-        Swift.Task {
+        Task {
             do {
                 try await viewModel.deleteGoal(goal)
                 dismiss()
@@ -326,7 +326,7 @@ struct GoalMilestonesSection: View {
 
             ForEach(goal.milestones.sorted { $0.targetDate < $1.targetDate }, id: \.id) { milestone in
                 MilestoneRow(milestone: milestone, onToggle: {
-                    Swift.Task {
+                    Task {
                         try? await viewModel.toggleMilestoneCompletion(milestone)
                     }
                 })
@@ -420,7 +420,7 @@ struct GoalTasksSection: View {
 }
 
 struct TaskRowInGoal: View {
-    let task: Task
+    let task: TodoTask
 
     var body: some View {
         HStack(spacing: BPSpacing.md) {
@@ -502,7 +502,7 @@ struct GoalActionButtons: View {
                         style: .primary,
                         size: .medium
                     ) {
-                        Swift.Task {
+                        Task {
                             try? await viewModel.completeGoal(goal)
                         }
                     }
@@ -690,7 +690,7 @@ struct GoalEditView: View {
 
         isSaving = true
 
-        Swift.Task {
+        Task {
             do {
                 // Update goal properties
                 goal.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -776,7 +776,7 @@ struct AddMilestoneView: View {
 
         isAdding = true
 
-        Swift.Task {
+        Task {
             do {
                 try await viewModel.addMilestone(
                     to: goal,
@@ -867,7 +867,7 @@ struct UpdateProgressView: View {
 
         isUpdating = true
 
-        Swift.Task {
+        Task {
             do {
                 try await viewModel.updateGoalProgress(goal, newValue: value)
 
@@ -936,7 +936,7 @@ struct AddTaskToGoalView: View {
 
         isAdding = true
 
-        Swift.Task {
+        Task {
             do {
                 try await viewModel.addTaskToGoal(goal, title: taskTitle.trimmingCharacters(in: .whitespacesAndNewlines))
 

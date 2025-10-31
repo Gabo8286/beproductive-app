@@ -20,7 +20,6 @@
 		2A1DC71D807EEE5046D06BAB /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F98B3E40D763A623E20697AB /* TaskViewModel.swift */; };
 		2C7F33C489960DB81175F2E7 /* EngageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D607A04019E33E662AED65 /* EngageView.swift */; };
 		2E99C42ABC18A41D0D532C37 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC9865DB46801D0D06ADAD1 /* KeychainManager.swift */; };
-		328A4BD0B5E37BD79EA28C56 /* Task+Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40093AB4889F3F4AE5751C6F /* Task+Observable.swift */; };
 		331AE1C82EFAD57911D84A58 /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECA10B13D6854AEB0EB89C1 /* PlanView.swift */; };
 		36B6D512C2A566060D2F94B7 /* HabitDetailView_Fixed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE04CC08706FE9D2B52394BE /* HabitDetailView_Fixed.swift */; };
 		3A9DFBFFCD9D75C1798EEDEE /* HabitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3817A234A71BA55E6F4C9096 /* HabitDetailView.swift */; };
@@ -96,7 +95,6 @@
 		3209095E13EF12E161D1E4D6 /* Habit 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Habit 2.swift"; sourceTree = "<group>"; };
 		3817A234A71BA55E6F4C9096 /* HabitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailView.swift; sourceTree = "<group>"; };
 		3ECA10B13D6854AEB0EB89C1 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
-		40093AB4889F3F4AE5751C6F /* Task+Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Observable.swift"; sourceTree = "<group>"; };
 		47BB76BA37D3F70EF61A07B5 /* Configuration.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Configuration.plist; sourceTree = "<group>"; };
 		49BC2BF4664CAB695436111C /* ProductionReadinessRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductionReadinessRunner.swift; sourceTree = "<group>"; };
 		5200C2C571C49396B7EB6DF2 /* SyncableModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncableModel.swift; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 		0F1E0D5E277D4B41B8FD9568 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				40093AB4889F3F4AE5751C6F /* Task+Observable.swift */,
 				8BBF06F3863AB8D6598DA5ED /* TaskDetailView.swift */,
 				A5E11E8A4AC8D3A20D272B31 /* TaskEditView.swift */,
 				63D0A7848BAF9EC07686A075 /* TaskListView.swift */,
@@ -637,7 +634,6 @@
 				E430054CEC9C97782547CC48 /* SessionManager.swift in Sources */,
 				CDBCD77B54A6635B3CBD1DC8 /* SyncEngine.swift in Sources */,
 				C116539EB93A22D1D0E63BD2 /* SyncableModel.swift in Sources */,
-				328A4BD0B5E37BD79EA28C56 /* Task+Observable.swift in Sources */,
 				DEF8EBA006BBBE4A1E47C95F /* Task.swift in Sources */,
 				A69DE2FB278FC09D6D831FE1 /* TaskDetailView.swift in Sources */,
 				AB6393C88C2F55A917BD43BA /* TaskEditView.swift in Sources */,

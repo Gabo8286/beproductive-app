@@ -189,7 +189,7 @@ final class ProductivityMetric: SyncableModel {
     // Sync properties
     var needsSync: Bool
     var lastModified: Date
-    var isDeleted: Bool
+    var isSoftDeleted: Bool
     var isNew: Bool
     
     // Computed properties for complex types
@@ -263,7 +263,7 @@ final class ProductivityMetric: SyncableModel {
         self.userId = userId
         self.needsSync = true
         self.lastModified = Date()
-        self.isDeleted = false
+        self.isSoftDeleted = false
         self.isNew = true
     }
 

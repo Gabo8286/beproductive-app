@@ -135,6 +135,10 @@
         </dict>
     </array>
 
+    <!-- Document Support Declaration -->
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <false/>
+
     <!-- Exported Type Declarations -->
     <key>UTExportedTypeDeclarations</key>
     <array>

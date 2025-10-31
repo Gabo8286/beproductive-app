@@ -475,8 +475,8 @@ public struct BPNavigationBar: View {
                 placeholder: config.placeholder,
                 text: $searchText
             )
-            .onChange(of: searchText) { newValue in
-                config.onSearchTextChanged(newValue)
+            .onChange(of: searchText) {
+                config.onSearchTextChanged(searchText)
             }
             .onSubmit {
                 config.onSearchSubmitted(searchText)

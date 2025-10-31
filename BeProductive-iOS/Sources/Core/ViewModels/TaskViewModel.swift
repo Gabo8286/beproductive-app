@@ -6,14 +6,14 @@ import Combine
 class TaskViewModel: ObservableObject {
 
     // MARK: - Published Properties
-    @Published var tasks: [Task] = []
-    @Published var filteredTasks: [Task] = []
+    @Published var tasks: [TodoTask] = []
+    @Published var filteredTasks: [TodoTask] = []
     @Published var searchText = ""
-    @Published var selectedFilter: TaskFilter = .all
-    @Published var selectedSort: TaskSort = .dueDate
+    @Published var selectedFilter: TodoTaskFilter = .all
+    @Published var selectedSort: TodoTaskSort = .dueDate
     @Published var showCompleted = true
     @Published var isLoading = false
-    @Published var error: TaskError?
+    @Published var error: TodoTaskError?
 
     // MARK: - Private Properties
     private let dataManager: DataManager
@@ -31,8 +31,8 @@ class TaskViewModel: ObservableObject {
         isLoading = true
 
         do {
-            let allTasks = try dataManager.fetch(Task.self)
-            tasks = allTasks.filter { !$0.isDeleted }
+            let allTasks = try dataManager.fetch(TodoTask.self)
+            tasks = allTasks.filter { !$0.isSoftDeleted }
             applyFiltersAndSort()
             isLoading = false
         } catch {
@@ -44,7 +44,7 @@ class TaskViewModel: ObservableObject {
     func createTask(
         title: String,
         description: String? = nil,
-        priority: TaskPriority = .medium,
+        priority: TodoTaskPriority = .medium,
         dueDate: Date? = nil,
         category: String? = nil,
         projectId: UUID? = nil,
@@ -54,7 +54,7 @@ class TaskViewModel: ObservableObject {
             throw TaskError.noUser
         }
 
-        let task = Task(
+        let task = TodoTask(
             title: title,
             description: description,
             priority: priority,
@@ -83,7 +83,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    func updateTask(_ task: Task) async throws {
+    func updateTask(_ task: TodoTask) async throws {
         task.updatedAt = Date()
         task.needsSync = true
         task.lastModified = Date()
@@ -98,7 +98,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    func toggleTaskCompletion(_ task: Task) async throws {
+    func toggleTaskCompletion(_ task: TodoTask) async throws {
         if task.isCompleted {
             task.markIncomplete()
         } else {
@@ -114,7 +114,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    func deleteTask(_ task: Task) async throws {
+    func deleteTask(_ task: TodoTask) async throws {
         do {
             try dataManager.delete(task)
             tasks.removeAll { $0.id == task.id }
@@ -126,7 +126,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    func addSubtask(to parentTask: Task, title: String) async throws {
+    func addSubtask(to parentTask: TodoTask, title: String) async throws {
         guard let userId = getCurrentUserId() else {
             throw TaskError.noUser
         }
@@ -148,7 +148,7 @@ class TaskViewModel: ObservableObject {
         }
     }
 
-    func duplicateTask(_ task: Task) async throws {
+    func duplicateTask(_ task: TodoTask) async throws {
         guard let userId = getCurrentUserId() else {
             throw TaskError.noUser
         }
@@ -182,12 +182,12 @@ class TaskViewModel: ObservableObject {
         )
     }
 
-    func updateFilter(_ filter: TaskFilter) {
+    func updateFilter(_ filter: TodoTaskFilter) {
         selectedFilter = filter
         applyFiltersAndSort()
     }
 
-    func updateSort(_ sort: TaskSort) {
+    func updateSort(_ sort: TodoTaskSort) {
         selectedSort = sort
         applyFiltersAndSort()
     }
@@ -319,7 +319,7 @@ class TaskViewModel: ObservableObject {
         return AuthenticationManager.shared?.currentUser?.id
     }
 
-    private func handleError(_ error: TaskError) async {
+    private func handleError(_ error: TodoTaskError) async {
         self.error = error
         print("TaskViewModel Error: \(error.localizedDescription)")
 

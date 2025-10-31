@@ -2,14 +2,14 @@ import SwiftUI
 import BeProductiveUI
 
 struct TaskListView: View {
-    @StateObject private var viewModel: TaskViewModel
+    @StateObject private var viewModel: TodoTaskViewModel
     @EnvironmentObject var appCoordinator: AppCoordinator
     @State private var showingCreateTask = false
     @State private var showingFilters = false
-    @State private var selectedTask: Task?
+    @State private var selectedTask: TodoTask?
 
     init(dataManager: DataManager) {
-        _viewModel = StateObject(wrappedValue: TaskViewModel(dataManager: dataManager))
+        _viewModel = StateObject(wrappedValue: TodoTaskViewModel(dataManager: dataManager))
     }
 
     var body: some View {
@@ -60,8 +60,8 @@ struct TaskListView: View {
 
 struct SearchAndFilterBar: View {
     @Binding var searchText: String
-    @Binding var selectedFilter: TaskFilter
-    @Binding var selectedSort: TaskSort
+    @Binding var selectedFilter: TodoTaskFilter
+    @Binding var selectedSort: TodoTaskSort
     @Binding var showingFilters: Bool
 
     var body: some View {
@@ -137,9 +137,9 @@ struct QuickFilterButton: View {
 }
 
 struct TaskScrollView: View {
-    let tasks: [Task]
-    @ObservedObject var viewModel: TaskViewModel
-    @Binding var selectedTask: Task?
+    let tasks: [TodoTask]
+    @ObservedObject var viewModel: TodoTaskViewModel
+    @Binding var selectedTask: TodoTask?
 
     var body: some View {
         ScrollView {
@@ -208,10 +208,10 @@ struct TaskScrollView: View {
 
 struct TaskSection: View {
     let title: String
-    let tasks: [Task]
+    let tasks: [TodoTask]
     var isOverdue: Bool = false
-    @ObservedObject var viewModel: TaskViewModel
-    @Binding var selectedTask: Task?
+    @ObservedObject var viewModel: TodoTaskViewModel
+    @Binding var selectedTask: TodoTask?
 
     var body: some View {
         VStack(alignment: .leading, spacing: BPSpacing.md) {
@@ -235,8 +235,8 @@ struct TaskSection: View {
 }
 
 struct TaskRowView: View {
-    @ObservedObject var task: Task
-    @ObservedObject var viewModel: TaskViewModel
+    @ObservedObject var task: TodoTask
+    @ObservedObject var viewModel: TodoTaskViewModel
     let onTap: () -> Void
 
     var body: some View {
@@ -342,7 +342,7 @@ struct TaskRowView: View {
 }
 
 struct TaskPriorityIndicator: View {
-    let priority: TaskPriority
+    let priority: TodoTaskPriority
 
     var body: some View {
         Circle()
@@ -369,8 +369,8 @@ struct TaskMetadataChip: View {
 }
 
 struct TaskContextMenu: View {
-    @ObservedObject var task: Task
-    @ObservedObject var viewModel: TaskViewModel
+    @ObservedObject var task: TodoTask
+    @ObservedObject var viewModel: TodoTaskViewModel
 
     var body: some View {
         Button(action: {
@@ -424,7 +424,7 @@ struct LoadingView: View {
 
 struct EmptyTasksView: View {
     let hasAnyTasks: Bool
-    let currentFilter: TaskFilter
+    let currentFilter: TodoTaskFilter
     let onCreateTask: () -> Void
 
     var body: some View {
@@ -475,12 +475,12 @@ struct EmptyTasksView: View {
 }
 
 struct CreateTaskView: View {
-    @ObservedObject var viewModel: TaskViewModel
+    @ObservedObject var viewModel: TodoTaskViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var title = ""
     @State private var description = ""
-    @State private var priority: TaskPriority = .medium
+    @State private var priority: TodoTaskPriority = .medium
     @State private var category = ""
     @State private var dueDate = Date()
     @State private var hasDueDate = false
@@ -597,7 +597,7 @@ struct CreateTaskView: View {
 }
 
 struct TaskFiltersView: View {
-    @ObservedObject var viewModel: TaskViewModel
+    @ObservedObject var viewModel: TodoTaskViewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

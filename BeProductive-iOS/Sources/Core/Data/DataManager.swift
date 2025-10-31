@@ -4,9 +4,7 @@ import SwiftData
 import Combine
 import Supabase
 
-// Type aliases to avoid conflicts with Swift concurrency types
-// Note: Task model will be referenced directly in the schema and throughout the code
-typealias SwiftTask<Success, Failure: Error> = _Concurrency.Task<Success, Failure>
+// Note: TodoTask model will be referenced directly in the schema and throughout the code
 
 @available(iOS 17, *)
 @MainActor
@@ -23,14 +21,14 @@ class DataManager: ObservableObject {
     private let supabaseClient: SupabaseClient
     private var cancellables = Set<AnyCancellable>()
     private let syncQueue = DispatchQueue(label: "com.beproductive.sync", qos: .utility)
-    let syncEngine: SyncEngine
+    lazy var syncEngine: SyncEngine = SyncEngine(dataManager: self)
 
     // MARK: - Initialization
     init() {
         // Initialize SwiftData container
         do {
             let schema = Schema([
-                Task.self,
+                TodoTask.self,
                 Goal.self,
                 Project.self,
                 Note.self,
@@ -61,9 +59,6 @@ class DataManager: ObservableObject {
             supabaseURL: URL(string: ConfigurationManager.shared.supabaseURL)!,
             supabaseKey: ConfigurationManager.shared.supabaseAnonKey
         )
-
-        // Initialize sync engine
-        self.syncEngine = SyncEngine(dataManager: self)
 
         setupObservers()
     }
@@ -129,7 +124,7 @@ class DataManager: ObservableObject {
             throw DataError.noUser
         }
 
-        let task = Task(
+        let task = TodoTask(
             title: title,
             priority: priority,
             category: category,
@@ -233,7 +228,7 @@ class DataManager: ObservableObject {
 
         // Mark for deletion sync if online
         if !isOfflineMode, var syncableModel = model as? SyncableModel {
-            syncableModel.isDeleted = true
+            syncableModel.isSoftDeleted = true
             syncableModel.needsSync = true
             syncableModel.lastModified = Date()
         }
@@ -287,8 +282,8 @@ class DataManager: ObservableObject {
 
     private func syncLocalTask(_ remoteTask: RemoteTask, context: ModelContext) async {
         do {
-            let predicate = #Predicate<Task> { $0.id == remoteTask.id }
-            let descriptor = FetchDescriptor<Task>(predicate: predicate)
+            let predicate = #Predicate<TodoTask> { $0.id == remoteTask.id }
+            let descriptor = FetchDescriptor<TodoTask>(predicate: predicate)
             let existingTasks = try context.fetch(descriptor)
 
             if let existingTask = existingTasks.first {
@@ -298,7 +293,7 @@ class DataManager: ObservableObject {
                 }
             } else {
                 // Create new local task
-                let newTask = Task.from(remoteTask)
+                let newTask = TodoTask.from(remoteTask)
                 context.insert(newTask)
             }
 
@@ -309,8 +304,8 @@ class DataManager: ObservableObject {
     }
 
     private func pushTasks(context: ModelContext) async throws {
-        let predicate = #Predicate<Task> { $0.needsSync == true }
-        let descriptor = FetchDescriptor<Task>(predicate: predicate)
+        let predicate = #Predicate<TodoTask> { $0.needsSync == true }
+        let descriptor = FetchDescriptor<TodoTask>(predicate: predicate)
         let tasksToSync = try context.fetch(descriptor)
 
         for task in tasksToSync {
@@ -321,7 +316,7 @@ class DataManager: ObservableObject {
         try context.save()
     }
 
-    private func pushTask(_ task: Task) async throws {
+    private func pushTask(_ task: TodoTask) async throws {
         let remoteTask = task.toRemoteTask()
 
         if task.isNew {
