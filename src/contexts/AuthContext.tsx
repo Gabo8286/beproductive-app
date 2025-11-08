@@ -1,22 +1,23 @@
+import type { User, Session } from "@supabase/supabase-js";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
-import { Profile, ProfileWithRole } from "@/types/database";
 import { toast } from "sonner";
-import { localAuth, isLocalMode, LocalAuthUser, LocalAuthSession } from "@/integrations/auth/localAuthAdapter";
-import { runAuthDiagnostics, displayDiagnostics } from "@/utils/browser/authDiagnostics";
+
+import { localAuth, isLocalMode } from "@/integrations/auth/localAuthAdapter";
+import { supabase } from "@/integrations/supabase/client";
+import type { Profile, ProfileWithRole } from "@/types/database";
+import type {
+  GuestUserType
+} from "@/utils/auth/guestMode";
 import {
   isGuestModeEnabled,
   createGuestUser,
   createGuestSession,
   createGuestProfile,
-  isGuestUser,
-  getGuestUserType,
   getSavedGuestModeSelection,
   saveGuestModeSelection,
-  clearGuestModeSelection,
-  GuestUserType
+  clearGuestModeSelection
 } from "@/utils/auth/guestMode";
+import { runAuthDiagnostics, displayDiagnostics } from "@/utils/browser/authDiagnostics";
 
 interface AuthContextType {
   user: User | null;
@@ -272,8 +273,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // CRITICAL: Check if Supabase client is ready before using it
         if (
-          !supabase ||
-          !supabase.auth ||
+          !supabase?.auth ||
           typeof supabase.auth.onAuthStateChange !== "function"
         ) {
           console.error(
@@ -406,7 +406,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string, retryCount = 0) => {
+    const maxRetries = 3;
     try {
       const localMode = isLocalMode();
 
@@ -457,7 +458,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }).single();
 
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error("Profile fetch timeout")), 8000);
+          setTimeout(() => reject(new Error("Profile fetch timeout")), 15000); // Increased from 8s to 15s
         });
 
         const result = (await Promise.race([
@@ -471,6 +472,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error("[AuthContext] Profile+role fetch error:", error);
+
+        // For new users or timeout errors, create a default profile instead of failing
+        if (error.message?.includes('timeout') || error.message?.includes('not found') || error.message?.includes('No rows')) {
+          console.log("[AuthContext] Creating default profile for new user due to:", error.message);
+
+          const defaultProfile: ProfileWithRole = {
+            id: userId,
+            email: user?.email || '',
+            full_name: user?.user_metadata?.full_name || 'New User',
+            avatar_url: user?.user_metadata?.avatar_url || null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            role: 'user',
+            subscription_tier: 'free',
+            preferences: {},
+            onboarding_completed: false,
+          };
+
+          setProfile(defaultProfile);
+          setAuthLoading(false);
+          setAuthError(null); // Clear any error since we recovered
+          isInitializing.current = false;
+          return;
+        }
+
         setAuthError(`Failed to load profile: ${error.message || error}`);
         // Don't show toast for network errors during initialization
         if (error.message && !error.message.includes("timeout")) {
@@ -487,6 +513,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("[AuthContext] Profile+role fetch failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
+
+      // Retry logic for timeouts and rate limiting
+      if (retryCount < maxRetries && (errorMessage.includes("timeout") || errorMessage.includes("429") || errorMessage.includes("fetch"))) {
+        console.log(`[AuthContext] Retrying profile fetch (${retryCount + 1}/${maxRetries}) after error: ${errorMessage}`);
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000)); // Exponential backoff: 1s, 2s, 4s
+        return fetchProfile(userId, retryCount + 1);
+      }
+
+      // After retries exhausted, create default profile for new users
+      if (errorMessage.includes("timeout") || errorMessage.includes("not found") || errorMessage.includes("fetch")) {
+        console.log("[AuthContext] Creating default profile after retry exhaustion for new user");
+
+        const defaultProfile: ProfileWithRole = {
+          id: userId,
+          email: user?.email || '',
+          full_name: user?.user_metadata?.full_name || 'New User',
+          avatar_url: user?.user_metadata?.avatar_url || null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          role: 'user',
+          subscription_tier: 'free',
+          preferences: {},
+          onboarding_completed: false,
+        };
+
+        setProfile(defaultProfile);
+        setAuthLoading(false);
+        setAuthError(null); // Clear error since we recovered
+        isInitializing.current = false;
+        return;
+      }
+
       setAuthError(`Failed to load profile: ${errorMessage}`);
 
       // Only show toast for unexpected errors, not timeouts during init

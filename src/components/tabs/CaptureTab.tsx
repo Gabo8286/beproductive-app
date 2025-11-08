@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   FileText,
   Target,
@@ -13,13 +11,15 @@ import {
   Archive,
   Trash2,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useHapticFeedback } from '@/hooks/useHapticFeedback';
-import { PullToRefresh } from '@/components/ui/PullToRefresh';
-import { SwipeableListItem, createSwipeActions } from '@/components/ui/SwipeableListItem';
-import { useSuperAdminAccess } from '@/hooks/useSupeRadminAccess';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { SuperAdminCaptureTab } from '@/components/tabs/SuperAdminCaptureTab';
-import { SuperAdminSetup } from '@/components/debug/SuperAdminSetup';
+import { PullToRefresh } from '@/components/ui/PullToRefresh';
+import { SwipeableListItem } from '@/components/ui/SwipeableListItem';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
+import { useSuperAdminAccess } from '@/hooks/useSupeRadminAccess';
+import { cn } from '@/lib/utils';
 
 interface QuickAddItem {
   id: string;
@@ -219,10 +219,11 @@ export const CaptureTab: React.FC<CaptureTabProps> = ({ className }) => {
           </div>
         </div>
 
-        {/* Temporary Super Admin Setup - Remove after testing */}
+        {/* TEMPORARILY DISABLED - SuperAdminSetup was causing auth issues for new users
         <div className="mt-4">
           <SuperAdminSetup />
         </div>
+        */}
       </div>
 
 
