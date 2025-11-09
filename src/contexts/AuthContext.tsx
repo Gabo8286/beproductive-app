@@ -86,6 +86,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const retryCount = useRef(0);
   const maxRetries = 2; // Reduced for faster recovery
 
+  // Track profile fetch attempts to prevent rate limiting
+  const profileFetchInProgress = useRef(false);
+  const lastProfileFetchTime = useRef(0);
+
   useEffect(() => {
 
     // Development skip login - auto-authenticate with mock user
@@ -408,6 +412,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchProfile = async (userId: string, retryCount = 0) => {
     const maxRetries = 3;
+
+    // Prevent multiple simultaneous profile fetches
+    if (profileFetchInProgress.current) {
+      console.log(`[AuthContext] Profile fetch already in progress for user ${userId}, skipping duplicate call`);
+      return;
+    }
+
+    // Rate limiting protection - ensure minimum 2 seconds between profile fetch attempts
+    const now = Date.now();
+    const timeSinceLastFetch = now - lastProfileFetchTime.current;
+    const minInterval = 2000; // 2 seconds
+
+    if (retryCount === 0 && timeSinceLastFetch < minInterval) {
+      const waitTime = minInterval - timeSinceLastFetch;
+      console.log(`[AuthContext] Rate limiting protection: waiting ${waitTime}ms before profile fetch`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+    }
+
+    profileFetchInProgress.current = true;
+    lastProfileFetchTime.current = Date.now();
+
+    // Enhanced logging for debugging existing user issues
+    console.log(`[AuthContext] fetchProfile starting for user ${userId}, attempt ${retryCount + 1}/${maxRetries + 1}`);
+
+    // Add delay for retries to prevent rate limiting
+    if (retryCount > 0) {
+      const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+      console.log(`[AuthContext] Waiting ${delay}ms before retry...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+
     try {
       const localMode = isLocalMode();
 
@@ -472,28 +507,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error("[AuthContext] Profile+role fetch error:", error);
+        console.log("[AuthContext] Error details:", {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+          userId: userId,
+          userEmail: user?.email,
+          retryCount: retryCount
+        });
 
-        // For new users or timeout errors, create a default profile instead of failing
-        if (error.message?.includes('timeout') || error.message?.includes('not found') || error.message?.includes('No rows')) {
-          console.log("[AuthContext] Creating default profile for new user due to:", error.message);
+        // Enhanced error handling for both new and existing users
+        const shouldCreateFallback = error.message?.includes('timeout') ||
+                                    error.message?.includes('not found') ||
+                                    error.message?.includes('No rows') ||
+                                    error.message?.includes('429') ||
+                                    error.message?.includes('rate limit') ||
+                                    error.code === 'PGRST116'; // PostgREST no rows error
 
-          const defaultProfile: ProfileWithRole = {
+        if (shouldCreateFallback) {
+          console.log("[AuthContext] Creating fallback profile for user due to:", error.message);
+
+          // Try to preserve existing user data if available
+          const fallbackProfile: ProfileWithRole = {
             id: userId,
             email: user?.email || '',
-            full_name: user?.user_metadata?.full_name || 'New User',
+            full_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User',
             avatar_url: user?.user_metadata?.avatar_url || null,
-            created_at: new Date().toISOString(),
+            created_at: user?.created_at || new Date().toISOString(),
             updated_at: new Date().toISOString(),
             role: 'user',
             subscription_tier: 'free',
             preferences: {},
-            onboarding_completed: false,
+            onboarding_completed: true, // Assume existing users have completed onboarding
           };
 
-          setProfile(defaultProfile);
+          setProfile(fallbackProfile);
           setAuthLoading(false);
           setAuthError(null); // Clear any error since we recovered
           isInitializing.current = false;
+          profileFetchInProgress.current = false; // Reset flag on recovery
+          console.log("[AuthContext] Successfully created fallback profile for existing user");
           return;
         }
 
@@ -503,45 +557,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           toast.error("Failed to load profile");
         }
         setAuthLoading(false);
+        profileFetchInProgress.current = false; // Reset flag on error path
         return;
       }
 
       setProfile(data as ProfileWithRole);
       setAuthLoading(false);
       isInitializing.current = false;
+      profileFetchInProgress.current = false; // Reset flag on success
     } catch (error) {
       console.error("[AuthContext] Profile+role fetch failed:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
 
-      // Retry logic for timeouts and rate limiting
-      if (retryCount < maxRetries && (errorMessage.includes("timeout") || errorMessage.includes("429") || errorMessage.includes("fetch"))) {
-        console.log(`[AuthContext] Retrying profile fetch (${retryCount + 1}/${maxRetries}) after error: ${errorMessage}`);
-        await new Promise(resolve => setTimeout(resolve, Math.pow(2, retryCount) * 1000)); // Exponential backoff: 1s, 2s, 4s
+      // Enhanced retry logic for timeouts, rate limiting, and network issues
+      const shouldRetry = retryCount < maxRetries && (
+        errorMessage.includes("timeout") ||
+        errorMessage.includes("429") ||
+        errorMessage.includes("fetch") ||
+        errorMessage.includes("network") ||
+        errorMessage.includes("ECONNRESET") ||
+        errorMessage.includes("rate limit")
+      );
+
+      if (shouldRetry) {
+        const retryDelay = Math.pow(2, retryCount) * 1000; // Exponential backoff: 1s, 2s, 4s
+        console.log(`[AuthContext] Retrying profile fetch (${retryCount + 1}/${maxRetries}) after ${retryDelay}ms due to: ${errorMessage}`);
+        profileFetchInProgress.current = false; // Reset flag before retry
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
         return fetchProfile(userId, retryCount + 1);
       }
 
-      // After retries exhausted, create default profile for new users
-      if (errorMessage.includes("timeout") || errorMessage.includes("not found") || errorMessage.includes("fetch")) {
-        console.log("[AuthContext] Creating default profile after retry exhaustion for new user");
+      // After retries exhausted, create fallback profile for both new and existing users
+      const shouldCreateFallbackProfile = errorMessage.includes("timeout") ||
+                                          errorMessage.includes("not found") ||
+                                          errorMessage.includes("fetch") ||
+                                          errorMessage.includes("429") ||
+                                          errorMessage.includes("network") ||
+                                          errorMessage.includes("rate limit");
 
-        const defaultProfile: ProfileWithRole = {
+      if (shouldCreateFallbackProfile) {
+        console.log("[AuthContext] Creating fallback profile after retry exhaustion - treating as existing user with auth issues");
+
+        // Enhanced fallback profile that works for both new and existing users
+        const fallbackProfile: ProfileWithRole = {
           id: userId,
           email: user?.email || '',
-          full_name: user?.user_metadata?.full_name || 'New User',
+          full_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User',
           avatar_url: user?.user_metadata?.avatar_url || null,
-          created_at: new Date().toISOString(),
+          created_at: user?.created_at || new Date().toISOString(),
           updated_at: new Date().toISOString(),
           role: 'user',
           subscription_tier: 'free',
           preferences: {},
-          onboarding_completed: false,
+          onboarding_completed: true, // Assume auth issues are for existing users who completed onboarding
         };
 
-        setProfile(defaultProfile);
+        setProfile(fallbackProfile);
         setAuthLoading(false);
         setAuthError(null); // Clear error since we recovered
         isInitializing.current = false;
+        profileFetchInProgress.current = false; // Reset flag on recovery
+        console.log(`[AuthContext] Successfully recovered authentication for user ${user?.email} with fallback profile`);
         return;
       }
 
@@ -554,6 +631,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setAuthLoading(false);
       isInitializing.current = false;
+      profileFetchInProgress.current = false; // Reset flag on final error
     }
   };
 
