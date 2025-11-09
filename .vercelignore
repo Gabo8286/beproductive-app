@@ -1,0 +1,17 @@
+node_modules
+BeProductive-iOS/
+BeProductiveUI/
+electron-app/
+.DS_Store
+*.log
+.env.local
+.env.*.local
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+.build/
+.swiftpm/
+Package.resolved
+wireframe/
+BP-test/
