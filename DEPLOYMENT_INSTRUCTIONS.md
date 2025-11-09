@@ -18,42 +18,46 @@
 
 ## 🎯 Next Steps for Live Deployment
 
-### Method 1: Netlify Drag & Drop (Fastest - 2 minutes)
+### Method 1: Vercel CLI Deploy (Fastest & Recommended - 1 minute)
 
-1. **Go to Netlify**: https://app.netlify.com/
-2. **Login** with your account
-3. **Deploy the dist folder**:
-   - Drag the entire `dist` folder from your project
-   - Drop it on the Netlify deploy area
-   - Wait for deployment (30-60 seconds)
-4. **Set Environment Variables**:
-   - Go to Site Settings > Environment Variables
-   - Add:
-     ```
-     VITE_SUPABASE_URL=your_supabase_url
-     VITE_SUPABASE_ANON_KEY=your_supabase_key
-     VITE_USE_NEW_AUTH=true
-     ```
-5. **Custom Domain** (if needed):
-   - Site Settings > Domain Settings
-   - Add custom domain: `beproductive.app`
-
-### Method 2: GitHub Auto-Deploy (Recommended for continuous deployment)
-
-1. **Connect to Netlify**:
-   - Go to https://app.netlify.com/
-   - Click "New site from Git"
-   - Select "GitHub"
-   - Choose repository: `beproductive-app`
-
-2. **Build Settings**:
-   ```
-   Build command: npm run build
-   Publish directory: dist
-   Branch: main
+1. **Authenticate with Vercel**:
+   ```bash
+   npx vercel login
    ```
 
-3. **Environment Variables**:
+2. **Deploy to Production**:
+   ```bash
+   npx vercel deploy --prod
+   ```
+
+3. **Set Environment Variables** (via CLI or dashboard):
+   ```bash
+   vercel env add VITE_SUPABASE_URL
+   vercel env add VITE_SUPABASE_ANON_KEY
+   vercel env add VITE_USE_NEW_AUTH
+   ```
+
+4. **Custom Domain** (if needed):
+   ```bash
+   vercel domains add beproductive.app
+   ```
+
+### Method 2: Vercel Dashboard (Recommended for continuous deployment)
+
+1. **Go to Vercel**: https://vercel.com/dashboard
+2. **New Project**: Click "Add New..." > "Project"
+3. **Import Git Repository**:
+   - Connect GitHub account
+   - Select repository: `beproductive-app`
+   - Click "Import"
+
+4. **Configure Project**:
+   - **Framework Preset**: Vite (auto-detected)
+   - **Build Command**: `npm run build` (auto-detected)
+   - **Output Directory**: `dist` (auto-detected)
+   - **Install Command**: `npm install` (auto-detected)
+
+5. **Environment Variables**:
    ```
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_key
@@ -62,7 +66,15 @@
    VITE_MIGRATION_PERCENTAGE=100
    ```
 
-4. **Deploy**: Click "Deploy Site"
+6. **Deploy**: Click "Deploy"
+
+### Why Vercel is Better for This Project:
+- ✅ **Purpose-built** for React/Vite applications
+- ✅ **Zero-config** deployment (auto-detects everything)
+- ✅ **Edge optimization** for better performance
+- ✅ **Instant preview** deployments on every commit
+- ✅ **Better GitHub** integration and CI/CD
+- ✅ **Automatic SSL** and custom domain management
 
 ---
 
